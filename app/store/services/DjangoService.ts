@@ -24,9 +24,13 @@ const DjangoService = createApi({
   }
 },
   endpoints: builder => ({
-    getBlogPaginatedList: builder.query<Blog[], { limit: number }>({
-      query: ({ limit }) => ({
+    getBlogPaginatedList: builder.query<Blog[], { limit: number, search: string, order: string[] }>({
+      query: ({ limit, search, order  }) => ({
         url: `blog/list/?page=${limit}`,
+        params: {
+          search: search || undefined,
+          order: order || undefined
+        }
       })
     }),
     getPostPaginatedList: builder.query<Post[], { limit: number }>({
@@ -54,7 +58,7 @@ const DjangoService = createApi({
         method: 'POST'
       })
     }),
-    createBlog: builder.mutation<Blog2, undefined>({
+    createBlog: builder.mutation<Blog, undefined>({
       query: ({ title, slug, description, authors }) => ({
         url: 'blog/create/',
         method: 'POST',
@@ -82,6 +86,23 @@ const DjangoService = createApi({
     getSubscriptions: builder.query<Blog, { username: string }>({
       query: ({ username }) => ({
         url: `${username}/subscriptions/`,
+      })
+    }),
+    subscribeBlog: builder.mutation<{ slug: string }>({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/subscribe/`,
+        method: 'POST',
+      })
+    }),
+    unsubscribeBlog: builder.mutation<{ slug: string }>({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/unsubscribe/`,
+        method: 'POST',
+      })
+    }),
+    getPost: builder.query<Post, { slug: string, postID: number}>({
+      query: ({ slug, postID }) => ({
+        url: `blog/${slug}/post/${postID}/`
       })
     })
   })

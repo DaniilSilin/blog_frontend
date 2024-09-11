@@ -1,0 +1,27 @@
+.root {
+    border: 1px solid black;
+    width: 575px;
+    height: 40px;
+    margin-bottom: 60px;
+    color: black;
+    font-size: 24px;
+}
+
+.menu {
+    justify-content: space-between;
+    display: flex;
+}
+
+.icons {
+    padding: 6px 10px;
+}
+
+.additionalSettings {
+    display: flex;
+    border: 1px solid black;
+    width: 575px;
+    height: 40px;
+    color: black;
+    font-size: 24px;
+}
+

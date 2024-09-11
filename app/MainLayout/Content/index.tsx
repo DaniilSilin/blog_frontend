@@ -17,7 +17,7 @@ export default function ContentReact({ children }: Props) {
         {/*<Breadcrumb style={{ margin: '16px 0' }}></Breadcrumb>*/}
         <div
           style={{
-            background: colorBgContainer,
+            // background: colorBgContainer,
             minHeight: 280,
             padding: 24,
             borderRadius: borderRadiusLG,

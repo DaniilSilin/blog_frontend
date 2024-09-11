@@ -1,6 +1,7 @@
 import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
 import { useRouter } from 'next/router'
+import __Input from "@/app/components/modules/form/Input"
 
 export default function BlogCreate() {
   const router = useRouter()
@@ -24,11 +25,10 @@ export default function BlogCreate() {
 
   return (
     <div>
-      <input />
-      <input />
-      <input />
-      <input />
-      <input type={'submit'} onClick={request} />
+      <__Input width={400} height={50} label={'Название Блога'} onChange={setTitle}  />
+      <__Input width={400} height={50} label={'Slug Блога'} onChange={setSlug} />
+      <__Input width={400} height={50} label={'Описание'} onChange={setDescription} />
+      <input type={'submit'} value={'Создать блог'} onClick={request} />
     </div>
   )
 }

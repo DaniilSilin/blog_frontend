@@ -7,8 +7,8 @@ export default function BlogItem() {
   const [ deleteBlog ] = DjangoService.useDeleteBlogMutation()
   const [ updateBlog ] = DjangoService.useUpdateBlogMutation()
 
-  const [ title, setTitle ] = React.useState<string>('')
-  const [ description, setDescription ] = React.useState<string>('')
+  const [ title, setTitle ] = React.useState<string>('Yesterday three 2-story houses burned down to ashes in her hometown. - Вчера в ее родном городе сгорело дотла три двухэтажных дома. ')
+  const [ description, setDescription ] = React.useState<string>('Все эти правила и особенности числительных в английском только на первый взгляд кажутся труднозапоминаемыми и сложными. На самом деле, залог успеха - это регулярная практика, поэтому смотрите новости, читайте газеты, статьи со статистическими данными, книги по истории. Так запомнить числа будет намного проще и интереснее.  ')
 
   const deleteItem = () => {
     deleteBlog({slug: '22222'})

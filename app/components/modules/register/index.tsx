@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './register.module.css'
 import DjangoService from '@/app/store/services/DjangoService'
 
-import __Input from '@/app/components/form/Input'
+import __Input from '@/app/components/modules/form/Input'
 
 export default function Register() {
   const [ email, setEmail ] = React.useState<string>('')
