@@ -25,13 +25,15 @@ const DjangoService = createApi({
 },
   endpoints: builder => ({
     getBlogPaginatedList: builder.query<Blog[], { limit: number, search: string, order: string[] }>({
-      query: ({ limit, search, order  }) => ({
+      query: ({ limit, search, order, after, before }) => ({
         url: `blog/list/?page=${limit}`,
         params: {
           search: search || undefined,
-          order: order || undefined
+          order: order || undefined,
+          before: before || undefined,
+          after: after || undefined
         }
-      })
+      }),
     }),
     getPostPaginatedList: builder.query<Post[], { limit: number }>({
       query: ({ limit }) => ({
@@ -100,11 +102,74 @@ const DjangoService = createApi({
         method: 'POST',
       })
     }),
-    getPost: builder.query<Post, { slug: string, postID: number}>({
-      query: ({ slug, postID }) => ({
-        url: `blog/${slug}/post/${postID}/`
+    getPost: builder.query<Post, { slug: string, post_id: number}>({
+      query: ({ slug, post_id }) => ({
+        url: `blog/${slug}/post/${post_id}/`
       })
-    })
+    }),
+    getUserData: builder.query({
+      query: () => ({
+        url: `user_data/`
+      })
+    }),
+    createPost: builder.mutation({
+      query: ({ title, body, is_published, blog, tags }) => ({
+        url: `blog/${blog}/post/create/`,
+        method: 'POST',
+        body: { title, body, is_published, blog, tags }
+      })
+    }),
+    getBlogPosts: builder.query({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/posts/`,
+      })
+    }),
+    inviteUserToBlog: builder.mutation({
+      query: ({ addressee, description, blog, admin}) => ({
+        url: 'invite/create/',
+        method: 'POST',
+        body: { addressee, description, blog, admin }
+      })
+    }),
+    getInviteList: builder.query({
+      query: () => ({
+        url: `invite/list/`,
+      })
+    }),
+    getMyPosts: builder.query({
+      query: () => ({
+        url: `posts/my/`,
+      })
+    }),
+    acceptInvite: builder.mutation({
+      query: ({ pk }) => ({
+        url: `invite/${pk}/accept/`,
+        method: 'POST',
+        body: { pk }
+      })
+    }),
+    createComment: builder.mutation({
+      query: ({ slug, post_id, body }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/create/`,
+        method: 'POST',
+        body: { body }
+      })
+    }),
+    getComment: builder.query({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/`,
+      })
+    }),
+    getBlogOwnerList: builder.query({
+      query: () => ({
+        url: `blog_owner/list/`,
+      })
+    }),
+    getBlogSlug: builder.query({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/available/`,
+      })
+    }),
   })
 })
 

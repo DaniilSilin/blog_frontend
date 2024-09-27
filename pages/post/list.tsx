@@ -1,9 +1,12 @@
 import React from 'react'
-import PostPaginatedListView from "@/app/views/PostPaginatedList";
+import PostPaginatedListView from '@/app/views/PostPaginatedList'
+import MainLayout from '@/app/MainLayout'
 
 
 export default function PostListPage() {
   return (
-    <PostPaginatedListView />
+    <MainLayout>
+      <PostPaginatedListView />
+    </MainLayout>
   )
 }

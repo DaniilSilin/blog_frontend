@@ -8,7 +8,8 @@ export interface Post {
   created_at: string,
   likes: number,
   views: number
-  post_id: number
+  post_id: number,
+  isLiked: boolean,
   blog: Blog,
   tags: Tag[]
   liked_users: User[]

@@ -10,7 +10,6 @@ export default function Logout() {
   }
   return (
     <div>
-      <input />
       <input type={"submit"} onClick={logoutUser1} />
     </div>
   )

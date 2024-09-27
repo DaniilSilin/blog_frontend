@@ -5,8 +5,9 @@
 
 .block {
     background-color: #fff;
+    padding: 15px;
     width: 575px;
-    height: 300px;
+    height: 320px;
     border: 1px solid black;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -14,19 +15,36 @@
 
 .header {
   display: flex;
-  padding: 15px;
   height: 20px;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .title {
-    padding: 0 15px;
     font-size: 24px;
     font-weight: 700;
-    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.description {
+    margin-bottom: 10px;
 }
 
 .iconBackground {
     background-color: #1616c4;
     border-radius: 32px;
+}
+
+.subscribeButton {
+    width: 115px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: green;
+}
+
+.unsubscribeButton {
+    width: 110px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: red;
 }

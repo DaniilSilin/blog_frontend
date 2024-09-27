@@ -1,0 +1,15 @@
+.root {
+
+}
+
+.title {
+    font-size: 28px;
+}
+
+.postContainer {
+    width: 600px;
+    padding: 15px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}

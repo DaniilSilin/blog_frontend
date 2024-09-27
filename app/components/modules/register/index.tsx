@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 import styles from './register.module.css'
 import DjangoService from '@/app/store/services/DjangoService'
 
@@ -9,7 +9,15 @@ export default function Register() {
   const [ username, setUsername ] = React.useState<string>('')
   const [ password, setPassword ] = React.useState<string>('')
 
+  const [ emailError, setEmailError ] = React.useState<string | undefined>('')
+
   const [ registerUser ] = DjangoService.useGetRegisterMutation()
+
+
+  // const handleChangeErrorEmail = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value
+  //   const alex = new Regex('.+@.+')
+  // }, [ setEmailError, emailError])
 
   const registerUserF = () => {
     registerUser({email, username, password})

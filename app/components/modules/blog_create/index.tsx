@@ -5,27 +5,34 @@ import __Input from "@/app/components/modules/form/Input"
 
 export default function BlogCreate() {
   const router = useRouter()
-  // const token = localStorage.getItem("token")
-  //
+
   // React.useEffect(() => {
+  //   const token = localStorage.getItem("authToken")
+  //
   //   if (!token) {
-  //     router.replace("/authorization")
+  //     router.replace("/login")
   //   }
-  // }, [router, token])
+  // }, [ router ])
 
-  const [ title, setTitle ] = React.useState<string>('alex2')
-  const [ slug, setSlug ] = React.useState<string>('alex2')
-  const [ description, setDescription ] = React.useState<string>('alex2')
+  const [ title, setTitle ] = React.useState<string>('')
+  const [ slug, setSlug ] = React.useState<string>('')
+  const [ description, setDescription ] = React.useState<string>('')
 
-  const [ createBlog ] = DjangoService.useCreateBlogMutation()
-
+  const [ createBlog, status ] = DjangoService.useCreateBlogMutation()
+  const { data: blog_slug } = DjangoService.useGetBlogSlugQuery({ slug })
   const request = () => {
     createBlog({ title, slug, description })
   }
 
+  if (status.isSuccess === 'fulfilled') {
+      router.push(`blog/${slug}/`)
+  }
+  console.log(status.isSuccess)
+
   return (
     <div>
       <__Input width={400} height={50} label={'Название Блога'} onChange={setTitle}  />
+      <div>{blog_slug}</div>
       <__Input width={400} height={50} label={'Slug Блога'} onChange={setSlug} />
       <__Input width={400} height={50} label={'Описание'} onChange={setDescription} />
       <input type={'submit'} value={'Создать блог'} onClick={request} />

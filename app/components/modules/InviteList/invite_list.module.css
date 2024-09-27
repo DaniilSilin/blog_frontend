@@ -1,0 +1,37 @@
+.root {
+
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.inviteContainer {
+    width: 600px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+.acceptInvite {
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: green;
+}
+
+.rejectInvite {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: red;
+}
+
+.inviteText {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 10px;
+}

@@ -3,9 +3,10 @@ import { VscSettings } from 'react-icons/vsc'
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2'
 import __Input from "@/app/components/modules/form/Input"
 import constants from './constants'
-import Calendar from '../calendar'
+import { DatePicker, Space } from 'antd/lib'
+const { RangePicker } = DatePicker
 
-import ConstantsCheckbox from "@/app/components/modules/filter/constantsCheckbox";
+import ConstantsCheckbox from "@/app/components/modules/filter/constantsCheckbox"
 
 import { useRouter } from 'next/router'
 
@@ -16,9 +17,11 @@ export interface Props {
   setSearchInput: (value: string) => void,
   orderList: string[],
   setOrderList: (value: string[]) => void
+  date: [string | null, string | null]
+  setDate: (value: [string | null, string | null]) => void
 }
 
-export default function Filter({ searchInput, setSearchInput, orderList, setOrderList }: Props) {
+export default function Filter({ date, setDate, searchInput, setSearchInput, orderList, setOrderList }: Props) {
   const [ showParamsFilter, setShowParamsFilter ] = React.useState<boolean>(false)
   const router = useRouter()
   const dropdownRef = React.useRef(null)
@@ -27,12 +30,14 @@ export default function Filter({ searchInput, setSearchInput, orderList, setOrde
     setShowParamsFilter(!showParamsFilter)
   }, [ showParamsFilter, setShowParamsFilter ])
 
-  const routerPush = React.useCallback(() => {
-     router.push({
-      pathname: '/blog/list/',
-      query: { ...router.query, search: searchInput },
-    }, undefined, { shallow: true })
-  }, [ router, searchInput, orderList ])
+    // console.log(date[1])
+
+  // const routerPush = React.useCallback(() => {
+  //    router.push({
+  //     pathname: '/blog/list/',
+  //     query: { ...router.query, order: orderList },
+  //   }, undefined, { shallow: true })
+  // }, [ router ])
 
   return (
     <div className={styles.root}>
@@ -41,16 +46,34 @@ export default function Filter({ searchInput, setSearchInput, orderList, setOrde
           <__Input width={400} height={30} onChange={setSearchInput} />
         </div>
         <div className={styles.icons}>
-          <HiMiniMagnifyingGlass onClick={routerPush} />
+          <HiMiniMagnifyingGlass />
           <VscSettings />
         </div>
       </div>
       <div className={styles.additionalSettings}>
-        <div style={{ marginLeft: '400px'}} onClick={dropdown}>
+        <div style={{ width: '400px'}}>
+        <Space direction="vertical" size={12}>
+            <RangePicker
+              picker="day"
+              id={{
+                start: 'startInput',
+                end: 'endInput',
+              }}
+              onFocus={(_, info) => {
+                // console.log('Focus:', info.range);
+              }}
+              onBlur={(_, info) => {
+                // console.log('Blur:', info.range);
+              }}
+              onChange={setDate}
+            />
+        </Space>
+        </div>
+        <div onClick={dropdown}>
           Фильтры
-          {showParamsFilter && (<div>{constants.map((item, index) => (
-            <ConstantsCheckbox key={item} orderList={orderList} setOrderList={setOrderList} item={item} index={index} />
-        ))}</div>)}
+        {/*  {(<div>{constants.map((item, index) => (*/}
+        {/*    <ConstantsCheckbox key={item} orderList={orderList} setOrderList={setOrderList} item={item} index={index} />*/}
+        {/*))}</div>)}*/}
         </div>
       </div>
     </div>

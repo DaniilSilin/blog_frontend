@@ -1,12 +1,12 @@
 import React from 'react'
 import MainLayout from '@/app/MainLayout'
-import PostView from '@/app/views/Post'
+import CommentView from "@/app/views/Comment"
 
 
-export default function PostPage() {
+export default function CommentPage() {
   return (
     <MainLayout>
-      <PostView />
+      <CommentView />
     </MainLayout>
   )
 }
