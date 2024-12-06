@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
 import { useRouter } from 'next/router'
 import __Input from "@/app/components/modules/form/Input"
@@ -6,28 +6,28 @@ import __Input from "@/app/components/modules/form/Input"
 export default function BlogCreate() {
   const router = useRouter()
 
-  // React.useEffect(() => {
-  //   const token = localStorage.getItem("authToken")
-  //
-  //   if (!token) {
-  //     router.replace("/login")
-  //   }
-  // }, [ router ])
-
   const [ title, setTitle ] = React.useState<string>('')
   const [ slug, setSlug ] = React.useState<string>('')
   const [ description, setDescription ] = React.useState<string>('')
+  const [ avatar, setImage ] = React.useState<any>(null)
 
   const [ createBlog, status ] = DjangoService.useCreateBlogMutation()
   const { data: blog_slug } = DjangoService.useGetBlogSlugQuery({ slug })
-  const request = () => {
-    createBlog({ title, slug, description })
+
+  const request = async() => {
+    const formData = new FormData()
+    formData.append('avatar', avatar)
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('slug', slug)
+    // createBlog({ formData })
+    createBlog({ formData })
   }
 
-  if (status.isSuccess === 'fulfilled') {
-      router.push(`blog/${slug}/`)
+  const sendImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files)
+    setImage(e.target.files[0])
   }
-  console.log(status.isSuccess)
 
   return (
     <div>
@@ -35,6 +35,18 @@ export default function BlogCreate() {
       <div>{blog_slug}</div>
       <__Input width={400} height={50} label={'Slug Блога'} onChange={setSlug} />
       <__Input width={400} height={50} label={'Описание'} onChange={setDescription} />
+      <input type='file' accept='image/*' multiple onChange={sendImage} />
+      {avatar && (
+        <section>
+          File details:
+          <ul>
+            <li>Name: {avatar.name}</li>
+            <li>Type: {avatar.type}</li>
+            <li>Size: {avatar.size} bytes</li>
+            <img src={URL.createObjectURL(avatar)} height={250} width={250}  />
+          </ul>
+        </section>
+      )}
       <input type={'submit'} value={'Создать блог'} onClick={request} />
     </div>
   )

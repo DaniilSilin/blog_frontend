@@ -14,7 +14,7 @@ export default function BlogList() {
   const [ date, setDate ] = React.useState<[string | null, string | null]>([null, null])
 
   const { data: userData } = DjangoService.useGetUserDataQuery()
-  const { data: blogs } = DjangoService.useGetBlogPaginatedListQuery({ limit: 1, search: searchInput, order: orderList })
+  const { data: blogs } = DjangoService.useGetBlogPaginatedListQuery({ limit: 1, search: searchInput, order: orderList, date: date })
 
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
   const [ unsubscribeBlog ] = DjangoService.useUnsubscribeBlogMutation()
@@ -25,6 +25,7 @@ export default function BlogList() {
   const unsubscribe = ( slug ) => {
     unsubscribeBlog({ slug })
   }
+  console.log(date)
 
   return (
       <div className={styles.root}>

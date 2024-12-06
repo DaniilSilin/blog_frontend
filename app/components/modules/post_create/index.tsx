@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import __Input from "@/app/components/modules/form/Input"
 import DjangoService from "@/app/store/services/DjangoService"
 import { useRouter } from "next/router"
@@ -11,12 +11,13 @@ export default function PostCreate({ slug }) {
   const router = useRouter()
   const [ title, setTitle ] = React.useState<string>('')
   const [ body, setBody ] = React.useState<string>('')
-  const [ isPublished, setIsPublished ] = React.useState<boolean>(false)
+  const [ isPublished, setIsPublished ] = React.useState<any>(false)
+  const [ tags, setTags] = React.useState([])
+  const [ images, setImages ] = React.useState([])
 
   const [ createPost ] = DjangoService.useCreatePostMutation()
 
   const { token } = theme.useToken();
-  const [ tags, setTags] = React.useState([])
   const [ inputVisible, setInputVisible ] = React.useState(false)
   const [ inputValue, setInputValue ] = React.useState('')
   const inputRef = React.useRef<InputRef>(null)
@@ -74,8 +75,28 @@ export default function PostCreate({ slug }) {
     borderStyle: 'dashed',
   }
 
+  const requestImages = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files)
+    setImages(e.target.files)
+  }
+
     const sendData = () => {
-        createPost({ title, body, is_published: isPublished, blog: slug, tags: tags.join(' ') })
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('body', body)
+      formData.append('is_published', isPublished)
+      formData.append('tags', tags.join(' '))
+      // formData.append('images', images)
+      // for(let i=0; i < images.length; i++) {
+      //   formData.append(`images${i}`, images[i])
+      // }
+      for (let image of images) {
+          formData.append('images', image)
+      }
+      formData.append('blog', slug)
+      console.log(images)
+      createPost({ formData, slug })
+      // createPost({ title, body, is_published: isPublished, blog: slug, tags: tags.join(' ') })
     }
 
     return (
@@ -118,6 +139,24 @@ export default function PostCreate({ slug }) {
                 </Tag>
               )}
             </>
+            <input style={{ display: 'block', marginTop: '8px' }} type='file' multiple accept='image/*' onChange={requestImages} />
+          {images && (
+
+            <section>
+                {/*{images?.map((image) => (*/}
+                {/*  <img src={image} />*/}
+                {/*))}*/}
+                File details:
+              {/*<ul>*/}
+              {/*  <li>Name: {images[0].name}</li>*/}
+              {/*  <li>Type: {images[0].type}</li>*/}
+              {/*  <li>Size: {images[0].size} bytes</li>*/}
+              {/*  <img src={URL.createObjectURL(images[0])} height={250} width={250}  />*/}
+              {/*  <img src={URL.createObjectURL(images[1])} height={250} width={250}  />*/}
+              {/*  <img src={URL.createObjectURL(images[2])} height={250} width={250}  />*/}
+              {/*</ul>*/}
+            </section>
+          )}
             <input type={"submit"} style={{ display: 'block', marginTop: '10px' }} onClick={sendData} value={'Создать пост'} />
         </div>
     )

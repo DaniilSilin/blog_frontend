@@ -1,0 +1,33 @@
+.commentBlock {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.commentHeader {
+    display: flex;
+}
+
+.avatar {
+    margin-right: 10px;
+}
+
+.author {
+    margin-right: 10px;
+}
+
+.commentBody {
+
+}
+
+.commentFooter {
+
+}
+
+.likeCounter {
+
+}
+
+.dislikeCounter {
+
+}

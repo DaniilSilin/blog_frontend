@@ -1,3 +1,6 @@
+import '../public/style/style.css'
+import 'react-image-crop/dist/ReactCrop.css'
+
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 

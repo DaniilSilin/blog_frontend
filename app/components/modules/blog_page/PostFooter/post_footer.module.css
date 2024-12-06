@@ -1,0 +1,21 @@
+.liked_users_container {
+  position: absolute;
+  padding: 10px;
+  background-color: olivedrab;
+  border-radius: 10px;
+}
+
+.liked_users_container_text {
+  color: white;
+}
+
+.ul_list {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+}
+
+.li_list {
+  display: flex;
+  padding: 4px 8px;
+}

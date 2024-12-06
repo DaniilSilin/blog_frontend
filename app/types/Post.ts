@@ -1,6 +1,7 @@
 import { Blog, Tag, User } from './index'
 
 export interface Post {
+  id: number,
   title: string,
   author: string,
   body: string,

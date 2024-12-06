@@ -6,16 +6,6 @@ import { rootReducer } from "@/app/store/reducers/rootReducer"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
 import { RootState } from "@/app/store/reduxTypes"
 
-
-// export const store = configureStore({
-//   reducer: {
-//     [djangoService.reducerPath]: djangoService.reducer,
-//     [userAPI.reducerPath]: userAPI.reducer
-//   },
-//   middleware: getDefaultMiddleware =>
-//     getDefaultMiddleware().concat(djangoService.middleware),
-// })
-
 let store: any
 
 const createStore = (
@@ -45,6 +35,7 @@ export const initializeStore = (
 
   if (preloadedState && store) {
     const state = store.getState()
+    console.log(_store)
     _store = createStore(
       {
         ...preloadedState,

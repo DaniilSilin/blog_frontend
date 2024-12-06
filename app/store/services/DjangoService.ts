@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery, defaultSerializeQueryArgs } from '@reduxjs/toolkit/query/react'
 import { Blog, Post, Register, Login, Author } from '@/app/types'
 import { HYDRATE } from 'next-redux-wrapper'
 
@@ -10,7 +10,8 @@ const DjangoService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
-      headers.set("Content-Type", "application/json")
+      // headers.set("Content-Type", "application/json")
+      // headers.set("Content-Type", "multipart/form-data")
       const token = localStorage.getItem("authToken")
       if (token) {
         headers.set('Authorization', `Token ${token}`)
@@ -24,10 +25,11 @@ const DjangoService = createApi({
   }
 },
   endpoints: builder => ({
-    getBlogPaginatedList: builder.query<Blog[], { limit: number, search: string, order: string[] }>({
-      query: ({ limit, search, order, after, before }) => ({
+    getBlogPaginatedList: builder.query<Blog[], { limit: number, search: string, order: string[], after: string, before: string, page: number }>({
+      query: ({ limit, search, order, after, before, page }) => ({
         url: `blog/list/?page=${limit}`,
         params: {
+          page: page || undefined,
           search: search || undefined,
           order: order || undefined,
           before: before || undefined,
@@ -47,7 +49,7 @@ const DjangoService = createApi({
         body: {email, username, password},
       })
     }),
-    getLogin: builder.mutation<Login>({
+    getLogin: builder.mutation<Login, { username: string, password: string }>({
       query: ({ username, password }) => ({
         url: 'login/',
         method: 'POST',
@@ -60,11 +62,12 @@ const DjangoService = createApi({
         method: 'POST'
       })
     }),
-    createBlog: builder.mutation<Blog, undefined>({
-      query: ({ title, slug, description, authors }) => ({
+    createBlog: builder.mutation({
+      query: ({ formData }) => ({
         url: 'blog/create/',
         method: 'POST',
-        body: { title, slug, description, authors },
+        body: formData,
+        formData: true,
       })
     }),
     getBlog: builder.query<Blog, {slug: string}>({
@@ -78,11 +81,12 @@ const DjangoService = createApi({
         method: 'DELETE',
       })
     }),
-    updateBlog: builder.mutation<Blog, {slug: string}>({
-      query: ({ slug, title, description, authors }) => ({
+    updateBlog: builder.mutation<Blog>({
+      query: ({ formData, slug }) => ({
         url: `blog/${slug}/`,
         method: 'PUT',
-        body: { title, description, authors }
+        body: formData,
+        formData: true
       })
     }),
     getSubscriptions: builder.query<Blog, { username: string }>({
@@ -90,13 +94,13 @@ const DjangoService = createApi({
         url: `${username}/subscriptions/`,
       })
     }),
-    subscribeBlog: builder.mutation<{ slug: string }>({
+    subscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/subscribe/`,
         method: 'POST',
       })
     }),
-    unsubscribeBlog: builder.mutation<{ slug: string }>({
+    unsubscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/unsubscribe/`,
         method: 'POST',
@@ -113,16 +117,26 @@ const DjangoService = createApi({
       })
     }),
     createPost: builder.mutation({
-      query: ({ title, body, is_published, blog, tags }) => ({
-        url: `blog/${blog}/post/create/`,
+      query: ({ formData, slug }) => ({
+        url: `blog/${slug}/post/create/`,
         method: 'POST',
-        body: { title, body, is_published, blog, tags }
+        body: formData,
+        formData: true
       })
     }),
     getBlogPosts: builder.query({
-      query: ({ slug }) => ({
-        url: `blog/${slug}/posts/`,
-      })
+      query: ({ slug, page }) => ({
+        url:`blog/${slug}/posts/?page=${page}`
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.results.push(...newItems.results)
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
     }),
     inviteUserToBlog: builder.mutation({
       query: ({ addressee, description, blog, admin}) => ({
@@ -170,7 +184,78 @@ const DjangoService = createApi({
         url: `blog/${slug}/available/`,
       })
     }),
-  })
+    getUsers: builder.query({
+      query: ({ username }) => ({
+        url: `invite/get_users/${username}/`
+      })
+    }),
+    getMySubscriptions: builder.query({
+      query: () => ({
+        url: `subscriptions/`
+      })
+    }),
+    kickUser: builder.mutation({
+      query: ({ slug, username }) => ({
+        url: `blog/${slug}/kick/${username}/`,
+        method: 'POST',
+      })
+    }),
+    getBlogAuthors: builder.query({
+      query:({ slug }) => ({
+        url: `blog/${slug}/authors/`,
+        method: 'POST',
+      })
+    }),
+    userProfile: builder.query({
+      query:({ username }) => ({
+        url: `profile/${username}/`,
+      })
+    }),
+    changeUserProfile: builder.mutation({
+      query:({ formData, usernameState }) => ({
+        url: `profile/${usernameState}/change/`,
+        method: 'POST',
+        body: formData,
+        formData: true,
+      })
+    }),
+    setLike: builder.mutation({
+      query: ({ slug, post_id}) => ({
+        url: `blog/${slug}/post/${post_id}/like/add/`,
+        method: 'POST',
+      })
+    }),
+    removeLike: builder.mutation({
+      query: ({ slug, post_id}) => ({
+        url: `blog/${slug}/post/${post_id}/like/remove/`,
+        method: 'POST',
+      })
+    }),
+    postsSearch: builder.query({
+      query: ({ hashtag }) => ({
+        url: `posts/search/`,
+        params: {
+          hashtag: hashtag || undefined
+        }
+      })
+    }),
+    blogPublications: builder.query({
+      query: ({ state, slug }) => ({
+        url: `blog/${slug}/publications/`,
+        params: {
+          state: state || undefined
+        }
+      })
+    }),
+    postCommentList: builder.query({
+      query: ({ slug, post_id, sortBy }) => ({
+        url: `blog/${slug}/post/${post_id}/comments/`,
+        params: {
+          sortBy: sortBy || undefined
+        }
+      })
+    })
+  }),
 })
 
 export default DjangoService

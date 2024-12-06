@@ -7,10 +7,11 @@ import styles from './subscriptions.module.css'
 
 export default function Subscriptions({ username }) {
   const { data } = DjangoService.useGetSubscriptionsQuery({ username })
+    console.log(username)
 
   return (
     <div>
-      <div className={styles.title}>Ваши подписки:</div>
+      <div className={styles.title}>Подписки пользователя {username}:</div>
       {data?.map((item, index) => (
         <div key={index}>
           {item?.subscriptions?.map((item, index) => (

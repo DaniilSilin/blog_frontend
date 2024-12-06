@@ -3,11 +3,11 @@ import { VscSettings } from 'react-icons/vsc'
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2'
 import __Input from "@/app/components/modules/form/Input"
 import constants from './constants'
-import { DatePicker, Space } from 'antd/lib'
+import {ConfigProvider, DatePicker, Space} from 'antd/lib'
 const { RangePicker } = DatePicker
 
 import ConstantsCheckbox from "@/app/components/modules/filter/constantsCheckbox"
-
+import locale from 'antd/locale/ru_RU'
 import { useRouter } from 'next/router'
 
 import styles from './filter.module.css'
@@ -38,8 +38,10 @@ export default function Filter({ date, setDate, searchInput, setSearchInput, ord
   //     query: { ...router.query, order: orderList },
   //   }, undefined, { shallow: true })
   // }, [ router ])
+  console.log(date)
 
   return (
+      <ConfigProvider locale={locale}>
     <div className={styles.root}>
       <div className={styles.menu}>
         <div style={{ padding: '6px 10px'}}>
@@ -54,16 +56,17 @@ export default function Filter({ date, setDate, searchInput, setSearchInput, ord
         <div style={{ width: '400px'}}>
         <Space direction="vertical" size={12}>
             <RangePicker
+              format='YYYY-MM-DD'
               picker="day"
               id={{
                 start: 'startInput',
                 end: 'endInput',
               }}
               onFocus={(_, info) => {
-                // console.log('Focus:', info.range);
+                console.log('Focus:', info.range);
               }}
               onBlur={(_, info) => {
-                // console.log('Blur:', info.range);
+                console.log('Blur:', info);
               }}
               onChange={setDate}
             />
@@ -71,11 +74,12 @@ export default function Filter({ date, setDate, searchInput, setSearchInput, ord
         </div>
         <div onClick={dropdown}>
           Фильтры
-        {/*  {(<div>{constants.map((item, index) => (*/}
-        {/*    <ConstantsCheckbox key={item} orderList={orderList} setOrderList={setOrderList} item={item} index={index} />*/}
-        {/*))}</div>)}*/}
+          {(<div>{constants.map((item, index) => (
+            <ConstantsCheckbox key={item} orderList={orderList} setOrderList={setOrderList} item={item} index={index} />
+        ))}</div>)}
         </div>
       </div>
     </div>
+    </ConfigProvider>
   )
 }

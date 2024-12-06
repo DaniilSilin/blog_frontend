@@ -11,6 +11,7 @@ export default function Login() {
 
   const inputFunction = async () => {
     const response = await loginUser({ username, password })
+    console.log(response)
     localStorage.setItem("authToken", response.data.token)
   }
 

@@ -1,14 +1,20 @@
 .root {
-    display: flex;
+    /*display: flex;*/
 }
 
 .blogTitle {
-    font-size: 26px;
+  font-size: 26px;
+  margin-right: 10px;
+}
+
+.blogInfo {
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .blogContainer {
     font-size: 16px;
-    width: 400px;
+    width: 1000px;
     padding: 15px;
     border: 1px solid gray;
     border-radius: 10px;
@@ -19,4 +25,168 @@
     margin-left: 20px;
     border: 1px solid gray;
     border-radius: 10px;
+}
+
+.subscribeButton {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #070707;
+    color: #b1b0b0;
+    height: 40px;
+    font-weight: 600;
+}
+
+.subscribeButton:hover {
+    cursor: pointer;
+    background-color: #353535;
+}
+
+.unsubscribeButton {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: black;
+  color: gray;
+  cursor: pointer;
+  height: 40px;
+  font-weight: 600;
+}
+
+.unsubscribeButton:hover {
+    cursor: pointer;
+    background-color: #303030;
+}
+
+
+.postsContainer {
+  width: 1000px;
+  padding-top: 10px;
+}
+
+.postContainer {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.postTitle {
+  color: black;
+  font-size: 24px;
+  margin-bottom: 7px;
+}
+
+.postLinkTitle {
+  text-decoration: none;
+  color: black;
+}
+
+.postLinkTitle:hover {
+  color: #0086B3;
+}
+
+.postTitle:hover {
+    color: #3a3ae3;
+    font-size: 24px;
+}
+
+.postDate {
+  font-weight: 700;
+  color: #757373;
+}
+
+.postTags {
+    margin-bottom: 7px;
+}
+
+.postHeader {
+
+}
+
+.postBody {
+    margin: 15px 0;
+}
+
+.blogDescription {
+  margin: 5px 0;
+  color: black;
+}
+
+.blogDescription:hover {
+  cursor: pointer;
+  color: gray;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 999999; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: hidden; /* Enable NewsBlock if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.close:hover {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal Content/Box */
+.modalContent {
+  background-color: #fefefe;
+  margin: 10% auto; /* 15% from the top and centered */
+  padding: 20px 32px 24px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 450px; /* Could be more or less, depending on screen size */
+}
+
+.modalTitle {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.modalDescription {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.modalList {
+    margin: 24px 0 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.li_element {
+    padding: 10px;
+}
+
+.li_div_element {
+  display: flex;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.modal .liTitle {
+    font-size: 20px;
+}
+
+.li_div_element:hover {
+  background-color: #ccbebe;
+  border-radius: 10px;
+  padding: 10px;
 }

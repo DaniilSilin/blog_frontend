@@ -1,6 +1,8 @@
 import { Author } from './Author'
 
 export interface Blog {
+  id: number,
+  avatar: any,
   title: string,
   description: string,
   slug: string,

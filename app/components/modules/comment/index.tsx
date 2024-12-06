@@ -4,22 +4,8 @@ import { useRouter } from 'next/router'
 import 'moment/locale/ru'
 import moment from 'moment'
 
-export default function Comment() {
-  const router = useRouter()
-
-  const getSlug = React.useMemo(() => {
-    return router.asPath.split('/')[2]
-  }, [ router ])
-
-  const getPostID = React.useMemo(() => {
-    return router.asPath.split('/')[4]
-  }, [ router ])
-
-  const getCommentID = React.useMemo(() => {
-    return router.asPath.split('/')[6]
-  }, [ router ])
-
-  const { data } = DjangoService.useGetCommentQuery({ slug: getSlug, post_id: getPostID, comment_id: getCommentID })
+export default function Comment({ post_id, slug, comment_id }) {
+  const { data } = DjangoService.useGetCommentQuery({ slug: slug, post_id: post_id, comment_id: comment_id })
   console.log(data)
 
   return (
