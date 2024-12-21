@@ -1,7 +1,34 @@
+.contentPublishedInformationBlock {
+  display: flex;
+}
+
+.contentAvatar {
+
+}
+
+.channelName {
+
+}
+
+.contentPublisher {
+    margin-left: 10px;
+}
+
+.postTitle {
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.postInformation {
+    display: flex;
+    color: #a0a0a4;
+}
+
 .commentBlock {
     border: 1px solid black;
     border-radius: 10px;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .commentHeader {
@@ -30,4 +57,33 @@
 
 .dislikeCounter {
 
+}
+
+.subscribeButton {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #070707;
+    color: #b1b0b0;
+    height: 40px;
+    font-weight: 600;
+}
+
+.subscribeButton:hover {
+    cursor: pointer;
+    background-color: #353535;
+}
+
+.unsubscribeButton {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: black;
+  color: gray;
+  cursor: pointer;
+  height: 40px;
+  font-weight: 600;
+}
+
+.unsubscribeButton:hover {
+    cursor: pointer;
+    background-color: #303030;
 }

@@ -99,7 +99,7 @@
 }
 
 .postHeader {
-
+  display: flex;
 }
 
 .postBody {
@@ -190,3 +190,38 @@
   border-radius: 10px;
   padding: 10px;
 }
+
+.sortingTitle {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.sortingMenu {
+  width: 260px;
+  position: absolute;
+  background-color: #757373;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.sortingMenuTitle {
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sortingMenuTitle:hover {
+    background-color: #474747;
+    cursor: pointer;
+}
+
+.selectButton {
+  display: flex;
+  cursor: pointer;
+}
+
+.selectButton:hover {
+  color: gray;
+}
+

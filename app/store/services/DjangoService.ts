@@ -10,7 +10,7 @@ const DjangoService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
-      // headers.set("Content-Type", "application/json")
+      headers.set("Content-Type", "application/json")
       // headers.set("Content-Type", "multipart/form-data")
       const token = localStorage.getItem("authToken")
       if (token) {
@@ -124,15 +124,32 @@ const DjangoService = createApi({
         formData: true
       })
     }),
+    deletePost: builder.mutation({
+      query: ({ slug, post_id }) => ({
+        url: `blog/${slug}/post/${post_id}/`,
+        method: 'DELETE'
+      })
+    }),
     getBlogPosts: builder.query({
-      query: ({ slug, page }) => ({
-        url:`blog/${slug}/posts/?page=${page}`
+      query: ({ slug, page, sorting }) => ({
+        url:`blog/${slug}/posts/`,
+        params: {
+          page: page || undefined,
+          sorting: sorting || undefined
+        }
       }),
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
       },
-      merge: (currentCache, newItems) => {
-        currentCache.results.push(...newItems.results)
+      merge: (currentCache, newItems, otherArgs) => {
+        let currentPage = 1
+        currentCache.previous = newItems.previous
+        currentCache.next = newItems.next
+        if (currentPage < otherArgs.arg.page) {
+          currentCache.results.push(...newItems.results)
+        } else {
+          currentCache.results = newItems.results
+        }
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
@@ -163,10 +180,10 @@ const DjangoService = createApi({
       })
     }),
     createComment: builder.mutation({
-      query: ({ slug, post_id, body }) => ({
+      query: ({ slug, post_id, reply_to_1, body }) => ({
         url: `blog/${slug}/post/${post_id}/comment/create/`,
         method: 'POST',
-        body: { body }
+        body: { body, reply_to_1 }
       })
     }),
     getComment: builder.query({
@@ -248,12 +265,31 @@ const DjangoService = createApi({
       })
     }),
     postCommentList: builder.query({
-      query: ({ slug, post_id, sortBy }) => ({
+      query: ({ slug, post_id, page, sortBy }) => ({
         url: `blog/${slug}/post/${post_id}/comments/`,
         params: {
+          page: page || undefined,
           sortBy: sortBy || undefined
         }
-      })
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        currentCache.next = newItems.next
+        currentCache.previous = newItems.previous
+        currentCache.results.push(...newItems.results)
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
+    }),
+    postCommentReplyList: builder.query({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/replies/`
+      }),
     })
   }),
 })

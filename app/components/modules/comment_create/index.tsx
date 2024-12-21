@@ -3,7 +3,13 @@ import DjangoService from "@/app/store/services/DjangoService"
 import __Input from "@/app/components/modules/form/Input"
 import { useRouter } from 'next/router'
 
-export default function CommentCreate({post_id, slug}) {
+export interface Props {
+  placeholder?: string
+  slug: string
+  post_id: number
+}
+
+export default function CommentCreate({ post_id, slug, placeholder }: Props) {
   const [ comment, setComment ] = React.useState<string>('')
   const [ createComment ] = DjangoService.useCreateCommentMutation()
 
@@ -13,8 +19,8 @@ export default function CommentCreate({post_id, slug}) {
 
   return (
     <div>
-      <__Input width={200} height={50} onChange={setComment} />
-      <input type={"submit"} onClick={createCommentFunc} value={'Отправить'} />
+      <__Input width={200} placeholder={placeholder} height={50} onChange={setComment} />
+      <input type={"submit"} onClick={createCommentFunc} disabled={!comment} value={'Отправить'} />
     </div>
   )
 }
