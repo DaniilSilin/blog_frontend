@@ -1,7 +1,8 @@
-import React, {ChangeEvent} from 'react'
+import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
 import { useRouter } from 'next/router'
 import __Input from "@/app/components/modules/form/Input"
+import _TextArea from '@/app/components/modules/form/Textarea'
 
 export default function BlogCreate() {
   const router = useRouter()
@@ -15,13 +16,14 @@ export default function BlogCreate() {
   const { data: blog_slug } = DjangoService.useGetBlogSlugQuery({ slug })
 
   const request = async() => {
-    const formData = new FormData()
-    formData.append('avatar', avatar)
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('slug', slug)
+    // const formData = new FormData()
+    // formData.append('avatar', avatar)
+    // formData.append('title', title)
+    // formData.append('description', description)
+    // formData.append('slug', slug)
     // createBlog({ formData })
-    createBlog({ formData })
+    // createBlog({ formData })
+    createBlog({ title, description, slug })
   }
 
   const sendImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,10 +33,11 @@ export default function BlogCreate() {
 
   return (
     <div>
-      <__Input width={400} height={50} label={'Название Блога'} onChange={setTitle}  />
+      <__Input width={600} height={50} label={'Название Блога'} onChange={setTitle}  />
       <div>{blog_slug}</div>
-      <__Input width={400} height={50} label={'Slug Блога'} onChange={setSlug} />
-      <__Input width={400} height={50} label={'Описание'} onChange={setDescription} />
+      <__Input width={600} height={50} label={'Slug Блога'} onChange={setSlug} />
+      <_TextArea width={600} height={100} label={'Описание'} onChange={setDescription} />
+
       <input type='file' accept='image/*' multiple onChange={sendImage} />
       {avatar && (
         <section>

@@ -1,0 +1,36 @@
+.label {
+  color: #666;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.label.active {
+  color: #404040
+}
+
+.label.non_active {
+  color: #666;
+}
+
+.description {
+  margin-top: 5px;
+  color: #a1a1a1;
+}
+
+.description.active {
+  color: #666;
+}
+
+.description.non_active {
+  color: #a1a1a1;
+}
+
+.error {
+  margin-top: 5px;
+  color: #ef5151;
+}
+
+.error.active {
+  color: #f40000;
+}

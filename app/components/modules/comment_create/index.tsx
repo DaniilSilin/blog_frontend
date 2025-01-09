@@ -1,7 +1,6 @@
 import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
 import __Input from "@/app/components/modules/form/Input"
-import { useRouter } from 'next/router'
 
 export interface Props {
   placeholder?: string

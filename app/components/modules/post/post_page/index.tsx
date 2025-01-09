@@ -6,23 +6,21 @@ import moment from 'moment'
 import 'moment/locale/ru'
 import { BiRepost } from "react-icons/bi"
 import __Input from "@/app/components/modules/form/Input"
-import CommentListSort from "@/app/components/modules/post/post_page/CommentListSort"
 import { LikeOutlined, LikeTwoTone, EyeOutlined } from '@ant-design/icons/lib'
-import CommentList from "@/app/components/modules/post/post_page/CommentList"
+import Comment from '../../comment'
 
 import styles from './post_page.module.css'
+
 const BASE_URL = 'http://localhost:8000'
 
 export default function PostPg({ slug, post_id }) {
-  const [ commentText, setCommentText ] = React.useState<string>('')
   const [ likeIsSet, setLikeIsSet ] = React.useState<boolean>()
   const [ sortBy, setSortBy] = React.useState<string>('')
   const [ tags, setTags ] = React.useState([])
   const commentListSortRef = React.useRef(null)
-  const [ page, setPage ] = React.useState(1)
 
   const { data: postData } = DjangoService.useGetPostQuery({ slug, post_id })
-  const { data: postCommentList, isFetching } = DjangoService.usePostCommentListQuery({ slug, post_id, sortBy, page })
+  const { data: postCommentList } = DjangoService.usePostCommentListQuery({ slug, post_id })
 
   const [ setPostLike ] = DjangoService.useSetLikeMutation()
   const [ removePostLike ] = DjangoService.useRemoveLikeMutation()
@@ -56,36 +54,22 @@ export default function PostPg({ slug, post_id }) {
   }, [])
 
   React.useEffect(() => {
-    setTags(postData?.tags.split(' '))
+    if (postData?.tags) {
+      setTags(postData?.tags.split(' '))
+    }
   }, [ postData ])
-
-  React.useEffect(() => {
-    const onScroll = () => {
-      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
-      if (scrolledToBottom && !isFetching) {
-          if (postCommentList.next !== null) {
-            setPage(page + 1)
-          } else {
-            return
-        }
-      }
-    }
-    document.addEventListener("scroll", onScroll)
-    return function () {
-      document.removeEventListener("scroll", onScroll)
-    }
-  }, [ page, isFetching ])
 
   return (
       <div>
         <div className={styles.contentPublishedInformationBlock}>
           <Link href={`/blog/${slug}/`}>
             <img src={`${BASE_URL}${postData?.blog.avatar}`} width={32} height={32}/>
+            {/*<Image src={`${BASE_URL}/${postData?.blog.avatar}`} width={32} height={32} alt="" />*/}
           </Link>
           <div className={styles.contentPublisher}>
             <Link href={`/blog/${slug}/`}>
               <div className={styles.channelName}>
-                {postData?.title}
+                {postData?.blog.title}
               </div>
             </Link>
             <div>{postData?.subscribers} подписчиков</div>
@@ -101,7 +85,7 @@ export default function PostPg({ slug, post_id }) {
           </div>
         </div>
         <div>
-          <div className={styles.postTitle}>{postData?.blog.title}</div>
+          <div className={styles.postTitle}>{postData?.title}</div>
           <div className={styles.postInformation}>
             <Link href={`/profile/${postData?.author.username}/`}>
               <div>{postData?.author.username}</div>
@@ -135,19 +119,18 @@ export default function PostPg({ slug, post_id }) {
           </div>
           <div>
             {tags?.map((tag) => (
-                <Link href={`/posts/search?hashtag=${tag.slice(1)}`}>{tag} </Link>
+              <Link href={`/posts/search?hashtag=${tag.slice(1)}`}>{tag} </Link>
             ))}
           </div>
           <div style={{ display: 'flex' }}>
             <div>Комментарии {postData?.commentCount}</div>
-            <CommentListSort setSortBy={setSortBy} commentListSortRef={commentListSortRef}/>
           </div>
         </div>
         <div>
           <CommentCreate placeholder={'Написать комментарий'} slug={slug} post_id={post_id}/>
           <div>
             {postCommentList?.results.map((comment) => (
-              <CommentList key={comment.id} slug={slug} post_id={post_id} comment={comment} setCommentText={setCommentText} />
+              <Comment slug={slug} post_id={post_id} comment={comment} reply_to={comment.reply_to} />
             ))}
           </div>
         </div>

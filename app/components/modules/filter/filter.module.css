@@ -1,27 +1,37 @@
 .root {
-    border: 1px solid black;
-    width: 575px;
-    height: 40px;
-    margin-bottom: 60px;
-    color: black;
-    font-size: 24px;
+  width: 750px;
+  height: 40px;
+  margin-bottom: 60px;
+  color: black;
+  font-size: 24px;
+}
+
+.sortingTitle {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.sortingMenu {
+  position: absolute;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
 }
 
 .menu {
-    justify-content: space-between;
-    display: flex;
+  display: flex;
 }
 
 .icons {
-    padding: 6px 10px;
+  padding: 6px 10px;
 }
 
 .additionalSettings {
-    display: flex;
-    border: 1px solid black;
-    width: 575px;
-    height: 40px;
-    color: black;
-    font-size: 24px;
+  display: flex;
+  width: 700px;
+  height: 40px;
+  color: black;
+  font-size: 24px;
 }
 

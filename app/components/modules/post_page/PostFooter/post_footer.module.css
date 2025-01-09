@@ -1,0 +1,99 @@
+.root {
+
+}
+
+.postTags {
+  font-size: 15px;
+  margin-bottom: 7px;
+}
+
+.postFooterActionMenu {
+  display: flex;
+}
+
+.postFooterActionMenu > div {
+  display: flex;
+  padding: 4px 8px;
+}
+
+.postFooterActionMenu > :first-child {
+  padding: 4px 8px 4px 0;
+}
+
+.likeButton {
+}
+
+.likeIcon {
+  margin-right: 3px;
+}
+
+.viewButton {
+}
+
+.viewIcon {
+  margin-right: 3px;
+}
+
+.commentButton {
+
+}
+
+.commentIcon {
+  margin-right: 3px;
+}
+
+.repostButton {
+
+}
+
+.repostIcon {
+
+}
+
+.setLikeAction {
+  display: flex;
+}
+
+.liked_users_container {
+  position: absolute;
+  padding: 10px;
+  background-color: #353535;
+  border-radius: 10px;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 999999; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: hidden; /* Enable NewsBlock if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.close:hover {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal Content/Box */
+.modalContent {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+

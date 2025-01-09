@@ -7,9 +7,12 @@ import { RightOutlined } from '@ant-design/icons/lib'
 import AdditionalBlogInformation from './AdditionalBlogInformation'
 import PostList from "@/app/components/modules/blog_page/PostList"
 import { IoIosCheckmark, IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
+import { BsThreeDotsVertical } from "react-icons/bs"
 import { useRouter } from 'next/router'
 
 import styles from './blog_page.module.css'
+import {useAppSelector} from "@/app/store";
+import PostItem from "@/app/components/modules/post_page";
 
 const BASE_URL = 'http://localhost:8000'
 
@@ -27,6 +30,7 @@ const SORTING_LIST = [
 ]
 
 export default function BlogItem({ slug }) {
+  const [ showOwnerMenu, setShowOwnerMenu ] = React.useState(false)
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug })
   const [ page, setPage ] = React.useState(1)
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
@@ -34,7 +38,7 @@ export default function BlogItem({ slug }) {
   const sortingPostListRef = React.useRef(null)
   const [ openSortingMenu, setOpenSortingMenu ] = React.useState(false)
   const router = useRouter()
-
+  const user = useAppSelector(state => state.django.profile)
 
   const sortingParam = React.useMemo(() => {
     const sorting1 = router.query.sorting ? router.query.sorting : undefined
@@ -141,6 +145,14 @@ export default function BlogItem({ slug }) {
     }
   }, [ page, isFetching ])
 
+  const showOwnerMenuFunction = () => {
+    setShowOwnerMenu(true)
+  }
+
+  const hideOwnerMenuFunction = () => {
+    setShowOwnerMenu(false)
+  }
+
   return (
       <div className={styles.root}>
         <div className={styles.blogContainer}>
@@ -158,6 +170,17 @@ export default function BlogItem({ slug }) {
                     <div className={styles.subscribeButton} onClick={subscribeRequest}>Подписаться</div>
                 )}
               </div>
+              {user?.username === blogData?.owner.username && (
+                <div onMouseOver={showOwnerMenuFunction} onMouseLeave={hideOwnerMenuFunction}>
+                  <BsThreeDotsVertical />
+                  {showOwnerMenu && (
+                    <div>
+                      <div onClick={router.push(`/blog/${blogData?.slug}/edit/`)}>Редактировать блог</div>
+                      <div>Подробнее о канале</div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <div>
@@ -189,6 +212,11 @@ export default function BlogItem({ slug }) {
             </div>
           </div>
         </div>
+        {/*{blogData?.pinned_post && (*/}
+        {/*  <div>*/}
+        {/*    <PostItem post={blogData?.pinned_post} />*/}
+        {/*  </div>*/}
+        {/*)}*/}
         <div ref={sortingPostListRef}>
           <span className={styles.selectButton}>
             <div className={styles.sortingTitle}>{currentTitle}</div>
@@ -207,7 +235,7 @@ export default function BlogItem({ slug }) {
         </div>
         <div className={styles.postsContainer}>
           {postList?.results?.map((post, index) => (
-              <PostList post={post} slug={slug}/>
+            <PostList post={post} slug={slug}/>
           ))}
         </div>
       </div>

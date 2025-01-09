@@ -1,25 +1,25 @@
 import React, { ChangeEvent } from 'react'
 
+import styles from './constants.module.css'
+
 export interface Props {
-  orderList: string[]
-  setOrderList: (value: string[]) => void
   item: any
+  setSortByQueryParam: any
+  cleanParams: any
 }
 
-export default function ConstantsCheckbox({ orderList, setOrderList, item }: Props) {
-  const changeOrderList = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+export default function ConstantsCheckbox({ setSortByQueryParam, cleanParams, item }: Props) {
+  const changeSortParam = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setOrderList([...orderList, item.name])
-    } else {
-      setOrderList(orderList.filter(item1 => item1 !== item.name))
+      setSortByQueryParam(item.value)
     }
-  }, [ orderList, setOrderList, item ])
+  }, [ setSortByQueryParam, item ])
 
   return (
-    <div style={{ padding: '5px', backgroundColor: 'mediumvioletred' }}>
+    <div>
       <label>
-        <input type={'checkbox'} onChange={changeOrderList} />
-        {item.name}
+        <input type={'radio'} onChange={changeSortParam} value={item.value} checked={item.value===cleanParams.sort_by} defaultChecked={item.value===cleanParams.sort_by} />
+        {item.label}
       </label>
     </div>
   )

@@ -3,7 +3,7 @@ import DjangoService from '@/app/store/services/DjangoService'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { useRouter } from "next/router"
-import Link from "next/link";
+import Link from "next/link"
 
 export default function PostsSearch() {
   const router = useRouter()

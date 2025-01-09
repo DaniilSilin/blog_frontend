@@ -4,11 +4,14 @@ import { BsFillTelephoneFill } from "react-icons/bs"
 import Link from "next/link"
 import { FaLink } from "react-icons/fa6"
 import { ImVk, ImYoutube, ImTelegram } from "react-icons/im"
+import moment from 'moment'
+import 'moment/locale/ru'
 
 import styles from "@/app/components/modules/blog_page/blog_page.module.css"
+import { Blog } from "@/app/types"
 
 export interface Props {
-    blogData: any;
+  blogData: Blog
 }
 
 export default function AdditionalBlogInformation({ blogData }: Props) {
@@ -21,6 +24,7 @@ export default function AdditionalBlogInformation({ blogData }: Props) {
         <div className={styles.close}>x</div>
         <div className={styles.modalTitle}>{blogData?.title}</div>
         <div className={styles.modalDescription}>{blogData?.description}</div>
+        <div>Дата создания {moment(blogData?.created_at).format("D MMMM hh:mm")}</div>
         <ul className={styles.modalList}>
           {blogData?.email && (
             <li>

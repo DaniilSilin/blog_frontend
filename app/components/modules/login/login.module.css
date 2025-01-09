@@ -1,0 +1,14 @@
+.root {
+
+}
+
+.signInTitle {
+  font-size: 32px;
+}
+
+.loginButton {
+  width: 200px;
+  background-color: blue;
+  color: white;
+  border-radius: 10px;
+}

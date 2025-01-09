@@ -1,0 +1,63 @@
+.root {
+
+}
+
+.postHeader {
+  display: flex;
+  color: black;
+  font-size: 24px;
+  margin-bottom: 7px;
+  justify-content: space-between;
+}
+
+.postHeaderRightPart {
+  display: flex;
+}
+
+.postHeaderLeftPart {
+
+}
+
+.postHeaderLeftPart:hover {
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #353535;
+}
+
+.postBlogAvatar {
+  margin-right: 10px;
+}
+
+.postBlogTitle {
+  text-decoration: none;
+  color: black;
+}
+
+.postTitle {
+  font-size: 20px;
+  color: black
+}
+
+.postTitle:hover {
+  font-size: 20px;
+  color: #0086B3;
+}
+
+.postHeaderInfo {
+  display: flex;
+}
+
+.postHeaderDelimiter {
+  padding: 0 8px;
+  font-weight: 600;
+}
+
+.postHeaderDate {
+  font-weight: 700;
+  color: #757373;
+}
+
+.postHeaderAuthor {
+  font-weight: 700
+}

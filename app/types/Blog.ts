@@ -1,4 +1,4 @@
-import { Author } from './Author'
+import { Author, Post } from './index'
 
 export interface Blog {
   id: number,
@@ -10,6 +10,8 @@ export interface Blog {
   updated_at: string,
   count_of_posts: number,
   count_of_commentaries: number,
+  subscribers: number,
   owner: string,
-  authors: Author[]
+  pinned_post: Post,
+  authors: Author[],
 }

@@ -28,7 +28,7 @@ export default function _TextArea({ width, height, onChange, label, error, place
   return (
     <div>
       <Field label={label} error={error}>
-        <TextArea showCount maxLength={100} onChange={handleChangeInput} placeholder="can resize" style={{ display: 'block', width: `${width}px`, height: `${height}px`}} />
+        <TextArea showCount maxLength={250} onChange={handleChangeInput} defaultValue={defaultValue} placeholder="can resize" style={{ display: 'block', width: `${width}px`, height: `${height}px`}} />
         {/*<Input onChange={handleChangeInput} placeholder={placeholder} defaultValue={defaultValue} style={{ display: 'block', width: `${width}px`, height: `${height}px`}} />*/}
       </Field>
     </div>

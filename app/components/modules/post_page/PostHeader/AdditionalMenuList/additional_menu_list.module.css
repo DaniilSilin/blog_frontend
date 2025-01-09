@@ -1,0 +1,12 @@
+.root {
+  width: 200px;
+  position: absolute;
+  font-size: 14px;
+  background-color: #3a3ae3;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.additionalMenuItem {
+
+}

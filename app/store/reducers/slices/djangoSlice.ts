@@ -4,11 +4,11 @@ import DjangoService from "../../services/DjangoService"
 import { RootState } from "../../reduxTypes"
 
 export interface DjangoStateType {
-
+  profile: Record<string, any>
 }
 
 const appInitialState: DjangoStateType = {
-
+  profile: {}
 }
 
 const djangoSlice = createSlice({
@@ -35,6 +35,15 @@ const djangoSlice = createSlice({
           }
         }
       )
+      // .addMatcher(
+      //   DjangoService.endpoints.getUserData,
+      //   (state, { payload }) => {
+      //     state.profile = {
+      //       ...state.profile,
+      //       ...payload,
+      //     }
+      //   }
+      // )
   },
 })
 

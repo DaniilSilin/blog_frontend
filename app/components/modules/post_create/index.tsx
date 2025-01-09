@@ -81,22 +81,16 @@ export default function PostCreate({ slug }) {
   }
 
     const sendData = () => {
-      const formData = new FormData()
-      formData.append('title', title)
-      formData.append('body', body)
-      formData.append('is_published', isPublished)
-      formData.append('tags', tags.join(' '))
+      // const formData = new FormData()
+      // formData.append('title', title)
+      // formData.append('body', body)
+      // formData.append('is_published', isPublished)
+      // formData.append('tags', tags.join(' '))
       // formData.append('images', images)
-      // for(let i=0; i < images.length; i++) {
-      //   formData.append(`images${i}`, images[i])
-      // }
-      for (let image of images) {
-          formData.append('images', image)
-      }
-      formData.append('blog', slug)
-      console.log(images)
-      createPost({ formData, slug })
-      // createPost({ title, body, is_published: isPublished, blog: slug, tags: tags.join(' ') })
+      // formData.append('blog', slug)
+      // console.log(images)
+      // createPost({ formData, slug })
+      createPost({ title, body, is_published: isPublished, blog: slug, tags: tags.join(' ') })
     }
 
     return (

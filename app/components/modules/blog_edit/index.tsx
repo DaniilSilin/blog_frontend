@@ -5,6 +5,7 @@ import _TextArea from "@/app/components/modules/form/Textarea"
 
 import styles from './blog_edit.module.css'
 import ImageUpload from './ImageUpload'
+import SelectField from "@/app/components/modules/form/SelectField";
 
 const BASE_URL = 'http://localhost:8000'
 
@@ -64,24 +65,23 @@ export default function BlogEdit({ slug }) {
   }
 
   if (!data) {
-    return null
+    return <div>Загрузка</div>
   }
 
   return (
     <div>
-          <img onClick={handleModalFunction} src={`${BASE_URL}${data?.avatar}`} alt='' width={200} height={200} />
-          <div className={styles.modal}>
-            <div className={styles.modalContent}>
-              <ImageUpload avatar={avatar} setAvatar={setAvatar} avatarSmall={avatarSmall} setAvatarSmall={setAvatarSmall} />
-            </div>
-          </div>
-          <__Input width={500} height={50} onChange={setTitle} label={'Название блога'} defaultValue={data?.title} />
-          <_TextArea width={500} height={100} label={'Описание блога'} onChange={setDescription} defaultValue={data?.description} />
-          <__Input width={500} height={50} onChange={setEmail} label={'Почта'} defaultValue={data?.email} />
-          <__Input width={500} height={50} onChange={setPhoneNumber} label={'Номер телефона'} defaultValue={data?.phone_number} />
-          <input type={'submit'} onClick={sendData} value={'Сохранить'}/>
-          <input type={'submit'} onClick={deleteItem} value={'Удалить Блог'}/>
-
+      <img onClick={handleModalFunction} src={`${BASE_URL}${data?.avatar}`} alt='' width={200} height={200} />
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <ImageUpload avatar={avatar} setAvatar={setAvatar} avatarSmall={avatarSmall} setAvatarSmall={setAvatarSmall} />
+        </div>
+      </div>
+      <__Input width={500} height={50} onChange={setTitle} label={'Название блога'} defaultValue={data?.title} />
+      <_TextArea width={500} height={100} label={'Описание блога'} onChange={setDescription} defaultValue={data?.description} />
+      <__Input width={500} height={50} onChange={setEmail} label={'Почта'} defaultValue={data?.email} />
+      <__Input width={500} height={50} onChange={setPhoneNumber} label={'Номер телефона'} defaultValue={data?.phone_number} />
+      <input type={'submit'} onClick={sendData} value={'Сохранить'}/>
+      <input type={'submit'} onClick={deleteItem} value={'Удалить Блог'}/>
     </div>
   )
 }
