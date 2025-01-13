@@ -10,7 +10,6 @@ export default function HeaderProfile() {
   const userRef = React.useRef(null)
   const [ openUserMenu, setOpenUserMenu ] = React.useState<boolean>(false)
   const user = useAppSelector(state => state.django.profile)
-  const [ logoutUser ] = DjangoService.useGetLogoutMutation()
 
   React.useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
@@ -31,7 +30,6 @@ export default function HeaderProfile() {
   const logoutUser1 = () => {
     localStorage.removeItem("authToken")
   }
-  console.log(user)
   if (!user) {
     return (
       <div>

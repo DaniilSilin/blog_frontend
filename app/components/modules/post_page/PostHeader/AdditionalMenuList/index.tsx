@@ -12,42 +12,41 @@ export interface Props {
 export default function AdditionalMenuList({ post }: Props) {
   const [ addBookmark ] = DjangoService.useAddToBookmarksMutation()
   const [ removeBookmark ] = DjangoService.useRemoveFromBookmarksMutation()
+  const [ deletePost ] = DjangoService.useDeletePostMutation()
   const user = useAppSelector(state => state.django.profile)
 
-  const addToBookmarks = () => {
-    addBookmark({ slug: post.blog.slug, post_id: post.post_id })
-  }
-
-  const removeFromBookmarks = () => {
-    removeBookmark({ slug: post.blog.slug, post_id: post.post_id })
-  }
-
-  console.log(user?.is_admin)
-
-  if (user?.username === post?.blog.owner.username) {
-    return (
-      <div>
-        <div>Закрепить пост</div>
-        <div>Отключить комментарии</div>
-        <div>Добавить в закладки</div>
-        <div>Удалить</div>
-      </div>
-    )
-  } else if (post?.blog.authors.find(author => author.username === user.username)) {
-    return (
-      <div>
-        <div>Закрепить пост</div>
-        <div>Отключить комментарии</div>
-        <div>Добавить в закладки</div>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <div>Добавить в закладки</div>
-        <div>Скопировать ссылку</div>
-        <div>Пожаловаться</div>
-      </div>
-    )
-  }
+  // const addToBookmarksRequest = () => {
+  //
+  // }
+  //
+  // const deletePostRequest = (post) => {
+  //   deletePost({ slug: post?.blog.slug, post_id: post?.post_id })
+  // }
+  //
+  // if (user?.username === post?.blog.owner.username || user?.is_admin) {
+  //   return (
+  //     <div>
+  //       <div>Закрепить пост</div>
+  //       <div>Отключить комментарии</div>
+  //       <div onClick={addToBookmarksRequest}>Добавить в закладки</div>
+  //       <div onClick={deletePostRequest}>Удалить</div>
+  //     </div>
+  //   )
+  // } else if (post?.blog.authors.find(author => author.username === user.username)) {
+  //   return (
+  //     <div>
+  //       <div>Закрепить пост</div>
+  //       <div>Отключить комментарии</div>
+  //       <div>Добавить в закладки</div>
+  //     </div>
+  //   )
+  // } else {
+  //   return (
+  //     <div>
+  //       <div>Добавить в закладки</div>
+  //       <div>Скопировать ссылку</div>
+  //       <div>Пожаловаться</div>
+  //     </div>
+  //   )
+  // }
 }

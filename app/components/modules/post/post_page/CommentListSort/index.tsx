@@ -1,6 +1,7 @@
 import React from 'react'
 import { DownOutlined, UpOutlined, CheckOutlined } from '@ant-design/icons/lib'
-import __Input from "@/app/components/modules/form/Input"
+
+import styles from './comment_list.module.css'
 
 export interface Props {
   setSortBy: (value: string) => void
@@ -30,15 +31,15 @@ export default function CommentListSort({ setSortBy, commentListSortRef }: Props
     setShowMenu(false)
   }, [ setCurrentParam, setSortBy, setShowMenu ])
 
-  React.useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!commentListSortRef.current.contains(e.target)) {
-        setShowMenu(false)
-      }
-    }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler);
-  }, [ commentListSortRef ])
+  // React.useEffect(() => {
+  //   const handler = (e: MouseEvent) => {
+  //     if (!commentListSortRef.current.contains(e.target)) {
+  //       setShowMenu(false)
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handler)
+  //   return () => document.removeEventListener("mousedown", handler);
+  // }, [ commentListSortRef ])
 
   const showParamMenuHandler = React.useCallback(() => {
     setShowMenu(!showMenu)
@@ -46,18 +47,19 @@ export default function CommentListSort({ setSortBy, commentListSortRef }: Props
 
   return (
     <div ref={commentListSortRef}>
-      <div style={{ display: 'flex' }} onClick={showParamMenuHandler}>
-        {currentParam}
+      <div data-title="dropdown" className={styles.dropdownTitle} style={{ display: 'flex' }} onClick={showParamMenuHandler}>
+        Упорядочить
         {showMenu ? <UpOutlined /> : <DownOutlined />}
       </div>
-      {showMenu && (<div>
-       {sortingList.map(param => (
-        <div key={param.id} style={{ border: '1px solid gray', display: 'flex' }}>
-          <div onClick={() => setParam(param.label, param.queryParam)}>{param.label}</div>
-          <div>{param.label === currentParam ? <CheckOutlined /> : null}</div>
+      {showMenu && (
+        <div className={styles.dropdown}>
+          {sortingList.map(param => (
+            <div key={param.id} style={{ border: '1px solid gray', display: 'flex' }}>
+              <div onClick={() => setParam(param.label, param.queryParam)}>{param.label}</div>
+              <div>{param.label === currentParam ? <CheckOutlined /> : null}</div>
+            </div>
+          ))}
         </div>
-       ))}
-      </div>
       )}
     </div>
   )

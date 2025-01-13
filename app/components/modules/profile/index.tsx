@@ -12,23 +12,19 @@ export default function Profile({ username}) {
   const { data } = DjangoService.useUserProfileQuery({ username })
   const user = useAppSelector(state => state.django.profile)
 
-
-
   const routerPush = React.useCallback(() => {
      router.push({
       pathname: `/profile/${user.username}/edit/`,
     }, undefined, { shallow: false })
   }, [ router ])
-  console.log(user?.username)
-  console.log(data?.username)
 
   return (
     <div>
       {data?.map(user => (
         <div>
-          <div>{user.username}</div>
+          {/*<div>{user.username}</div>*/}
           <div>{data.username}</div>
-          <img src={`${BASE_URL}${user.avatar}`} alt='' width={200} height={200} />
+          <img src={`${BASE_URL}${user.avatar_small}`} alt='' width={100} height={100} style={{ borderRadius: '50%' }} />
           {user?.username === data?.username ? (
             <div style={{ fontSize: '16px' }} onClick={routerPush}>
               Изменить профиль

@@ -48,7 +48,6 @@ export default function Filter({ page, cleanParams }: Props) {
   const [ showParamsFilter, setShowParamsFilter ] = React.useState<boolean>(false)
   const [ inputSearch, setInputSearch ] = React.useState<string>(cleanParams.search ? cleanParams.search : '')
 
-  console.log(router)
 
   const setSearchQueryParam = React.useCallback((search: string) => {
       router.push({

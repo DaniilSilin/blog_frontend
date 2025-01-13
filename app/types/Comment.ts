@@ -10,4 +10,5 @@ export interface Comment {
     date: string,
     is_edited: boolean,
     is_liked_by_author: boolean
+    reply_to?: number
 }

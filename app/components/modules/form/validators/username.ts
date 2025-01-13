@@ -4,8 +4,10 @@ const usernameValidator = (username: string, isUsernameAvailable: string) => {
   if (!username) {
     return ''
   } else {
-    if (!usernameRegex.test(username)) {
-      return 'Минимальная длина: 3 символа. Имя пользователя может содержать Латинские символы, цифры и символ "_"'
+    if (usernameRegex.length < 3) {
+      return 'Слишком короткое имя пользователя.'
+    } else if (!usernameRegex.test(username)) {
+      return 'Минимальная длина: 3 символа. Ваше имя пользователя может содержать латинские буквы, цифры и знак нижнего подчёркивания.'
     } else if (isUsernameAvailable === '123') {
       return 'Имя пользователя занято. Подумайте над другим именем.'
     } else {

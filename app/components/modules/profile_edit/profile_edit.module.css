@@ -1,0 +1,55 @@
+.root {
+
+}
+
+
+
+@keyframes expand {
+    from {
+        max-height: 2px;
+    }
+
+    to {
+        max-height: 100%;
+    }
+}
+
+@keyframes collapse {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+.avatarDropdownActionMenu {
+  position: absolute;
+  z-index: 5;
+  width: 200px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: gray;
+  /*height: 120px;*/
+  animation: expand 5s ease-out;
+  overflow: hidden;
+}
+
+.avatarDropdownActionMenu > div {
+  padding: 5px 5px;
+}
+
+.avatarDropdownActionMenu > div:hover {
+  padding: 5px 5px;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

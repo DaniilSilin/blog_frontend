@@ -15,14 +15,14 @@
 }
 
 .postHeaderLeftPart {
-
+  font-size: 16px;
 }
 
 .postHeaderLeftPart:hover {
-  padding: 5px;
-  border-radius: 50%;
-  cursor: pointer;
-  background-color: #353535;
+  /*padding: 5px;*/
+  /*border-radius: 50%;*/
+  /*cursor: pointer;*/
+  /*background-color: #353535;*/
 }
 
 .postBlogAvatar {

@@ -35,15 +35,15 @@ const djangoSlice = createSlice({
           }
         }
       )
-      // .addMatcher(
-      //   DjangoService.endpoints.getUserData,
-      //   (state, { payload }) => {
-      //     state.profile = {
-      //       ...state.profile,
-      //       ...payload,
-      //     }
-      //   }
-      // )
+      .addMatcher(
+        DjangoService.endpoints.getUserData.matchFulfilled,
+        (state, { payload }) => {
+          state.profile = {
+            ...state.profile,
+            ...payload,
+          }
+        }
+      )
   },
 })
 

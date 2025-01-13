@@ -14,11 +14,7 @@ export default function ContentReact({ children }: Props) {
 
 
   return (
-      <Content style={{ padding: '0 48px', margin: '16px 0' }}>
-          <Breadcrumb
-            items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
-            style={{ margin: '16px 2px' }}
-          />
+      <Content>
         <div
           style={{
             background: colorBgContainer,
@@ -27,7 +23,9 @@ export default function ContentReact({ children }: Props) {
             borderRadius: borderRadiusLG,
           }}
         >
+        <div style={{ width: '1100px', margin: '20px auto' }}>
           {children}
+        </div>
         </div>
       </Content>
   )

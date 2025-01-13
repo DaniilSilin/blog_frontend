@@ -27,10 +27,11 @@ export default function BlogEdit({ slug }) {
   const freezeBody = React.useCallback(() => document.querySelector("body")?.classList.add("freeze"), [])
   const unfreezeBody = React.useCallback(() => document.querySelector("body")?.classList.remove("freeze"), [])
 
+  const [ sourceImage, setSourceImage ] = React.useState('')
+
   const handleModalFunction = React.useCallback((e) => {
     let elem = e.target
     if (isModalOpen) {
-      console.log(elem)
     } else {
       let modalNode = null
       if (elem.nextSibling.className === 'blog_edit_modal__aA8Pb') {
@@ -40,7 +41,22 @@ export default function BlogEdit({ slug }) {
         (modalNode as HTMLDivElement).style.display = 'block'
         freezeBody()
         setIsModalOpen(true)
-        console.log(elem)
+      }
+    }
+  }, [ isModalOpen, freezeBody, unfreezeBody ])
+
+  const handleShowModal = React.useCallback((e) => {
+    let elem = e.target
+    if (isModalOpen) {
+    } else {
+      let modalNode = null
+      if (elem.nextSibling.className === 'blog_edit_modal__aA8Pb') {
+        modalNode = elem.nextSibling
+      }
+      if (modalNode) {
+        (modalNode as HTMLDivElement).style.display = 'block'
+        freezeBody()
+        setIsModalOpen(true)
       }
     }
   }, [ isModalOpen, freezeBody, unfreezeBody ])
@@ -68,14 +84,61 @@ export default function BlogEdit({ slug }) {
     return <div>Загрузка</div>
   }
 
+
+  const onSelectFile = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    console.log(reader)
+    reader.addEventListener("load", () => {
+      const imageElement = new Image()
+      const imageUrl = reader.result.toString() || ''
+      console.log(imageUrl)
+      setSourceImage(imageUrl)
+      const elem = e.target
+      console.log(elem)
+    })
+    reader.readAsDataURL(file)
+  }
+
+
   return (
     <div>
-      <img onClick={handleModalFunction} src={`${BASE_URL}${data?.avatar}`} alt='' width={200} height={200} />
-      <div className={styles.modal}>
-        <div className={styles.modalContent}>
-          <ImageUpload avatar={avatar} setAvatar={setAvatar} avatarSmall={avatarSmall} setAvatarSmall={setAvatarSmall} />
+      <div>
+        <div>Баннер</div>
+        <div>Это изображение показывается в верхней части страницы канала.</div>
+        <img src={`${BASE_URL}${data?.banner}`} width={100} height={50} alt={''}  />
+        <div>
+          <div>
+            <div>Изменить</div>
+            <input type={'file'} onChange={onSelectFile} accept='image/*' />
+          </div>
+          <div>Удалить</div>
         </div>
       </div>
+      <div className={'modal'}>
+        <div className={'modalContent'}>
+
+        </div>
+      </div>
+      <div>
+        <div>Фото профиля</div>
+        <div>Фото профиля показывается, например, рядом с вашими видео или комментариями на сайте.</div>
+        <img src={`${BASE_URL}${data?.avatar}`} width={100} height={50} alt={''}  />
+        <div>
+          <div>
+            <div>Изменить</div>
+            <input type={'file'} accept='image/*' />
+          </div>
+          <div>Удалить</div>
+        </div>
+      </div>
+      {/*<img onClick={handleModalFunction} src={`${BASE_URL}${data?.avatar}`} alt='' width={200} height={200} />*/}
+      {/*<div className={styles.modal}>*/}
+      {/*  <div className={styles.modalContent}>*/}
+      {/*    <ImageUpload avatar={avatar} setAvatar={setAvatar} avatarSmall={avatarSmall} setAvatarSmall={setAvatarSmall} />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       <__Input width={500} height={50} onChange={setTitle} label={'Название блога'} defaultValue={data?.title} />
       <_TextArea width={500} height={100} label={'Описание блога'} onChange={setDescription} defaultValue={data?.description} />
       <__Input width={500} height={50} onChange={setEmail} label={'Почта'} defaultValue={data?.email} />

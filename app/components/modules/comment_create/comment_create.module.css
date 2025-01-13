@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+}
+
+.avatarCreateComment {
+  border-radius: 50%;
+  margin-right: 16px;
+  margin-top: 15px;
+}
+
+.leaveCommentButton {
+  border-radius: 25px;
+  border-color: #272727;
+  color: #717171;
+}
+
+
+.leaveCommentButton.notEmpty {
+  background-color: #3ea6ff;
+  color: #0f0f0f;
+}
+
+.cancelCommentButton {
+
+}

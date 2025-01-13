@@ -1,0 +1,32 @@
+.root {
+
+}
+
+.ownerAvatarEditHeader {
+  padding: 20px 20px;
+  border-bottom: 1px solid #363738;
+}
+
+.ownerAvatarEditFooter {
+  font-size: 12px;
+  text-align: center;
+  border-top: 1px solid #363738;
+  padding: 10px 20px;
+}
+
+.ownerAvatarEditBodyErrorMessage {
+  background-color: #522e2e;
+  padding: 10px 10px;
+}
+
+.ownerAvatarEditBodyTitle {
+  text-align: center;
+}
+
+.ownerAvatarEditorButton {
+  margin: 30px auto;
+}
+
+.ownerAvatarEditBody {
+  padding: 20px 25px;
+}

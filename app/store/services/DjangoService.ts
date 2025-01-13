@@ -10,7 +10,7 @@ const DjangoService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
-      headers.set("Content-Type", "application/json")
+      // headers.set("Content-Type", "application/json")
       // headers.set("Content-Type", "multipart/form-data")
       const token = localStorage.getItem("authToken")
       if (token) {
@@ -91,10 +91,10 @@ const DjangoService = createApi({
       })
     }),
     createBlog: builder.mutation({
-      query: ({ title, description, slug }) => ({
+      query: ({ title, description, slug, formData }) => ({
         url: 'blog/create/',
         method: 'POST',
-        body: { title, description, slug }
+        body: formData,
         // formData: true,
       })
     }),
@@ -268,10 +268,15 @@ const DjangoService = createApi({
     }),
     postsSearch: builder.query({
       query: ({ hashtag }) => ({
-        url: `posts/search/`,
+        url: `posts/search/${hashtag}/`,
         params: {
           hashtag: hashtag || undefined
         }
+      })
+    }),
+    postsSearchData: builder.query({
+      query: ({ hashtag }) => ({
+        url: `posts/search_data/${hashtag}/`,
       })
     }),
     blogPublications: builder.query({
@@ -350,6 +355,13 @@ const DjangoService = createApi({
         url: `${username}/available/`
       })
     }),
+    changeAvatar: builder.mutation({
+      query: ({ formData, username }) => ({
+        url: `profile/${username}/change/avatar/`,
+        method: 'PUT',
+        body: formData,
+      })
+    })
   }),
 })
 

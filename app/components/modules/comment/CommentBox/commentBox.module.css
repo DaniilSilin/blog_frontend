@@ -1,0 +1,49 @@
+.root {
+  display: flex;
+}
+
+.avatarCreateComment {
+  border-radius: 50%;
+  margin-right: 16px;
+  margin-top: 15px;
+}
+
+.commentFooter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leaveCommentButton {
+  padding: 10px 15px;
+  font-weight: 700;
+  border-radius: 25px;
+  background-color: #272727;
+  color: #6c6c6c;
+}
+
+.leaveCommentButton.notEmpty {
+  background-color: #3ea6ff;
+  color: #0f0f0f;
+}
+
+.leaveCommentButton.notEmpty:hover {
+  background-color: #65b8ff;
+  cursor: pointer;
+}
+
+.emojiIcon {
+
+}
+
+.emojiIcon:hover {
+  border-radius: 50%;
+  background-color: #3f3f3f;
+}
+
+.cancelCommentButton {
+
+}
+
+.cancelCommentButton:hover {
+  background-color: #3f3f3f;
+}

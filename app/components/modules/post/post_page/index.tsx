@@ -5,11 +5,10 @@ import CommentCreate from "@/app/components/modules/comment_create"
 import moment from 'moment'
 import 'moment/locale/ru'
 import { BiRepost } from "react-icons/bi"
-import __Input from "@/app/components/modules/form/Input"
 import { LikeOutlined, LikeTwoTone, EyeOutlined } from '@ant-design/icons/lib'
 import Comment from '../../comment'
-
 import styles from './post_page.module.css'
+import CommentListSort from "@/app/components/modules/post/post_page/CommentListSort";
 
 const BASE_URL = 'http://localhost:8000'
 
@@ -122,15 +121,18 @@ export default function PostPg({ slug, post_id }) {
               <Link href={`/posts/search?hashtag=${tag.slice(1)}`}>{tag} </Link>
             ))}
           </div>
-          <div style={{ display: 'flex' }}>
-            <div>Комментарии {postData?.commentCount}</div>
-          </div>
         </div>
         <div>
-          <CommentCreate placeholder={'Написать комментарий'} slug={slug} post_id={post_id}/>
-          <div>
+          <div style={{ margin: '20px 0' }}>
+            <div style={{ display: 'flex', marginBottom: '15px' }}>
+              <div>{postData?.commentCount} комментариев</div>
+              <div><CommentListSort /></div>
+            </div>
+            <CommentCreate slug={slug} post_id={post_id} />
+          </div>
+          <div className={styles.commentsBlock}>
             {postCommentList?.results.map((comment) => (
-              <Comment slug={slug} post_id={post_id} comment={comment} reply_to={comment.reply_to} />
+              <Comment slug={slug} post_id={post_id} comment={comment} postData={postData} />
             ))}
           </div>
         </div>

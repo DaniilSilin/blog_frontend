@@ -1,0 +1,46 @@
+@keyframes expand {
+    from {
+        max-height: 2px;
+    }
+
+    to {
+        max-height: 100%;
+    }
+}
+
+.dropdown {
+    position: absolute;
+    z-index: 10;
+    background-color: #212121;
+    padding: 8px 8px;
+    animation: expand 0.15s linear;
+}
+
+.dropdownTitle [data-title]:hover {
+    color: red;
+}
+
+.dropdownTitle [data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+.dropdownTitle [data-title]:after {
+    content: attr(data-title);
+    background-color: #00FF00;
+    color: #111;
+    font-size: 150%;
+    position: absolute;
+    padding: 1px 5px 2px 5px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+}
+.dropdownTitle [data-title] {
+    position: relative;
+}

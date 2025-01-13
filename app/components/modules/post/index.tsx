@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import DjangoService from '../../../store/services/DjangoService'
 
 import Filter from '../filter'
@@ -25,7 +25,6 @@ export default function PostPaginatedList() {
   const router = useRouter()
   const [ page, setPage ] = React.useState<number>(1)
 
-  console.log(cleanParams(router.query, page))
   const { data: postPaginatedList, isLoading } = DjangoService.useGetPostPaginatedListQuery(cleanParams(router.query, page))
 
   if (isLoading) {

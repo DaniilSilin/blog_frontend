@@ -1,25 +1,25 @@
 import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
-import __Input from "@/app/components/modules/form/Input"
+import { useAppSelector } from "@/app/store"
+
+import styles from './comment_create.module.css'
+import CommentInput from "@/app/components/modules/form/CommentInput";
+import CommentBox from "@/app/components/modules/comment/CommentBox";
 
 export interface Props {
-  placeholder?: string
   slug: string
   post_id: number
 }
 
-export default function CommentCreate({ post_id, slug, placeholder }: Props) {
-  const [ comment, setComment ] = React.useState<string>('')
-  const [ createComment ] = DjangoService.useCreateCommentMutation()
+const BASE_URL = 'http://localhost:8000'
 
-  const createCommentFunc = () => {
-    createComment({ body: comment, post_id: post_id, slug: slug })
-  }
+export default function CommentCreate({ post_id, slug }: Props) {
+  const user = useAppSelector(state => state.django.profile)
 
   return (
-    <div>
-      <__Input width={200} placeholder={placeholder} height={50} onChange={setComment} />
-      <input type={"submit"} onClick={createCommentFunc} disabled={!comment} value={'Отправить'} />
+    <div className={styles.root}>
+      <img className={styles.avatarCreateComment} src={`${BASE_URL}${user.avatar_small}`} width={40} height={40} alt='' />
+      <CommentBox placeholder={'Введите комментарий'} submitButtonText={'Оставить комментарий'} slug={slug} post_id={post_id} />
     </div>
   )
 }

@@ -4,10 +4,8 @@ const emailValidator = (email: string) => {
   if (!email) {
     return ''
   } else {
-    if (email.length <= 3) {
-      return 'Минимальная длина должна быть не меньше 4 символов'
-    } else if (!emailRegex.test(email)) {
-      return 'E-mail содержать недопустимые символы'
+    if (!emailRegex.test(email)) {
+      return 'Неверный email. Проверьте правильность указанного адреса. '
     } else {
       return ''
     }

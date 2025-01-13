@@ -11,7 +11,6 @@ export interface Props {
 
 export default function SelectField({ options, setValue, value }: Props) {
   const handleChange = (selectedValues: string[]) => {
-   console.log(selectedValues)
    setValue(selectedValues)
  }
 

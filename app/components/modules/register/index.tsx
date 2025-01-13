@@ -10,7 +10,7 @@ import styles from './register.module.css'
 const firstNameDescription = 'Введите ваше имя.'
 const lastNameDescription = 'Введите вашу фамилию.'
 const emailDescription = 'Адрес вашей электронной почты.'
-const usernameDescription = 'Минимальная длина: 3 символа. Имя пользователя может содержать Латинские символы, цифры и символ "_".'
+const usernameDescription = 'Минимальная длина: 3 символа. Ваше имя пользователя может содержать латинские буквы, цифры и знак нижнего подчёркивания.'
 const passwordDescription = 'Минимальная длина: 8 символов. Ваш пароль должен содержать строчные и заглавные буквы, а также цифры.'
 const passwordConfirm = 'Повторите пароль, чтобы исключить вероятность опечатки.'
 

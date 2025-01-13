@@ -11,63 +11,18 @@ import { BsThreeDotsVertical } from "react-icons/bs"
 import { useRouter } from 'next/router'
 
 import styles from './blog_page.module.css'
-import {useAppSelector} from "@/app/store";
-import PostItem from "@/app/components/modules/post_page";
+import { useAppSelector } from '@/app/store'
+import PostItem from "@/app/components/modules/post_page"
 
 const BASE_URL = 'http://localhost:8000'
 
-const SORTING_LIST = [
-  {
-    id: 1,
-    title: 'Сначала новое',
-    query_param: 'newest'
-  },
-  {
-    id: 2,
-    title: 'Сначала старое',
-    query_param: 'oldest',
-  }
-]
 
 export default function BlogItem({ slug }) {
-  const [ showOwnerMenu, setShowOwnerMenu ] = React.useState(false)
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug })
-  const [ page, setPage ] = React.useState(1)
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
   const [ unsubscribeBlog ] = DjangoService.useUnsubscribeBlogMutation()
-  const sortingPostListRef = React.useRef(null)
-  const [ openSortingMenu, setOpenSortingMenu ] = React.useState(false)
   const router = useRouter()
   const user = useAppSelector(state => state.django.profile)
-
-  const sortingParam = React.useMemo(() => {
-    const sorting1 = router.query.sorting ? router.query.sorting : undefined
-    if (sorting1) {
-     if (sorting1 === 'oldest' || sorting1 === 'newest') {
-        return sorting1
-      } else {
-        return undefined
-      }
-    } else {
-      return undefined
-    }
-  }, [ router ])
-
-  console.log(sortingParam)
-  const [ sorting, setSorting ] = React.useState(sortingParam ? sortingParam : SORTING_LIST[0].query_param)
-  console.log(sorting)
-  const [ currentTitle, setCurrentTitle ] = React.useState(SORTING_LIST[0].title)
-  // SORTING_LIST.find(item => item.query_param === sorting ? item.title :
-  const { data: postList, isFetching } = DjangoService.useGetBlogPostsQuery({ slug, page, sorting })
-
-  const setSortingQueryParam = React.useCallback((item: any) => {
-    setSorting(item.query_param)
-     router.push({
-      pathname: `/blog/${slug}`,
-      query: { sorting: item.query_param },
-    }
-    ,undefined, { shallow: true })
-  }, [ setSorting, router ])
 
   const subscribeRequest = () => {
     subscribeBlog({ slug })
@@ -84,8 +39,8 @@ export default function BlogItem({ slug }) {
   const handleDynamicContentClick = React.useCallback((e) => {
     let elem = e.target
     if (dynamicContentModalDisplayed) {
-      if (elem.className.startsWith('blog_page_close__iM9MY') || elem.className.startsWith('blog_page_modal__2v_9_')) {
-        if (elem.className.startsWith('blog_page_close')) {
+      if (elem.className.startsWith("close_3") || elem.className.startsWith("modal_3")) {
+        if (elem.className.startsWith("close_3")) {
           elem = elem.parentNode.parentNode.parentNode
           elem.style.display = 'none'
           unfreezeBody()
@@ -97,7 +52,7 @@ export default function BlogItem({ slug }) {
       }
     } else {
       let modalNode = null
-      if (elem.lastElementChild.className.startsWith('blog_page_modal__2v_9_')) {
+      if (elem.lastElementChild.className.startsWith("modal_3")) {
         modalNode = elem.lastElementChild
         modalNode.style.display = 'block'
         freezeBody()
@@ -106,138 +61,107 @@ export default function BlogItem({ slug }) {
     }
   }, [freezeBody, unfreezeBody, dynamicContentModalDisplayed])
 
-  React.useEffect(() => {
-    const handleMouse = (e: MouseEvent) => {
-      if (sortingPostListRef.current.contains(e.target)) {
-        setOpenSortingMenu(true)
-      } else {
-        setOpenSortingMenu(false)
-      }
-    }
-    document.addEventListener('mousedown', handleMouse)
-    return () => document.addEventListener('mousedown', handleMouse)
-  })
+  // React.useEffect(() => {
+  //   const handleMouse = (e: MouseEvent) => {
+  //     if (sortingPostListRef.current.contains(e.target)) {
+  //       setOpenSortingMenu(true)
+  //     } else {
+  //       setOpenSortingMenu(false)
+  //     }
+  //   }
+  //   document.addEventListener('mousedown', handleMouse)
+  //   return () => document.addEventListener('mousedown', handleMouse)
+  // })
 
-  const sortingMenuHandleChange = React.useCallback((item: any) => {
-    setOpenSortingMenu(false)
-    if (item.query_param !== sorting) {
-      setSortingQueryParam(item)
-      setSorting(item.query_param)
-      setCurrentTitle(item.title)
-      setPage(1)
-    }
-  }, [ setSorting, setCurrentTitle, setOpenSortingMenu, setPage, sorting ])
+  // const sortingMenuHandleChange = React.useCallback((item: any) => {
+  //   setOpenSortingMenu(false)
+  //   if (item.query_param !== sorting) {
+  //     setSortingQueryParam(item)
+  //     setSorting(item.query_param)
+  //     setCurrentTitle(item.title)
+  //     setPage(1)
+  //   }
+  // }, [ setSorting, setCurrentTitle, setOpenSortingMenu, setPage, sorting ])
 
-  React.useEffect(() => {
-    const onScroll = () => {
-      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
-      if (scrolledToBottom && !isFetching) {
-          if (postList.next !== null) {
-            setPage(page + 1)
-          } else {
-            return
-        }
-      }
-    }
-    document.addEventListener("scroll", onScroll)
-    return function () {
-      document.removeEventListener("scroll", onScroll)
-    }
-  }, [ page, isFetching ])
-
-  const showOwnerMenuFunction = () => {
-    setShowOwnerMenu(true)
-  }
-
-  const hideOwnerMenuFunction = () => {
-    setShowOwnerMenu(false)
-  }
+  // React.useEffect(() => {
+  //   const onScroll = () => {
+  //     const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
+  //     if (scrolledToBottom && !isFetching) {
+  //         if (postList.next !== null) {
+  //           setPage(page + 1)
+  //         } else {
+  //           return
+  //       }
+  //     }
+  //   }
+  //   document.addEventListener("scroll", onScroll)
+  //   return function () {
+  //     document.removeEventListener("scroll", onScroll)
+  //   }
+  // }, [ page, isFetching ])
+  console.log(router)
 
   return (
-      <div className={styles.root}>
-        <div className={styles.blogContainer}>
-          <div style={{display: 'flex'}}>
-            <img src={`${BASE_URL}${blogData?.avatar}`} alt="" width='60' height='60'/>
-            <div style={{justifyContent: 'space-between', display: 'flex', width: '870px'}}>
+    <div className={styles.root}>
+      <div className={styles.blogContainer}>
+          <img src={`${BASE_URL}${blogData?.banner}`} width={1070} height={180} style={{ borderRadius: '15px' }} alt="" />
+          <div style={{ display: 'flex'}}>
+            <img src={`${BASE_URL}${blogData?.avatar}`} style={{ borderRadius: '50%' }} alt="" width='150' height='150' />
+            <div style={{ justifyContent: 'space-between', display: 'flex', width: '870px' }}>
               <div className={styles.blogInfo}>
                 <div className={styles.blogTitle}>{blogData?.title}</div>
-                <div>{blogData?.subscriberList} подписчиков</div>
-              </div>
-              <div>
-                {blogData?.isSubscribed.toString() === 'true' ? (
-                    <div className={styles.unsubscribeButton} onClick={unsubscribeRequest}>Отписаться</div>
-                ) : (
-                    <div className={styles.subscribeButton} onClick={subscribeRequest}>Подписаться</div>
-                )}
-              </div>
-              {user?.username === blogData?.owner.username && (
-                <div onMouseOver={showOwnerMenuFunction} onMouseLeave={hideOwnerMenuFunction}>
-                  <BsThreeDotsVertical />
-                  {showOwnerMenu && (
-                    <div>
-                      <div onClick={router.push(`/blog/${blogData?.slug}/edit/`)}>Редактировать блог</div>
-                      <div>Подробнее о канале</div>
-                    </div>
-                  )}
+                <div style={{ display: 'flex' }}>
+                  <div>{blogData?.slug}</div>
+                  <div style={{ margin: '0 4px' }}>·</div>
+                  <div>{blogData?.subscriberList} подписчиков</div>
+                  <div style={{ margin: '0 4px' }}>·</div>
+                  <div>{blogData?.count_of_posts} постов</div>
                 </div>
-              )}
-            </div>
-          </div>
-          <div>
-            <div>
-              <div onClick={handleDynamicContentClick} className={styles.blogDescription}>
-                {(blogData?.description.length < 100) ?
-                    <>{blogData?.description}<RightOutlined/></> :
-                    <>{blogData?.description.slice(0, 130)}...<RightOutlined/></>}
-                <div className={styles.modal}>
-                  <div className={styles.modalContent}>
-                    <AdditionalBlogInformation blogData={blogData}/>
+                <div></div>
+                <div onClick={handleDynamicContentClick} className={styles.blogDescription}>
+                  {(blogData?.description.length < 35) ?
+                    <>{blogData?.description}...ещё</> :
+                    <>{blogData?.description.slice(0, 35)}...ещё</>}
+                  <div className={"modal_3"}>
+                    <div className={"modalContent_3"}>
+                      <AdditionalBlogInformation blogData={blogData}/>
+                    </div>
                   </div>
                 </div>
+                <div>
+                  {blogData?.isSubscribed.toString() === 'true' ? (
+                    <div className={styles.unsubscribeButton} onClick={unsubscribeRequest}>Отписаться</div>
+                  ) : (
+                    <div className={styles.subscribeButton} onClick={subscribeRequest}>Подписаться</div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-          <div style={{display: 'flex'}}>
-            <div style={{fontWeight: '700', fontSize: '18px'}}>Последнее обновление:</div>
-            <div style={{marginTop: '2px'}}>&nbsp;{moment(blogData?.updated_at).format("D MMMM YYYY hh:mm")}</div>
-          </div>
-          <div style={{display: 'flex'}}>
-            <div style={{display: 'flex', padding: '4px 8px 4px 0'}}>
-              <div style={{fontSize: '18px', fontWeight: '700'}}>{blogData?.count_of_posts}</div>
-              <div style={{fontSize: '14px', color: '#7A9199', marginTop: '3.5px'}}>&nbsp;Постов</div>
-            </div>
-            <div style={{display: 'flex', padding: '4px 8px'}}>
-              <div style={{fontSize: '18px', fontWeight: '700'}}>{blogData?.count_of_commentaries}</div>
-              <div style={{fontSize: '14px', color: '#7A9199', marginTop: '3.5px'}}>&nbsp;Комментариев</div>
-            </div>
-          </div>
-        </div>
-        {/*{blogData?.pinned_post && (*/}
-        {/*  <div>*/}
-        {/*    <PostItem post={blogData?.pinned_post} />*/}
-        {/*  </div>*/}
-        {/*)}*/}
-        <div ref={sortingPostListRef}>
-          <span className={styles.selectButton}>
-            <div className={styles.sortingTitle}>{currentTitle}</div>
-            <div>{openSortingMenu ? <IoIosArrowUp size={22} style={{ marginTop: '10px' }} /> : <IoIosArrowDown size={22} style={{ marginTop: '10px' }} />}</div>
-          </span>
-            {openSortingMenu && (
-                <div className={styles.sortingMenu}>
-                  {SORTING_LIST.map((item) => (
-                      <div key={item.id} className={styles.sortingMenuTitle} onClick={() => sortingMenuHandleChange(item)}>
-                        {item.title}
-                        {item.title === sorting && <IoIosCheckmark />}
-                      </div>
-                  ))}
-                </div>
-            )}
-        </div>
-        <div className={styles.postsContainer}>
-          {postList?.results?.map((post, index) => (
-            <PostList post={post} slug={slug}/>
-          ))}
-        </div>
       </div>
+      <div className={styles.bottomMenu}>
+        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/`}>
+          <div>Главная</div>
+        </Link>
+        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/posts/`}>
+          <div>Посты</div>
+        </Link>
+        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/videos/`}>
+          <div>Видео</div>
+        </Link>
+        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/playlists/`}>
+          <div>Плейлисты</div>
+        </Link>
+        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/community/`}>
+          <div>Обсуждения</div>
+        </Link>
+      </div>
+      {blogData?.pinned_post && (
+        <div>
+          <PostItem post={blogData?.pinned_post} />
+        </div>
+      )}
+    </div>
   )
 }
+

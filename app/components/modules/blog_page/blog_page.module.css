@@ -3,7 +3,7 @@
 }
 
 .blogTitle {
-  font-size: 26px;
+  font-size: 36px;
   margin-right: 10px;
 }
 
@@ -13,11 +13,9 @@
 }
 
 .blogContainer {
-    font-size: 16px;
-    width: 1000px;
-    padding: 15px;
-    border: 1px solid gray;
-    border-radius: 10px;
+  font-size: 16px;
+  width: 1000px;
+  padding: 15px;
 }
 
 .blogUpdateContainer {
@@ -225,3 +223,17 @@
   color: gray;
 }
 
+.bottomMenu {
+  display: flex;
+  /*border-bottom: 2px solid black;*/
+  margin-bottom: 10px;
+}
+
+.bottomMenu > div {
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.bottomMenu > div:hover {
+  border-bottom: 1px solid black;
+}
