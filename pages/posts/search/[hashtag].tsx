@@ -5,8 +5,6 @@ import type { GetServerSidePropsContext } from "next"
 
 
 export default function PostsSearchPage(props) {
-  console.log(props)
-
   return (
     <MainLayout>
       <PostsSearchView hashtag={props.hashtag} />

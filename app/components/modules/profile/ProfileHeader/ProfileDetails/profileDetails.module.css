@@ -1,0 +1,33 @@
+.root {
+
+}
+
+.modalHeader {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 20px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+}
+
+.modalContent {
+  padding: 8px;
+}
+
+.modalContent > div {
+  display: flex;
+  padding: 0 10px;
+  margin-bottom: 10px;
+
+}
+
+.modalContentIcon {
+  margin-right: 12px;
+}
+
+.divider {
+  content: "";
+  background: #000000;
+}
+

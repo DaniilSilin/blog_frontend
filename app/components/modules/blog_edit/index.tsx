@@ -1,20 +1,43 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
+import NextImage from 'next/image'
 import DjangoService from "@/app/store/services/DjangoService"
-import __Input from "@/app/components/modules/form/Input"
-import _TextArea from "@/app/components/modules/form/Textarea"
 
 import styles from './blog_edit.module.css'
-import ImageUpload from './ImageUpload'
-import SelectField from "@/app/components/modules/form/SelectField";
+import AvatarCrop from "@/app/components/modules/blog_edit/AvatarCrop"
+import BannerCrop from "@/app/components/modules/blog_edit/BannerCrop"
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://localhost:8000/'
+
+const MIN_AVATAR_SIZE_IN_MB = 33554432
+const MIN_BANNER_SIZE_IN_MB = 50331648
+const MIN_DIMENSION_AVATAR = 100
+const MIN_HEIGHT_BANNER = 576
+const MIN_WIDTH_BANNER = 1024
+
+
 
 export default function BlogEdit({ slug }) {
+  const avatarRef = React.useRef(null)
+  const bannerRef = React.useRef(null)
+  const uploadErrorRef = React.useRef(null)
+
+  const [ originalBannerSource, setOriginalBannerSource ] = React.useState<File>()
+  const [ originalBannerSourceUrl, setOriginalBannerSourceUrl ] = React.useState<string>('')
+
+  const [ originalAvatarSource, setOriginalAvatarSource ] = React.useState<File>()
+  const [ originalAvatarSourceUrl, setOriginalAvatarSourceUrl ] = React.useState<string>('')
+
   const [ deleteBlog ] = DjangoService.useDeleteBlogMutation()
   const [ updateBlog ] = DjangoService.useUpdateBlogMutation()
-  const [ kickUser ] = DjangoService.useKickUserMutation()
+  const [ originalImageSource, setOriginalImageSource ] = React.useState<any>()
+  const [ originalImageSourceUrl, setOriginalImageSourceUrl ] = React.useState<string>("")
 
   const { data } = DjangoService.useGetBlogQuery({ slug })
+  const [ displayAvatarCropModal, setDisplayAvatarCropModal ] = React.useState(false)
+
+  const [ vkLink, setVkLink ] = React.useState('')
+  const [ dzen, setDzenLink ] = React.useState('')
+  const [ youtube, setYoutubeLink ] = React.useState('')
 
   const [ title, setTitle ] = React.useState<string>('')
   const [ description, setDescription ] = React.useState<string>('')
@@ -23,128 +46,179 @@ export default function BlogEdit({ slug }) {
   const [ avatar, setAvatar ] = React.useState<any>(null)
   const [ avatarSmall, setAvatarSmall ] = React.useState<any>(null)
 
+  const [ displayLinks, setDisplayLinks ] = React.useState(false)
   const [ isModalOpen, setIsModalOpen ] = React.useState<boolean>(false)
-  const freezeBody = React.useCallback(() => document.querySelector("body")?.classList.add("freeze"), [])
-  const unfreezeBody = React.useCallback(() => document.querySelector("body")?.classList.remove("freeze"), [])
 
   const [ sourceImage, setSourceImage ] = React.useState('')
 
-  const handleModalFunction = React.useCallback((e) => {
-    let elem = e.target
-    if (isModalOpen) {
-    } else {
-      let modalNode = null
-      if (elem.nextSibling.className === 'blog_edit_modal__aA8Pb') {
-        modalNode = elem.nextSibling
-      }
-      if (modalNode) {
-        (modalNode as HTMLDivElement).style.display = 'block'
-        freezeBody()
-        setIsModalOpen(true)
-      }
-    }
-  }, [ isModalOpen, freezeBody, unfreezeBody ])
+  const [ imageErrorMessage, setImageErrorMessage ] = React.useState('')
 
-  const handleShowModal = React.useCallback((e) => {
-    let elem = e.target
-    if (isModalOpen) {
-    } else {
-      let modalNode = null
-      if (elem.nextSibling.className === 'blog_edit_modal__aA8Pb') {
-        modalNode = elem.nextSibling
-      }
-      if (modalNode) {
-        (modalNode as HTMLDivElement).style.display = 'block'
-        freezeBody()
-        setIsModalOpen(true)
-      }
-    }
-  }, [ isModalOpen, freezeBody, unfreezeBody ])
+  const onSelectBannerImage = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
-  const deleteItem = () => {
-    deleteBlog({ slug })
+    const fileSize = file?.size
+    if (fileSize >= MIN_BANNER_SIZE_IN_MB) {
+      setImageErrorMessage('Максимальный размер изображения - 6 Мб.')
+    }
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
+      // @ts-ignore
+      const imageElement = new Image()
+      const imageUrl = reader.result?.toString() || ''
+      imageElement.src = imageUrl
+
+      imageElement.addEventListener("load", (e) => {
+        const width = e.currentTarget.width
+        const height = e.currentTarget.height
+        if (width < MIN_DIMENSION_AVATAR || MIN_DIMENSION_AVATAR > height) {
+          setImageErrorMessage('Минимальный размер изображения – 1024 x 576 пикс.')
+          setOriginalBannerSource(undefined)
+          setOriginalBannerSourceUrl('')
+        }
+      })
+      setOriginalBannerSource(file)
+      setOriginalBannerSourceUrl(imageUrl)
+    })
+    reader.readAsDataURL(file)
   }
 
-  // const updateItem = () => {
-  //   updateBlog({ formData, slug })
-  // }
+  const onSelectAvatar = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
-  const sendData = () => {
-    const formData = new FormData()
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('phoneNumber', phoneNumber)
-    formData.append('blog', slug)
-    formData.append('avatar', avatar)
-    formData.append('avatar_small', avatarSmall)
-    updateBlog({ formData, slug })
+    const fileSize = file?.size
+    if (fileSize >= 33554432 ) {
+      setImageErrorMessage('Файл не может превышать размер 4 Мб!')
+    }
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
+      const imageElement = new Image()
+      const imageUrl = reader.result?.toString() || ''
+      imageElement.src = imageUrl
+
+      imageElement.addEventListener("load", (e) => {
+        const width = e.currentTarget.width
+        const height = e.currentTarget.height
+        if (width < MIN_WIDTH_BANNER || MIN_HEIGHT_BANNER > height) {
+          setImageErrorMessage('Минимальный размер изображения – 1024 x 576 пикс.')
+          setOriginalAvatarSource(undefined)
+          setOriginalAvatarSourceUrl('')
+        }
+      })
+      setImageErrorMessage('Файл не может превышать размер 4 Мб!')
+
+      setOriginalAvatarSource(file)
+      setOriginalAvatarSourceUrl(imageUrl)
+    })
+    reader.readAsDataURL(file)
+  }, [ setOriginalAvatarSource, setOriginalAvatarSourceUrl ])
+
+  const handleDisplayModal = (e: any) => {
+    let elem = e.target
+    if (elem.className === 'modal_3') {
+      elem.style.display = 'none'
+      setImageErrorMessage('')
+    }
   }
+
+  React.useEffect(() => {
+    if (imageErrorMessage) {
+      console.log(123)
+      uploadErrorRef.current.style.display = 'block'
+    }
+    if (originalAvatarSource && originalAvatarSourceUrl) {
+      avatarRef.current.style.display = 'block'
+    }
+  }, [ originalAvatarSource, originalAvatarSourceUrl, imageErrorMessage ])
 
   if (!data) {
     return <div>Загрузка</div>
   }
 
-
-  const onSelectFile = (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-    const reader = new FileReader()
-    console.log(reader)
-    reader.addEventListener("load", () => {
-      const imageElement = new Image()
-      const imageUrl = reader.result.toString() || ''
-      console.log(imageUrl)
-      setSourceImage(imageUrl)
-      const elem = e.target
-      console.log(elem)
-    })
-    reader.readAsDataURL(file)
-  }
-
-
   return (
     <div>
-      <div>
-        <div>Баннер</div>
-        <div>Это изображение показывается в верхней части страницы канала.</div>
-        <img src={`${BASE_URL}${data?.banner}`} width={100} height={50} alt={''}  />
-        <div>
-          <div>
-            <div>Изменить</div>
-            <input type={'file'} onChange={onSelectFile} accept='image/*' />
+      <div className={styles.tabTitle}>Настройки</div>
+      <div className={styles.bannerContainer}>
+        <div className={styles.bannerContainerTitle}>Баннер</div>
+        <div className={styles.bannerContainerDescription}>Это изображение показывается в верхней части страницы канала.</div>
+        <div style={{ display: 'flex', marginTop: '8px' }}>
+          <div style={{ width: '290px', height: '160px', backgroundColor: '#1f1f1f', alignItems: 'center', borderRadius: '15px', display: 'flex', justifyContent: 'center' }}>
+            <NextImage src={`${BASE_URL}${data?.banner}`} style={{ border: '2px solid white' }} width={175} height={100} alt={''} />
           </div>
-          <div>Удалить</div>
-        </div>
-      </div>
-      <div className={'modal'}>
-        <div className={'modalContent'}>
-
-        </div>
-      </div>
-      <div>
-        <div>Фото профиля</div>
-        <div>Фото профиля показывается, например, рядом с вашими видео или комментариями на сайте.</div>
-        <img src={`${BASE_URL}${data?.avatar}`} width={100} height={50} alt={''}  />
-        <div>
-          <div>
-            <div>Изменить</div>
-            <input type={'file'} accept='image/*' />
+          <div className={styles.avatarUploadContainer}>
+            <div className={styles.bannerGuide}>Чтобы канал выглядел привлекательно на всех устройствах, советуем загрузить изображение размером не менее 2048 x 1152 пикс.
+              Размер файла – не более 6 МБ.
+            </div>
+            <div className={styles.bannerActionsContainer}>
+              <div className={styles.bannerUploadButton}>
+                <label>
+                  Изменить
+                  <input type={'file'} accept='image/png,image/jpeg,image/gif' onChange={onSelectBannerImage}/>
+                </label>
+              </div>
+              <div className={styles.bannerDeleteButton}>
+                <div>Удалить</div>
+              </div>
+              <div onClick={handleDisplayModal} ref={avatarRef} className="modal_3">
+                <div className="modalContent_3">
+                  <BannerCrop />
+                </div>
+              </div>
+            </div>
           </div>
-          <div>Удалить</div>
+        </div>
+        <div className={styles.avatarContainer}>
+          <div className={styles.avatarContainerTitle}>Фото профиля</div>
+          <div className={styles.bannerContainerDescription}>Фото профиля показывается, например, рядом с вашими видео или комментариями на сайте.</div>
+        <div style={{display: 'flex', marginTop: '8px'}}>
+          <div style={{ width: '290px', height: '160px', backgroundColor: '#1f1f1f', alignItems: 'center', borderRadius: '15px', display: 'flex', justifyContent: 'center' }}>
+            <NextImage src={`${BASE_URL}${data?.avatar_small}`} style={{ borderRadius: '50%', border: '2px solid white' }} width={140} height={140} alt={''}/>
+          </div>
+          <div className={styles.avatarUploadContainer}>
+            <div className={styles.avatarGuide}>Рекомендуем использовать изображение размером не менее 98 х 98 пикселей в формате PNG или GIF.
+              Анимированные картинки загружать нельзя. Размер файла – не более 4 МБ. Помните, что изображение должно соответствовать правилам сообщества YouTube.
+            </div>
+            <div className={styles.avatarActionsContainer}>
+              <div className={styles.avatarUploadButton}>
+                <label>
+                  Изменить
+                  <input type={'file'} accept='image/png,image/jpeg,image/gif' onChange={onSelectAvatar} />
+                </label>
+              </div>
+              <div className={styles.avatarDeleteButton}>
+                <div>Удалить</div>
+              </div>
+              <div onClick={handleDisplayModal} ref={avatarRef} className="modal_3">
+                <div className="modalContent_3">
+                  <AvatarCrop originalImageSourceUrl={originalImageSourceUrl} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      {/*<img onClick={handleModalFunction} src={`${BASE_URL}${data?.avatar}`} alt='' width={200} height={200} />*/}
-      {/*<div className={styles.modal}>*/}
-      {/*  <div className={styles.modalContent}>*/}
-      {/*    <ImageUpload avatar={avatar} setAvatar={setAvatar} avatarSmall={avatarSmall} setAvatarSmall={setAvatarSmall} />*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      <__Input width={500} height={50} onChange={setTitle} label={'Название блога'} defaultValue={data?.title} />
-      <_TextArea width={500} height={100} label={'Описание блога'} onChange={setDescription} defaultValue={data?.description} />
-      <__Input width={500} height={50} onChange={setEmail} label={'Почта'} defaultValue={data?.email} />
-      <__Input width={500} height={50} onChange={setPhoneNumber} label={'Номер телефона'} defaultValue={data?.phone_number} />
-      <input type={'submit'} onClick={sendData} value={'Сохранить'}/>
-      <input type={'submit'} onClick={deleteItem} value={'Удалить Блог'}/>
+      <div ref={uploadErrorRef} onClick={handleDisplayModal} className="modal_3">
+        <div className={styles.modalContentError}>
+          <div style={{ padding: '7px 8px 5px', fontWeight: '500', fontSize: '20px', lineHeight: '28px' }}>
+            Ошибка
+          </div>
+          <div style={{ paddingLeft: '24px', paddingRight: '24px' }}>
+            <div>
+              {imageErrorMessage}
+            </div>
+          </div>
+          <div>
+            <div>
+              Отмена
+            </div>
+            <div>
+              Повторить
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   )
 }

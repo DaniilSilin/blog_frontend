@@ -91,11 +91,10 @@ const DjangoService = createApi({
       })
     }),
     createBlog: builder.mutation({
-      query: ({ title, description, slug, formData }) => ({
+      query: ({ formData }) => ({
         url: 'blog/create/',
         method: 'POST',
         body: formData,
-        // formData: true,
       })
     }),
     getBlog: builder.query<Blog, {slug: string}>({
@@ -114,7 +113,6 @@ const DjangoService = createApi({
         url: `blog/${slug}/`,
         method: 'PUT',
         body: formData,
-        formData: true
       })
     }),
     getSubscriptions: builder.query<Blog, { username: string }>({
@@ -140,11 +138,10 @@ const DjangoService = createApi({
       })
     }),
     createPost: builder.mutation({
-      query: ({ title, body, is_published, blog, tags }) => ({
+      query: ({ title, body, is_published, map, blog, tags }) => ({
         url: `blog/${blog}/post/create/`,
         method: 'POST',
-        body: { title, body, is_published, blog, tags },
-        // formData: true
+        body: { title, body, map, is_published, blog, tags },
       })
     }),
     deletePost: builder.mutation({
@@ -323,6 +320,9 @@ const DjangoService = createApi({
         return endpointName
       },
       merge: (currentCache, newItems, otherArgs) => {
+        currentCache = {
+
+        }
         currentCache.results.push(...newItems.results)
         // let currentPage = 1
         // currentCache.previous = newItems.previous
@@ -338,16 +338,37 @@ const DjangoService = createApi({
       },
     }),
     postCommentList: builder.query({
-      query: ({ slug, post_id, parent_id }) => ({
+      query: ({ slug, post_id, parent_id, page }) => ({
         url: `blog/${slug}/post/${post_id}/comment/list/`,
         params: {
+          page: page || undefined,
           parent_id: parent_id || undefined,
         }
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        if (otherArgs.arg.parent_id) {
+          // currentCache.threads = newItems
+          // console.log(currentCache.threads)
+          // currentCache.threads.push({id: otherArgs.arg.parent_id })
+          // currentCache.replyThread.parent_id.push(...newItems.results)
+        } else {
+          currentCache.mainThread.push(...newItems.results)
+          currentCache.next = newItems.next
+          currentCache.previous = newItems.previous
+          console.log(currentCache)
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
     }),
+
     getUsers: builder.query({
-      query: ({ username }) => ({
-        url: `invite/get_users/${username}/`
+      query: ({ slug, username }) => ({
+        url: `invite/blog/${slug}/get_users/${username}/`
       })
     }),
     isUsernameAvailable: builder.query({
@@ -360,6 +381,37 @@ const DjangoService = createApi({
         url: `profile/${username}/change/avatar/`,
         method: 'PUT',
         body: formData,
+      })
+    }),
+    blogEditorPosts: builder.query({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/editor/posts/`
+      })
+    }),
+    blogsWhereUserIsOwner: builder.query({
+      query: ({ username }) => ({
+        url: `${username}/blogs/owner/`
+      })
+    }),
+    blogsWhereUserIsAuthor: builder.query({
+      query: ({ username }) => ({
+        url: `${username}/blogs/author/`
+      })
+    }),
+    leaveBlog: builder.mutation({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/leave/`,
+        method: 'POST'
+      })
+    }),
+    blogInvitations: builder.query({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/invitations/`,
+      })
+    }),
+    blogComments: builder.query({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/comments/`
       })
     })
   }),

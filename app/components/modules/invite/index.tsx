@@ -4,7 +4,6 @@ import DjangoService from "@/app/store/services/DjangoService"
 import { Button, Divider, Input, Select, Space } from 'antd/lib'
 import SelectField from "@/app/components/modules/form/SelectField";
 
-const BASE_URL = 'http://localhost:8000'
 
 export default function Invite() {
   const [ addressee, setAddressee ] = React.useState<string>('')

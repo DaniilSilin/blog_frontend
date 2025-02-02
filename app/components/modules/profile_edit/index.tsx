@@ -4,6 +4,7 @@ import __Input from "@/app/components/modules/form/Input"
 import ImageChange from "@/app/components/modules/profile_edit/ImageChange"
 
 import styles from './profile_edit.module.css'
+import _TextArea from "@/app/components/modules/form/Textarea";
 
 const BASE_URL = 'http://localhost:8000'
 
@@ -11,12 +12,14 @@ export default function ProfileEdit({ username }) {
   const { data } = DjangoService.useUserProfileQuery({ username })
   const [ changeUser ] = DjangoService.useChangeUserProfileMutation()
 
+  const [ age, setAge ] = React.useState<number>()
   const [ firstName, setFirstName ] = React.useState<string>('')
   const [ lastName, setLastName ] = React.useState<string>('')
   const [ email, setEmail ] = React.useState<string>('')
   const [ usernameState, setUsernameState ] = React.useState<string>(username)
   const [ displayModal, setDisplayModal ] = React.useState<boolean>(false)
   const [ image, setImage ] = React.useState<any>(null)
+  const [ description, setDescription ] = React.useState<string>('')
 
   const [ show, setShow ] = React.useState<boolean>(false)
   const modalRef = React.useRef(null)
@@ -83,6 +86,7 @@ export default function ProfileEdit({ username }) {
           <__Input width={400} height={50} label={'Фамилия'} defaultValue={user?.last_name} onChange={setLastName} placeholder={'Введите фамилию'} />
           <__Input width={400} height={50} label={'Электронная почта'} defaultValue={user?.email} onChange={setEmail} placeholder={'Введите название почты'}/>
           <__Input width={400} height={50} label={'Имя пользователя'} defaultValue={user?.username} onChange={setUsernameState} placeholder={'Введите имя пользователя'} />
+          <_TextArea width={400} height={150} label={'Краткая информация'} onChange={setDescription} autoSize={false} maxLength={250} />
           <input type={'submit'} value={'Сохранить'} onClick={onSubmitData} />
         </div>
         </>

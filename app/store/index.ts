@@ -35,7 +35,6 @@ export const initializeStore = (
 
   if (preloadedState && store) {
     const state = store.getState()
-    console.log(_store)
     _store = createStore(
       {
         ...preloadedState,

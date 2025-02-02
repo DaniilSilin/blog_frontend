@@ -1,0 +1,19 @@
+.root {
+
+}
+
+.mapTitle {
+  margin-bottom: 5px;
+  text-decoration: underline;
+  color: #3c3cbd;
+}
+
+.mapTitle:hover {
+  color: #0909ea;
+  cursor: pointer;
+}
+
+.tagListContainer {
+  margin: 7px 0;
+  width: 400px;
+}

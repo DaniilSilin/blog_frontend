@@ -12,17 +12,15 @@ export default function HeaderReact() {
       id: 1,
       label: <HeaderProfile />,
     },
-    {
-      id: 2,
-      label: <HeaderData />
-    }
   ]
 
   return (
-    <Header style={{ display: 'flex', flexDirection: 'row-reverse' }}>
-      <div className="demo-logo" />
-      {/*<Menu theme="dark" mode="horizontal" items={headerMenu}></Menu>*/}
-      <HeaderProfile />
+    <Header style={{ display: 'flex', flexDirection: 'row-reverse', lineHeight: '30px' }}>
+      {/*<div className="demo-logo" />*/}
+      <Menu theme="dark" mode="horizontal">
+        <HeaderProfile />
+      </Menu>
+      {/*<HeaderProfile />*/}
       {/*<HeaderData />*/}
       {/*<div className="demo-logo" />*/}
       {/*<Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={headerMenu} style={{ flex: 1, flexDirection: 'row-reverse' }}/>*/}

@@ -1,0 +1,42 @@
+.root {
+
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.tabsMenu {
+  display: flex;
+}
+
+.TabsMenuTab {
+
+}
+
+.tabsMenu > .TabsMenuTab {
+
+}
+
+.tabsMenu > div {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.selectionBar {
+  display: flex;
+  font-size: 16px;
+}
+
+.selectionBar > .selectionBarCell {
+  padding: 10px;
+}
+
+.selectionBarCell {
+
+}
+
+.publicationsList {
+
+}

@@ -9,22 +9,68 @@ import { LikeOutlined, LikeTwoTone, EyeOutlined } from '@ant-design/icons/lib'
 import Comment from '../../comment'
 import styles from './post_page.module.css'
 import CommentListSort from "@/app/components/modules/post/post_page/CommentListSort";
-
 const BASE_URL = 'http://localhost:8000'
 
+const socket = new WebSocket('ws://localhost:8000/ws/some-url/')
+
 export default function PostPg({ slug, post_id }) {
+       React.useEffect(() => {
+           const socket = new WebSocket('ws://localhost:8000/ws/some_path/');
+
+           socket.onopen = () => {
+               console.log('Connected to WebSocket server');
+               socket.send(JSON.stringify({ message: 'World' }));
+           };
+
+           socket.onmessage = (event) => {
+               const data = JSON.parse(event.data);
+               console.log(data.message);
+           };
+
+           socket.onclose = () => {
+               console.log('Disconnected from WebSocket server');
+           };
+
+           return () => {
+               socket.close();
+           };
+       }, []);
+
+
   const [ likeIsSet, setLikeIsSet ] = React.useState<boolean>()
   const [ sortBy, setSortBy] = React.useState<string>('')
   const [ tags, setTags ] = React.useState([])
   const commentListSortRef = React.useRef(null)
+  const [ page, setPage ] = React.useState(1)
 
   const { data: postData } = DjangoService.useGetPostQuery({ slug, post_id })
-  const { data: postCommentList } = DjangoService.usePostCommentListQuery({ slug, post_id })
+  const { data: postCommentList, isFetching } = DjangoService.usePostCommentListQuery({ slug, post_id, page })
 
   const [ setPostLike ] = DjangoService.useSetLikeMutation()
   const [ removePostLike ] = DjangoService.useRemoveLikeMutation()
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
   const [ unsubscribeBlog ] = DjangoService.useSubscribeBlogMutation()
+
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+      if (scrolledToBottom && !isFetching) {
+        if (postCommentList.next != null) {
+          console.log("Fetching more data...")
+          setPage(page + 1);
+        } else {
+          return
+        }
+      }
+    }
+
+    document.addEventListener("scroll", onScroll);
+    return function () {
+      document.removeEventListener("scroll", onScroll);
+    };
+  }, [ page, isFetching ]);
 
   React.useEffect(() => {
     if (postData?.isLiked.toString() === 'true') {
@@ -60,18 +106,20 @@ export default function PostPg({ slug, post_id }) {
 
   return (
       <div>
-        <div className={styles.contentPublishedInformationBlock}>
-          <Link href={`/blog/${slug}/`}>
-            <img src={`${BASE_URL}${postData?.blog.avatar}`} width={32} height={32}/>
-            {/*<Image src={`${BASE_URL}/${postData?.blog.avatar}`} width={32} height={32} alt="" />*/}
-          </Link>
-          <div className={styles.contentPublisher}>
+        <div style={{ justifyContent: 'space-between' }} className={styles.contentPublishedInformationBlock}>
+          <div style={{ display: 'flex' }}>
             <Link href={`/blog/${slug}/`}>
-              <div className={styles.channelName}>
-                {postData?.blog.title}
-              </div>
+              <img src={`${BASE_URL}${postData?.blog.avatar}`} style={{ borderRadius: '50%' }} width={60} height={60}/>
+              {/*<Image src={`${BASE_URL}/${postData?.blog.avatar}`} width={32} height={32} alt="" />*/}
             </Link>
-            <div>{postData?.subscribers} подписчиков</div>
+            <div className={styles.contentPublisher}>
+              <Link href={`/blog/${slug}/`}>
+                <div className={styles.channelName}>
+                  {postData?.blog.title}
+                </div>
+              </Link>
+              <div>{postData?.subscribers} подписчиков</div>
+            </div>
           </div>
           <div>
             <div style={{marginLeft: '40px'}}>
@@ -98,6 +146,7 @@ export default function PostPg({ slug, post_id }) {
         <div>
           <div style={{margin: '15px 0'}}>{postData?.body}</div>
         </div>
+        <div className={styles.map} dangerouslySetInnerHTML={{ __html: postData?.map }}></div>
         <div>
           <div style={{display: 'flex'}}>
             <div style={{display: 'flex'}}>
@@ -118,15 +167,15 @@ export default function PostPg({ slug, post_id }) {
           </div>
           <div>
             {tags?.map((tag) => (
-              <Link href={`/posts/search?hashtag=${tag.slice(1)}`}>{tag} </Link>
+              <Link style={{ fontSize: '18px' }} href={`/posts/search/${tag.slice(1)}/`}>{tag} </Link>
             ))}
           </div>
         </div>
         <div>
           <div style={{ margin: '20px 0' }}>
             <div style={{ display: 'flex', marginBottom: '15px' }}>
-              <div>{postData?.commentCount} комментариев</div>
-              <div><CommentListSort /></div>
+              <div style={{ fontSize: '20px', fontWeight: '600', margin: '0 32px 0 0' }}>{postData?.commentCount} комментариев</div>
+              <CommentListSort />
             </div>
             <CommentCreate slug={slug} post_id={post_id} />
           </div>

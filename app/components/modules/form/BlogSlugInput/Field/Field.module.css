@@ -1,0 +1,43 @@
+.root {
+  margin: 10px 0;
+}
+
+.label {
+  color: #666;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.label.active {
+  color: #404040
+}
+
+.label.non_active {
+  color: #666;
+}
+
+.error {
+  margin-top: 5px;
+  color: #ef5151;
+}
+
+.error.active {
+  color: #f40000;
+}
+
+.available {
+  color: #28a128;
+}
+
+.available.active {
+   color: #15ea15;
+}
+
+.not_available {
+  color: #ef5151;
+}
+
+.not_available.active {
+  color: #f40000;
+}

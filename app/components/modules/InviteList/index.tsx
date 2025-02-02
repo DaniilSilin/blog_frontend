@@ -19,8 +19,6 @@ export default function InviteList() {
     rejectInvite({ pk })
   }
 
-  console.log(data)
-
   return (
     <div className={styles.root}>
       <div className={styles.title}>Список приглашений</div>

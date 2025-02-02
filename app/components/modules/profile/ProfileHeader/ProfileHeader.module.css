@@ -1,0 +1,40 @@
+.banner {
+  border-radius: 25px;
+  width: 1000px;
+  height: 175px;
+}
+
+.profileInfo {
+
+}
+
+.profileInformationMain {
+  width: 100%;
+  padding: 20px;
+}
+
+.profileInformationContainer {
+  display: flex;
+}
+
+.details {
+
+}
+
+.details:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.detailsContainer {
+  padding: 3px 4px;
+  display: flex;
+}
+
+.detailsContainer:hover {
+  cursor: pointer;
+}
+
+.username {
+  font-size: 28px;
+}

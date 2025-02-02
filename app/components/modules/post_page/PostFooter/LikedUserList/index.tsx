@@ -45,7 +45,6 @@ export default function LikedUserList({ setPage, post, likedUserList, triggerQue
   //       // @ts-ignore
   //       setCurrentHeight(modalWindowUseRef.current.scrollTop)
   //       setMaxHeight(modalWindowUseRef.current.scrollTopMax)
-  //       console.log(modalWindowUseRef.current.scrollTop)
   //       // @ts-ignore
   //       console.log(modalWindowUseRef.current.scrollTopMax)
   //     }

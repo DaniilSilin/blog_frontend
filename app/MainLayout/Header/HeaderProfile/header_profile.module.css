@@ -1,22 +1,58 @@
 .root {
-  width: 50px;
-  height: 50px;
+  height: inherit;
+  /*width: 50px;*/
+  /*height: 50px;*/
 }
 
 .root:hover {
-  cursor: pointer;
+  background-color: #1677ff;
+}
+
+.root.active {
+  background-color: #1677ff;
 }
 
 .profileMenu {
+  color: #a6adb4 !important;
+  width: 250px;
   position: absolute;
   padding: 10px;
-  background-color: gray;
-  top: 72px;
+  background-color: #001529;
   right: 50px;
+  border: 2px solid #363738;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
-.profileMenu > div {
+.profileMenu > .profileMenuElement {
+  color: #a6adb4 !important;
+  display: flex;
+  height: 50px;
+  /*padding: 10px 16px;*/
+  align-items: center;
+}
 
+.profileMenu > .profileMenuElement:hover {
+  background-color: #1677ff !important;
+  border-radius: 10px;
+  color: #ffffff !important;
+  cursor: pointer;
+}
+
+.profileMenuElement > a {
+  display: flex;
+  align-items: center;
+  color: #a6adb4 !important;
+}
+
+.profileMenuElement > a:hover {
+  color: #ffffff !important;
+}
+
+.loginContainer {
+  color: #a6adb4;
+}
+
+.loginContainer:hover {
+  color: #ffffff;
 }

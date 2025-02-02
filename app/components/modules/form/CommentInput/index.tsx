@@ -9,28 +9,25 @@ export interface Props {
   onChange: (value: string) => void
   placeholder?: string
   defaultValue?: string
-  setInputIsFocused?: any
+  setFocusOnInput?: any
   value: string
+  focusOnInput: boolean
 }
 
-const CommentInput = React.forwardRef(function CommentInput({ height, onChange, placeholder, defaultValue, setInputIsFocused, value }: Props, ref) {
+const CommentInput = React.forwardRef(function CommentInput({ height, onChange, placeholder, defaultValue, setFocusOnInput, value, focusOnInput }: Props, ref) {
   const handleChangeInput = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onChange(value)
   }, [ onChange ])
 
   const handleFocus = React.useCallback(() => {
-    if (setInputIsFocused) {
-      setInputIsFocused(true)
-    } else return
-  }, [ setInputIsFocused ])
+    setFocusOnInput(true)
+  }, [ setFocusOnInput ])
 
   return (
     <div>
-      <Field>
-        <TextArea onChange={handleChangeInput} ref={ref} value={value} placeholder={placeholder} defaultValue={defaultValue} onFocus={handleFocus} autoSize={true}
+      <TextArea onChange={handleChangeInput} ref={ref} value={value} placeholder={placeholder} defaultValue={defaultValue} onFocus={handleFocus} autoSize={true}
                   style={{ display: 'block', height: `${height}px` }} />
-      </Field>
     </div>
   )
 })

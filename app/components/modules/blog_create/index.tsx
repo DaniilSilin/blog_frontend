@@ -1,184 +1,187 @@
 import React from 'react'
-import DjangoService from "@/app/store/services/DjangoService"
 import { useRouter } from 'next/router'
-import __Input from "@/app/components/modules/form/Input"
-import _TextArea from '@/app/components/modules/form/Textarea'
-import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelCrop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
 
-const ASPECT_RATION = 1
-const MIN_DIMENSION = 150
+import DjangoService from "@/app/store/services/DjangoService"
+import AvatarModal from "@/app/components/modules/avatar_modal"
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons/lib'
+import { Flex, message, Upload } from 'antd/lib'
+import type { GetProp, UploadProps } from 'antd/lib'
+import { slugValidator, titleValidator } from '../../modules/form/validators'
+import { BlogSlugInput, PostDataInput, PostDataTextArea } from '../../../components/modules/form'
 
-const BASE_URL = 'http://localhost:8000'
+const titleLabel = 'Название канала'
+const slugLabel = 'Ссылка на сайт'
+const descriptionLabel = 'Описание'
 
 export default function BlogCreate() {
-  const imgRef = React.useRef(null)
+  const router = useRouter()
+  const divRef = React.useRef(null)
+
   const [ title, setTitle ] = React.useState<string>('')
   const [ slug, setSlug ] = React.useState<string>('')
   const [ description, setDescription ] = React.useState<string>('')
-  const [ avatar, setAvatar ] = React.useState<any>()
-  const [ imageSource, setImageSource ] = React.useState<string>('')
-  const [ avatarBig, setAvatarBig ] = React.useState()
-  const [ crop, setCrop ] = React.useState<any>()
-  const previewCanvasRef = React.useRef(null)
-  const [ createBlog, status ] = DjangoService.useCreateBlogMutation()
-  const { data: blog_slug } = DjangoService.useGetBlogSlugQuery({ slug })
 
-  const [ imageOriginal, setImageOriginal ] = React.useState()
+  const [ createBlog, { data, isLoading, isSuccess }] = DjangoService.useCreateBlogMutation()
+  const [ triggerQuery, { data: blog_slug }] = DjangoService.useLazyGetBlogSlugQuery()
 
-  const request = async() => {
-    const formData = new FormData()
-    formData.append('avatar_small', avatar)
-    formData.append('avatar', avatarBig)
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('slug', slug)
-    createBlog({ formData })
-    // createBlog({ title, description, slug })
-  }
+  const [ imageSource, setImageSource ] = React.useState<any>()
+  const [ imageSourceUrl, setImageSourceUrl ] = React.useState('')
+  const [ croppedImage, setCroppedImage ] = React.useState<any>()
+  const [ croppedImageUrl, setCroppedImageUrl ] = React.useState()
 
-  const onSelectFile = (e) => {
-    const file = e.target?.files[0]
+  const [ titleError, setTitleError ] = React.useState<string>("")
+  const [ slugError, setSlugError ] = React.useState<string>("")
 
-    const reader = new FileReader()
-    reader.addEventListener("load", () => {
-      const imageUrl = reader.result?.toString() || ''
-      setImageOriginal(file)
-      setAvatarBig(file)
-      setImageSource(imageUrl)
-    })
-    reader.readAsDataURL(file)
-  }
+  React.useEffect(() => {
+    if (imageSource) {
+      divRef.current.style.display = 'block'
+    } else {
+      divRef.current.style.display = 'none'
+    }
+  }, [ imageSource ])
 
-  const onImageLoad = (e) => {
-    const width = e.target.width
-    const height = e.target.height
-    const crop = makeAspectCrop(
-    {
-      unit: 'px',
-      width: MIN_DIMENSION
-    },
-      ASPECT_RATION,
-      width,
-      height
-      )
-    const centeredCrop = centerCrop(crop, width, height)
-    setCrop(centeredCrop)
-  }
-
-  const setCanvasPreview = (image, canvas, crop) => {
-    const setCanvasPreview = (
-      image, // HTMLImageElement
-      canvas, // HTMLCanvasElement
-      crop // PixelCrop
-    ) => {
-      const ctx = canvas.getContext("2d")
-      if (!ctx) {
-        throw new Error('232')
+  const showModal = React.useCallback((e: any) => {
+    let elem = e.target
+    if (imageSource) {
+      if (elem.className === "modal_4" || elem.className === "close_3") {
+        if (elem.className === "close_3") {
+          elem = elem.parentNode.parentNode
+        }
+        elem.style.display = "none"
+        setImageSource('')
       }
+    } else {
+
     }
-    const ctx = canvas.getContext("2d")
+  }, [ setImageSource, imageSource ])
 
-    const PixelRatio = window.devicePixelRatio
-    const scaleX = image.naturalWidth / image.width
-    const scaleY = image.naturalHeight / image.height
 
-    canvas.width = Math.floor(crop.width)
-    canvas.height = Math.floor(crop.height)
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-    ctx.scale(PixelRatio, PixelRatio)
-    ctx.imageSmoothingQuality = 'high'
-    ctx.save()
+const getBase64 = (img: FileType, callback: (url: string) => void) => {
+  const reader = new FileReader()
+  reader.addEventListener('load', () =>
+      callback(reader.result as string)
+  )
+  reader.readAsDataURL(img)
+};
 
-    const cropX = crop.x * scaleX
-    const cropY = crop.y * scaleX
+const beforeUpload = (file: FileType) => {
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error('Изображение должно быть менее 2 Мб!')
+  }
+  return isLt2M
+}
+  const [loading, setLoading] = React.useState(false)
 
-    ctx.translate(-cropX, -cropY)
-    ctx.drawImage(
-      image,
-      0,
-      0,
-      image.naturalWidth,
-      image.naturalHeight,
-        0,
-      0,
-      image.naturalWidth,
-      image.naturalHeight
-    )
-    ctx.restore()
+  const handleChange: UploadProps['onChange'] = (info) => {
+    if (info.file.status === 'uploading') {
+      setLoading(true)
+      return
+    }
+    if (info.file.status === 'done') {
+      setImageSource(info.file)
+      getBase64(info.file.originFileObj as FileType, (url) => {
+        setImageSourceUrl(url)
+        setLoading(false)
+      })
+    }
   }
 
-  const dataURLtoFile = (dataUrl, filename) => {
-    const arr = dataUrl.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n)
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Загрузить</div>
+    </button>
+  )
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
+  const formValidation = React.useCallback(() => {
+    let isValid = false
+
+    if (titleValidator(title)) {
+      setTitleError(titleValidator(title))
+      isValid = false
+    } else {
+      setTitleError('')
+      isValid = true
     }
-    return new File([u8arr], filename, { type: mime })
+
+    if (slugValidator(slug)) {
+      setSlugError(slugValidator(slug))
+      isValid = false
+    } else {
+      setSlugError('')
+      isValid = true
+    }
+    if (blog_slug === 'Адрес свободен') {
+      isValid = true
+    }
+    if (blog_slug === 'Этот адрес уже занят') {
+      isValid = false
+    }
+
+    return isValid
+  }, [ title, slug, setSlugError, setTitleError ])
+
+  React.useEffect(() => {
+    formValidation()
+  }, [ title, slug ])
+
+
+  const request = () => {
+    let isValid = formValidation()
+    console.log(isValid)
+    if (isValid) {
+      const formData = new FormData()
+      formData.append('avatar_small', croppedImage)
+      formData.append('avatar', imageSource)
+      formData.append('title', title)
+      formData.append('description', description)
+      formData.append('slug', slug)
+      createBlog({ formData })
+    }
   }
+
+  if (isSuccess) {
+    router.push({
+      pathname: `/blog/${data}/`,
+    })
+  }
+
+  React.useEffect(() => {
+    if (slug && !slugError) {
+      triggerQuery({ slug })
+    }
+  }, [ slug, slugError, triggerQuery ])
 
   return (
     <div>
-      <img src={`${BASE_URL}/media/icy.jpg/`} width={30} height={30} alt="" />
-      <input type='file' accept='image/*' onChange={onSelectFile} />
-      {/*<input type='file' accept='image/*' style={{  }} onChange={onSelectFile}>*/}
-      {/*  <img src={`${BASE_URL}/media/icy.jpg/`} width={30} height={30} alt="" />*/}
-      {/*</input>*/}
-      <div>
-        {imageSource && (
-          <div>
-            <ReactCrop
-              crop={crop}
-              onChange={
-                (pixelCrop, percentCrop)=>setCrop(pixelCrop)
-              }
-              circularCrop
-              keepSelection
-              aspect={1}
-              minWidth={150}
-            >
-              <img ref={imgRef} src={imageSource} alt='' onLoad={onImageLoad} />
-            </ReactCrop>
+      <Flex gap="middle" wrap>
+        <Upload
+          name="avatar"
+          listType="picture-circle"
+          className="avatar-uploader"
+          accept='image/png,image/jpeg,image/gif,image/heic,image/heif,image/webp'
+          showUploadList={false}
+          beforeUpload={beforeUpload}
+          onChange={handleChange}
+          >
+            {croppedImage ? <img src={croppedImageUrl} alt="avatar" style={{ width: '100%', borderRadius: '50%'}} /> : uploadButton}
+        </Upload>
+      </Flex>
+        <div onClick={showModal} ref={divRef} className="modal_3">
+          <div className="modalContent_3">
+            <div className="close_3">x</div>
+            <AvatarModal setImageSource={setImageSource} imageSourceUrl={imageSourceUrl} setImageSourceUrl={setImageSourceUrl} setCroppedImageUrl={setCroppedImageUrl}
+            imageSource={imageSource} croppedImage={croppedImage} setCroppedImage={setCroppedImage}/>
           </div>
-        )}
-      </div>
-      <button onClick={() => {
-        setCanvasPreview(
-          imgRef.current,
-          previewCanvasRef.current,
-          convertToPixelCrop(
-            crop,
-            imgRef.current.width,
-            imgRef.current.height
-          ))
-        const dataUrl = previewCanvasRef.current.toDataURL();
-        const file = dataURLtoFile(dataUrl, 'croppedImage.jpeg');
-        setAvatar(file)
-      }}>
-      {crop && (
-        <canvas
-          ref={previewCanvasRef}
-          className="mt-4"
-          style={{
-            display: "none",
-            border: "1px solid black",
-            objectFit: "contain",
-            width: 150,
-            height: 150,
-          }}
-        />
-      )}
-      </button>
-      {avatar && (<img src={previewCanvasRef.current.toDataURL()} />)}
-      <__Input width={600} height={50} label={'Название блога'} onChange={setTitle} placeholder={'Придумайте название'}  />
-      <div>{blog_slug}</div>
-      <__Input width={600} height={50} label={'Slug Блога'} onChange={setSlug} />
-      <_TextArea width={600} height={100} label={'Описание'} onChange={setDescription} placeholder={'Напишите пару строк, чтобы заинтересовать аудиторию'} />
-      <input type={'submit'} value={'Создать блог'} onClick={request} />
+        </div>
+      <PostDataInput width={600} height={40} label={titleLabel} onChange={setTitle} maxLength={100} error={titleError} />
+      <BlogSlugInput width={600} height={40} label={slugLabel} onChange={setSlug} maxLength={25} description={'Задайте уникальное значение'}
+                     error={slugError} blog_slug={blog_slug} value={slug} />
+      <PostDataTextArea width={600} height={120} label={descriptionLabel} onChange={setDescription} maxLength={200} autoSize={true} showCount={true} />
+      <input type={'submit'} value={'Создать'} onClick={request}/>
     </div>
   )
 }

@@ -31,7 +31,8 @@ export default function Comment({ post_id, slug, comment, postData }) {
         {!!comment?.count_of_replies && (
           <div style={{ marginLeft: '56px' }}>
             <div className={styles.showRepliesButton}>
-              <div style={{ marginLeft: '16px' }}>
+              <div style={{ marginLeft: '16px', display: 'flex' }}>
+                <IoIosArrowUp />
                 <button onClick={getReplies}>123123</button>
               </div>
             </div>
@@ -39,7 +40,7 @@ export default function Comment({ post_id, slug, comment, postData }) {
             <>
               <div>
                 {replyList?.results.map((comment: Comment) => (
-                  <Commentary width={24} height={24} slug={slug} post_id={post_id} comment={comment} postData={postData} />
+                  <Commentary width={32} height={32} slug={slug} post_id={post_id} comment={comment} postData={postData} />
                 ))}
               </div>
             </>

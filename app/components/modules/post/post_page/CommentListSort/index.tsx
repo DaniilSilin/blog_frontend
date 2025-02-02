@@ -1,5 +1,6 @@
 import React from 'react'
-import { DownOutlined, UpOutlined, CheckOutlined } from '@ant-design/icons/lib'
+import { CheckOutlined } from '@ant-design/icons/lib'
+import { BsListNested } from "react-icons/bs"
 
 import styles from './comment_list.module.css'
 
@@ -47,15 +48,15 @@ export default function CommentListSort({ setSortBy, commentListSortRef }: Props
 
   return (
     <div ref={commentListSortRef}>
-      <div data-title="dropdown" className={styles.dropdownTitle} style={{ display: 'flex' }} onClick={showParamMenuHandler}>
-        Упорядочить
-        {showMenu ? <UpOutlined /> : <DownOutlined />}
+      <div style={{ display: 'flex' }}>
+        <BsListNested size={20} style={{ marginRight: '10px' }} />
+        <div className={styles.dropdownTitle} onClick={showParamMenuHandler}>Упорядочить</div>
       </div>
       {showMenu && (
         <div className={styles.dropdown}>
           {sortingList.map(param => (
-            <div key={param.id} style={{ border: '1px solid gray', display: 'flex' }}>
-              <div onClick={() => setParam(param.label, param.queryParam)}>{param.label}</div>
+            <div style={{ display: 'flex' }}>
+              <div className={styles.dropdownElement} onClick={() => setParam(param.label, param.queryParam)}>{param.label}</div>
               <div>{param.label === currentParam ? <CheckOutlined /> : null}</div>
             </div>
           ))}

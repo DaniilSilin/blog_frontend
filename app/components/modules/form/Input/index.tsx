@@ -11,14 +11,13 @@ export interface Props {
   error?: string | undefined
   placeholder?: string
   defaultValue?: string
-  isPassword?: boolean
   maxLength?: number
-  value: string
-  description: string
+  value?: string
+  description?: string
   setInputOnFocus?: any
 }
 
-export default function __Input({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, isPassword, value, description, setInputOnFocus }: Props) {
+const __Input = React.forwardRef(function __Input({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, value, description, setInputOnFocus }: Props, ref) {
   const handleChangeInput = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onChange(value)
@@ -40,19 +39,13 @@ export default function __Input({ width, height, onChange, label, error, placeho
   return (
     <div>
       <Field label={label} onFocus={onFocus} error={error} value={value} description={description}>
-        {!isPassword ? (
-          <>
-            <Input onChange={handleChangeInput} placeholder={placeholder} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus} onBlur={handleBlur}
-              style={{ display: 'block', width: `${width}px`, height: `${height}px` }} />
-          </>
-        ) : (
-          <Input.Password onChange={handleChangeInput} placeholder={placeholder} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus}
-            style={{ display: 'block', width: `${width}px`, height: `${height}px`, padding: '8px 10px' }}
-            iconRender={(visible) => (visible ? <EyeTwoTone style={{ position: 'relative', top: '-17px', right: '-350px' }} /> :
-              <EyeInvisibleOutlined style={{ position: 'relative', top: '-17px', right: '-350px' }} />)}
-          />
-        )}
+        <>
+          <Input onChange={handleChangeInput} placeholder={placeholder} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus} onBlur={handleBlur} ref={ref}
+            style={{ display: 'block', width: `${width}px`, height: `${height}px`}} />
+        </>
       </Field>
     </div>
   )
-}
+})
+
+export default __Input

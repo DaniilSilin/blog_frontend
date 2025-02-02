@@ -11,15 +11,12 @@ export interface Props {
   value: string
   description: string
   onFocus: boolean
+  blog_slug: string
 }
 
-export default function Field({ label, children, error, value, description, onFocus }: Props) {
-  const descriptionValue = React.useMemo(() => {
-    if (!error && !value || !error && value) {
-      return '123'
-    } else {
-      return ''
-    }
+export default function Field({ label, children, error, value, description, onFocus, blog_slug }: Props) {
+  const isInputEmptyOrHasNoError = React.useMemo(() => {
+    return !!(!error && !value || !error && value);
   }, [ error, value ])
 
   const iconValue = React.useMemo(() => {
@@ -40,15 +37,15 @@ export default function Field({ label, children, error, value, description, onFo
       })}>{label}</div>
       <div style={{ display: 'flex' }}>
         {children}
-        {iconValue === '3' && <div><FaCheck color={'green'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}
-        {iconValue === '2' && <div><CiWarning color={'red'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}
+        {/*{iconValue === '3' && <div><FaCheck color={'green'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}*/}
+        {/*{iconValue === '2' && <div><CiWarning color={'red'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}*/}
       </div>
       <>
-        {descriptionValue ? (
+        {isInputEmptyOrHasNoError ? (
           <div className={classNames(styles.description, {
             [styles.active]: onFocus,
             [styles.non_active]: !onFocus
-          })}>{description}</div>
+          })}>{blog_slug ? blog_slug : description}</div>
         ) : (
           <div className={classNames(styles.error, {
             [styles.active]: onFocus,

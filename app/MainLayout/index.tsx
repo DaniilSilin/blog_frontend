@@ -14,7 +14,7 @@ export default function MainLayout({ children }: Props) {
   return (
     <Layout>
       <HeaderReact />
-      <Layout>
+      <Layout style={{ display: 'flex' }}>
         <Sider />
         <ContentReact children={children} />
       </Layout>

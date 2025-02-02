@@ -1,0 +1,28 @@
+.root {
+
+}
+
+.avatar {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+.avatarDropdown {
+  position: absolute;
+  border-radius: 25px;
+  background-color: #5e5e5e;
+  padding: 5px 5px;
+}
+
+.avatarDropdown > div {
+  padding: 5px 10px;
+}
+
+.avatarDropdown > div:hover {
+  cursor: pointer;
+  background-color: #aaaaaa;
+  border-radius: 10px;
+}

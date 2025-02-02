@@ -99,14 +99,13 @@ export default function BlogItem({ slug }) {
   //     document.removeEventListener("scroll", onScroll)
   //   }
   // }, [ page, isFetching ])
-  console.log(router)
 
   return (
     <div className={styles.root}>
       <div className={styles.blogContainer}>
           <img src={`${BASE_URL}${blogData?.banner}`} width={1070} height={180} style={{ borderRadius: '15px' }} alt="" />
           <div style={{ display: 'flex'}}>
-            <img src={`${BASE_URL}${blogData?.avatar}`} style={{ borderRadius: '50%' }} alt="" width='150' height='150' />
+            <img src={`${BASE_URL}${blogData?.avatar_small}`} style={{ borderRadius: '50%' }} alt="" width='150' height='150' />
             <div style={{ justifyContent: 'space-between', display: 'flex', width: '870px' }}>
               <div className={styles.blogInfo}>
                 <div className={styles.blogTitle}>{blogData?.title}</div>

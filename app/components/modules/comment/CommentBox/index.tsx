@@ -17,45 +17,49 @@ export interface Props {
   comment?: Comment
   slug: string
   post_id: number
-  setDisplayReplyInput: (value: boolean) => void
+  setDisplayReplyInput?: (value: boolean) => void
+  setEditMode?: (value: boolean) => void
+  editMode?: boolean
 }
 
-export default function CommentBox({ placeholder, submitButtonText, displayReplyInput, setDisplayReplyInput, comment, slug, post_id }: Props) {
+export default function CommentBox({ placeholder, submitButtonText, editMode, setEditMode, displayReplyInput, setDisplayReplyInput, comment, slug, post_id }: Props) {
   const [ commentBody, setCommentBody ] = React.useState<string>('')
-  const [ inputIsFocused, setInputIsFocused ] = React.useState(false)
+  const [ focusOnInput, setFocusOnInput ] = React.useState<boolean>(false)
   const [ displayEmojiPicker, setDisplayEmojiPicker ] = React.useState(false)
 
+  const [ updateComment ] = DjangoService.useUpdateCommentMutation()
   const user = useAppSelector(state => state.django.profile)
   const inputRef = React.useRef(null)
+  const [ createComment ] = DjangoService.useCreateCommentMutation()
 
   const cancelComment = () => {
-    setInputIsFocused(false)
-    if (setDisplayReplyInput) {
+    if (editMode) {
+      setEditMode(false)
+    }
+
+    setFocusOnInput(false)
+    if (displayReplyInput) {
       setDisplayReplyInput(false)
     } else return
   }
 
   React.useEffect(() => {
-    const currentElement = inputRef.current.selectionStart
-    console.log(currentElement)
-  }, [ inputRef.current ])
-
-  const [ createComment ] = DjangoService.useCreateCommentMutation()
+    inputRef?.current.focus()
+  }, [ editMode ])
 
   const leaveComment = () => {
-    if (comment) {
-      if (comment?.reply_to) {
-        createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.reply_to })
-      } else {
-        createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.comment_id })
-      }
-      // if (!comment?.reply_to) {
-      //   createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.comment_id })
-      // } else {
-      //   createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.reply_to })
-      // }
+    if (editMode) {
+      updateComment({ slug: slug, post_id: post_id, comment_id: comment?.comment_id  })
     } else {
-      createComment({ body: commentBody, post_id: post_id, slug: slug })
+      if (comment) {
+        if (comment?.reply_to) {
+          createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.reply_to })
+        } else {
+          createComment({ body: commentBody, post_id: post_id, slug: slug, reply_to: comment?.comment_id })
+        }
+      } else {
+        createComment({ body: commentBody, post_id: post_id, slug: slug })
+      }
     }
   }
 
@@ -77,8 +81,9 @@ export default function CommentBox({ placeholder, submitButtonText, displayReply
 
   return (
     <div style={{ width: '100%' }}>
-      <CommentInput ref={inputRef} placeholder={placeholder} height={50} onChange={setCommentBody} setInputIsFocused={setInputIsFocused} value={commentBody} />
-        {inputIsFocused && (
+      <CommentInput ref={inputRef} placeholder={placeholder} height={50} onChange={setCommentBody} setFocusOnInput={setFocusOnInput} focusOnInput={focusOnInput}
+                    value={commentBody} defaultValue={comment?.body} />
+        {focusOnInput && (
           <div className={styles.commentFooter}>
             <HiOutlineEmojiHappy className={styles.emojiIcon} open={true} onClick={openEmojiMenuHandleClick} size={20} />
             <EmojiPicker style={{ position: 'absolute', marginTop: '15px' }} open={displayEmojiPicker} onEmojiClick={onEmojiHandleClick} />

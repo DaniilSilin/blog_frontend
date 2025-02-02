@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react'
-import { Flex, Input } from 'antd/lib';
+import { Input } from 'antd/lib'
 
-const { TextArea } = Input;
-import Field from '../Field'
+const { TextArea: BaseTextArea } = Input
+import Field from './Field'
 
 export interface Props {
   width: number
@@ -12,19 +12,36 @@ export interface Props {
   error?: string | undefined
   placeholder?: string
   defaultValue?: string
+  autoSize: boolean
+  maxLength?: number
+  showCount: boolean
 }
 
-export default function _TextArea({ width, height, onChange, label, error, placeholder, defaultValue }: Props) {
+export default function TextArea({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, showCount }: Props) {
+  const [ wasFocusedOnce, setWasFocusedOnce ] = React.useState(false)
+  const [ inputIsFocused, setInputIsFocused ] = React.useState(false)
+
   const handleChangeInput = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onChange(value)
   }, [ onChange ])
 
+  const handleFocus = React.useCallback(() => {
+    setInputIsFocused(true)
+  }, [ setInputIsFocused ])
+
+  const handleBlur = React.useCallback(() => {
+    setInputIsFocused(false)
+    setWasFocusedOnce(true)
+  }, [ setWasFocusedOnce, setInputIsFocused ])
+
+
   return (
     <div>
       <Field label={label} error={error}>
-        <TextArea showCount maxLength={250} onChange={handleChangeInput} defaultValue={defaultValue} placeholder={placeholder}
-                  style={{ display: 'block', width: `${width}px`, height: `${height}px`}} />
+        <BaseTextArea maxLength={maxLength} onChange={handleChangeInput} defaultValue={defaultValue} placeholder={placeholder}
+                      autoSize={true} showCount={showCount} onBlur={handleBlur} onFocus={handleFocus}
+                  style={{ display: 'block', width: `${width}px`, height: `${height}px`, minHeight: `${height}px` }} />
       </Field>
     </div>
   )
