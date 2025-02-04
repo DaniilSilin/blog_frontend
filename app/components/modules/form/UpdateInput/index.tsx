@@ -5,15 +5,17 @@ import Field from './Field'
 export interface Props {
   width: number
   height: number
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
   label?: string
   error?: string | undefined
   defaultValue?: string
   maxLength?: number
   value?: string
+  description?: string
+  disabled?: boolean
 }
 
-export default function Input({ width, height, onChange, label, error, defaultValue, maxLength, value }: Props ) {
+export default function UpdateInput({ width, height, onChange, label, error, defaultValue, maxLength, value, description, disabled }: Props ) {
   const [ wasFocusedOnce, setWasFocusedOnce ] = React.useState(false)
   const [ inputIsFocused, setInputIsFocused ] = React.useState(false)
 
@@ -33,8 +35,8 @@ export default function Input({ width, height, onChange, label, error, defaultVa
 
   return (
     <div>
-      <Field label={label} inputIsFocused={inputIsFocused} error={error} value={value} wasFocusedOnce={wasFocusedOnce}>
-          <BaseInput onChange={handleChangeInput} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus} onBlur={handleBlur} value={value}
+      <Field label={label} inputIsFocused={inputIsFocused} error={error} value={value} description={description}>
+          <BaseInput onChange={handleChangeInput} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus} onBlur={handleBlur} value={value} disabled={disabled}
             style={{ display: 'block', width: `${width}px`, height: `${height}px` }} />
       </Field>
     </div>

@@ -15,9 +15,10 @@ export interface Props {
   autoSize: boolean
   maxLength?: number
   showCount: boolean
+  value: string
 }
 
-export default function TextArea({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, showCount }: Props) {
+export default function TextArea({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, showCount, value }: Props) {
   const [ wasFocusedOnce, setWasFocusedOnce ] = React.useState(false)
   const [ inputIsFocused, setInputIsFocused ] = React.useState(false)
 
@@ -40,7 +41,7 @@ export default function TextArea({ width, height, onChange, label, error, placeh
     <div>
       <Field label={label} error={error}>
         <BaseTextArea maxLength={maxLength} onChange={handleChangeInput} defaultValue={defaultValue} placeholder={placeholder}
-                      autoSize={true} showCount={showCount} onBlur={handleBlur} onFocus={handleFocus}
+                      autoSize={true} showCount={showCount} onBlur={handleBlur} onFocus={handleFocus} value={value}
                   style={{ display: 'block', width: `${width}px`, height: `${height}px`, minHeight: `${height}px` }} />
       </Field>
     </div>

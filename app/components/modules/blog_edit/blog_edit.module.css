@@ -78,13 +78,11 @@
 
 .avatarUploadButton {
   padding: 0 16px;
-  height: 36px;
   font-size: 14px;
   line-height: 36px;
   border-radius: 18px;
   color: white;
   background-color: #3e3e3e;
-  /*width: fit-content;*/
 }
 
 .bannerUploadButton {
@@ -95,19 +93,16 @@
   border-radius: 18px;
   color: white;
   background-color: #3e3e3e;
-  /*width: fit-content;*/
 }
 
 .avatarDeleteButton {
   margin-left: 8px;
   padding: 0 16px;
-  height: 36px;
   font-size: 14px;
   line-height: 36px;
   border-radius: 18px;
   color: white;
   background-color: #3e3e3e;
-  width: fit-content;
 }
 
 .avatarDeleteButton:hover {
@@ -116,6 +111,11 @@
 }
 
 .avatarUploadButton:hover {
+  background-color: #535353;
+  cursor: pointer;
+}
+
+.bannerUploadButton:hover {
   background-color: #535353;
   cursor: pointer;
 }
@@ -130,6 +130,21 @@
 
 .bannerUploadButton input[type="file"] {
   display: none;
+}
+
+.avatarImage {
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.avatarBackground {
+  width: 290px;
+  height: 160px;
+  background-color: #1f1f1f;
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
 }
 
 .modalContentError {

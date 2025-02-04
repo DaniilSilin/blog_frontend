@@ -9,11 +9,13 @@ import { UserProfile } from "@/app/types"
 
 export interface Props {
   user: UserProfile
+  hasAccess: boolean
 }
 
 import styles from './ProfileHeader.module.css'
+import { useAppSelector } from "@/app/store";
 
-export default function ProfileHeader({ user }: Props) {
+export default function ProfileHeader({ user, hasAccess }: Props) {
   const [ displayModal, setDisplayModal ] = React.useState(false)
 
   const details = React.useCallback((e: any) => {
@@ -37,7 +39,7 @@ export default function ProfileHeader({ user }: Props) {
     <div className={styles.profileHeader}>
       <ProfileBanner user={user} />
       <div className={styles.profileInformationContainer}>
-        <ProfileAvatar user={user} />
+        <ProfileAvatar user={user} hasAccess={hasAccess} />
         <div className={styles.profileInformationMain}>
           <div className={styles.username}>{user.username}</div>
           <div style={{ display: 'flex' }} onClick={details}>

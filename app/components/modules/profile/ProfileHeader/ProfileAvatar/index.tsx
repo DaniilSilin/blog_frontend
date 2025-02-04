@@ -4,6 +4,7 @@ import { UserProfile } from "@/app/types"
 
 export interface Props {
   user: UserProfile
+hasAccess: boolean
 }
 
 import styles from './ProfileAvatar.module.css'
@@ -11,7 +12,7 @@ import ImageChange from "@/app/components/modules/profile_edit/ImageChange";
 
 const BASE_URL = 'http://localhost:8000'
 
-export default function ProfileAvatar({ user }: Props) {
+export default function ProfileAvatar({ user, hasAccess }: Props) {
   const [ displayMenu, setDisplayMenu ] = React.useState(false)
   const [ displayModal, setDisplayModal ] = React.useState(false)
 
@@ -77,7 +78,7 @@ export default function ProfileAvatar({ user }: Props) {
           </div>
         </div>
         <Image className={styles.avatar} src={`${BASE_URL}${user.avatar_small}`} width={150} height={150} alt=''/>
-        {displayMenu && (
+        {hasAccess && (
             <>
               <div className={styles.avatarDropdown}>
                 <div onClick={handleDynamicContentClick} className='open_original_image'>Открыть фотографию</div>

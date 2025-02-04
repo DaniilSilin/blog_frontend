@@ -13,6 +13,7 @@ export interface Props {
 }
 
 export default function Field({ label, children, error, value, wasFocusedOnce, inputIsFocused }: Props) {
+  console.log(error)
   return (
     <div className={styles.root}>
       <div className={classNames(styles.label, {

@@ -45,8 +45,6 @@ export default function ImageCrop({ avatar, setAvatar, avatarSmall, setAvatarSma
     image: HTMLImageElement,
     canvas: HTMLCanvasElement,
     crop: PixelCrop,
-    scale = 1,
-    rotate = 0,
   ) => {
     const ctx = canvas.getContext("2d")
     if (!ctx) {
@@ -105,9 +103,6 @@ export default function ImageCrop({ avatar, setAvatar, avatarSmall, setAvatarSma
               keepSelection
               aspect={ASPECT_RATIO}
               minWidth={MIN_DIMENSION}>
-              <img src={avatarSmall} alt='' onLoad={onImageLoad} ref={imgRef}
-                style={{ transform: `scale(1) rotate(${rotate}deg)` }}
-              />
           </ReactCrop>
           <div style={{ display: 'flex' }}>
             <div onClick={() => { setCanvasPreview(imgRef.current, previewCanvasRef.current, convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height )) }} className={styles.saveAndContinueButton}>Сохарнить и продолжить</div>

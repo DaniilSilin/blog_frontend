@@ -349,16 +349,13 @@ const DjangoService = createApi({
         return endpointName
       },
       merge: (currentCache, newItems, otherArgs) => {
-        if (otherArgs.arg.parent_id) {
-          // currentCache.threads = newItems
-          // console.log(currentCache.threads)
-          // currentCache.threads.push({id: otherArgs.arg.parent_id })
-          // currentCache.replyThread.parent_id.push(...newItems.results)
+        let currentPage = 1
+        currentCache.previous = newItems.previous
+        currentCache.next = newItems.next
+        if (currentPage < otherArgs.arg.page) {
+          currentCache.results.push(...newItems.results)
         } else {
-          currentCache.mainThread.push(...newItems.results)
-          currentCache.next = newItems.next
-          currentCache.previous = newItems.previous
-          console.log(currentCache)
+          currentCache.results = newItems.results
         }
       },
       forceRefetch({ currentArg, previousArg }) {

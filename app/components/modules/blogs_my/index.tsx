@@ -1,16 +1,15 @@
 import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService";
 import { useAppSelector } from "@/app/store"
-import { IoSettingsOutline } from "react-icons/io5"
 import OwnerBlogList from "@/app/components/modules/blogs_my/OwnerBlogList";
 import AuthorBlogList from "@/app/components/modules/blogs_my/AuthorBlogList";
 
 const BASE_URL = 'http://127.0.0.1:8000/'
 
-
 export default function BlogsMy() {
-  const { data: blogsWhereUserIsOwner } = DjangoService.useBlogsWhereUserIsOwnerQuery({ username: 'admin' })
-  const { data: blogsWhereUserIsAuthor } = DjangoService.useBlogsWhereUserIsAuthorQuery({ username: 'admin' })
+  const user = useAppSelector(state => state.django.profile)
+  const { data: blogsWhereUserIsOwner } = DjangoService.useBlogsWhereUserIsOwnerQuery({ username: user?.username })
+  const { data: blogsWhereUserIsAuthor } = DjangoService.useBlogsWhereUserIsAuthorQuery({ username: user?.username })
 
   return (
     <div>

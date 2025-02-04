@@ -14,29 +14,6 @@ const BASE_URL = 'http://localhost:8000'
 const socket = new WebSocket('ws://localhost:8000/ws/some-url/')
 
 export default function PostPg({ slug, post_id }) {
-       React.useEffect(() => {
-           const socket = new WebSocket('ws://localhost:8000/ws/some_path/');
-
-           socket.onopen = () => {
-               console.log('Connected to WebSocket server');
-               socket.send(JSON.stringify({ message: 'World' }));
-           };
-
-           socket.onmessage = (event) => {
-               const data = JSON.parse(event.data);
-               console.log(data.message);
-           };
-
-           socket.onclose = () => {
-               console.log('Disconnected from WebSocket server');
-           };
-
-           return () => {
-               socket.close();
-           };
-       }, []);
-
-
   const [ likeIsSet, setLikeIsSet ] = React.useState<boolean>()
   const [ sortBy, setSortBy] = React.useState<string>('')
   const [ tags, setTags ] = React.useState([])
@@ -109,7 +86,7 @@ export default function PostPg({ slug, post_id }) {
         <div style={{ justifyContent: 'space-between' }} className={styles.contentPublishedInformationBlock}>
           <div style={{ display: 'flex' }}>
             <Link href={`/blog/${slug}/`}>
-              <img src={`${BASE_URL}${postData?.blog.avatar}`} style={{ borderRadius: '50%' }} width={60} height={60}/>
+              <img src={`${BASE_URL}${postData?.blog.avatar_small}`} style={{ borderRadius: '50%' }} width={60} height={60}/>
               {/*<Image src={`${BASE_URL}/${postData?.blog.avatar}`} width={32} height={32} alt="" />*/}
             </Link>
             <div className={styles.contentPublisher}>

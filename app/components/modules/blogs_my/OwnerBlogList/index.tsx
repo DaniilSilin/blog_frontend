@@ -23,22 +23,26 @@ export default function OwnerBlogList({ blog }: Props) {
   return (
       <div style={{border: '1px solid black', padding: '10px', borderRadius: '10px', marginRight: '10px', marginBottom: '10px'}}>
           <div style={{display: 'flex', alignItems: 'center'}}>
-              <img src={`${BASE_URL}${blog.avatar_small}`} alt={''} width={'60'} height={'60'}
-                   style={{borderRadius: '50%'}}/>
-              <div style={{fontSize: '24px', marginLeft: '10px'}}>{blog?.title}</div>
+              <Link href={`/blog/${blog.slug}/`}>
+                <img src={`${BASE_URL}${blog.avatar_small}`} alt={''} width={'60'} height={'60'} style={{borderRadius: '50%'}}/>
+              </Link>
+              <Link href={`/blog/${blog.slug}/`}>
+                <div style={{fontSize: '24px', marginLeft: '10px'}}>{blog?.title}</div>
+              </Link>
               <IoSettingsOutline size={24} onClick={showBlogActionsMenuHandleFunction} />
               {showBlogActionsMenu && (
+              <div style={{ position: 'absolute' }}>
                 <div onClick={deleteChosenBlog}>
                   Удалить блог
                 </div>
+                <div>
+                    <Link href={`/blog/${blog.slug}/editor/settings/`}>Настройки</Link>
+                </div>
+              </div>
               )}
           </div>
           <div>
-              <div>Авторы:</div>
-              <div>Дата создания: {blog.created_at}</div>
-              <div style={{ border: '1px solid black', padding: '5px', display: 'inline-block', borderRadius: '10px' }}>
-                  <Link href={`/blog/`}>Перейти в блог</Link>
-              </div>
+            <div>Дата создания: {blog.created_at}</div>
           </div>
       </div>
   )

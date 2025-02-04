@@ -33,7 +33,7 @@ export default function BlogItem({ blog }: Props) {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex' }}>
             <Link href={`/blog/${blog.slug}/`}>
-              <img className={styles.blogAvatar} src={`${BASE_URL}${blog?.avatar}`} alt='' width={38} height={38} />
+              <img className={styles.blogAvatar} src={`${BASE_URL}${blog?.avatar_small}`} alt='' width={38} height={38} />
             </Link>
             <div>
               <Link className={styles.blogTitle} href={`/blog/${blog.slug}/`}>
