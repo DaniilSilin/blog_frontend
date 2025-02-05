@@ -6,31 +6,30 @@ import Link from 'next/link'
 import { RightOutlined } from '@ant-design/icons/lib'
 import AdditionalBlogInformation from './AdditionalBlogInformation'
 import PostList from "@/app/components/modules/blog_page/PostList"
-import { IoIosCheckmark, IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
-import { BsThreeDotsVertical } from "react-icons/bs"
 import { useRouter } from 'next/router'
 
 import styles from './blog_page.module.css'
 import { useAppSelector } from '@/app/store'
 import PostItem from "@/app/components/modules/post_page"
+import BlogActionMenu from "@/app/components/modules/blog_page/BlogActionMenu";
 
 const BASE_URL = 'http://localhost:8000'
 
 
 export default function BlogItem({ slug }) {
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug })
-  const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
-  const [ unsubscribeBlog ] = DjangoService.useUnsubscribeBlogMutation()
-  const router = useRouter()
   const user = useAppSelector(state => state.django.profile)
+  const [ hasAccess, setHasAccess ] = React.useState(false)
 
-  const subscribeRequest = () => {
-    subscribeBlog({ slug })
-  }
-
-  const unsubscribeRequest = () => {
-    unsubscribeBlog({ slug })
-  }
+  React.useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      setHasAccess(false)
+    } else {
+      const access = user.username === blogData?.owner.username || user.is_admin.toString() === 'true'
+      setHasAccess(access)
+    }
+  }, [ blogData, user, setHasAccess ])
+  console.log(hasAccess)
 
   const [ dynamicContentModalDisplayed, setDynamicContentModalDisplayed ] = React.useState(false)
   const freezeBody = React.useCallback(() => document.querySelector("body")?.classList.add("freeze"), [])
@@ -128,11 +127,7 @@ export default function BlogItem({ slug }) {
                   </div>
                 </div>
                 <div>
-                  {blogData?.isSubscribed.toString() === 'true' ? (
-                    <div className={styles.unsubscribeButton} onClick={unsubscribeRequest}>Отписаться</div>
-                  ) : (
-                    <div className={styles.subscribeButton} onClick={subscribeRequest}>Подписаться</div>
-                  )}
+                  <BlogActionMenu hasAccess={hasAccess} blogData={blogData} slug={slug} />
                 </div>
               </div>
             </div>

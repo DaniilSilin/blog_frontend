@@ -12,12 +12,12 @@ export default function Wrapper({ children }: Props ) {
 
   const [ getUserProfile, lastResult ] = DjangoService.useLazyGetUserDataQuery()
   const user = useAppSelector(state => state.django.profile)
-  React.useEffect(() => {
-    const token = localStorage.getItem("authToken")
-    if (token) {
-      getUserProfile()
-    }
-  }, [ router.pathname ])
+  // React.useEffect(() => {
+  //   const token = localStorage.getItem("authToken")
+  //   if (token) {
+  //     getUserProfile()
+  //   }
+  // }, [ router.pathname ])
 
   return children
 }

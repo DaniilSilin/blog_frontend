@@ -28,7 +28,7 @@ export default function PostPg({ slug, post_id }) {
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
   const [ unsubscribeBlog ] = DjangoService.useSubscribeBlogMutation()
 
-
+  console.log(postData)
   React.useEffect(() => {
     const onScroll = () => {
       const scrolledToBottom =

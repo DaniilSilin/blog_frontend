@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery, defaultSerializeQueryArgs } from '@reduxjs/toolkit/query/react'
 import { Blog, Post, Register, Login, Author } from '@/app/types'
 import { HYDRATE } from 'next-redux-wrapper'
+import {GetServerSidePropsContext} from "next";
+import CookieHelper from "@/app/store/cookieHelper";
 
-const API_URL = 'http://localhost:3001/api/v1/'
+const API_URL = 'http://127.0.0.1:3001/api/v1/'
 
 
 const DjangoService = createApi({
@@ -12,7 +14,14 @@ const DjangoService = createApi({
     prepareHeaders: (headers, api) => {
       // headers.set("Content-Type", "application/json")
       // headers.set("Content-Type", "multipart/form-data")
-      const token = localStorage.getItem("authToken")
+      const token =
+      typeof window === "undefined"
+        ? (api.extra as GetServerSidePropsContext).req?.cookies?.token ||
+          "" // server
+        : CookieHelper.getCookie("token") //client
+      // const token = localStorage.getItem("authToken")
+      console.log(`token`)
+      console.log(token)
       if (token) {
         headers.set('Authorization', `Token ${token}`)
       }
@@ -345,8 +354,13 @@ const DjangoService = createApi({
           parent_id: parent_id || undefined,
         }
       }),
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+      serializeQueryArgs: ({
+        endpointName,
+        queryArgs,
+      }) => {
+        const args = queryArgs
+        delete args.page
+        return `${endpointName}(${JSON.stringify(args)})`
       },
       merge: (currentCache, newItems, otherArgs) => {
         let currentPage = 1
@@ -359,7 +373,7 @@ const DjangoService = createApi({
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
+        return false
       },
     }),
 

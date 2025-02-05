@@ -1,4 +1,4 @@
-import { UnknownAction, Reducer } from "redux"
+import { AnyAction, Reducer } from "redux"
 import { ThunkDispatch } from "redux-thunk"
 import DjangoService from "./services/DjangoService"
 import { DjangoStateType } from "./reducers/slices/djangoSlice"
@@ -8,5 +8,5 @@ export interface RootState {
   [DjangoService.reducerPath]: any
 }
 
-export type RootDispatch = ThunkDispatch<RootState, void, UnknownAction>
-export type RootReducer = Reducer<RootState, UnknownAction>
+export type RootDispatch = ThunkDispatch<RootState, void, AnyAction>
+export type RootReducer = Reducer<RootState, AnyAction>

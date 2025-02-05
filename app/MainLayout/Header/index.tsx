@@ -18,7 +18,7 @@ export default function HeaderReact() {
     <Header style={{ display: 'flex', flexDirection: 'row-reverse', lineHeight: '30px' }}>
       {/*<div className="demo-logo" />*/}
       <Menu theme="dark" mode="horizontal">
-        <HeaderProfile />
+        {/*<HeaderProfile />*/}
       </Menu>
       {/*<HeaderProfile />*/}
       {/*<HeaderData />*/}

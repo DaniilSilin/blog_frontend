@@ -32,6 +32,7 @@
     color: #b1b0b0;
     height: 40px;
     font-weight: 600;
+    width: fit-content;
 }
 
 .subscribeButton:hover {
@@ -47,11 +48,12 @@
   cursor: pointer;
   height: 40px;
   font-weight: 600;
+  width: fit-content;
 }
 
 .unsubscribeButton:hover {
-    cursor: pointer;
-    background-color: #303030;
+  cursor: pointer;
+  background-color: #303030;
 }
 
 

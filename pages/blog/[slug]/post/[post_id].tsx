@@ -2,6 +2,7 @@ import React from 'react'
 import MainLayout from '@/app/MainLayout'
 import PostView from '@/app/views/Post'
 import type { GetServerSidePropsContext } from 'next'
+import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
 
 
 export default function PostPage(props) {
@@ -12,11 +13,22 @@ export default function PostPage(props) {
   )
 }
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      slug: ctx.query.slug,
-      post_id: ctx.query.post_id
+const resolveConfig = getConfig([
+  ["postCommentList", (ctx) => ({ slug: ctx!.query.slug, post_id: ctx!.query.post_id, page: 1 })],
+  ["getPost", (ctx) => ({ slug: ctx!.query.slug, post_id: ctx!.query.post_id })],
+])
+
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        slug: ctx.query.slug,
+        post_id: ctx.query.post_id
+      },
     }
+  },
+  results => {
+    return !!results.getPost.isError
   }
-})
+)

@@ -14,4 +14,5 @@ export interface Blog {
   owner: string,
   pinned_post: Post,
   authors: Author[],
+  isSubscribed: boolean
 }
