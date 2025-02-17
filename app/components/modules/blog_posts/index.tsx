@@ -1,109 +1,56 @@
 import React from 'react'
 import DjangoService from '@/app/store/services/DjangoService'
-import moment from 'moment'
-import 'moment/locale/ru'
-import Link from 'next/link'
-import { RightOutlined } from '@ant-design/icons/lib'
-import AdditionalBlogInformation from './AdditionalBlogInformation'
-import PostList from "@/app/components/modules/blog_page/PostList"
-import { IoIosCheckmark, IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
-import { BsThreeDotsVertical } from "react-icons/bs"
 import { useRouter } from 'next/router'
+import BlogItem from "@/app/components/modules/blog_page"
+import PostItem from "@/app/components/modules/post_page"
 
 import styles from './blog_posts.module.css'
-import BlogItem from "@/app/components/modules/blog_page"
-import PostBody from "@/app/components/modules/post_page/PostBody";
-import PostFooter from "@/app/components/modules/post_page/PostFooter";
-import PostHeader_1 from "@/app/components/modules/post_page/PostHeader/PostHeader_1";
+import SortingBlogPosts from "@/app/components/modules/blog_posts/SortingBlogPosts"
 
-const SORTING_LIST = [
-  {
-    id: 1,
-    title: 'Сначала новое',
-    query_param: 'newest'
-  },
-  {
-    id: 2,
-    title: 'Сначала старое',
-    query_param: 'oldest',
-  }
-]
+const cleanParams = (queryParams: any, page: number, slug: string) => {
+  const sorting = queryParams.sorting ? queryParams.sorting : undefined
+  const search = queryParams.search ? queryParams.search : undefined
+
+  return { sorting: sorting, search: search, slug: slug, page: page }
+}
 
 export default function BlogPosts({ slug }) {
   const router = useRouter()
-
-  const { data } = DjangoService.useGetBlogPostsQuery({ slug: slug })
-  const sortingPostListRef = React.useRef(null)
-  const [ openSortingMenu, setOpenSortingMenu ] = React.useState(false)
-  const [ showOwnerMenu, setShowOwnerMenu ] = React.useState(false)
   const [ page, setPage ] = React.useState(1)
+  const { data: blogPosts, isFetching } = DjangoService.useGetBlogPostsQuery(cleanParams(router.query, page, slug))
 
-  const [ sorting, setSorting ] = React.useState(SORTING_LIST[0].query_param)
-  const [ currentTitle, setCurrentTitle ] = React.useState(SORTING_LIST[0].title)
-  // const [ currentTitle, setCurrentTitle ] = React.useState(SORTING_LIST[0].title) SORTING_LIST.find(item => item.query_param === sorting ? item.title :
-
-  const sortingMenuHandleChange = React.useCallback((item: any) => {
-    setOpenSortingMenu(false)
-    if (item.query_param !== sorting) {
-      setSortingQueryParam(item)
-      setSorting(item.query_param)
-      setCurrentTitle(item.title)
-      setPage(1)
-    }
-  }, [ setSorting, setCurrentTitle, setOpenSortingMenu, setPage, sorting ])
-
-  const setSortingQueryParam = React.useCallback((item: any) => {
-    setSorting(item.query_param)
-     router.push({
-      pathname: `/blog/${slug}/`,
-      query: { sorting: item.query_param },
-    }
-    ,undefined, { shallow: true })
-  }, [ setSorting, router ])
-
-  const sortingParam = React.useMemo(() => {
-    const sorting1 = router.query.sorting ? router.query.sorting : undefined
-    if (sorting1) {
-     if (sorting1 === 'oldest' || sorting1 === 'newest') {
-        return sorting1
-      } else {
-        return undefined
+  React.useEffect(() => {
+    const onScroll = () => {
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
+      if (scrolledToBottom && !isFetching) {
+        if (blogPosts.next != null) {
+          setPage(page + 1)
+        } else {
+          return
+        }
       }
-    } else {
-      return undefined
     }
-  }, [ router ])
+    document.addEventListener("scroll", onScroll)
+    return () => document.removeEventListener("scroll", onScroll)
+  }, [ page, blogPosts ])
+
 
   return (
     <div className={styles.root}>
-      <BlogItem slug={slug} />
-
-      <div ref={sortingPostListRef}>
-        <span className={styles.selectButton}>
-          <div className={styles.sortingTitle}>{sortingParam}</div>
-          <div>{openSortingMenu ? <IoIosArrowUp size={22} style={{ marginTop: '10px' }} /> : <IoIosArrowDown size={22} style={{ marginTop: '10px' }} />}</div>
-        </span>
-        {openSortingMenu && (
-        <div>
-          <div className={styles.sortingMenu}>
-            {SORTING_LIST.map((item) => (
-            <div key={item.id} className={styles.sortingMenuTitle} onClick={() => sortingMenuHandleChange(item)}>
-                {item.title}
-                {item.title === sorting && <IoIosCheckmark />}
-            </div>
+      <BlogItem slug={slug}>
+        {blogPosts.count > 0 ? (
+          <>
+            <SortingBlogPosts page={page} setPage={setPage} cleanParams={cleanParams(router.query, page, slug)} slug={slug} />
+            <div>
+            {blogPosts?.results.map((post, index) => (
+              <PostItem key={index} post={post} />
             ))}
-          </div>
-        </div>
+            </div>
+          </>
+        ) : (
+            <h1>Содатель Блога не разметил ни одной записи в своём блоге</h1>
         )}
-      </div>
-
-      {data?.results.map((post, index) => (
-        <div style={{ border: '1px solid black' }}>
-          <PostHeader_1 post={post} />
-          <PostBody post={post} />
-          <PostFooter post={post} />
-        </div>
-      ))}
+      </BlogItem>
     </div>
   )
 }

@@ -6,10 +6,13 @@ import DjangoService from "@/app/store/services/DjangoService"
 import { IoMdEye } from "react-icons/io"
 import { FaRegCommentAlt, FaShare } from "react-icons/fa"
 import { AiOutlineLike, AiFillLike } from 'react-icons/ai'
+import { HiMiniBookmark } from "react-icons/hi2";
+import { IoBookmarkSharp } from "react-icons/io5";
 import ShareMenu from './ShareMenu'
 
 import styles from './post_footer.module.css'
 import LikedUserList from "@/app/components/modules/post_page/PostFooter/LikedUserList";
+import Bookmark from './Bookmark'
 
 export interface Props {
   post: Post,
@@ -20,8 +23,6 @@ const BASE_URL = 'http://localhost:8000'
 export default function PostFooter({ post }: Props) {
   const [ setLike ] = DjangoService.useSetLikeMutation()
   const [ removeLike ] = DjangoService.useRemoveLikeMutation()
-  const [ addBookmark ] = DjangoService.useAddToBookmarksMutation()
-  const [ removeBookmark ] = DjangoService.useRemoveFromBookmarksMutation()
 
   const [ isVisible, setIsVisible ] = React.useState<boolean>(false)
   const [ isVisibleMenu, setIsVisibleMenu ] = React.useState<boolean>(false)
@@ -124,6 +125,7 @@ export default function PostFooter({ post }: Props) {
           <Link style={{ display: 'flex' }} href={`/blog/${post.blog.slug}/post/${post.post_id}/`} />
           <div>{post?.comments}</div>
         </div>
+        <Bookmark post={post} />
         <div onMouseOver={handleShowMenu} onMouseLeave={handleHideMenu}>
           <FaShare size={20} />
           {isVisibleMenu && (

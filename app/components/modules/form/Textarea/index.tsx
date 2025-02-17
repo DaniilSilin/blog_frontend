@@ -15,7 +15,7 @@ export interface Props {
   autoSize: boolean
   maxLength?: number
   showCount: boolean
-  value: string
+  value?: string
 }
 
 export default function TextArea({ width, height, onChange, label, error, placeholder, defaultValue, maxLength, showCount, value }: Props) {

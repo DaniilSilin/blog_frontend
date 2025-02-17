@@ -104,3 +104,12 @@
     display: block;
     margin: 30px 0;
 }
+
+.createReplyButton {
+  padding: 7px 10px;
+  border-radius: 25px;
+}
+
+.createReplyButton:hover {
+  background-color: #3f3f3f;
+}

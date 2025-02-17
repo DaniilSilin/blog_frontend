@@ -33,7 +33,7 @@ export default function PostHeader({ post }: Props) {
       <div className={styles.postHeader}>
         <div className={styles.postHeaderRightPart}>
           <Link href={`/blog/${post?.blog.slug}/`}>
-            <img className={styles.postBlogAvatar} src={`${BASE_URL}${post?.blog.avatar}`} alt="" width='32' height='32' />
+            <img className={styles.postBlogAvatar} src={`${BASE_URL}${post?.blog.avatar_small}`} style={{ borderRadius: '50%' }} alt="" width='32' height='32' />
           </Link>
           <Link className={styles.postBlogTitle} href={`/blog/${post?.blog.slug}/`}>{post.blog.title}</Link>
         </div>

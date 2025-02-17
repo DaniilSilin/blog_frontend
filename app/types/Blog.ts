@@ -2,7 +2,6 @@ import { Author, Post } from './index'
 
 export interface Blog {
   id: number,
-  avatar: any,
   title: string,
   description: string,
   slug: string,
@@ -15,4 +14,16 @@ export interface Blog {
   pinned_post: Post,
   authors: Author[],
   isSubscribed: boolean
+  email?: string
+  vk_link?: string
+  telegram_link?: string
+  youtube_link?: string
+  dzen_link?: string
+  site_link?: string
+  map?: string
+  subscriberList?: number
+  avatar?: string
+  avatar_small?: string
+  banner?: string
+  banner_small?: string
 }

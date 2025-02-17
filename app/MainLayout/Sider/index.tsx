@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import {MdOutlineLocalPostOffice} from "react-icons/md";
 import { AiOutlineLike } from "react-icons/ai";
+import DjangoService from "@/app/store/services/DjangoService";
+
 const siderMenu = [
   {
     key: '1',
@@ -39,7 +41,7 @@ const siderMenu = [
     key: '5',
     icon: <IoFolderOpenOutline size={24} />,
     href: '/subscriptions',
-    label: 'Подписки'
+    label: 'Подписки',
   },
   {
     key: '6',
@@ -49,6 +51,9 @@ const siderMenu = [
   }
 ]
 
+const BASE_URL = 'http://127.0.0.1:8000'
+
+
 const items2: MenuProps['items'] = siderMenu.map((icon, index) => {
   return {
     key: siderMenu[index].key,
@@ -57,9 +62,30 @@ const items2: MenuProps['items'] = siderMenu.map((icon, index) => {
   }
 })
 
-
 export default function App() {
   const router = useRouter()
+  const { data: subscriptionListMini } = DjangoService.useSubscriptionListMiniQuery({})
+  const [ siderSubs, setSiderSubs ] = React.useState<any>([])
+
+  React.useEffect(() => {
+    setSiderSubs([
+     {
+      id: 1,
+      icon: <IoHomeOutline size={24} />,
+      title: 'Главная',
+      children: subscriptionListMini
+    }
+  ])
+  }, [subscriptionListMini])
+
+  const siderItems = [
+  {
+    key: 1,
+    icon: <IoHomeOutline size={24} />,
+    title: 'Главная',
+    // children: subscriptionListMini
+  }]
+
 
   const defaultSelectedKey = React.useMemo(() => {
     const defaultValue = siderMenu.find(item => item.href === router.asPath ? `${item.key}` : null)
@@ -70,6 +96,8 @@ export default function App() {
     <Sider>
       <div className="demo-logo-vertical" />
       <Menu theme="dark" defaultSelectedKeys={[defaultSelectedKey]} mode="inline" items={items2} />
+      <div style={{ border: '1px solid black' }}></div>
+      {/*<Menu theme="dark" defaultSelectedKeys={['']} mode="inline" items={siderItems} />*/}
     </Sider>
   )
 }

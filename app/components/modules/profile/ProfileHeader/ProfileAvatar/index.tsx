@@ -4,13 +4,13 @@ import { UserProfile } from "@/app/types"
 
 export interface Props {
   user: UserProfile
-hasAccess: boolean
+  hasAccess: boolean
 }
 
 import styles from './ProfileAvatar.module.css'
 import ImageChange from "@/app/components/modules/profile_edit/ImageChange";
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 export default function ProfileAvatar({ user, hasAccess }: Props) {
   const [ displayMenu, setDisplayMenu ] = React.useState(false)
@@ -64,7 +64,7 @@ export default function ProfileAvatar({ user, hasAccess }: Props) {
             </div>
           </div>
           <div className='modal_3' id={'2'}>
-            <img src={`${BASE_URL}${user.avatar}`} alt=''/>
+            <img src={user.avatar ? `${BASE_URL}${user.avatar}` : '/img/default/avatar_default.jpg'} alt=''/>
           </div>
           <div className='modal_3' id={'3'}>
             <div className='modalContent_3'>

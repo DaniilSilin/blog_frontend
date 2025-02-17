@@ -1,10 +1,9 @@
 import React from 'react'
 import DjangoService from "@/app/store/services/DjangoService";
 import { useAppSelector } from "@/app/store"
-import OwnerBlogList from "@/app/components/modules/blogs_my/OwnerBlogList";
-import AuthorBlogList from "@/app/components/modules/blogs_my/AuthorBlogList";
+import OwnerBlogList from "@/app/components/modules/blogs_my/OwnerBlogList"
+import AuthorBlogList from "@/app/components/modules/blogs_my/AuthorBlogList"
 
-const BASE_URL = 'http://127.0.0.1:8000/'
 
 export default function BlogsMy() {
   const user = useAppSelector(state => state.django.profile)

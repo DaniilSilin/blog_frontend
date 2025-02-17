@@ -1,8 +1,8 @@
 import React from 'react'
-import BlogItem from '@/app/components/modules/blog_page'
+import BlogMain from "@/app/components/modules/blog_main";
 
 export default function BlogView({ slug }) {
   return (
-    <BlogItem slug={slug} />
+    <BlogMain slug={slug} />
   )
 }

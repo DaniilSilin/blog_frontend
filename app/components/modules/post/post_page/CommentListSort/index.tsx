@@ -48,7 +48,7 @@ export default function CommentListSort({ setSortBy, commentListSortRef }: Props
 
   return (
     <div ref={commentListSortRef}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <BsListNested size={20} style={{ marginRight: '10px' }} />
         <div className={styles.dropdownTitle} onClick={showParamMenuHandler}>Упорядочить</div>
       </div>

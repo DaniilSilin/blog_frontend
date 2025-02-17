@@ -1,0 +1,16 @@
+.root {
+  width: 378px;
+  height: 174px;
+  background-color: #212121;
+  position: absolute;
+}
+
+.title {
+  margin: 16px 0 16px 0;
+  color: #d2d2d2;
+}
+
+.description {
+  margin: 4px 0 32px;
+  color: #919191;
+}

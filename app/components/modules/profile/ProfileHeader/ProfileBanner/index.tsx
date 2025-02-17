@@ -31,7 +31,7 @@ export default function ProfileBanner({ user }: Props) {
 
   return (
     <div className={styles.root} onMouseLeave={onMouseLeaveHandle} onMouseOver={onMouseOverHandle}>
-      <img src={`${BASE_URL}${user.banner_small}`} width={1000} height={175} className={styles.banner} alt='' />
+      <img src={user.banner_small ? `${BASE_URL}${user.banner_small}` : '/img/default/banner.jpg'} width={1000} height={175} className={styles.banner} alt='' />
       <>
         {display && (
           <div style={{ position: 'absolute', zIndex: '10', backgroundColor: 'red' }} onMouseOver={onMouseOverHandle2} onMouseLeave={onMouseLeaveHandle2}>

@@ -2,7 +2,8 @@ import React from 'react'
 import EditorMainLayout from "@/app/EditorMainLayout"
 import type { GetServerSidePropsContext } from 'next'
 import MainLayout from "@/app/MainLayout";
-import BlogEditorInviteView from "@/app/views/BlogEditorInvite";
+import BlogEditorInviteView from "@/app/views/BlogEditorInvite"
+import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
 
 export default function BlogEditorInvite(props: any) {
   return (
@@ -14,10 +15,22 @@ export default function BlogEditorInvite(props: any) {
   )
 }
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      slug: ctx.query.slug
+const resolveConfig = getConfig([
+  ["blogAuthors", (ctx) => ({ slug: ctx!.query.slug })],
+  ["getUsers", (ctx) => ({ slug: ctx!.query.slug })],
+  ["blogInvitations", (ctx) => ({ slug: ctx!.query.slug })],
+])
+
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        slug: ctx.query.slug,
+      },
     }
+  },
+  results => {
+    return false
   }
-})
+)

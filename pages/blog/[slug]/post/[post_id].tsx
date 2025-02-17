@@ -29,6 +29,6 @@ export const getServerSideProps = serverSideResolverWrapper(
     }
   },
   results => {
-    return !!results.getPost.isError
+    return false
   }
 )

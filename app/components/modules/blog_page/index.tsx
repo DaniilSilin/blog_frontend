@@ -1,22 +1,26 @@
 import React from 'react'
 import DjangoService from '@/app/store/services/DjangoService'
-import moment from 'moment'
-import 'moment/locale/ru'
 import Link from 'next/link'
-import { RightOutlined } from '@ant-design/icons/lib'
 import AdditionalBlogInformation from './AdditionalBlogInformation'
-import PostList from "@/app/components/modules/blog_page/PostList"
-import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 import styles from './blog_page.module.css'
 import { useAppSelector } from '@/app/store'
 import PostItem from "@/app/components/modules/post_page"
-import BlogActionMenu from "@/app/components/modules/blog_page/BlogActionMenu";
+import BlogActionMenu from "@/app/components/modules/blog_page/BlogActionMenu"
+import { useRouter } from 'next/router'
+import classNames from "classnames"
+import createBlogMenu from "@/app/components/modules/blog_page/constants"
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://127.0.0.1:8000/'
 
+export interface Props {
+  children: React.ReactNode
+  slug: string
+}
 
-export default function BlogItem({ slug }) {
+export default function BlogItem({ slug, children }: Props) {
+  const router = useRouter()
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug })
   const user = useAppSelector(state => state.django.profile)
   const [ hasAccess, setHasAccess ] = React.useState(false)
@@ -29,7 +33,6 @@ export default function BlogItem({ slug }) {
       setHasAccess(access)
     }
   }, [ blogData, user, setHasAccess ])
-  console.log(hasAccess)
 
   const [ dynamicContentModalDisplayed, setDynamicContentModalDisplayed ] = React.useState(false)
   const freezeBody = React.useCallback(() => document.querySelector("body")?.classList.add("freeze"), [])
@@ -60,51 +63,14 @@ export default function BlogItem({ slug }) {
     }
   }, [freezeBody, unfreezeBody, dynamicContentModalDisplayed])
 
-  // React.useEffect(() => {
-  //   const handleMouse = (e: MouseEvent) => {
-  //     if (sortingPostListRef.current.contains(e.target)) {
-  //       setOpenSortingMenu(true)
-  //     } else {
-  //       setOpenSortingMenu(false)
-  //     }
-  //   }
-  //   document.addEventListener('mousedown', handleMouse)
-  //   return () => document.addEventListener('mousedown', handleMouse)
-  // })
-
-  // const sortingMenuHandleChange = React.useCallback((item: any) => {
-  //   setOpenSortingMenu(false)
-  //   if (item.query_param !== sorting) {
-  //     setSortingQueryParam(item)
-  //     setSorting(item.query_param)
-  //     setCurrentTitle(item.title)
-  //     setPage(1)
-  //   }
-  // }, [ setSorting, setCurrentTitle, setOpenSortingMenu, setPage, sorting ])
-
-  // React.useEffect(() => {
-  //   const onScroll = () => {
-  //     const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
-  //     if (scrolledToBottom && !isFetching) {
-  //         if (postList.next !== null) {
-  //           setPage(page + 1)
-  //         } else {
-  //           return
-  //       }
-  //     }
-  //   }
-  //   document.addEventListener("scroll", onScroll)
-  //   return function () {
-  //     document.removeEventListener("scroll", onScroll)
-  //   }
-  // }, [ page, isFetching ])
+  const BLOG_MENU = createBlogMenu(slug)
 
   return (
     <div className={styles.root}>
       <div className={styles.blogContainer}>
-          <img src={`${BASE_URL}${blogData?.banner}`} width={1070} height={180} style={{ borderRadius: '15px' }} alt="" />
+          <Image src={blogData?.banner_small ? `${BASE_URL}${blogData?.banner_small}` : '/img/default/banner.jpg'} width={1070} height={180} style={{ borderRadius: '15px' }} alt="" />
           <div style={{ display: 'flex'}}>
-            <img src={`${BASE_URL}${blogData?.avatar_small}`} style={{ borderRadius: '50%' }} alt="" width='150' height='150' />
+            <Image src={blogData?.avatar_small ? `${BASE_URL}${blogData?.avatar_small}` : '/img/default/avatar_default.jpg'} style={{ borderRadius: '50%' }} alt="" width='150' height='150' />
             <div style={{ justifyContent: 'space-between', display: 'flex', width: '870px' }}>
               <div className={styles.blogInfo}>
                 <div className={styles.blogTitle}>{blogData?.title}</div>
@@ -115,7 +81,6 @@ export default function BlogItem({ slug }) {
                   <div style={{ margin: '0 4px' }}>·</div>
                   <div>{blogData?.count_of_posts} постов</div>
                 </div>
-                <div></div>
                 <div onClick={handleDynamicContentClick} className={styles.blogDescription}>
                   {(blogData?.description.length < 35) ?
                     <>{blogData?.description}...ещё</> :
@@ -134,27 +99,13 @@ export default function BlogItem({ slug }) {
           </div>
       </div>
       <div className={styles.bottomMenu}>
-        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/`}>
-          <div>Главная</div>
-        </Link>
-        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/posts/`}>
-          <div>Посты</div>
-        </Link>
-        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/videos/`}>
-          <div>Видео</div>
-        </Link>
-        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/playlists/`}>
-          <div>Плейлисты</div>
-        </Link>
-        <Link style={{ fontSize: '22px', marginRight: '10px' }} href={`/blog/${slug}/community/`}>
-          <div>Обсуждения</div>
-        </Link>
+        {BLOG_MENU.map((item) => (
+          <Link className={classNames(styles.blogMenu, {[styles.active]: router.pathname === item.pathname })} href={item.href}>
+            <div>{item.title}</div>
+          </Link>
+        ))}
       </div>
-      {blogData?.pinned_post && (
-        <div>
-          <PostItem post={blogData?.pinned_post} />
-        </div>
-      )}
+      {children}
     </div>
   )
 }

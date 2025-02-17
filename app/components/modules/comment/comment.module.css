@@ -1,5 +1,8 @@
 .showRepliesButton {
+  display: inline-flex;
   color: #3ea6ff;
+  padding: 8px 12px 8px 12px;
+  border-radius: 20px;
 }
 
 .showRepliesButton:hover {

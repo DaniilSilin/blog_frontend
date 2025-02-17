@@ -23,3 +23,23 @@
   padding: 10px;
   font-size: 18px;
 }
+
+.sortingItem {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #3a3a3a;
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.sortingItem.active {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #8b8686;
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.sortingItem:hover {
+
+}

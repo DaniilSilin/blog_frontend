@@ -18,12 +18,12 @@ export default function Field({ label, children, error, value, description, onFo
       return 'emptyValue'
     } else if (error && value) {
       return 'hasError'
-    } else {
+    } else if (!error && value) {
       return 'blogSlug'
     }
   }, [ value, error ])
-    console.log(descriptionState)
-
+  console.log(descriptionState)
+  console.log(blog_slug)
   return (
     <div style={{ margin: '10px 0' }}>
       <div className={classNames(styles.label, {

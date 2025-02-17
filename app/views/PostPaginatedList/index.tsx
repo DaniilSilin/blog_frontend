@@ -1,9 +1,8 @@
 import React from 'react'
-import PostPaginatedList from "@/app/components/modules/post"
+import PostList from '@/app/components/modules/post'
 
-
-export default function PostPaginatedListView() {
+export default function PostListView() {
   return (
-    <PostPaginatedList />
+    <PostList />
   )
 }

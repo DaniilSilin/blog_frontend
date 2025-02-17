@@ -9,9 +9,9 @@ import { LikeOutlined, LikeTwoTone, EyeOutlined } from '@ant-design/icons/lib'
 import Comment from '../../comment'
 import styles from './post_page.module.css'
 import CommentListSort from "@/app/components/modules/post/post_page/CommentListSort";
-const BASE_URL = 'http://localhost:8000'
 
-const socket = new WebSocket('ws://localhost:8000/ws/some-url/')
+const BASE_URL = 'http://127.0.0.1:8000'
+// const socket = new WebSocket('ws://localhost:8000/ws/some-url/');
 
 export default function PostPg({ slug, post_id }) {
   const [ likeIsSet, setLikeIsSet ] = React.useState<boolean>()
@@ -28,26 +28,20 @@ export default function PostPg({ slug, post_id }) {
   const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
   const [ unsubscribeBlog ] = DjangoService.useSubscribeBlogMutation()
 
-  console.log(postData)
   React.useEffect(() => {
     const onScroll = () => {
-      const scrolledToBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
       if (scrolledToBottom && !isFetching) {
         if (postCommentList.next != null) {
-          console.log("Fetching more data...")
-          setPage(page + 1);
+          setPage(page + 1)
         } else {
           return
         }
       }
     }
-
-    document.addEventListener("scroll", onScroll);
-    return function () {
-      document.removeEventListener("scroll", onScroll);
-    };
-  }, [ page, isFetching ]);
+    document.addEventListener("scroll", onScroll)
+    return () => document.removeEventListener("scroll", onScroll)
+  }, [ page, isFetching ])
 
   React.useEffect(() => {
     if (postData?.isLiked.toString() === 'true') {
@@ -150,8 +144,11 @@ export default function PostPg({ slug, post_id }) {
         </div>
         <div>
           <div style={{ margin: '20px 0' }}>
-            <div style={{ display: 'flex', marginBottom: '15px' }}>
-              <div style={{ fontSize: '20px', fontWeight: '600', margin: '0 32px 0 0' }}>{postData?.commentCount} комментариев</div>
+            <div style={{ display: 'flex', marginBottom: '15px', fontSize: '20px', fontWeight: '600', margin: '0 32px 10px 0' }}>
+              <h2>
+                <span>{postData?.commentCount}</span>
+                <span>&nbsp;комментариев</span>
+              </h2>
               <CommentListSort />
             </div>
             <CommentCreate slug={slug} post_id={post_id} />

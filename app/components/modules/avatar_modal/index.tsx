@@ -15,7 +15,8 @@ export interface Props {
 const ASPECT_RATION = 1
 const MIN_DIMENSION = 150
 
-export default function AvatarModal({ setImageSource, imageSource, croppedImage, setCroppedImage, imageSourceUrl, setImageSourceUrl, setCroppedImageUrl }: Props) {
+const AvatarModal =
+  React.forwardRef(function AvatarModal({ setImageSource, imageSource, setCroppedImage, imageSourceUrl, setCroppedImageUrl}: Props, ref) {
   const imgRef = React.useRef(null)
   const previewCanvasRef = React.useRef(null)
   const [ crop, setCrop ] = React.useState<any>()
@@ -97,18 +98,18 @@ export default function AvatarModal({ setImageSource, imageSource, croppedImage,
 
   const saveImage = () => {
     setCanvasPreview(
-                imgRef.current,
-                previewCanvasRef.current,
-                convertToPixelCrop(
-                    crop,
-                    imgRef.current.width,
-                    imgRef.current.height
-                ))
+      imgRef.current,
+      previewCanvasRef.current,
+      convertToPixelCrop(
+        crop,
+        imgRef.current.width,
+        imgRef.current.height
+      ))
       const dataUrl = previewCanvasRef.current.toDataURL();
-            setCroppedImageUrl(dataUrl)
-            const file = dataURLtoFile(dataUrl, 'croppedImage.jpeg');
-            setCroppedImage(file)
-
+      setCroppedImageUrl(dataUrl)
+      const file = dataURLtoFile(dataUrl, 'croppedImage.jpeg')
+      setCroppedImage(file)
+      ref.current.style.display = 'none'
   }
 
     return (
@@ -147,4 +148,6 @@ export default function AvatarModal({ setImageSource, imageSource, croppedImage,
             )}
       </div>
     )
-}
+})
+
+export default AvatarModal

@@ -14,6 +14,7 @@ export interface Post {
   blog: Blog,
   tags: Tag[]
   liked_users: User[]
-  isInBookmark: boolean
+  isBookmarked: boolean
   commentCount: number
+  comments: number
 }

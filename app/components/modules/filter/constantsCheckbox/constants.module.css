@@ -1,0 +1,16 @@
+.root {
+
+}
+
+.optionSelected {
+  background-color: #212121;
+  cursor: pointer;
+}
+
+.optionSelected.active {
+  background-color: #4d4d4d;
+}
+
+.optionSelected.active:hover {
+  background-color: #717171;
+}

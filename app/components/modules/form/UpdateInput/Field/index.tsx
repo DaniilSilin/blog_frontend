@@ -17,7 +17,7 @@ export default function Field({ label, children, error, description }: Props) {
       <div style={{ marginBottom: '4px', fontSize: '15px', fontWeight: '500' }}>{label}</div>
       <div style={{ marginBottom: '8px', color: '#aaaaaa', fontSize: '13px' }}>{description}</div>
       <div>{children}</div>
-      <div>{error}</div>
+      <div style={{ color: 'red' }}>{error}</div>
     </div>
   )
 }

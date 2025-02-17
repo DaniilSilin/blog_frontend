@@ -1,3 +1,12 @@
 .root {
-    margin: 15px 0;
+  margin: 15px 0;
+}
+
+.showMore {
+  max-height: 190px;
+  overflow: hidden;
+}
+
+.showMore.active {
+  max-height: 100%;
 }

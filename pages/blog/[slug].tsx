@@ -2,19 +2,34 @@ import React from 'react'
 import BlogView from '@/app/views/Blog'
 import MainLayout from '@/app/MainLayout'
 import type { GetServerSidePropsContext } from 'next'
+import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
 
-export default function BlogPage(props) {
+export interface Props {
+    children: React.ReactNode
+}
+
+export default function BlogPage(props, children) {
   return (
     <MainLayout>
-      <BlogView slug={props.slug} />
+      <BlogView children={children} slug={props.slug} />
     </MainLayout>
   )
 }
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      slug: ctx.query.slug
+const resolveConfig = getConfig([
+  ["getBlog", (ctx) => ({ slug: ctx!.query.slug })],
+])
+
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        slug: ctx.query.slug,
+      },
     }
+  },
+  results => {
+    return false
   }
-})
+)

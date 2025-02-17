@@ -1,20 +1,18 @@
 import React from 'react'
-import PostPaginatedListView from '@/app/views/PostPaginatedList'
 import MainLayout from '@/app/MainLayout'
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
+import PostListView from '@/app/views/PostPaginatedList'
 
 export default function PostListPage() {
   return (
     <MainLayout>
-      <PostPaginatedListView />
+      <PostListView />
     </MainLayout>
   )
 }
 
 const resolveConfig = getConfig([
-  [
-    "getPostPaginatedList",
-  ],
+  ["getPostPaginatedList", () => ({ page: 1 })],
 ])
 
 export const getServerSideProps = serverSideResolverWrapper(

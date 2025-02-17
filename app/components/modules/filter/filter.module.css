@@ -1,7 +1,6 @@
 .root {
   width: 750px;
-  height: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   color: black;
   font-size: 24px;
 }
@@ -30,8 +29,22 @@
 .additionalSettings {
   display: flex;
   width: 700px;
-  height: 40px;
   color: black;
   font-size: 24px;
 }
 
+.sortingItem {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #3a3a3a;
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.sortingItem.active {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #8b8686;
+  font-size: 18px;
+  margin-right: 12px;
+}

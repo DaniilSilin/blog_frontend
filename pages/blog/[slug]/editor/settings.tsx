@@ -3,6 +3,7 @@ import type { GetServerSidePropsContext } from 'next'
 import BlogEdit from "@/app/components/modules/blog_edit";
 import EditorMainLayout from "@/app/EditorMainLayout";
 import MainLayout from "@/app/MainLayout";
+import {getConfig, serverSideResolverWrapper} from "@/app/store/wrapper";
 
 export default function BlogPage(props: any) {
   return (
@@ -14,10 +15,20 @@ export default function BlogPage(props: any) {
   )
 }
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      slug: ctx.query.slug
+const resolveConfig = getConfig([
+  ["getBlog", (ctx) => ({ slug: ctx!.query.slug })],
+])
+
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        slug: ctx.query.slug,
+      },
     }
+  },
+  results => {
+    return false
   }
-})
+)

@@ -39,19 +39,34 @@ const DjangoService = createApi({
         url: `user_data/`
       })
     }),
-    getBlogPaginatedList: builder.query<Blog[], { search: string, order: string[], after: string, before: string, page: number }>({
-      query: ({ limit, search, order, after, before, page }) => ({
+    getBlogPaginatedList: builder.query({
+      query: ({ search, sorting, after, before, page }) => ({
         url: `blog/list/`,
         params: {
-          page: page || undefined,
-          // search: search || undefined,
-          // order: order || undefined,
-          // before: before || undefined,
-          // after: after || undefined
+          page: page,
+          search: search || undefined,
+          sorting: sorting || undefined,
+          before: before || undefined,
+          after: after || undefined
         }
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous
+        currentCache.next = newItems.next
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results)
+        } else {
+          currentCache.results = newItems.results
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
     }),
-    getPostPaginatedList: builder.query<Post[]>({
+    getPostPaginatedList: builder.query({
       query: ({ page, sort_by, search, before, after }) => ({
         url: `post/list/`,
         params: {
@@ -79,7 +94,7 @@ const DjangoService = createApi({
         return currentArg !== previousArg
       },
     }),
-    register: builder.mutation<Register>({
+    register: builder.mutation({
       query: ({ email, username, password }) => ({
         url: 'register/',
         method: 'POST',
@@ -91,12 +106,6 @@ const DjangoService = createApi({
         url: 'login/',
         method: 'POST',
         body: { username, password }
-      })
-    }),
-    getLogout: builder.mutation({
-      query: () => ({
-        url: 'logout/',
-        method: 'POST'
       })
     }),
     createBlog: builder.mutation({
@@ -124,11 +133,11 @@ const DjangoService = createApi({
         body: formData,
       })
     }),
-    getSubscriptions: builder.query<Blog, { username: string }>({
-      query: ({ username }) => ({
-        url: `${username}/subscriptions/`,
-      })
-    }),
+    // getSubscriptions: builder.query<Blog, { username: string }>({
+    //   query: ({ username }) => ({
+    //     url: `${username}/subscriptions/`,
+    //   })
+    // }),
     subscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/subscribe/`,
@@ -160,21 +169,21 @@ const DjangoService = createApi({
       })
     }),
     getBlogPosts: builder.query({
-      query: ({ slug, page, order }) => ({
+      query: ({ slug, page, sorting, search }) => ({
         url:`blog/${slug}/posts/`,
         params: {
           page: page || undefined,
-          order: order || undefined,
+          sorting: sorting || undefined,
+          search: search || undefined
         }
       }),
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
       },
       merge: (currentCache, newItems, otherArgs) => {
-        let currentPage = 1
         currentCache.previous = newItems.previous
         currentCache.next = newItems.next
-        if (currentPage < otherArgs.arg.page) {
+        if (otherArgs.arg.page > 1) {
           currentCache.results.push(...newItems.results)
         } else {
           currentCache.results = newItems.results
@@ -185,7 +194,7 @@ const DjangoService = createApi({
       },
     }),
     inviteUserToBlog: builder.mutation({
-      query: ({ addressee, description, blog, admin}) => ({
+      query: ({ addressee, description, blog, admin }) => ({
         url: 'invite/create/',
         method: 'POST',
         body: { addressee, description, blog, admin }
@@ -233,12 +242,6 @@ const DjangoService = createApi({
     getMySubscriptions: builder.query({
       query: () => ({
         url: `subscriptions/`
-      })
-    }),
-    kickUser: builder.mutation({
-      query: ({ slug, username }) => ({
-        url: `blog/${slug}/kick/${username}/`,
-        method: 'POST',
       })
     }),
     getBlogAuthors: builder.query({
@@ -354,19 +357,19 @@ const DjangoService = createApi({
           parent_id: parent_id || undefined,
         }
       }),
-      serializeQueryArgs: ({
-        endpointName,
-        queryArgs,
-      }) => {
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        console.log(queryArgs)
         const args = queryArgs
+        console.log(args)
         delete args.page
+        console.log(args)
+        console.log(`${endpointName}${JSON.stringify(args)}`)
         return `${endpointName}(${JSON.stringify(args)})`
       },
       merge: (currentCache, newItems, otherArgs) => {
-        let currentPage = 1
         currentCache.previous = newItems.previous
         currentCache.next = newItems.next
-        if (currentPage < otherArgs.arg.page) {
+        if (otherArgs.arg.page > 1) {
           currentCache.results.push(...newItems.results)
         } else {
           currentCache.results = newItems.results
@@ -376,10 +379,9 @@ const DjangoService = createApi({
         return false
       },
     }),
-
     getUsers: builder.query({
       query: ({ slug, username }) => ({
-        url: `invite/blog/${slug}/get_users/${username}/`
+        url: `invite/blog/${slug}/get_users/?query=${username}`
       })
     }),
     isUsernameAvailable: builder.query({
@@ -423,6 +425,49 @@ const DjangoService = createApi({
     blogComments: builder.query({
       query: ({ slug }) => ({
         url: `blog/${slug}/comments/`
+      })
+    }),
+    likedPostList: builder.query({
+      query: () => ({
+        url: `liked_posts/`
+      })
+    }),
+    bookmarkedPostList: builder.query({
+      query: () => ({
+        url: `bookmarked_posts/`
+      })
+    }),
+    subscriptionList: builder.query({
+      query: () => ({
+        url: `subscriptions/`,
+      })
+    }),
+    subscriptionListMini: builder.query({
+      query: () => ({
+        url: `subscriptions/mini/`
+      })
+    }),
+    blogAuthors: builder.query({
+      query: ({ slug, username }) => ({
+        url: `blog/${slug}/authors/?query=${username}`
+      })
+    }),
+    kickUser: builder.mutation({
+      query: ({ slug, username }) => ({
+        url: `blog/${slug}/kick/${username}/`,
+        method: 'POST',
+      })
+    }),
+    setOrRemoveCommentLike: builder.mutation({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like/add/`,
+        method: 'POST'
+      })
+    }),
+    setOrRemoveCommentDislike: builder.mutation({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/dislike/add/`,
+        method: 'POST'
       })
     })
   }),

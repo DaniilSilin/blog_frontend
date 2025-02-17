@@ -20,9 +20,10 @@ export interface Props {
   setDisplayReplyInput?: (value: boolean) => void
   setEditMode?: (value: boolean) => void
   editMode?: boolean
+  isReplyToParentComment: boolean
 }
 
-export default function CommentBox({ placeholder, submitButtonText, editMode, setEditMode, displayReplyInput, setDisplayReplyInput, comment, slug, post_id }: Props) {
+export default function CommentBox({ placeholder, submitButtonText, editMode, setEditMode, displayReplyInput, setDisplayReplyInput, comment, slug, post_id, isReplyToParentComment }: Props) {
   const [ commentBody, setCommentBody ] = React.useState<string>('')
   const [ focusOnInput, setFocusOnInput ] = React.useState<boolean>(false)
   const [ displayEmojiPicker, setDisplayEmojiPicker ] = React.useState(false)
@@ -32,7 +33,7 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
   const inputRef = React.useRef(null)
   const [ createComment ] = DjangoService.useCreateCommentMutation()
 
-  const cancelComment = () => {
+  const cancelComment = React.useCallback(() => {
     if (editMode) {
       setEditMode(false)
     }
@@ -41,10 +42,13 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
     if (displayReplyInput) {
       setDisplayReplyInput(false)
     } else return
-  }
+  }, [ editMode, setEditMode, displayReplyInput, setDisplayReplyInput, setFocusOnInput ])
 
   React.useEffect(() => {
-    inputRef?.current.focus()
+    if (editMode) {
+      // @ts-ignore
+      inputRef?.current.focus()
+    }
   }, [ editMode ])
 
   const leaveComment = () => {
@@ -74,7 +78,10 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
 
   React.useEffect(() => {
     if (displayReplyInput) {
-      setCommentBody(`@${comment?.author.username} `)
+      if (!isReplyToParentComment) {
+        setCommentBody(`@${comment?.author.username} `)
+      }
+      // @ts-ignore
       inputRef?.current.focus()
     }
   }, [ displayReplyInput ])
@@ -87,10 +94,17 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
           <div className={styles.commentFooter}>
             <HiOutlineEmojiHappy className={styles.emojiIcon} open={true} onClick={openEmojiMenuHandleClick} size={20} />
             <EmojiPicker style={{ position: 'absolute', marginTop: '15px' }} open={displayEmojiPicker} onEmojiClick={onEmojiHandleClick} />
-            <div>
-              <input type={"submit"} onClick={cancelComment} value={'Отмена'} />
-              <input className={classNames(styles.leaveCommentButton, {[styles.notEmpty]: commentBody })} type={"submit"} onClick={leaveComment} disabled={!commentBody}
-                     value={submitButtonText} />
+            <div className={styles.buttons}>
+              <button className={styles.cancelCommentButton} onClick={cancelComment}>
+                <div>
+                  <span>Отмена</span>
+                </div>
+              </button>
+              <button onClick={leaveComment} disabled={!commentBody} className={classNames(styles.leaveCommentButton, {[styles.notEmpty]: commentBody })}>
+                <div>
+                  <span>{submitButtonText}</span>
+                </div>
+              </button>
             </div>
           </div>
         )}

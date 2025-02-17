@@ -12,7 +12,7 @@ export interface Props {
 }
 
 const MIN_WIDTH_DIMENSION = 1024
-const MIN_HEIGHT_DIMENSION = 768
+const MIN_HEIGHT_DIMENSION = 576
 const ASPECT_RATIO = 1
 
 const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUrl, setOriginalBannerSourceUrl,
@@ -30,12 +30,14 @@ const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUr
   const onImageLoad = (e) => {
     const width = e.target.width
     const height = e.target.height
-    const cropWidthInPercent = (MIN_WIDTH_DIMENSION / width) * 100
+    const cropWidthInPercent = MIN_WIDTH_DIMENSION
+    const cropHeightInPercent = MIN_HEIGHT_DIMENSION
 
     const crop = makeAspectCrop(
       {
           unit: '%',
-          width: 50,
+          width: cropWidthInPercent,
+          height: cropHeightInPercent,
       },
       ASPECT_RATIO,
       width,
@@ -71,7 +73,6 @@ const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUr
     setCroppedBannerUrl(dataUrl)
     const file = dataURLtoFile(dataUrl, 'croppedImage.jpeg')
     setCroppedBanner(file)
-      console.log(file)
     setIsBannerDeleted(false)
     ref.current.style.display = 'none'
   }
@@ -128,7 +129,7 @@ const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUr
       >
         <img src={originalBannerSourceUrl} ref={bannerRef} onLoad={onImageLoad} alt='' />
       </ReactCrop>
-            {crop && (
+       {crop && (
         <canvas
           ref={previewCanvasRef}
           className="mt-4"
@@ -136,8 +137,8 @@ const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUr
             display: "none",
             border: "1px solid black",
             objectFit: "contain",
-            width: 150,
-            height: 150,
+            width: 1024,
+            height: 576,
           }}
         />
       )}

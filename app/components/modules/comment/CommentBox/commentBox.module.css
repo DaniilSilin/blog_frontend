@@ -20,6 +20,7 @@
   border-radius: 25px;
   background-color: #272727;
   color: #6c6c6c;
+  margin-left: 8px;
 }
 
 .leaveCommentButton.notEmpty {
@@ -29,7 +30,6 @@
 
 .leaveCommentButton.notEmpty:hover {
   background-color: #65b8ff;
-  cursor: pointer;
 }
 
 .emojiIcon {
@@ -42,7 +42,9 @@
 }
 
 .cancelCommentButton {
-
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-weight: 600;
 }
 
 .cancelCommentButton:hover {

@@ -1,17 +1,17 @@
 import React, { ChangeEvent } from 'react'
 import DjangoService from "@/app/store/services/DjangoService"
-
+import NextImage from 'next/image'
 import styles from './blog_edit.module.css'
 import AvatarCrop from "@/app/components/modules/blog_edit/AvatarCrop"
 import BannerCrop from "@/app/components/modules/blog_edit/BannerCrop"
 import TextArea from "@/app/components/modules/form/Textarea"
 import { UpdateInput } from "@/app/components/modules/form"
 import { emailValidator, titleValidator } from "@/app/components/modules/form/validators"
-import BlogSocialMediaLinks from "@/app/components/modules/blog_edit/BlogSocialMediaLinks";
+import BlogSocialMediaLinks from "@/app/components/modules/blog_edit/BlogSocialMediaLinks"
 
-const BASE_URL = 'http://localhost:8000/'
-const AVATAR_SMALL_PATH = '/media/default/small/avatar.jpg'
-const BANNER_SMALL_PATH = '/media/default/small/banner.jpg'
+const BASE_URL = 'http://127.0.0.1:8000/'
+const AVATAR_SMALL_PATH = '/img/default/avatar_default.jpg'
+const BANNER_SMALL_PATH = '/img/default/banner.jpg'
 
 const MIN_AVATAR_SIZE_IN_MB = 33554432
 const MIN_BANNER_SIZE_IN_MB = 50331648
@@ -21,7 +21,7 @@ const MIN_WIDTH_BANNER = 1024
 
 const titleDescription = 'Придумайте название канала, которое будет представлять вас и ваш контент. Если вы укажете другое название или ' +
     'поменяете фото профиля, эти изменения будут видны только на YouTube, а не во всех сервисах Google. Изменить имя можно дважды в течение 14 дней. '
-const slugDescription = 'Придумайте уникальное имя пользователя из букв и цифр. Вернуть прежний псевдоним можно в течение 14 дней. Псевдонимы можно менять два раза каждые 14 дней.\n'
+const slugDescription = 'Ваше уникальный URL блога. Менять уникальный URL нельзя.'
 const descriptionDescription = 'Придумайте описание для вашего блога.'
 
 const titleLabel = 'Название блога'
@@ -37,12 +37,14 @@ export default function BlogEdit({ slug }) {
   const [ croppedBanner, setCroppedBanner ] = React.useState()
   const [ croppedBannerUrl, setCroppedBannerUrl ] = React.useState('')
   const [ isBannerDeleted, setIsBannerDeleted ] = React.useState(false)
+  const [ initialBanner, setInitialBanner ] = React.useState()
 
   const [ originalAvatarSource, setOriginalAvatarSource ] = React.useState<File>()
   const [ originalAvatarSourceUrl, setOriginalAvatarSourceUrl ] = React.useState<string>('')
   const [ croppedAvatar, setCroppedAvatar ] = React.useState()
   const [ croppedAvatarUrl, setCroppedAvatarUrl ] = React.useState('')
   const [ isAvatarDeleted, setIsAvatarDeleted ] = React.useState(false)
+  const [ initialAvatar, setInitialAvatar ] = React.useState()
 
   const [ chosenFile, setChosenFile ] = React.useState<string>('')
 
@@ -89,10 +91,12 @@ export default function BlogEdit({ slug }) {
   const [ displaySocialMediaLinks, setDisplaySocialMediaLinks ] = React.useState(false)
 
   React.useEffect(() => {
-    setInitialEmail(data?.email)
-    setInitialPhoneNumber(data?.email)
+    // setInitialEmail(data?.email)
+    // setInitialPhoneNumber(data?.email)
     setInitialTitle(data?.title)
-    setInitialDescription(data?.description)
+    // setInitialDescription(data?.description)
+    setInitialAvatar(data?.avatar_small)
+    setInitialBanner(data?.banner_small)
   }, [ data ])
 
   const setToDefault = React.useCallback(() => {
@@ -106,8 +110,8 @@ export default function BlogEdit({ slug }) {
     setPhoneNumber(initialPhoneNumber)
     setTitle(initialTitle)
     setDescription(initialDescription)
-  }, [ initialEmail, initialPhoneNumber, initialTitle, initialDescription, setIsBannerDeleted, setIsAvatarDeleted, setCroppedAvatar, setCroppedAvatarUrl, setCroppedBanner, setCroppedBannerUrl,
-    setEmail, setPhoneNumber, setTitle, setDescription ])
+  }, [ initialEmail, initialPhoneNumber, initialTitle, initialDescription, setIsBannerDeleted, setIsAvatarDeleted, setCroppedAvatar,
+    setCroppedAvatarUrl, setCroppedBanner, setCroppedBannerUrl, setEmail, setPhoneNumber, setTitle, setDescription ])
 
   const [ imageErrorMessage, setImageErrorMessage ] = React.useState('')
 
@@ -130,41 +134,45 @@ export default function BlogEdit({ slug }) {
       isValid = true
     }
 
-
-
     return isValid
   }, [ email, title, setTitleError, setEmailError ])
 
 
   React.useEffect(() => {
     formValidator()
-  }, [ email, title ])
+  }, [ title ])
 
   const bannerState = React.useMemo(() => {
-    const defaultImage = '/img/banner.jpg'
+    const defaultImage = '/img/default/banner.jpg'
+    if (!initialBanner && !(croppedBannerUrl && croppedBanner)) {
+      return defaultImage
+    }
     if (isBannerDeleted) {
       return defaultImage
     } else {
       if (croppedBannerUrl && croppedBanner) {
         return croppedBannerUrl
       } else {
-        return `${BASE_URL}${data?.banner_small}`
+        return `${BASE_URL}${initialBanner}`
       }
     }
-  }, [ isBannerDeleted, croppedBannerUrl, croppedBanner, data ])
+  }, [ isBannerDeleted, croppedBannerUrl, croppedBanner, data, initialBanner ])
 
   const avatarState = React.useMemo(() => {
-    const defaultImage = '/img/avatar.jpg'
+    const defaultImage = '/img/default/avatar_default.jpg'
+    if (!initialAvatar && !(croppedAvatarUrl && croppedAvatar)) {
+      return defaultImage
+    }
     if (isAvatarDeleted) {
       return defaultImage
     } else {
       if (croppedAvatarUrl && croppedAvatar) {
         return croppedAvatarUrl
       } else {
-        return `${BASE_URL}${data?.avatar_small}`
+        return `${BASE_URL}${initialAvatar}`
       }
     }
-  }, [ isAvatarDeleted, croppedAvatarUrl, croppedAvatar, data ])
+  }, [ isAvatarDeleted, croppedAvatarUrl, croppedAvatar, data, initialAvatar ])
 
   const deleteBanner = React.useCallback(() => {
     setIsBannerDeleted(true)
@@ -294,14 +302,14 @@ export default function BlogEdit({ slug }) {
         <div className={styles.bannerContainerDescription}>Это изображение показывается в верхней части страницы канала.</div>
         <div style={{ display: 'flex', marginTop: '8px' }}>
           <div style={{ width: '290px', height: '160px', backgroundColor: '#1f1f1f', alignItems: 'center', borderRadius: '15px', display: 'flex', justifyContent: 'center' }}>
-            <img src={bannerState} style={{ border: '2px solid white' }} width={175} height={100} alt={''} />
+            <NextImage src={bannerState} style={{ border: '2px solid white' }} width={175} height={100} alt={''} />
           </div>
           <div className={styles.avatarUploadContainer}>
             <div className={styles.bannerGuide}>Чтобы канал выглядел привлекательно на всех устройствах, советуем загрузить изображение размером не менее 2048 x 1152 пикс.
               Размер файла – не более 6 МБ.
             </div>
             <div className={styles.bannerActionsContainer}>
-              {(data?.banner_small === BANNER_SMALL_PATH || isBannerDeleted.toString() === 'true') ? (
+              {(bannerState === BANNER_SMALL_PATH || isBannerDeleted.toString() === 'true') ? (
                 <div className={styles.bannerUploadButton}>
                   <label>
                     Загрузить
@@ -336,14 +344,14 @@ export default function BlogEdit({ slug }) {
           <div className={styles.bannerContainerDescription}>Фото профиля показывается, например, рядом с вашими видео или комментариями на сайте.</div>
         <div style={{ display: 'flex', marginTop: '8px' }}>
           <div className={styles.avatarBackground}>
-            <img src={avatarState} className={styles.avatarImage} width={140} height={140} alt={''} />
+            <NextImage src={avatarState} className={styles.avatarImage} width={140} height={140} alt={''} />
           </div>
           <div className={styles.avatarUploadContainer}>
             <div className={styles.avatarGuide}>Рекомендуем использовать изображение размером не менее 98 х 98 пикселей в формате PNG или GIF.
-              Анимированные картинки загружать нельзя. Размер файла – не более 4 МБ. Помните, что изображение должно соответствовать правилам сообщества YouTube.
+              Анимированные картинки загружать нельзя. Размер файла – не более 4 МБ.
             </div>
             <div className={styles.avatarActionsContainer}>
-              {(data?.avatar_small === AVATAR_SMALL_PATH || isAvatarDeleted.toString() === 'true') ? (
+              {(avatarState === AVATAR_SMALL_PATH || isAvatarDeleted.toString() === 'true') ? (
                 <div className={styles.avatarUploadButton}>
                   <label>
                     Загрузить
@@ -406,30 +414,32 @@ export default function BlogEdit({ slug }) {
       </div>
       <div className={styles.otherFields}>
         <div>
-          <UpdateInput width={400} height={40} onChange={setTitle} defaultValue={data?.title} error={emailError} label={titleLabel} description={titleDescription} />
+          <UpdateInput width={400} height={40} defaultValue={data?.title} label={titleLabel} onChange={setTitle} error={titleError} description={titleDescription} />
           <UpdateInput width={400} height={40} defaultValue={data?.slug} label={'Псевдоним'} description={slugDescription} disabled={true} />
-          <TextArea width={400} height={100} onChange={setDescription} label={descriptionLabel} autoSize={false} showCount={true} value={description} maxLength={300} />
+      {/*    <TextArea width={400} height={100} onChange={setDescription} label={descriptionLabel} autoSize={false} showCount={true} value={description} maxLength={300} />*/}
         </div>
-        <div>
-          <div style={{fontSize: '15px', lineHeight: '25px'}}>Ссылки</div>
-          <div style={{fontSize: '13px', lineHeight: '20px', color: '#929292'}}>Поделитесь внешними ссылками с аудиторией. Они будут видны в профиле канала и на вкладке "О канале".</div>
-          <div onClick={() => setDisplaySocialMediaLinks(!displaySocialMediaLinks)}>Показать ссылки</div>
-          {displaySocialMediaLinks && (
-            <BlogSocialMediaLinks vkLink={vkLink} setVkLink={setVkLink} telegramLink={telegramLink} setTelegramLink={setTelegramLink}
-                                  youtubeLink={youtubeLink} setYoutubeLink={setYoutubeLink} dzenLink={dzenLink} setDzenLink={setDzenLink}
-            />
-          )}
-        </div>
-        <div>
-          <div style={{fontSize: '15px', lineHeight: '25px'}}>Контактная информация</div>
-          <div style={{fontSize: '13px', lineHeight: '20px', color: '#929292'}}>Укажите, как связаться с вами по
-            вопросам сотрудничества. Зрители могут увидеть адрес электронной почты на вкладке "О канале". </div>
-          <UpdateInput width={400} height={40} onChange={setEmail} error={emailError} label={'Адрес электронной почты'} description={'123123'} />
-          <UpdateInput width={400} height={40} onChange={setOwnSite} error={ownSiteError} label={'Ссылка на Ваш веб-ресурс'} description={'123123'} />
-        </div>
+      {/*  <div>*/}
+      {/*    <div style={{fontSize: '15px', lineHeight: '25px'}}>Ссылки</div>*/}
+      {/*    <div style={{fontSize: '13px', lineHeight: '20px', color: '#929292'}}>Поделитесь внешними ссылками с аудиторией. Они будут видны в профиле канала и на вкладке "О канале".</div>*/}
+      {/*    <div onClick={() => setDisplaySocialMediaLinks(!displaySocialMediaLinks)}>Показать ссылки</div>*/}
+      {/*    {displaySocialMediaLinks && (*/}
+      {/*      <BlogSocialMediaLinks vkLink={vkLink} setVkLink={setVkLink} telegramLink={telegramLink} setTelegramLink={setTelegramLink}*/}
+      {/*                            youtubeLink={youtubeLink} setYoutubeLink={setYoutubeLink} dzenLink={dzenLink} setDzenLink={setDzenLink}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  </div>*/}
+      {/*  <div>*/}
+      {/*    <div style={{fontSize: '15px', lineHeight: '25px'}}>Контактная информация</div>*/}
+      {/*    <div style={{fontSize: '13px', lineHeight: '20px', color: '#929292'}}>Укажите, как связаться с вами по*/}
+      {/*      вопросам сотрудничества. Зрители могут увидеть адрес электронной почты на вкладке "О канале". </div>*/}
+      {/*    <UpdateInput width={400} height={40} onChange={setEmail} error={emailError} label={'Адрес электронной почты'} description={'123123'} />*/}
+      {/*    <UpdateInput width={400} height={40} onChange={setOwnSite} error={ownSiteError} label={'Ссылка на Ваш веб-ресурс'} description={'123123'} />*/}
+      {/*  </div>*/}
       </div>
       <div onClick={setToDefault}>Отмена</div>
-      {/*<input type={'submit'} onClick={updateBlogData}>Сохранить</input>*/}
+      <button onClick={updateBlogData}>
+        Сохранить
+      </button>
     </div>
   )
 }
