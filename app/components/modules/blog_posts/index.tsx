@@ -18,6 +18,7 @@ export default function BlogPosts({ slug }) {
   const router = useRouter()
   const [ page, setPage ] = React.useState(1)
   const { data: blogPosts, isFetching } = DjangoService.useGetBlogPostsQuery(cleanParams(router.query, page, slug))
+  // const { data: blogData } = DjangoService.useGetBlogQuery({ slug: slug })
 
   React.useEffect(() => {
     const onScroll = () => {
@@ -34,11 +35,13 @@ export default function BlogPosts({ slug }) {
     return () => document.removeEventListener("scroll", onScroll)
   }, [ page, blogPosts ])
 
-
   return (
     <div className={styles.root}>
       <BlogItem slug={slug}>
-        {blogPosts.count > 0 ? (
+        {/*{blogData?.pinned_post && (*/}
+        {/*  <PostItem post={blogData?.pinned_post} />*/}
+        {/*)}*/}
+        {/*{blogPosts.count > 0 ? (*/}
           <>
             <SortingBlogPosts page={page} setPage={setPage} cleanParams={cleanParams(router.query, page, slug)} slug={slug} />
             <div>
@@ -47,9 +50,9 @@ export default function BlogPosts({ slug }) {
             ))}
             </div>
           </>
-        ) : (
-            <h1>Содатель Блога не разметил ни одной записи в своём блоге</h1>
-        )}
+        {/*) : (*/}
+        {/*    <h1>Содатель Блога не размеcтил ни одной записи в своём блоге</h1>*/}
+        {/*)}*/}
       </BlogItem>
     </div>
   )

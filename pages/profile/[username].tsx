@@ -1,8 +1,7 @@
 import React from 'react'
-import MainLayout from "@/app/MainLayout"
-import ProfileView from "@/app/views/Profile"
-import type { GetServerSidePropsContext } from "next"
-import {getConfig, serverSideResolverWrapper} from "@/app/store/wrapper";
+import MainLayout from '@/app/MainLayout'
+import ProfileView from '@/app/views/Profile'
+import {getConfig, serverSideResolverWrapper} from '@/app/store/wrapper'
 
 export default function ProfilePage(props) {
   return (
@@ -12,25 +11,20 @@ export default function ProfilePage(props) {
   )
 }
 
-//
-// const resolveConfig = getConfig([
-//   ["getPostPaginatedList", () => ({ page: 1 })],
-// ])
-//
-// export const getServerSideProps = serverSideResolverWrapper(
-//   resolveConfig,
-//   ctx => {
-//     return {
-//       props: {},
-//     }
-//   }
-// )
-//
+const resolveConfig = getConfig([
+  ["userProfile", (ctx) => ({ username: ctx!.query.username })],
+])
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      username: ctx.query.username
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        username: ctx.query.username,
+      },
     }
+  },
+  results => {
+    return false
   }
-})
+)

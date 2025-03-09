@@ -1,62 +1,54 @@
-import React, {ChangeEvent} from 'react'
-import DjangoService from "@/app/store/services/DjangoService";
-import { LikeTwoTone, DislikeTwoTone } from "@ant-design/icons/lib"
-import { FaRegHeart } from "react-icons/fa";
-import { BsThreeDotsVertical } from "react-icons/bs"
-import Link from 'next/link'
-const BASE_URL = 'http://localhost:8000'
+import React from 'react'
+import DjangoService from '@/app/store/services/DjangoService'
+import { Comment } from '../../../types'
+import CommentList from './CommentList'
 
+import styles from './blog_editor_community.module.css'
 
 export default function BlogEditorCommunity({ slug }) {
-  const { data: blogComments } = DjangoService.useBlogCommentsQuery({ slug })
+  const [ page, setPage ] = React.useState(1)
+  const { data: blogCommentList, isFetching } = DjangoService.useBlogCommentsQuery({ slug, page })
+  const [ selectedBlogComments, setSelectedBlogComments ] = React.useState([])
+  const [ blogCommentListDelete ] = DjangoService.useBlogCommentListDeleteMutation()
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
+      if (scrolledToBottom && !isFetching) {
+        if (blogCommentList.next != null) {
+          setPage(page + 1)
+        } else {
+          return
+        }
+      }
+    }
+    document.addEventListener("scroll", onScroll)
+    return () => document.removeEventListener("scroll", onScroll)
+  }, [ page, isFetching ])
+
+  const blogCommentListDeleteButton = () => {
+    blogCommentListDelete({ slug: slug, comment_list: selectedBlogComments })
+  }
+
+  const resetSelectedBlogCommentsHandleChange = React.useCallback(() => {
+    setSelectedBlogComments([])
+  }, [ setSelectedBlogComments ])
 
   return (
     <div>
-      <div style={{ fontSize: '28px', fontWeight: '600' }}>Сообщество</div>
-      <div>Комментарии</div>
+      <div className={styles.title}>Сообщество</div>
+      {selectedBlogComments.length !== 0 && (
+        <div style={{ height: '48px' }}>
+          Выбрано {selectedBlogComments.length} (максимум 100)
+          <div onClick={blogCommentListDeleteButton}>Удалить</div>
+          <div onClick={resetSelectedBlogCommentsHandleChange}>Reset</div>
+        </div>
+      )}
       <div>
-          {blogComments?.results.map((comment) => (
-            <div style={{ display: 'flex', border: '1px solid #3e3e3e', padding: '12px' }}>
-                <div>
-                    <Link href={`/profile/${comment.author.username}/`}>
-                      <img src={`${BASE_URL}${comment.author.avatar_small}`} style={{borderRadius: '50%', marginRight: '16px'}} alt={''}
-                         width={50} height={50}/>
-                    </Link>
-                </div>
-                <div>
-                    <div style={{display: 'flex', marginBottom: '4px'}}>
-                        <div>
-                            <Link href={`/profile/${comment.author.username}/`}>
-                                <div>{comment.author.username}</div>
-                            </Link>
-                        </div>
-                        <div style={{ margin: '0 4px 0 4px' }}>•</div>
-                        <div>{comment.created_at}</div>
-                    </div>
-                  <div>{comment.body}</div>
-                  <div style={{ display: 'flex' }}>
-                      <div>Ответить</div>
-                      <div>Нет ответов</div>
-                      <LikeTwoTone />
-                      <DislikeTwoTone />
-                      <FaRegHeart />
-                      <BsThreeDotsVertical />
-                  </div>
-                </div>
-                <div style={{ display: 'flex' }}>
-                  <div>
-                      <Link href={`/blog/${comment.post.blog.slug}/post/${comment.post.post_id}/`}>
-                        <img src={`${BASE_URL}${comment.post.blog.avatar_small}`} alt={''} width={50} height={50} />
-                      </Link>
-                  </div>
-                  <Link href={`/blog/${comment.post.blog.slug}/post/${comment.post.post_id}/`}>
-                    <div>{comment.post.title}</div>
-                  </Link>
-                </div>
-            </div>
-          ))}
+        {blogCommentList?.results.map((comment: Comment, index: number) => (
+          <CommentList key={index} comment={comment} slug={slug} setSelectedBlogComments={setSelectedBlogComments} selectedBlogComments={selectedBlogComments} />
+        ))}
       </div>
-      <div></div>
     </div>
   )
 }

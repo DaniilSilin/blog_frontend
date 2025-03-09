@@ -1,17 +1,21 @@
 import React from 'react'
-import Link from 'next/link'
-import { LikeTwoTone, DislikeTwoTone } from "@ant-design/icons/lib"
-import 'moment/locale/ru'
-import moment from 'moment'
-import styles from "@/app/components/modules/post/post_page/post_page.module.css"
-import CommentBox from "@/app/components/modules/comment/CommentBox"
-import {useAppSelector} from "@/app/store"
-import { FcLike } from "react-icons/fc"
-import { BsThreeDotsVertical } from "react-icons/bs"
-import CommentaryActionMenu from "@/app/components/modules/comment/Commentary/CommentaryActionMenu"
+import DjangoService from '@/app/store/services/DjangoService'
+import { useAppSelector } from '@/app/store'
 import Image from 'next/image'
-import DjangoService from "@/app/store/services/DjangoService"
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai"
+import Link from 'next/link'
+import moment from 'moment'
+import 'moment/locale/ru'
+import classNames from 'classnames'
+
+import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike } from 'react-icons/ai'
+import { FcLike } from 'react-icons/fc'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { VscPinned } from 'react-icons/vsc'
+
+import CommentBox from '@/app/components/modules/comment/CommentBox'
+import CommentaryActionMenu from './CommentaryActionMenu'
+
+import styles from './commentary.module.css'
 
 export interface Props {
   comment: any
@@ -20,11 +24,16 @@ export interface Props {
   width: number
   height: number
   postData: any
+  isReplyToParentComment: boolean
+  isPinned: boolean
+  isParent: boolean
+  refetch: any
 }
 
 const BASE_URL = 'http://127.0.0.1:8000'
 
-export default function Commentary({ slug, post_id, comment, width, height, postData }: Props) {
+export default function Commentary({ slug, post_id, comment, width, height, postData, isReplyToParentComment, isPinned, isParent, refetch }: Props) {
+  const bodyRef = React.useRef(null)
   const [ displayReplyInput, setDisplayReplyInput] = React.useState(false)
   const user = useAppSelector(state => state.django.profile)
   const commentAdditionalMenuRef = React.useRef(null)
@@ -32,13 +41,21 @@ export default function Commentary({ slug, post_id, comment, width, height, post
   const [ editMode, setEditMode ] = React.useState(false)
   const [ setOrRemoveCommentLike ] = DjangoService.useSetOrRemoveCommentLikeMutation()
   const [ setOrRemoveCommentDislike ] = DjangoService.useSetOrRemoveCommentDislikeMutation()
+  const [ commentButtonLabel, setCommentButtonLabel ] = React.useState<string>('Читать дальше')
+  const [ isNormalMode, setIsNormalMode ] = React.useState<boolean | undefined>(undefined)
+  const [ isBodyCollapsed, setIsBodyCollapsed ] = React.useState(false)
 
   const showReplyInputHandleChange = React.useCallback(() => {
     setDisplayReplyInput(true)
   }, [ setDisplayReplyInput ])
 
-  const likeCommentButton = () => {
-    setOrRemoveCommentLike({ slug: slug, post_id: post_id, comment_id: comment?.comment_id })
+  const likeCommentButton = async () => {
+    const result = await setOrRemoveCommentLike({ slug: slug, post_id: post_id, comment_id: comment?.comment_id })
+    // if (!result.error) {
+      // if (typeof refetch === 'function') {
+      //   refetch();
+    // }
+    // }
   }
 
   const dislikeCommentButton = () => {
@@ -60,63 +77,105 @@ export default function Commentary({ slug, post_id, comment, width, height, post
     }
   })
 
+  React.useEffect(() => {
+    // @ts-ignore
+    if (bodyRef.current.offsetHeight > 190) {
+      setIsNormalMode(false)
+    } else {
+      setIsNormalMode(true)
+    }
+  }, [ bodyRef, setIsNormalMode ])
+
+  const resizeBodyHandleChange = React.useCallback(() => {
+    setIsBodyCollapsed(!isBodyCollapsed)
+    if (isBodyCollapsed) {
+      setCommentButtonLabel('Читать дальше')
+    } else {
+      setCommentButtonLabel('Свернуть')
+    }
+  }, [ setIsBodyCollapsed, isBodyCollapsed ])
+
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{marginRight: '16px'}}>
+    <div className={styles.root}>
+      <div className={styles.commentAuthorAvatarBlock}>
         <Link href={`/profile/${comment.author.username}/`}>
-          <Image className={styles.avatar} src={comment.author.avatar_small ? `${BASE_URL}${comment.author.avatar_small}` : '/img/default/avatar_default.jpg'} width={width} height={height} alt=''/>
+          <Image className={styles.commentAuthorAvatar} src={comment.author.avatar_small ? `${BASE_URL}${comment.author.avatar_small}` : '/img/default/avatar_default.jpg'} width={width} height={height} alt={''} />
         </Link>
       </div>
       {editMode ? (
         <CommentBox editMode={editMode} setEditMode={setEditMode} comment={comment} placeholder={''}
-                    submitButtonText={'Сохранить'} slug={slug} post_id={post_id} setDisplayReplyInput={setDisplayReplyInput} isReplyToParentComment={false}
+                    submitButtonText={'Сохранить'} slug={slug} post_id={post_id} setDisplayReplyInput={setDisplayReplyInput} isReplyToParentComment={true}
         />
       ) : (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+        <div className={styles.commentContainer}>
           <div style={{ width: '1000px' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Link href={`/profile/${comment.author.username}/`}>
-                {postData?.author.username === comment?.author.username ? (
+            <div className={styles.commentHeader}>
+              {isPinned && (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <VscPinned style={{ marginRight: '5px' }} />
+                  <div>Закреплено каналом</div>
+                </div>
+              )}
+              <div style={{ display: 'flex' }}>
+                <Link href={`/profile/${comment.author.username}/`}>
+                  {postData?.author.username === comment?.author.username ? (
                     <div className={styles.commentAuthorIsPostAuthor}>{comment?.author.username}</div>
-                ) : (
+                  ) : (
                     <div className={styles.commentAuthor}>{comment.author.username}</div>
-                )}
-              </Link>
-              <div className={styles.date}>{moment(comment.created_at).fromNow()}</div>
-            </div>
-            <div>
-              <div></div>
-              <div>{comment.body}</div>
-            </div>
-            <div className={styles.commentFooter} style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                {comment.isLiked.toString() === 'true' ? (
-                    <AiOutlineLike size={20} style={{ color: 'black' }} onClick={likeCommentButton} />
-                ) : (
-                    <AiOutlineLike size={20} style={{ color: 'red' }} onClick={likeCommentButton} />
-                )}
+                  )}
+                </Link>
+                <div className={styles.date}>{moment(comment.created_at).fromNow()}</div>
               </div>
-              <span style={{ marginRight: '8px' }}>{comment.likes}</span>
-              <div>
-                {comment.isDisliked.toString() === 'true' ? (
+            </div>
+            <div ref={bodyRef} className={styles.commentBody}>
+              {isNormalMode ? (
+                <div>{comment.body}</div>
+              ) : (
+                <>
+                  <div className={classNames(styles.commentBodyCollapsed, {[styles.commentBodyFull]: commentButtonLabel === 'Свернуть' })}>{comment.body}</div>
+                  <button className={styles.bodyButton} onClick={resizeBodyHandleChange}>{commentButtonLabel}</button>
+                </>
+              )}
+            </div>
+            <div className={styles.commentFooter}>
+              <div className={styles.likeButtonContainer}>
+                <div>
+                  {comment.isLiked.toString() === 'true' ? (
+                    <AiFillLike size={20} className={styles.likeIconNotLiked} onClick={likeCommentButton} />
+                  ) : (
+                    <AiOutlineLike size={20} className={styles.likeIconLiked} onClick={likeCommentButton} />
+                  )}
+                </div>
+                <div>
+                  {comment.likes ? (
+                    <span className={styles.likeCounter}>{comment.likes}</span>
+                  ) : null}
+                </div>
+              </div>
+              <div className={styles.dislikeButtonContainer}>
+                <div>
+                  {comment.isDisliked.toString() === 'true' ? (
+                    <AiFillDislike size={20} style={{ color: 'black' }} onClick={dislikeCommentButton} />
+                  ) : (
                     <AiOutlineDislike size={20} style={{ color: 'black' }} onClick={dislikeCommentButton} />
-                ) : (
-                    <AiOutlineDislike size={20} style={{ color: 'red' }} onClick={dislikeCommentButton} />
-                )}
+                  )}
+                </div>
+                <div>
+                  {comment.dislikes ? (
+                      <span className={styles.likeCounter}>{comment.dislikes}</span>
+                  ) : null}
+                </div>
               </div>
-              <span style={{ marginRight: '8px' }}>{comment.dislikes}</span>
-              {comment?.isLikedByPostAuthor && (
-                  <div style={{margin: '0 5px'}}>
-                    <img src={postData?.author.avatar_small ? `${BASE_URL}${postData?.author.avatar_small}` : '/img/default/avatar_default.jpg'} style={{ borderRadius: '50%' }}
-                         width={24} height={24} alt=''/>
-                    <FcLike size={10} style={{
-                      position: 'absolute',
-                      width: '18px',
-                      height: '18px',
-                      marginTop: '10px',
-                      marginLeft: '-10px'
-                    }}/>
-                  </div>
+              {comment?.liked_by_author ? (
+                <div className={styles.likedByAuthorContainer}>
+                  <Image src={postData?.author.avatar_small ? `${BASE_URL}${postData?.author.avatar_small}` : '/img/default/avatar_default.jpg'} className={styles.likedByAuthorAvatar}
+                         width={24} height={24} alt={''} />
+                  <FcLike size={10} className={styles.likedByAuthorHeart} />
+                </div>
+              ) : (
+                <div>
+                  <FcLike size={20} className={styles.notLikedByAuthorHeart} />
+                </div>
               )}
               <div>
                 <button className={styles.createReplyButton} onClick={showReplyInputHandleChange}>
@@ -124,24 +183,28 @@ export default function Commentary({ slug, post_id, comment, width, height, post
                 </button>
               </div>
             </div>
-            <div>
+            <div className={styles.createReplyContainer}>
               {displayReplyInput && (
-                  <div style={{display: 'flex'}}>
-                    <Image src={user?.avatar_small ? `${BASE_URL}${user?.avatar_small}` : '/img/default/avatar_default.jpg'} width={32} height={32}
-                         style={{ borderRadius: '50%', marginRight: '5px' }} alt=''/>
-                    <CommentBox comment={comment} post_id={post_id} slug={slug} editMode={editMode}
-                                displayReplyInput={displayReplyInput} setDisplayReplyInput={setDisplayReplyInput}
-                                placeholder={'Введите ответ'} submitButtonText={'Ответить'} isReplyToParentComment={true} />
-                  </div>
+                <>
+                  <Image src={user?.avatar_small ? `${BASE_URL}${user?.avatar_small}` : '/img/default/avatar_default.jpg'} width={32} height={32}
+                      className={styles.createReplyUserAvatar} alt={''} />
+                  <CommentBox comment={comment} post_id={post_id} slug={slug} editMode={editMode}
+                      displayReplyInput={displayReplyInput} setDisplayReplyInput={setDisplayReplyInput}
+                      placeholder={'Введите ответ'} submitButtonText={'Ответить'} isReplyToParentComment={isReplyToParentComment} />
+                </>
               )}
             </div>
           </div>
-          <div ref={commentAdditionalMenuRef}>
-            <BsThreeDotsVertical/>
-            {displayAdditionalMenu && (
-              <CommentaryActionMenu setDisplayAdditionalMenu={setDisplayAdditionalMenu} comment={comment} slug={slug} post_id={post_id} setEditMode={setEditMode} />
-            )}
-          </div>
+          {!user.isGuest && (
+            <div ref={commentAdditionalMenuRef}>
+              <BsThreeDotsVertical/>
+              {displayAdditionalMenu && (
+                <CommentaryActionMenu setDisplayAdditionalMenu={setDisplayAdditionalMenu} comment={comment} slug={slug} post_id={post_id} postData={postData} setEditMode={setEditMode}
+                  isParent={isParent}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

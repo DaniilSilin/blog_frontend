@@ -1,7 +1,10 @@
 import React from 'react'
+import DjangoService from '@/app/store/services/DjangoService'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Post, User } from '@/app/types'
+
 import styles from "@/app/components/modules/post_page/PostFooter/post_footer.module.css";
-import { Post, User } from '../../../../../types'
-import DjangoService from "@/app/store/services/DjangoService";
 
 export interface Props {
   post: Post
@@ -12,7 +15,7 @@ export interface Props {
   setPage: (value: number) => void
 }
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 export default function LikedUserList({ setPage, post, likedUserList, triggerQuery, isFetching, page }:Props) {
   const modalWindowUseRef = React.useRef(null)
@@ -55,12 +58,12 @@ export default function LikedUserList({ setPage, post, likedUserList, triggerQue
 
   return (
     <div>
-       <div className={styles.close}>x</div>
-       <div>Понравилось {post.likes} пользователям</div>
+      <div className={styles.close}>x</div>
+      <div>Понравилось {post.likes} пользователям</div>
       <div ref={modalWindowUseRef} style={{ overflow: 'auto', height: '80px' }}>
         {likedUserList?.results.map((user: User) => (
           <div key={user.id} style={{ display: 'flex', padding: '8px' }}>
-            <img src={`${BASE_URL}${user.avatar}`} width={30} height={30} alt="" />
+            <Image src={user.avatar_small ? `${BASE_URL}${user.avatar_small}` : '/img/default/avatar_default.jpg'} width={30} height={30} alt="" />
             <div>{user.username}</div>
           </div>
         ))}

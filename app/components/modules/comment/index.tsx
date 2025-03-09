@@ -1,9 +1,12 @@
 import React from 'react'
 import DjangoService from '@/app/store/services/DjangoService'
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
-import { MdOutlineSubdirectoryArrowRight } from "react-icons/md"
+import { LoadingOutlined } from '@ant-design/icons/lib'
+import { Flex, Spin } from 'antd/lib'
 
-import Comment from '../../../types'
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
+import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
+
+import { Comment, Post } from '@/app/types'
 import Commentary from "@/app/components/modules/comment/Commentary"
 
 import styles from './comment.module.css'
@@ -11,73 +14,68 @@ import styles from './comment.module.css'
 export interface Props {
   slug: string,
   post_id: number,
-  comment: Comment[]
-  postData: any
+  comment: Comment
+  postData: Post
+  isPinned: boolean
 }
 
-export default function Comment({ post_id, slug, comment, postData }: Props) {
+export default function Comment({ post_id, slug, comment, postData, isPinned }: Props) {
   const [ showReplies, setShowReplies ] = React.useState(false)
   const [ page, setPage ] = React.useState(1)
-  const [ triggerQuery, { data: replyList }] = DjangoService.useLazyPostCommentListQuery()
+  // const [ triggerQuery, { data: replyList }] = DjangoService.useLazyPostCommentListQuery()
+  const { data: replyList, refetch } = DjangoService.usePostCommentListQuery({ slug: slug, post_id: post_id, parent_id: comment.comment_id, page: page })
   const [ wasDisplayedOnce, setWasDisplayedOnce ] = React.useState(false)
 
   const getReplies = React.useCallback(() => {
     if (!wasDisplayedOnce) {
-      triggerQuery({ slug: slug, post_id: post_id, parent_id: comment.comment_id, page: page })
+      setPage(1)
       setWasDisplayedOnce(true)
     }
     setShowReplies(!showReplies)
-  }, [ wasDisplayedOnce, setWasDisplayedOnce, setShowReplies, triggerQuery, page ])
+  }, [ wasDisplayedOnce, setWasDisplayedOnce, setShowReplies, showReplies, comment, post_id, slug ])
 
   const uploadMoreReplies = React.useCallback(() => {
     setPage(page + 1)
-    triggerQuery({ slug: slug, post_id: post_id, parent_id: comment.comment_id, page: page })
-  }, [ setPage, page, triggerQuery ])
+  }, [ setPage, page, comment, slug, post_id ])
 
   const countOfRepliesTitle = React.useMemo(() => {
-    if (comment?.count_of_replies === 1) {
-      return `${comment?.count_of_replies} ответ`
-    } else if (comment?.count_of_replies === 2 || comment?.count_of_replies === 3 || comment?.count_of_replies === 4) {
-      return `${comment?.count_of_replies} ответа`
-    } else if (comment?.count_of_replies === 5 || comment?.count_of_replies === 6 || comment?.count_of_replies === 7) {
-      return `${comment?.count_of_replies} ответов`
+    const countOfReplies = comment?.count_of_replies.toString()
+
+    if (countOfReplies.slice(-1) === '1' && countOfReplies.slice(-2) !== '11') {
+      return `${countOfReplies} ответ`
+    } else if (((countOfReplies.slice(-1) === '2' || countOfReplies.slice(-1) === '3' || countOfReplies.slice(-1) === '4') &&
+        (countOfReplies.slice(-2) !== '12' && countOfReplies.slice(-2) !== '13' && countOfReplies.slice(-2) !== '14'))) {
+      return `${countOfReplies} ответа`
     } else {
-      return `${comment?.count_of_replies} ответов`
+      return `${countOfReplies} ответов`
     }
   }, [ comment ])
 
   return (
-    <>
-      <div style={{ marginBottom: '15px' }}>
-        <Commentary width={40} height={40} comment={comment} post_id={post_id} slug={slug} postData={postData} />
-        {!!comment?.count_of_replies && (
-          <div style={{ marginLeft: '56px' }}>
-              <div>
-                <button className={styles.showRepliesButton} onClick={getReplies}>
-                  {showReplies ? <IoIosArrowUp size={20} style={{ marginRight: '6px' }} /> : <IoIosArrowDown size={20} style={{ marginRight: '6px' }} />}
-                  <div>
-                    {countOfRepliesTitle}
-                  </div>
-                </button>
-              </div>
-            {showReplies && (
+    <div className={styles.root}>
+      <Commentary width={40} height={40} comment={comment} post_id={post_id} slug={slug} postData={postData} isReplyToParentComment={true} isPinned={isPinned} isParent={true} />
+      {!!comment?.count_of_replies && (
+        <div className={styles.commentRepliesContainer}>
+          <button className={styles.showRepliesButton} onClick={getReplies}>
+            {showReplies ? <IoIosArrowUp size={20} className={styles.arrow} /> : <IoIosArrowDown size={20} className={styles.arrow} />}
+            {countOfRepliesTitle}
+          </button>
+          {showReplies && (
             <>
-              <div>
-                {replyList?.results.map((comment: Comment) => (
-                  <Commentary width={32} height={32} slug={slug} post_id={post_id} comment={comment} postData={postData} />
-                ))}
-              </div>
+              {replyList?.results.map((comment: Comment, index: number) => (
+                <Commentary key={index} width={32} height={32} slug={slug} post_id={post_id} comment={comment} postData={postData}
+                            isReplyToParentComment={false} isPinned={false} isParent={false} refetch={refetch} />
+              ))}
               {!!replyList?.next && (
-                <button style={{ display: 'inline-flex' }} onClick={uploadMoreReplies}>
-                  {showReplies ? <MdOutlineSubdirectoryArrowRight size={20} style={{ marginRight: '6px' }} /> : <MdOutlineSubdirectoryArrowRight size={20} style={{ marginRight: '6px' }} />}
-                  <div>Другие ответы</div>
+                <button className={styles.showMoreReplies} onClick={uploadMoreReplies}>
+                  <MdOutlineSubdirectoryArrowRight size={20} className={styles.subdirectoryArrowRight} />
+                  Другие ответы
                 </button>
               )}
             </>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+          )}
+        </div>
+      )}
+    </div>
   )
 }

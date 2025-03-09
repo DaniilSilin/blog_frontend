@@ -8,7 +8,9 @@ export interface DjangoStateType {
 }
 
 const appInitialState: DjangoStateType = {
-  profile: {}
+  profile: {
+    isGuest: true
+  }
 }
 
 const djangoSlice = createSlice({
@@ -41,6 +43,7 @@ const djangoSlice = createSlice({
           state.profile = {
             ...state.profile,
             ...payload,
+            isGuest: false
           }
         }
       )

@@ -1,6 +1,9 @@
 import React from 'react'
+import NextImage from 'next/image'
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
+
+import styles from './avatar_modal.module.css'
 
 export interface Props {
   setImageSource: (value: any) => void
@@ -112,10 +115,10 @@ const AvatarModal =
       ref.current.style.display = 'none'
   }
 
-    return (
-      <div>
+  return (
+    <div>
         {imageSource && (
-          <div>
+          <div style={{ padding: '25px 25px' }}>
             <ReactCrop
               crop={crop}
               onChange={
@@ -130,24 +133,29 @@ const AvatarModal =
             </ReactCrop>
           </div>
         )}
-        <div onClick={onCancelButton}>Отмена</div>
-        <button onClick={saveImage}>Готово</button>
-
-            {crop && (
-                <canvas
-                    ref={previewCanvasRef}
-                    className="mt-4"
-                    style={{
-                      display: "none",
-                      border: "1px solid black",
-                      objectFit: "contain",
-                      width: 150,
-                      height: 150,
-                    }}
-                />
-            )}
-      </div>
-    )
+        <div className={styles.actionButtonsContainer}>
+          <button className={styles.cancelButton} onClick={onCancelButton}>
+            Отмена
+          </button>
+          <button className={styles.saveButton} onClick={saveImage}>
+            Готово
+          </button>
+        </div>
+        {crop && (
+          <canvas
+            ref={previewCanvasRef}
+            className="mt-4"
+            style={{
+              display: "none",
+              border: "1px solid black",
+              objectFit: "contain",
+              width: 150,
+              height: 150,
+            }}
+          />
+        )}
+    </div>
+  )
 })
 
 export default AvatarModal

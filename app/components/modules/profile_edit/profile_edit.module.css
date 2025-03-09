@@ -2,54 +2,248 @@
 
 }
 
-
-
-@keyframes expand {
-    from {
-        max-height: 2px;
-    }
-
-    to {
-        max-height: 100%;
-    }
+.tabTitle {
+  font-size: 28px;
+  font-weight: 600;
 }
 
-@keyframes collapse {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
+.bannerContainer {
+  padding: 12px 12px 12px 0;
 }
 
+.bannerContainerTitle {
+  font-size: 15px;
+  font-weight: 500;
+}
 
-.avatarDropdownActionMenu {
-  position: absolute;
-  z-index: 5;
-  width: 200px;
-  padding: 15px;
+.bannerContainerDescription {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.bannerUploadContainer {
+  width: 330px;
+  margin-left: 30px;
+}
+
+.avatarUploadContainer {
+  width: 330px;
+  margin-left: 30px;
+}
+
+.bannerGuide {
+  font-size: 13px;
+}
+
+.avatarGuide {
+  font-size: 13px;
+}
+
+.bannerDeleteButton {
+  margin-left: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  background-color: #3e3e3e;
+}
+
+.bannerDeleteButton:hover {
+  background-color: #535353;
+}
+
+.previewBannerUploadContainer {
+  background-color: #0f0f0f;
   border-radius: 10px;
-  background-color: gray;
-  /*height: 120px;*/
-  animation: expand 5s ease-out;
-  overflow: hidden;
 }
 
-.avatarDropdownActionMenu > div {
-  padding: 5px 5px;
+.bannerActionsContainer {
+  display: flex;
+  margin-top: 8px;
 }
 
-.avatarDropdownActionMenu > div:hover {
-  padding: 5px 5px;
+.avatarActionsContainer {
+  display: flex;
+  margin-top: 8px;
 }
 
-@keyframes show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.avatarContainer {
+  padding: 12px 12px 12px 0;
+}
+
+.avatarContainerTitle {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.avatarUploadButton {
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  background-color: #3e3e3e;
+}
+
+.bannerUploadButton {
+  padding: 0 16px;
+  height: 36px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  justify-content: center;
+  background-color: #3e3e3e;
+}
+
+.avatarDeleteButton {
+  margin-left: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  background-color: #3e3e3e;
+}
+
+.avatarDeleteButton:hover {
+  background-color: #535353;
+}
+
+.avatarUploadButton:hover {
+  background-color: #535353;
+  cursor: pointer;
+}
+
+.bannerUploadButton:hover {
+  background-color: #535353;
+  cursor: pointer;
+}
+
+.avatarUploadButton label:hover {
+  cursor: pointer;
+}
+
+.avatarUploadButton input[type="file"] {
+  display: none;
+}
+
+.bannerUploadButton input[type="file"] {
+  display: none;
+}
+
+.avatarImage {
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.avatarBackground {
+  width: 290px;
+  height: 160px;
+  background-color: #1f1f1f;
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.modalContentError {
+  outline: none;
+  min-width: 512px;
+  max-width: 512px;
+  position: fixed;
+  top: 322.5px;
+  left: 704px;
+  box-sizing: border-box;
+  max-height: 830px;
+  z-index: 10;
+  min-height: 185px;
+  border-radius: 30px;
+  background-color: #282828;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.deleteButton {
+  padding: 7px 16px;
+  border-radius: 18px;
+  color: #eaeaea;
+  background-color: #d50606;
+}
+
+.deleteButton:hover {
+  background-color: #850303;
+}
+
+.cancelButton {
+  padding: 7px 16px;
+  border-radius: 18px;
+  color: #6f6f6f;
+  background-color: #3e3e3e;
+  cursor: default;
+}
+
+.cancelButton.active {
+  cursor: pointer;
+  color: #eaeaea;
+  background-color: #3e3e3e;
+}
+
+.cancelButton.active:hover {
+  background-color: #535353;
+}
+
+.submitButton {
+  padding: 7px 16px;
+  border-radius: 18px;
+  color: #6f6f6f;
+  background-color: #3e3e3e;
+  cursor: default;
+}
+
+.submitButton.active {
+  cursor: pointer;
+  color: #eaeaea;
+  background-color: #3e3e3e;
+}
+
+.submitButton.active:hover {
+  background-color: #535353;
+}
+
+.errorMessageActionContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 80px;
+  justify-content: end;
+  margin-right: 20px;
+}
+
+.retryErrorButton {
+  background-color: #ffffff;
+  color: #030303;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-weight: 600;
+}
+
+.retryErrorButton:hover {
+  background-color: #d9d9d9;
+}
+
+.closeErrorButton {
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-weight: 600;
+  background-color: #3e3e3e;
+  color: #e2e2e2;
+}
+
+.closeErrorButton:hover {
+  background-color: #535353;
 }

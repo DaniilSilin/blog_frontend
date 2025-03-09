@@ -3,6 +3,7 @@ import EditorMainLayout from "@/app/EditorMainLayout"
 import type { GetServerSidePropsContext } from 'next'
 import MainLayout from "@/app/MainLayout";
 import BlogEditorCommunityView from "@/app/views/BlogEditorCommunityView";
+import {getConfig, serverSideResolverWrapper} from "@/app/store/wrapper";
 
 export default function BlogEditorPublications(props: any) {
   return (
@@ -14,10 +15,20 @@ export default function BlogEditorPublications(props: any) {
   )
 }
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  return {
-    props: {
-      slug: ctx.query.slug
+const resolveConfig = getConfig([
+  ["blogComments", (ctx) => ({ slug: ctx!.query.slug, page: 1 })],
+])
+
+export const getServerSideProps = serverSideResolverWrapper(
+  resolveConfig,
+  ctx => {
+    return {
+      props: {
+        slug: ctx.query.slug,
+      },
     }
+  },
+  results => {
+    return false
   }
-})
+)

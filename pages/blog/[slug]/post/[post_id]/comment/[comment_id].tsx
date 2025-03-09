@@ -1,7 +1,7 @@
 import React from 'react'
 import MainLayout from '@/app/MainLayout'
 import CommentView from "@/app/views/Comment"
-import type {GetServerSidePropsContext} from "next";
+import type { GetServerSidePropsContext } from 'next'
 
 
 export default function CommentPage(props) {

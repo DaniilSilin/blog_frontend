@@ -1,3 +1,7 @@
+.root {
+  margin-bottom: 15px;
+}
+
 .showRepliesButton {
   display: inline-flex;
   color: #3ea6ff;
@@ -7,4 +11,27 @@
 
 .showRepliesButton:hover {
   background: #263850;
+}
+
+.showMoreReplies {
+  display: inline-flex;
+  color: #3ea6ff;
+  padding: 8px 12px 8px 12px;
+  border-radius: 20px;
+}
+
+.showMoreReplies:hover {
+  background: #263850;
+}
+
+.arrow {
+  margin-right: 6px;
+}
+
+.commentRepliesContainer {
+  margin-left: 56px;
+}
+
+.subdirectoryArrowRight {
+  margin-right: 6px;
 }

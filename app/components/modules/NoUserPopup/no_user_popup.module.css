@@ -3,14 +3,21 @@
   height: 174px;
   background-color: #212121;
   position: absolute;
+
 }
 
 .title {
   margin: 16px 0 16px 0;
+  padding: 0 24px;
   color: #d2d2d2;
 }
 
 .description {
   margin: 4px 0 32px;
+  padding: 0 24px;
   color: #919191;
+}
+
+.loginButton {
+  padding: 8px 8px 8px 24px;
 }

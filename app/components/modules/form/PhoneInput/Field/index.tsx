@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 
-
 export interface Props {
   label?: string | undefined
   children: React.ReactNode
@@ -12,9 +11,9 @@ export interface Props {
 
 export default function Field({ label, children, error, description }: Props) {
   return (
-    <div>
+    <div style={{ margin: '25px 0' }}>
       <div style={{ marginBottom: '4px', fontSize: '15px', fontWeight: '500' }}>{label}</div>
-        <div>{description}</div>
+        <div style={{ marginBottom: '8px', color: '#aaaaaa', fontSize: '13px' }}>{description}</div>
       <div>{children}</div>
       <div>{error}</div>
     </div>

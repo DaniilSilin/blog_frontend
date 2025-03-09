@@ -1,3 +1,7 @@
+.root {
+  font-weight: 500;
+}
+
 @keyframes expand {
     from {
         max-height: 2px;
@@ -8,18 +12,37 @@
     }
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.titleIcon {
+  margin-right: 10px;
+}
+
 .dropdown {
+  margin-top: 10px;
   border-radius: 10px;
   position: absolute;
   z-index: 10;
-  background-color: #212121;
-  padding: 8px 8px;
-  animation: expand 0.15s linear;
+  background-color: #3a3a3a;
+  padding: 8px 0;
+  /*animation: expand 0.15s linear;*/
 }
 
 .dropdownElement {
+  display: flex;
   font-size: 18px;
-  padding: 5px 0;
+  color: white;
+  padding: 5px 10px;
+}
+
+.dropdownElement.active {
+  font-size: 18px;
+  background-color: #6c6c6c;
+  padding: 5px 10px;
 }
 
 .dropdownElement:hover {

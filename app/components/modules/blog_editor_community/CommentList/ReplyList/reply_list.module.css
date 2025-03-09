@@ -1,0 +1,66 @@
+.root {
+  border: 1px solid black;
+  padding: 8px 24px 14px 24px;
+}
+
+.inputContainer {
+  padding-right: 32px;
+}
+
+.commentReplyAuthorAvatarContainer {
+  padding-right: 32px;
+}
+
+.commentReplyAuthorAvatar {
+  border-radius: 50%;
+}
+
+.commentReplyMainContainer {
+
+}
+
+.commentHeaderContainer {
+  display: flex;
+}
+
+.commentReplyDate {
+  margin-left: 8px;
+}
+
+.commentBody {
+  width: 600px;
+  overflow-wrap: anywhere;
+}
+
+.commentBodyCollapsed {
+  max-height: 190px;
+  overflow: hidden;
+}
+
+.commentBodyFull {
+  max-height: 100%;
+}
+
+.bodyButton:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.commentActionButtons {
+  margin-top: 8px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.replyButton {
+  padding: 10px;
+  border-radius: 25px;
+  background-color: #363636;
+  color: white;
+  margin-right: 8px;
+}
+
+.replyButton:hover {
+  background-color: #535353;
+}

@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import styles from './post_body.module.css'
 
 export interface Props {
-  post: Post,
+  post: Post
 }
 
 export default function PostBody({ post }: Props) {
@@ -20,19 +20,18 @@ export default function PostBody({ post }: Props) {
   React.useEffect(() => {
     // @ts-ignore
     if (bodyRef.current.offsetHeigth > 400) {
-      console.log(bodyRef.current.offsetHeigth)
       setShowButton(false)
       setShowMore(true)
     } else {
       setShowMore(false)
       setShowButton(false)
     }
-  }, [ bodyRef, setShowMore ])
+  }, [ bodyRef, setShowMore, setShowButton ])
 
 
   return (
     <div className={styles.root}>
-      <div ref={bodyRef} className={classNames(styles.showMore, {[styles.active]: !showMore})} style={{ overflowWrap: 'break-word' }} dangerouslySetInnerHTML={{__html: post.body}} />
+      <div ref={bodyRef} className={classNames(styles.showMore, {[styles.active]: !showMore})}>{post.body}</div>
       {showButton && (
       <>
         {showMore ? (

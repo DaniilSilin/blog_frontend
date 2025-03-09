@@ -1,0 +1,24 @@
+.root {
+  padding: 10px 10px;
+}
+
+.blogModalTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.aboutChannelContainer > .descriptionItem {
+
+}
+
+.aboutChannelTitle {
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.descriptionItem {
+  display: flex;
+  margin-bottom: 15px;
+}

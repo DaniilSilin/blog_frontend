@@ -1,0 +1,25 @@
+.root {
+
+}
+
+.title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.selectContainer {
+  width: 400px;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.userUsername {
+  font-size: 16px;
+}
+
+.userEmail {
+  font-size: 14px;
+}

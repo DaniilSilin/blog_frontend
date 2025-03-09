@@ -1,12 +1,11 @@
 import React from 'react'
-
-import CommentInput from "@/app/components/modules/form/CommentInput"
-import classNames from "classnames"
 import DjangoService from '@/app/store/services/DjangoService'
-import { useAppSelector } from '@/app/store'
-import { HiOutlineEmojiHappy } from 'react-icons/hi'
-import Comment from '../../../../types'
+import classNames from 'classnames'
 import EmojiPicker from 'emoji-picker-react'
+
+import CommentInput from '@/app/components/modules/form/CommentInput'
+import { HiOutlineEmojiHappy } from 'react-icons/hi'
+import { Comment } from '@/app/types'
 
 import styles from './commentBox.module.css'
 
@@ -24,13 +23,13 @@ export interface Props {
 }
 
 export default function CommentBox({ placeholder, submitButtonText, editMode, setEditMode, displayReplyInput, setDisplayReplyInput, comment, slug, post_id, isReplyToParentComment }: Props) {
+  const inputRef = React.useRef(null)
+  const emojiPickerRef = React.useRef(null)
   const [ commentBody, setCommentBody ] = React.useState<string>('')
   const [ focusOnInput, setFocusOnInput ] = React.useState<boolean>(false)
   const [ displayEmojiPicker, setDisplayEmojiPicker ] = React.useState(false)
 
   const [ updateComment ] = DjangoService.useUpdateCommentMutation()
-  const user = useAppSelector(state => state.django.profile)
-  const inputRef = React.useRef(null)
   const [ createComment ] = DjangoService.useCreateCommentMutation()
 
   const cancelComment = React.useCallback(() => {
@@ -68,13 +67,18 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
   }
 
   const onEmojiHandleClick = (emoji: any) => {
-    setCommentBody(`${commentBody}${emoji.emoji}`)
+    const input = inputRef.current.resizableTextArea.textArea
+    const cursorPosition = input.selectionStart
+    setCommentBody(`${commentBody.slice(0, cursorPosition)}${emoji.emoji}${commentBody.slice(cursorPosition)}`)
+    input.focus()
+    setTimeout(() => {
+      input.setSelectionRange(cursorPosition+2, cursorPosition+2)
+    }, 0)
   }
 
   const openEmojiMenuHandleClick = React.useCallback(() => {
     setDisplayEmojiPicker(!displayEmojiPicker)
   }, [ setDisplayEmojiPicker, displayEmojiPicker ])
-
 
   React.useEffect(() => {
     if (displayReplyInput) {
@@ -86,24 +90,37 @@ export default function CommentBox({ placeholder, submitButtonText, editMode, se
     }
   }, [ displayReplyInput ])
 
+  React.useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      // @ts-ignore
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
+        setDisplayEmojiPicker(false)
+      }
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [ emojiPickerRef ])
+
+
+
   return (
-    <div style={{ width: '100%' }}>
+    <div className={styles.root}>
       <CommentInput ref={inputRef} placeholder={placeholder} height={50} onChange={setCommentBody} setFocusOnInput={setFocusOnInput} focusOnInput={focusOnInput}
                     value={commentBody} defaultValue={comment?.body} />
         {focusOnInput && (
           <div className={styles.commentFooter}>
-            <HiOutlineEmojiHappy className={styles.emojiIcon} open={true} onClick={openEmojiMenuHandleClick} size={20} />
-            <EmojiPicker style={{ position: 'absolute', marginTop: '15px' }} open={displayEmojiPicker} onEmojiClick={onEmojiHandleClick} />
+            <div ref={emojiPickerRef}>
+              <HiOutlineEmojiHappy className={styles.emojiIcon} onClick={openEmojiMenuHandleClick} size={20} />
+              {displayEmojiPicker && (
+                <EmojiPicker style={{ position: 'absolute' }} className={styles.emojiPicker} open={displayEmojiPicker} onEmojiClick={onEmojiHandleClick} />
+              )}
+            </div>
             <div className={styles.buttons}>
               <button className={styles.cancelCommentButton} onClick={cancelComment}>
-                <div>
-                  <span>Отмена</span>
-                </div>
+                <span>Отмена</span>
               </button>
-              <button onClick={leaveComment} disabled={!commentBody} className={classNames(styles.leaveCommentButton, {[styles.notEmpty]: commentBody })}>
-                <div>
-                  <span>{submitButtonText}</span>
-                </div>
+              <button onClick={leaveComment} disabled={!commentBody} className={classNames(styles.leaveCommentButton, {[styles.notEmpty]: !!commentBody })}>
+                <span>{submitButtonText}</span>
               </button>
             </div>
           </div>

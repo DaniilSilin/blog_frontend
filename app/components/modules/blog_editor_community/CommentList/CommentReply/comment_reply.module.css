@@ -1,0 +1,54 @@
+.root {
+  margin-top: 8px;
+  padding: 0 24px 0 56px;
+}
+
+.subRoot {
+  width: 600px;
+  display: flex;
+}
+
+.avatarContainer {
+   margin-right: 12px;
+}
+
+.userAvatar {
+  border-radius: 50%;
+}
+
+.inputAndActionButtonsContainer {
+   width: inherit;
+}
+
+.commentActionButtons {
+  margin-top: 8px;
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+}
+
+.cancelButton {
+  color: white;
+  font-weight: 600;
+  padding: 5px 10px;
+  background-color: #363636;
+  border-radius: 25px;
+}
+
+.cancelButton:hover {
+  cursor: pointer;
+  background-color: #535353;
+}
+
+.submitButton {
+  color: white;
+  font-weight: 600;
+  padding: 5px 10px;
+  background-color: #363636;
+  border-radius: 25px;
+}
+
+.submitButton:hover {
+  cursor: pointer;
+  background-color: #535353;
+}

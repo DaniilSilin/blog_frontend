@@ -17,6 +17,7 @@ export default function Login() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     const response = await loginUser({ username, password })
+    console.log(response)
     CookieHelper.setCookie('token', response.data.token, 365)
     router.push('/')
   }

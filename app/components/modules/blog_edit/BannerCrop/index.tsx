@@ -2,6 +2,8 @@ import React from 'react'
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
+import styles from './banner_crop.module.css'
+
 export interface Props {
   originalBannerSourceUrl: string
   setOriginalBannerSourceUrl: any
@@ -142,9 +144,13 @@ const BannerCrop = React.forwardRef(function BannerCrop({ originalBannerSourceUr
           }}
         />
       )}
-      <div>
-        <div onClick={cancelCrop}>Отмена</div>
-        <div onClick={cropImage}>Готово</div>
+      <div className={styles.actionButtonsContainer}>
+        <button onClick={cancelCrop}>
+          Отмена
+        </button>
+        <button onClick={cropImage}>
+          Готово
+        </button>
       </div>
     </div>
   )

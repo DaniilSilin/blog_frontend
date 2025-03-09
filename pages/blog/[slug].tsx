@@ -1,8 +1,7 @@
 import React from 'react'
 import BlogView from '@/app/views/Blog'
 import MainLayout from '@/app/MainLayout'
-import type { GetServerSidePropsContext } from 'next'
-import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
+import { getConfig, serverSideResolverWrapper } from '@/app/store/wrapper'
 
 export interface Props {
     children: React.ReactNode
@@ -30,6 +29,6 @@ export const getServerSideProps = serverSideResolverWrapper(
     }
   },
   results => {
-    return false
+    return !!results.getBlog.isError
   }
 )

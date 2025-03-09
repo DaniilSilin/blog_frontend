@@ -5,6 +5,7 @@
 .showMore {
   max-height: 190px;
   overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .showMore.active {

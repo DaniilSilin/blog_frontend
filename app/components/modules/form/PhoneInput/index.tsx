@@ -1,42 +1,37 @@
 import React, { ChangeEvent } from 'react'
-// import { Input as BaseInput } from 'antd/lib'
-// import FormItem from "antd/es/form/FormItem/";
-// import PhoneInput from "antd-phone-input";
+import { PhoneInput as BasePhoneInput } from 'react-international-phone'
+import 'react-international-phone/style.css'
+
 import Field from './Field'
-import { PhoneInput } from 'react-international-phone';
-import 'react-international-phone/style.css';
 
 export interface Props {
-  width: number
-  height: number
-  onChange: any
+  value: string
+  onChange: (value: string) => void
   label?: string
   error?: string | undefined
   defaultValue?: string
   maxLength?: number
-  value?: any
   description?: string
-  setPhoneNumber: any
 }
 
 const countries = ['ru']
 
-export default function PhoneInput1({ width, height, onChange, label, error, defaultValue, maxLength, value, description, setPhoneNumber }: Props ) {
+export default function PhoneInput({ label, description, value, onChange }: Props ) {
+  const phoneNumberHandleChange = React.useCallback((value: string) => {
+    onChange(value)
+  }, [ onChange ])
+
   return (
     <div>
-      <Field label={label} error={error} value={value} description={description}>
-        <PhoneInput
-          style={{ width: '400px' }}
-          defaultCountry={'ru'}
-          hideDropdown={true}
+      <Field label={label} description={description}>
+        <BasePhoneInput
+          defaultCountry="ru"
+          value={value}
+          onChange={(phone) => phoneNumberHandleChange(phone)}
           disableCountryGuess={true}
-          onChange={(phone, alex) => setPhoneNumber(phone)}
-         />
+          disableDialCodePrefill={true}
+        />
       </Field>
-
-
-          {/*<BaseInput onChange={handleChangeInput} defaultValue={defaultValue} maxLength={maxLength} onFocus={handleFocus} onBlur={handleBlur} value={value}*/}
-          {/*  style={{ display: 'block', width: `${width}px`, height: `${height}px` }} />*/}
     </div>
   )
 }

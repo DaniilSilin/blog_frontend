@@ -1,7 +1,11 @@
-import { Author, Post } from './index'
+import { Author, Post, Owner } from './index'
 
 export interface Blog {
   id: number,
+  avatar?: string
+  avatar_small?: string
+  banner?: string
+  banner_small?: string
   title: string,
   description: string,
   slug: string,
@@ -10,7 +14,7 @@ export interface Blog {
   count_of_posts: number,
   count_of_commentaries: number,
   subscribers: number,
-  owner: string,
+  owner: Owner
   pinned_post: Post,
   authors: Author[],
   isSubscribed: boolean
@@ -22,8 +26,6 @@ export interface Blog {
   site_link?: string
   map?: string
   subscriberList?: number
-  avatar?: string
-  avatar_small?: string
-  banner?: string
-  banner_small?: string
+  views: number
+  phone_number: string
 }

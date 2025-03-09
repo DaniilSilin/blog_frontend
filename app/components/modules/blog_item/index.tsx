@@ -8,14 +8,35 @@ import IsBlogOwner from "@/app/components/modules/blog_item/IsBlogOwner"
 import NoUserPopup from "@/app/components/modules/NoUserPopup"
 
 import styles from './blog_item.module.css'
+import {useAppSelector} from "@/app/store";
+import DjangoService from "@/app/store/services/DjangoService";
 
 export interface Props {
   blog: Blog
+  refetchBlogList: any
 }
 
 const BASE_URL = 'http://127.0.0.1:8000'
 
-export default function BlogItem({ blog }: Props) {
+export default function BlogItem({ blog, refetchBlogList }: Props) {
+  const user = useAppSelector(state => state.django.profile)
+  const [ subscribeBlog ] = DjangoService.useSubscribeBlogMutation()
+  const [ unsubscribeBlog ] = DjangoService.useUnsubscribeBlogMutation()
+
+  const subscribeRequest = async () => {
+    const result = await subscribeBlog({ slug: blog?.slug })
+    if (!result.error && result.data.status !== 'unsuccessful') {
+      refetchBlogList()
+    }
+  }
+
+  const unsubscribeRequest = async () => {
+    const result = await unsubscribeBlog({ slug: blog?.slug })
+    if (!result.error && result.data.status !== 'unsuccessful') {
+      refetchBlogList()
+    }
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.header}>
@@ -35,14 +56,22 @@ export default function BlogItem({ blog }: Props) {
             <div>{blog?.subscriberList} подписчиков</div>
           </div>
         </div>
-        <IsBlogOwner blog={blog} />
+        <div>
+          <div>
+            {blog?.isSubscribed.toString() === 'true' ? (
+              <div className={styles.unsubscribeButton} onClick={unsubscribeRequest}>Отписаться</div>
+            ) : (
+              <div className={styles.subscribeButton} onClick={subscribeRequest}>Подписаться</div>
+            )}
+          </div>
+        </div>
       </div>
       <div className={styles.blogInformationContainer}>
         {blog?.description && (
-          <div>
-            <div className={styles.descriptionTitle}>Описание:</div>
-            <div className={styles.descriptionContent}>{blog?.description}</div>
-          </div>
+            <div>
+              <div className={styles.descriptionTitle}>Описание:</div>
+              <div className={styles.descriptionContent}>{blog?.description}</div>
+            </div>
         )}
         <div>
           <div className={styles.dateTitle}>Последнее обновление:</div>

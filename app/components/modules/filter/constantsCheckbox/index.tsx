@@ -31,8 +31,6 @@ export default function ConstantsCheckbox({ cleanParams, item }: Props) {
       return cleanParams.sort_by
     }
   }, [ cleanParams ])
-  console.log(currentSortParam)
-  console.log(cleanParams.sort_by === currentSortParam)
 
   return (
     <div>

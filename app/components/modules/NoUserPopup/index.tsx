@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import Link from "next/link"
+import Link from 'next/link'
 
 import styles from './no_user_popup.module.css'
 
@@ -18,9 +18,9 @@ export default function NoUserPopup({ title, description }: Props) {
 
   return (
     <div className={styles.root}>
-    <div className={styles.title}>{title}</div>
-    <div className={styles.description}>{description}</div>
-      <Link href={`/login`}>
+      <div className={styles.title}>{title}</div>
+      <div className={styles.description}>{description}</div>
+      <Link className={styles.loginButton} href={`/login`}>
         <div onClick={signIn}>Войти</div>
       </Link>
     </div>

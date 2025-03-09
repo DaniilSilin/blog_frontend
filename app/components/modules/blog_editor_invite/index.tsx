@@ -1,15 +1,18 @@
 import React from 'react'
+
 import InviteOrRemoveAuthor from './InviteOrRemoveAuthor'
 import BlogInvitations from './BlogInvitations'
+
+import styles from './blog_editor_invite.module.css'
 
 export default function BlogEditorInvite({ slug }) {
   return (
     <div>
-      <div style={{ fontSize: '28px', fontWeight: '600', marginBottom: '20px' }}>Приглашения</div>
-        <div style={{ display: 'flex' }}>
-          <InviteOrRemoveAuthor slug={slug} />
-          <BlogInvitations slug={slug} />
-        </div>
+      <div className={styles.title}>Приглашения</div>
+      <div style={{ display: 'flex' }}>
+        <InviteOrRemoveAuthor slug={slug} />
+        <BlogInvitations slug={slug} />
+      </div>
     </div>
   )
 }

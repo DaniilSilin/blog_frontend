@@ -1,4 +1,4 @@
-const telegramLinkRegex = 't.me'
+const telegramLinkRegex = 'https://t.me/'
 
 const telegramLinkValidator = (telegramLink: string) => {
   if (telegramLink) {

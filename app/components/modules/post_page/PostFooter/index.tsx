@@ -1,8 +1,9 @@
 import React from 'react'
+import DjangoService from '@/app/store/services/DjangoService'
 import Link from 'next/link'
+import Image from 'next/image'
 
-import { Post, User } from '../../../../types'
-import DjangoService from "@/app/store/services/DjangoService"
+import { Post, User } from '@/app/types'
 import { IoMdEye } from "react-icons/io"
 import { FaRegCommentAlt, FaShare } from "react-icons/fa"
 import { AiOutlineLike, AiFillLike } from 'react-icons/ai'
@@ -11,14 +12,14 @@ import { IoBookmarkSharp } from "react-icons/io5";
 import ShareMenu from './ShareMenu'
 
 import styles from './post_footer.module.css'
-import LikedUserList from "@/app/components/modules/post_page/PostFooter/LikedUserList";
+import LikedUserList from "@/app/components/modules/post_page/PostFooter/LikedUserList"
 import Bookmark from './Bookmark'
 
 export interface Props {
-  post: Post,
+  post: Post
 }
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 export default function PostFooter({ post }: Props) {
   const [ setLike ] = DjangoService.useSetLikeMutation()
@@ -99,7 +100,7 @@ export default function PostFooter({ post }: Props) {
                     {post?.liked_users.map((user: User) => (
                       <div key={user.id}>
                         <Link href={`/profile/${user.username}/`}>
-                          <img src={`${BASE_URL}${user.avatar}`} width={20} height={20} alt="" />
+                          <Image src={user.avatar_small ? `${BASE_URL}${user.avatar_small}` : '/img/default/avatar_default.jpg'} width={20} height={20} alt="" />
                         </Link>
                         <Link href={`/profile/${user.username}/`}>{user.username}</Link>
                       </div>

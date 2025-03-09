@@ -1,18 +1,19 @@
 import React from 'react'
 import DjangoService from '@/app/store/services/DjangoService'
-import Link from 'next/link'
-import AdditionalBlogInformation from './AdditionalBlogInformation'
+import { useAppSelector } from '@/app/store'
+import { useRouter } from 'next/router'
 import Image from 'next/image'
+import Link from 'next/link'
+import classNames from 'classnames'
+
+import AdditionalBlogInformation from './AdditionalBlogInformation'
+import PostItem from "@/app/components/modules/post_page"
+import BlogActionMenu from './BlogActionMenu'
+import createBlogMenu from './constants'
 
 import styles from './blog_page.module.css'
-import { useAppSelector } from '@/app/store'
-import PostItem from "@/app/components/modules/post_page"
-import BlogActionMenu from "@/app/components/modules/blog_page/BlogActionMenu"
-import { useRouter } from 'next/router'
-import classNames from "classnames"
-import createBlogMenu from "@/app/components/modules/blog_page/constants"
 
-const BASE_URL = 'http://127.0.0.1:8000/'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 export interface Props {
   children: React.ReactNode
@@ -23,20 +24,22 @@ export default function BlogItem({ slug, children }: Props) {
   const router = useRouter()
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug })
   const user = useAppSelector(state => state.django.profile)
-  const [ hasAccess, setHasAccess ] = React.useState(false)
-
-  React.useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      setHasAccess(false)
-    } else {
-      const access = user.username === blogData?.owner.username || user.is_admin.toString() === 'true'
-      setHasAccess(access)
-    }
-  }, [ blogData, user, setHasAccess ])
 
   const [ dynamicContentModalDisplayed, setDynamicContentModalDisplayed ] = React.useState(false)
   const freezeBody = React.useCallback(() => document.querySelector("body")?.classList.add("freeze"), [])
   const unfreezeBody = React.useCallback(() => document.querySelector("body")?.classList.remove("freeze"), [])
+
+  const blogSubscribersTitle = React.useMemo(() => {
+    const blogSubscribers = blogData?.subscriberList.toString()
+    if (blogSubscribers.slice(-1) === '1' && blogSubscribers.slice(-2) !== '11') {
+      return `${blogSubscribers} подписчик`
+    } else if (((blogSubscribers.slice(-1) === '2' || blogSubscribers.slice(-1) === '3' || blogSubscribers.slice(-1) === '4') &&
+        (blogSubscribers.slice(-2) !== '12' && blogSubscribers.slice(-2) !== '13' && blogSubscribers.slice(-2) !== '14'))) {
+      return `${blogSubscribers} подписчика`
+    } else {
+      return `${blogSubscribers} подписчиков`
+    }
+  }, [ blogData?.subscriberList ])
 
   const handleDynamicContentClick = React.useCallback((e) => {
     let elem = e.target
@@ -76,31 +79,42 @@ export default function BlogItem({ slug, children }: Props) {
                 <div className={styles.blogTitle}>{blogData?.title}</div>
                 <div style={{ display: 'flex' }}>
                   <div>{blogData?.slug}</div>
-                  <div style={{ margin: '0 4px' }}>·</div>
-                  <div>{blogData?.subscriberList} подписчиков</div>
-                  <div style={{ margin: '0 4px' }}>·</div>
+                  <div className={styles.delimiter}>·</div>
+                  <div>{blogSubscribersTitle}</div>
+                  <div className={styles.delimiter}>·</div>
                   <div>{blogData?.count_of_posts} постов</div>
                 </div>
                 <div onClick={handleDynamicContentClick} className={styles.blogDescription}>
-                  {(blogData?.description.length < 35) ?
-                    <>{blogData?.description}...ещё</> :
-                    <>{blogData?.description.slice(0, 35)}...ещё</>}
+                  {blogData?.description ? (
+                    <>
+                      {blogData?.description.length < 35 ? (
+                        <>{blogData?.description}...ещё</>
+                          ) : (
+                        <>{blogData?.description.slice(0, 35)}...ещё</>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <>Подробнее о канале</>
+                      <>...ещё</>
+                    </>
+                  )}
                   <div className={"modal_3"}>
                     <div className={"modalContent_3"}>
-                      <AdditionalBlogInformation blogData={blogData}/>
+                      <AdditionalBlogInformation blogData={blogData} />
                     </div>
                   </div>
                 </div>
                 <div>
-                  <BlogActionMenu hasAccess={hasAccess} blogData={blogData} slug={slug} />
+                  {/*<BlogActionMenu hasAccess={hasAccess} blogData={blogData} slug={slug} />*/}
                 </div>
               </div>
             </div>
           </div>
       </div>
       <div className={styles.bottomMenu}>
-        {BLOG_MENU.map((item) => (
-          <Link className={classNames(styles.blogMenu, {[styles.active]: router.pathname === item.pathname })} href={item.href}>
+        {BLOG_MENU.map((item, index: number) => (
+          <Link key={index} className={classNames(styles.blogMenu, {[styles.active]: router.pathname === item.pathname })} href={item.href}>
             <div>{item.title}</div>
           </Link>
         ))}

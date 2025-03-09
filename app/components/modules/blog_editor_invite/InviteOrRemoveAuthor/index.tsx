@@ -1,8 +1,10 @@
 import React from 'react'
-import DjangoService from "@/app/store/services/DjangoService"
-import TextArea from "@/app/components/modules/form/Textarea"
-import { useAppSelector } from "@/app/store"
-import SelectField from "@/app/components/modules/form/SelectField"
+import DjangoService from '@/app/store/services/DjangoService'
+import { useAppSelector } from '@/app/store'
+import classNames from 'classnames'
+
+import TextArea from '@/app/components/modules/form/Textarea'
+import SelectField from '@/app/components/modules/form/SelectField'
 
 import styles from './invite_or_remove_author.module.css'
 
@@ -35,17 +37,19 @@ export default function InviteOrRemoveAuthor({ slug }: Props) {
   return (
     <div className={styles.root}>
       <div className={styles.title}>Создать приглашения</div>
-        <div style={{ marginBottom: '20px' }}>
-          <div>
-            <SelectField title={'Пригласить пользователя'} data={userList} setAddressee={setAddressee} setUsername={setUsername} />
-            <TextArea width={400} height={100} onChange={setDescription} autoSize={false} showCount={true} maxLength={300} label={'Текст приглашения'}/>
-            <button className={styles.inviteButton} disabled={!(addressee && description)} onClick={inviteToBlogOnClick}>Отправить приглашение</button>
-          </div>
-          <div>
-            <SelectField title={'Выгнать автора'} data={blogAuthors} setAddressee={setKickAddressee} setUsername={setAuthorUsername} />
-            <button className={styles.inviteButton} disabled={!kickAddressee} onClick={kickAuthorHandleSubmit}>Выгнать автора</button>
-          </div>
+      <div style={{ marginBottom: '20px' }}>
+        <div className={styles.inviteUserContainer}>
+          <SelectField title={'Пригласить пользователя'} data={userList} setAddressee={setAddressee} setUsername={setUsername} />
+          <TextArea width={400} height={100} onChange={setDescription} autoSize={false} showCount={true} maxLength={300} label={'Текст приглашения'}/>
+          <button className={classNames(styles.inviteButton, {[styles.active]: !!(addressee && description) })} disabled={!(addressee && description)} onClick={inviteToBlogOnClick}>
+            Отправить приглашение
+          </button>
         </div>
+        <div className={styles.kickUserContainer}>
+          <SelectField title={'Выгнать автора'} data={blogAuthors} setAddressee={setKickAddressee} setUsername={setAuthorUsername} />
+          <button className={classNames(styles.kickButton, {[styles.active]: !!kickAddressee })} disabled={!kickAddressee} onClick={kickAuthorHandleSubmit}>Выгнать автора</button>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import React from 'react'
-import Link from "next/link";
+import Link from 'next/link'
+
+import styles from './invitation_list.module.css'
 
 export interface Props {
   invite: any
@@ -20,15 +22,14 @@ export default function InvitationList({ invite }: Props) {
     }
   }, [ invite ])
 
-
   return (
-        <div style={{border: '1px solid black', padding: '10px', borderRadius: '10px'}}>
-          <div style={{display: 'flex', fontSize: '16px'}}>
-            <div style={{fontWeight: '600'}}>Отправить:&nbsp;</div>
-            <Link href={`/profile/${invite.admin}/`}>
-              <div>{invite.admin}</div>
-            </Link>
-          </div>
+    <div className={styles.root}>
+      <div style={{ display: 'flex', fontSize: '16px' }}>
+        <div style={{fontWeight: '600'}}>Отправить:&nbsp;</div>
+        <Link href={`/profile/${invite.admin}/`}>
+          <div>{invite.admin}</div>
+        </Link>
+      </div>
           <div style={{display: 'flex', fontSize: '16px'}}>
             <div style={{fontWeight: '600'}}>Получатель:&nbsp;</div>
             <Link href={`/profile/${invite.addressee}/`}>
@@ -39,6 +40,6 @@ export default function InvitationList({ invite }: Props) {
           <div>Статус:</div>
           <div>{inviteStatus}</div>
           <div>Текст сообщения {invite.description}</div>
-        </div>
+    </div>
   )
 }

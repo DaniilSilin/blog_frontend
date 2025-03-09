@@ -1,9 +1,7 @@
 import React from 'react'
 import MainLayout from '@/app/MainLayout'
 import PostView from '@/app/views/Post'
-import type { GetServerSidePropsContext } from 'next'
-import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
-
+import { getConfig, serverSideResolverWrapper } from '@/app/store/wrapper'
 
 export default function PostPage(props) {
   return (
@@ -29,6 +27,6 @@ export const getServerSideProps = serverSideResolverWrapper(
     }
   },
   results => {
-    return false
+    return !!results.getPost.isError
   }
 )

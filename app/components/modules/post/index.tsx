@@ -3,12 +3,12 @@ import DjangoService from '../../../store/services/DjangoService'
 
 import Filter from '../filter'
 import PostItem from '../post_page'
-import { Post } from '../../../types'
+import { Post } from '@/app/types'
 import { useRouter } from 'next/router'
 
 import styles from './post_list.module.css'
 
-const cleanParams = (query, page: number) => {
+const cleanParams = (query: any, page: number) => {
   const search = query.search ? query.search : undefined
   const before = query.before ? query.before : undefined
   const after = query.after ? query.after : undefined

@@ -1,7 +1,8 @@
 import React from 'react'
 import DjangoService from '@/app/store/services/DjangoService'
-import { Blog } from '../../../types'
+import { Blog } from '@/app/types'
 import { useRouter } from 'next/router'
+
 import BlogItem from "@/app/components/modules/blog_item"
 import Filter from '../filter'
 
@@ -19,13 +20,13 @@ const cleanParams = (query, page: number) => {
 export default function BlogList() {
   const router = useRouter()
   const [ page, setPage ] = React.useState<number>(1)
-  const { data: blogPaginatedList, isLoading, isFetching } = DjangoService.useGetBlogPaginatedListQuery(cleanParams(router.query, page))
+  const { data: blogList, isLoading, isFetching, refetch: refetchBlogList } = DjangoService.useGetBlogPaginatedListQuery(cleanParams(router.query, page))
 
   React.useEffect(() => {
     const onScroll = () => {
       const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight
       if (scrolledToBottom && !isFetching) {
-        if (blogPaginatedList.next != null) {
+        if (blogList.next != null) {
           setPage(page + 1)
         } else {
           return
@@ -44,8 +45,8 @@ export default function BlogList() {
     <div className={styles.root}>
       <h1>Блоги</h1>
       <Filter page={page} setPage={setPage} cleanParams={cleanParams(router.query, page)} />
-      {blogPaginatedList?.results.map((blog: Blog[], index: number) => (
-        <BlogItem key={index} blog={blog}/>
+      {blogList?.results.map((blog: Blog[], index: number) => (
+        <BlogItem key={index} blog={blog} refetchBlogList={refetchBlogList} />
       ))}
     </div>
   )

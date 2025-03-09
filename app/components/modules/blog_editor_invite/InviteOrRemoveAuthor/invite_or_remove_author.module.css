@@ -8,13 +8,38 @@
   margin-bottom: 15px;
 }
 
-.inviteButton {
-  padding: 10px;
-  background-color: #001529;
-  color: #a6adb4;
-  border-radius: 15px;
+.inviteUserContainer {
+
 }
 
-.inviteButton:hover {
+.kickUserContainer {
+
+}
+
+.inviteButton {
+  padding: 10px;
+  background-color: #363636;
+  color: #6e6e6e;
+  border-radius: 15px;
+  cursor: default;
+}
+
+.inviteButton.active {
   color: white;
+  background-color: #363636;
+  cursor: pointer;
+}
+
+.kickButton {
+  padding: 10px;
+  background-color: #363636;
+  color: #6e6e6e;
+  border-radius: 15px;
+  cursor: default;
+}
+
+.kickButton.active {
+  color: white;
+  background-color: #363636;
+  cursor: pointer;
 }

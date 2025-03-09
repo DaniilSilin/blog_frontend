@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { Layout, Menu, theme } from 'antd/lib'
+import { Layout, Menu } from 'antd/lib'
 const { Header } = Layout
-import { useAppSelector } from "../../store"
 import HeaderProfile from "@/app/MainLayout/Header/HeaderProfile"
-import HeaderData from "@/app/MainLayout/Header/HeaderData"
 
 export default function HeaderReact() {
   const headerMenu = [
@@ -18,7 +16,7 @@ export default function HeaderReact() {
     <Header style={{ display: 'flex', flexDirection: 'row-reverse', lineHeight: '30px' }}>
       {/*<div className="demo-logo" />*/}
       <Menu theme="dark" mode="horizontal">
-        {/*<HeaderProfile />*/}
+        <HeaderProfile />
       </Menu>
       {/*<HeaderProfile />*/}
       {/*<HeaderData />*/}

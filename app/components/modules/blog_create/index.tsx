@@ -1,33 +1,34 @@
-import React, {ChangeEvent, FormEvent} from 'react'
+import React, { ChangeEvent, FormEvent } from 'react'
+import DjangoService from '@/app/store/services/DjangoService'
+import NextImage from 'next/image'
 import { useRouter } from 'next/router'
+import classNames from 'classnames'
 
-import DjangoService from "@/app/store/services/DjangoService"
-import AvatarModal from "@/app/components/modules/avatar_modal"
+import AvatarModal from '@/app/components/modules/avatar_modal'
 
 import { slugValidator, titleValidator } from '../../modules/form/validators'
 import { BlogSlugInput, PostDataInput, PostDataTextArea } from '../../../components/modules/form'
-import NextImage from 'next/image'
 
-const titleLabel = 'Название канала'
-const slugLabel = 'Ссылка на сайт'
-const descriptionLabel = 'Описание'
+import styles from './blog_create.module.css'
+
 const MIN_AVATAR_SIZE_IN_MB = 33554432
 const MIN_DIMENSION_AVATAR = 100
 
 export default function BlogCreate() {
   const router = useRouter()
   const divRef = React.useRef(null)
+  const [ submitAvailable, setSubmitIsAvailable ] = React.useState(false)
 
   const [ title, setTitle ] = React.useState<string>('')
   const [ slug, setSlug ] = React.useState<string>('')
   const [ description, setDescription ] = React.useState<string>('')
 
-  const [ createBlog, { data: createBlogData, isSuccess } ] = DjangoService.useCreateBlogMutation()
+  const [ createBlog ] = DjangoService.useCreateBlogMutation()
   const [ triggerQuery, { data: blog_slug }] = DjangoService.useLazyGetBlogSlugQuery()
 
-  const [ imageSource, setImageSource ] = React.useState<any>()
+  const [ imageSource, setImageSource ] = React.useState<any>(null)
   const [ imageSourceUrl, setImageSourceUrl ] = React.useState('')
-  const [ croppedImage, setCroppedImage ] = React.useState<any>()
+  const [ croppedImage, setCroppedImage ] = React.useState<any>(null)
   const [ croppedImageUrl, setCroppedImageUrl ] = React.useState()
 
   const [ imageErrorMessage, setImageErrorMessage ] = React.useState('')
@@ -70,8 +71,10 @@ export default function BlogCreate() {
 
   React.useEffect(() => {
     if (imageSource) {
+      // @ts-ignore
       divRef.current.style.display = 'block'
     } else {
+      // @ts-ignore
       divRef.current.style.display = 'none'
     }
   }, [ imageSource ])
@@ -106,6 +109,12 @@ export default function BlogCreate() {
 
   React.useEffect(() => {
     formValidation()
+    const isValid = formValidation()
+    if (isValid && title && slug) {
+      setSubmitIsAvailable(true)
+    } else {
+      setSubmitIsAvailable(false)
+    }
   }, [ title, slug ])
 
 
@@ -126,12 +135,11 @@ export default function BlogCreate() {
         formData.append('description', description)
         formData.append('slug', slug)
       }
-      createBlog({ formData })
+      const result = await createBlog({ formData })
+      if (!result.error) {
+        router.push(`/blog/${slug}/`)
+      }
     }
-  }
-
-  if (isSuccess) {
-    router.push(`/blog/${createBlogData}/`)
   }
 
   React.useEffect(() => {
@@ -141,23 +149,28 @@ export default function BlogCreate() {
   }, [ slug, slugError, triggerQuery ])
 
   return (
-    <div>
+    <div className={styles.root}>
       <form onSubmit={handleSubmit}>
-        <label style={{ cursor: 'pointer' }}>
-          <NextImage src={croppedImageUrl ? croppedImageUrl : '/img/default/avatar_default.jpg'} style={{ borderRadius: '50%' }} alt={''} width={64} height={64} />
-          <input style={{ display: 'none' }} type={'file'} accept={'image/*'} onChange={onSelectAvatar} />
-        </label>
+        <div className={styles.avatarContainer}>
+          <label>
+            <NextImage src={croppedImageUrl ? croppedImageUrl : '/img/default/avatar_default.jpg'} className={styles.avatar} width={100} height={100} alt={''} />
+            <input style={{ display: 'none' }} type={'file'} accept={'image/*'} onChange={onSelectAvatar} />
+          </label>
+        </div>
         <div ref={divRef} className="modal_3">
-          <div className="modalContent_3">
-            <AvatarModal setImageSource={setImageSource} imageSourceUrl={imageSourceUrl} setImageSourceUrl={setImageSourceUrl} setCroppedImageUrl={setCroppedImageUrl}
-            imageSource={imageSource} croppedImage={croppedImage} setCroppedImage={setCroppedImage} ref={divRef} />
+          <div className="modalContent_3" style={{ margin: '10% auto' }}>
+            <AvatarModal setImageSource={setImageSource} imageSourceUrl={imageSourceUrl}
+                         setImageSourceUrl={setImageSourceUrl} setCroppedImageUrl={setCroppedImageUrl}
+                         imageSource={imageSource} croppedImage={croppedImage} setCroppedImage={setCroppedImage} ref={divRef} />
           </div>
         </div>
-      <PostDataInput width={600} height={40} label={titleLabel} onChange={setTitle} maxLength={100} error={titleError} />
-      <BlogSlugInput width={600} height={40} label={slugLabel} onChange={setSlug} maxLength={25} description={'Задайте уникальное значение'}
-                     error={slugError} blog_slug={blog_slug} value={slug} />
-      <PostDataTextArea width={600} height={120} label={descriptionLabel} onChange={setDescription} maxLength={200} autoSize={true} showCount={true} />
-      <input type={'submit'} value={'Создать'} onClick={handleSubmit} />
+        <PostDataInput width={600} height={40} label={'Название канала'} onChange={setTitle} maxLength={100} error={titleError} />
+        <BlogSlugInput width={600} height={40} label={'Ссылка на сайт'} onChange={setSlug} maxLength={25} description={'Задайте уникальное значение'}
+                       error={slugError} blog_slug={blog_slug} value={slug} />
+        <PostDataTextArea width={600} height={120} label={'Описание'} onChange={setDescription} maxLength={200} autoSize={true} showCount={true} />
+        <button onClick={handleSubmit} disabled={!submitAvailable} className={classNames(styles.buttonSubmit, {[styles.active]: submitAvailable })}>
+          Создать
+        </button>
       </form>
     </div>
   )

@@ -256,22 +256,21 @@ const DjangoService = createApi({
       })
     }),
     changeUserProfile: builder.mutation({
-      query:({ formData, usernameState }) => ({
-        url: `profile/${usernameState}/change/`,
-        method: 'POST',
+      query:({ formData, username }) => ({
+        url: `profile/${username}/`,
+        method: 'PUT',
         body: formData,
-        formData: true,
       })
     }),
-    setLike: builder.mutation({
+    setOrRemoveLike: builder.mutation({
       query: ({ slug, post_id}) => ({
-        url: `blog/${slug}/post/${post_id}/like/add/`,
+        url: `blog/${slug}/post/${post_id}/like/`,
         method: 'POST',
       })
     }),
-    removeLike: builder.mutation({
+    setOrRemoveDislike: builder.mutation({
       query: ({ slug, post_id}) => ({
-        url: `blog/${slug}/post/${post_id}/like/remove/`,
+        url: `blog/${slug}/post/${post_id}/dislike/`,
         method: 'POST',
       })
     }),
@@ -296,15 +295,9 @@ const DjangoService = createApi({
         }
       })
     }),
-    addToBookmarks: builder.mutation({
+    addOrRemoveBookmark: builder.mutation({
       query: ({ slug, post_id }) => ({
-        url: `bookmark/blog/${slug}/post/${post_id}/add/`,
-        method: 'POST',
-      })
-    }),
-    removeFromBookmarks: builder.mutation({
-      query: ({ slug, post_id }) => ({
-        url: `bookmark/blog/${slug}/post/${post_id}/remove/`,
+        url: `/blog/${slug}/post/${post_id}/bookmark/`,
         method: 'POST',
       })
     }),
@@ -350,20 +343,21 @@ const DjangoService = createApi({
       },
     }),
     postCommentList: builder.query({
-      query: ({ slug, post_id, parent_id, page }) => ({
+      query: ({ slug, post_id, parent_id, page, sort_by }) => ({
         url: `blog/${slug}/post/${post_id}/comment/list/`,
         params: {
           page: page || undefined,
           parent_id: parent_id || undefined,
+          sort_by: sort_by || undefined
         }
       }),
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        console.log(queryArgs)
-        const args = queryArgs
-        console.log(args)
+        const args = { ...queryArgs }
+        // console.log(queryArgs)
+        // console.log(args)
         delete args.page
-        console.log(args)
-        console.log(`${endpointName}${JSON.stringify(args)}`)
+        // console.log(args)
+        // console.log(`${endpointName}${JSON.stringify(args)}`)
         return `${endpointName}(${JSON.stringify(args)})`
       },
       merge: (currentCache, newItems, otherArgs) => {
@@ -376,7 +370,7 @@ const DjangoService = createApi({
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return false
+        return true
       },
     }),
     getUsers: builder.query({
@@ -397,8 +391,12 @@ const DjangoService = createApi({
       })
     }),
     blogEditorPosts: builder.query({
-      query: ({ slug }) => ({
-        url: `blog/${slug}/editor/posts/`
+      query: ({ slug, state, columnType, sortOrder }) => ({
+        url: `blog/${slug}/editor/posts?state=${state}`,
+        params: {
+          columnType: columnType || undefined,
+          sortOrder: sortOrder || undefined
+        }
       })
     }),
     blogsWhereUserIsOwner: builder.query({
@@ -423,9 +421,32 @@ const DjangoService = createApi({
       })
     }),
     blogComments: builder.query({
-      query: ({ slug }) => ({
-        url: `blog/${slug}/comments/`
-      })
+      query: ({ slug, page, search_query, sort_by, parent_id }) => ({
+        url: `blog/${slug}/comments/`,
+        params: {
+          page: page || undefined,
+          search_query: search_query || undefined,
+          sort_by: sort_by || undefined,
+          parent_id: parent_id || undefined,
+        }
+      }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs }
+        delete args.page
+        return `${endpointName}(${JSON.stringify(args)})`
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous
+        currentCache.next = newItems.next
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results)
+        } else {
+          currentCache.results = newItems.results
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true
+      },
     }),
     likedPostList: builder.query({
       query: () => ({
@@ -460,14 +481,34 @@ const DjangoService = createApi({
     }),
     setOrRemoveCommentLike: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
-        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like/add/`,
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like/`,
         method: 'POST'
       })
     }),
     setOrRemoveCommentDislike: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
-        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/dislike/add/`,
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/dislike/`,
         method: 'POST'
+      })
+    }),
+    setOrRemoveLikeByAuthor: builder.mutation({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like_by_author/`,
+        method: 'POST'
+      })
+    }),
+    blogCommentListDelete: builder.mutation({
+      query: ({ slug, comment_list }) => ({
+        url: `blog/${slug}/comment/list/delete/`,
+        method: 'DELETE',
+        body: { comment_list }
+      })
+    }),
+    updatePost: builder.mutation({
+      query: ({ slug, post_id, formData }) => ({
+        url: `/blog/${slug}/post/${post_id}/`,
+        method: 'PUT',
+        body: formData
       })
     })
   }),

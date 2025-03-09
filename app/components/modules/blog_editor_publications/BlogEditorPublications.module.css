@@ -7,16 +7,35 @@
   font-weight: 600;
 }
 
-.tabsMenu {
+.postTabsMenu {
   display: flex;
 }
 
-.TabsMenuTab {
-
+.postTabsMenu {
+  font-size: 22px;
+  width: fit-content;
+  margin-right: 24px;
+  text-decoration: none;
+  color: black !important;
 }
 
-.tabsMenu > .TabsMenuTab {
+.postTabsMenu:hover {
+  cursor: pointer;
+  border-bottom: 2px solid black;
+}
 
+.postTabsMenu.active {
+  border-bottom: 2px solid black;
+}
+
+
+.TabsMenuTab {
+  margin-right: 10px;
+}
+
+.tabsMenu {
+  display: flex;
+  height: 30px;
 }
 
 .tabsMenu > div {
@@ -39,4 +58,53 @@
 
 .publicationsList {
 
+}
+
+.dateTh {
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateTh.active {
+  font-weight: 700;
+}
+
+.dateTh:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viewsTh {
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewsTh:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viewsTh.active {
+  font-weight: 700;
+}
+
+.commentsTh {
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentsTh:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.commentsTh.active {
+  font-weight: 700;
+}
+
+.arrow {
+  margin-left: 5px;
 }

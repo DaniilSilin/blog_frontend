@@ -1,13 +1,14 @@
 import React from 'react'
-import { ImVk, ImYoutube, ImTelegram,  } from "react-icons/im"
-import { TbBrandYandex } from "react-icons/tb";
-import { IoCalendar } from "react-icons/io5"
+import moment from 'moment'
+import 'moment/locale/ru'
+
+import { ImVk, ImYoutube, ImTelegram } from 'react-icons/im'
+import { TbBrandYandex } from 'react-icons/tb'
+import { IoCalendar } from 'react-icons/io5'
 import { IoIosPeople } from "react-icons/io"
 import { AiOutlineRise, AiOutlineMail } from "react-icons/ai"
 import { FaSignsPost, FaPhone } from "react-icons/fa6"
 import { BiPlanet } from "react-icons/bi"
-import moment from 'moment'
-import 'moment/locale/ru'
 import { Blog } from "@/app/types"
 
 import styles from './addition_information.module.css'
@@ -28,37 +29,37 @@ export default function AdditionalBlogInformation({ blogData }: Props) {
   }, [ blogData ])
 
 return (
-  <div style={{ padding: '10px 10px' }}>
-    <div style={{ fontSize: '28px', fontWeight: '700', marginBottom: '10px' }}>О канале</div>
+  <div className={styles.root}>
+    <div className={styles.blogModalTitle}>О канале</div>
     {blogData?.description && (
       <div style={{ display: 'flex', marginBottom: '10px' }}>
         <div>{blogData?.description}</div>
       </div>
     )}
-    <div>
-        <div style={{ fontSize: '21px', fontWeight: '700', marginBottom: '10px' }}>О канале</div>
-        {blogData?.email && (
-        <div style={{ display: 'flex', marginBottom: '15px' }}>
+    <div className={styles.aboutChannelContainer}>
+      <div className={styles.aboutChannelTitle}>О канале</div>
+      {blogData?.email && (
+        <div className={styles.descriptionItem}>
           <AiOutlineMail size={20} style={{ marginRight: '10px' }} />
           <a href={`mailto:${blogData?.email}`}>{blogData?.email}</a>
         </div>
-        )}
-        <div style={{ display: 'flex', marginBottom: '15px' }}>
+      )}
+      <div className={styles.descriptionItem}>
           <AiOutlineRise size={20} style={{ marginRight: '10px' }} />
           <div>{blogData?.views} просмотров</div>
-        </div>
-        <div style={{ display: 'flex', marginBottom: '15px' }}>
+      </div>
+      <div className={styles.descriptionItem}>
           <IoIosPeople size={20} style={{ marginRight: '10px' }} />
           <div>{blogData?.count_of_posts} подписчиков</div>
-        </div>
-        <div style={{ display: 'flex', marginBottom: '15px' }}>
-          <FaSignsPost size={20} style={{ marginRight: '10px' }} />
-          <div>{blogData?.subscriberList} постов</div>
-        </div>
-        <div style={{ display: 'flex', marginBottom: '15px' }}>
-          <IoCalendar size={20} style={{ marginRight: '10px' }} />
-          <div>Дата регистрации: {moment(blogData?.created_at).format("D MMMM hh:mm")}</div>
-        </div>
+      </div>
+      <div className={styles.descriptionItem}>
+        <FaSignsPost size={20} style={{ marginRight: '10px' }} />
+        <div>{blogData?.subscriberList} постов</div>
+      </div>
+      <div className={styles.descriptionItem}>
+        <IoCalendar size={20} style={{ marginRight: '10px' }} />
+        <div>Дата регистрации: {moment(blogData?.created_at).format("D MMMM hh:mm")}</div>
+      </div>
     </div>
       {doesHaveLink && (
           <div>

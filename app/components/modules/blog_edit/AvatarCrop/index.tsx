@@ -3,13 +3,15 @@ import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelC
 import 'react-image-crop/dist/ReactCrop.css'
 
 export interface Props {
-  originalAvatarSourceUrl: any
+  originalAvatarSourceUrl: string
   setOriginalAvatarSource: any
   setOriginalAvatarSourceUrl: any
   setCroppedAvatar: any
-  setCroppedAvatarUrl: any
+  setCroppedAvatarUrl: string
   setIsAvatarDeleted: any
 }
+
+import styles from './avatar_crop.module.css'
 
 const MIN_DIMENSION = 100
 const ASPECT_RATIO = 1
@@ -114,7 +116,7 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
   }
 
   return (
-    <div>
+    <div className={styles.root}>
       <ReactCrop
         onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
         circularCrop
@@ -138,9 +140,13 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
           }}
         />
       )}
-      <div>
-        <div onClick={cancelCrop}>Отмена</div>
-        <div onClick={cropImage}>Готово</div>
+      <div className={styles.actionButtonsContainer}>
+        <button className={styles.cancelButton} onClick={cancelCrop}>
+          Отмена
+        </button>
+        <button className={styles.cropButton} onClick={cropImage}>
+          Готово
+        </button>
       </div>
     </div>
   )

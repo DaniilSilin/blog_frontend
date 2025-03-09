@@ -1,0 +1,15 @@
+.rootIsParent {
+  margin-right: 32px;
+  cursor: pointer;
+  height: 50%;
+}
+
+.rootIsNotParent {
+  margin-right: 85px;
+  cursor: pointer;
+  height: 50%;
+}
+
+.inputCheckbox {
+  cursor: pointer;
+}

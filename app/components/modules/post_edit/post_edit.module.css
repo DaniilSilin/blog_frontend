@@ -1,0 +1,38 @@
+.root {
+
+}
+
+.actionButtonsContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.cancelButton {
+  border-radius: 10px;
+  padding: 8px 12px;
+  background-color: #3e3e3e;
+  cursor: default;
+}
+
+.cancelButton:hover {
+  background-color: #535353
+}
+
+.cancelButton.active {
+  padding: 8px 12px;
+  background-color: #3e3e3e;
+  cursor: pointer;
+}
+
+.submitButton {
+  border-radius: 10px;
+  padding: 8px 12px;
+  background-color: #5a5454;
+}
+
+.submitButton.active {
+  padding: 8px 12px;
+  background-color: #3a3ae3;
+  cursor: pointer;
+}
+
