@@ -1,13 +1,7 @@
-import React from 'react'
+import React from "react";
 
-export interface Props {
-
-}
+export interface Props {}
 
 export default function BlogEditor() {
-  return (
-    <div>
-
-    </div>
-  )
+  return <div></div>;
 }

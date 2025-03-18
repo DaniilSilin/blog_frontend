@@ -1,15 +1,15 @@
-const dzenLinkRegex = 'https://dzen.ru/'
+const dzenLinkRegex = "https://dzen.ru/";
 
 const dzenLinkValidator = (dzenLink: string) => {
   if (dzenLink) {
     if (!dzenLink.startsWith(dzenLinkRegex)) {
-      return 'Неверная ссылка'
+      return "Неверная ссылка";
     } else {
-      return ''
+      return "";
     }
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default dzenLinkValidator
+export default dzenLinkValidator;

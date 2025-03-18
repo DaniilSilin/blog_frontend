@@ -1,5 +1,4 @@
 .root {
-
 }
 
 .actionButtonsContainer {
@@ -15,7 +14,7 @@
 }
 
 .cancelButton:hover {
-  background-color: #535353
+  background-color: #535353;
 }
 
 .cancelButton.active {
@@ -35,4 +34,3 @@
   background-color: #3a3ae3;
   cursor: pointer;
 }
-

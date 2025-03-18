@@ -16,8 +16,8 @@ body {
   width: 600px; /* Full width */
   height: 600px; /* Full height */
   overflow: auto; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .modal_2 {
@@ -29,8 +29,8 @@ body {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   color: white;
 }
 
@@ -43,8 +43,8 @@ body {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   color: white;
 }
 
@@ -57,8 +57,8 @@ body {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   color: white;
 }
 
@@ -137,8 +137,8 @@ body.freeze {
   overflow: hidden;
 }
 
-input[type='submit'] {
-  border:none;
+input[type="submit"] {
+  border: none;
   background-image: none;
   /*background-color: transparent;*/
   -webkit-box-shadow: none;
@@ -147,13 +147,13 @@ input[type='submit'] {
 }
 
 input {
-    appearance: auto; /* Resets the appearance to default */
-    border: none; /* Remove any custom borders */
-    background: none; /* Remove custom background */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    color: inherit; /* Inherit text color */
-    font: inherit; /* Inherit font properties */
+  appearance: auto; /* Resets the appearance to default */
+  border: none; /* Remove any custom borders */
+  background: none; /* Remove custom background */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  color: inherit; /* Inherit text color */
+  font: inherit; /* Inherit font properties */
 }
 
 button {
@@ -169,12 +169,10 @@ button {
   text-align: inherit;
 }
 
-
 * {
   /*color: white;*/
   /*background: #0f0f0f;*/
 }
 
 .labelForm {
-
 }

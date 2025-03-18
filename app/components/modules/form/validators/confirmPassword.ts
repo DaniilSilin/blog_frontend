@@ -1,13 +1,16 @@
-const confirmPasswordValidator = (password: string, confirmPassword: string) => {
+const confirmPasswordValidator = (
+  password: string,
+  confirmPassword: string,
+) => {
   if (!confirmPassword) {
-    return ''
+    return "";
   } else {
     if (confirmPassword === password && password) {
-      return ''
+      return "";
     } else {
-      return 'Пароли не совпадают'
+      return "Пароли не совпадают";
     }
   }
-}
+};
 
-export default confirmPasswordValidator
+export default confirmPasswordValidator;

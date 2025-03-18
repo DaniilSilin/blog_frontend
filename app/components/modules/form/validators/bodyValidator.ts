@@ -1,9 +1,9 @@
 const bodyValidator = (body: string) => {
   if (!body) {
-    return 'Обязательное поле.'
+    return "Обязательное поле.";
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default bodyValidator
+export default bodyValidator;

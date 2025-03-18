@@ -1,24 +1,24 @@
-import React from 'react'
+import React from "react";
+import { Layout } from "antd/lib";
 
-import { Layout } from 'antd/lib'
-import FooterReact from '@/app/MainLayout/Footer'
-import HeaderReact from '@/app/MainLayout/Header'
-import ContentReact from '@/app/MainLayout/Content'
-import Sider from './Sider'
+import Footer from "./Footer";
+import Header from "./Header";
+import Content from "./Content";
+import Sider from "./Sider";
 
 export interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: Props) {
   return (
     <Layout>
-      <HeaderReact />
-      <Layout style={{ display: 'flex' }}>
+      <Header />
+      <Layout style={{ display: "flex" }}>
         <Sider />
-        <ContentReact children={children} />
+        <Content>{children}</Content>
       </Layout>
-      <FooterReact />
+      <Footer />
     </Layout>
-  )
+  );
 }

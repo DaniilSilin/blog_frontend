@@ -29,19 +29,19 @@
 }
 
 .postInformation {
-    display: flex;
-    color: #a0a0a4;
+  display: flex;
+  color: #a0a0a4;
 }
 
 .commentBlock {
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .commentHeader {
-    display: flex;
+  display: flex;
 }
 
 .avatar {
@@ -80,11 +80,9 @@
 }
 
 .commentBody {
-
 }
 
 .commentFooter {
-
 }
 
 .actionContainer {
@@ -216,17 +214,17 @@
 }
 
 .subscribeButton {
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #070707;
-    color: #b1b0b0;
-    height: 40px;
-    font-weight: 600;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #070707;
+  color: #b1b0b0;
+  height: 40px;
+  font-weight: 600;
 }
 
 .subscribeButton:hover {
-    cursor: pointer;
-    background-color: #353535;
+  cursor: pointer;
+  background-color: #353535;
 }
 
 .unsubscribeButton {
@@ -240,12 +238,12 @@
 }
 
 .unsubscribeButton:hover {
-    cursor: pointer;
-    background-color: #303030;
+  cursor: pointer;
+  background-color: #303030;
 }
 
 .commentsBlock > input {
-  width: inherit
+  width: inherit;
 }
 
 .map {

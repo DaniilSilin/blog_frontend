@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-import { Post } from '../../../../types'
-import styles from '../blog_page.module.css'
+import { Post } from "../../../../types";
+import styles from "../blog_page.module.css";
 import PostItem from "@/app/components/modules/post_page";
 
 export interface Props {
-    post: Post
+  post: Post;
 }
 
 export default function PostList({ post }: Props) {
@@ -13,5 +13,5 @@ export default function PostList({ post }: Props) {
     <div>
       <PostItem post={post} />
     </div>
-  )
+  );
 }

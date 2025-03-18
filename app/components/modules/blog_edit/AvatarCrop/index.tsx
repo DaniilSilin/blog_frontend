@@ -1,63 +1,78 @@
-import React from 'react'
-import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelCrop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
+import React from "react";
+import ReactCrop, {
+  centerCrop,
+  makeAspectCrop,
+  Crop,
+  PixelCrop,
+  convertToPixelCrop,
+} from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 export interface Props {
-  originalAvatarSourceUrl: string
-  setOriginalAvatarSource: any
-  setOriginalAvatarSourceUrl: any
-  setCroppedAvatar: any
-  setCroppedAvatarUrl: string
-  setIsAvatarDeleted: any
+  originalAvatarSourceUrl: string;
+  setOriginalAvatarSource: any;
+  setOriginalAvatarSourceUrl: any;
+  setCroppedAvatar: any;
+  setCroppedAvatarUrl: string;
+  setIsAvatarDeleted: any;
 }
 
-import styles from './avatar_crop.module.css'
+import styles from "./avatar_crop.module.css";
 
-const MIN_DIMENSION = 100
-const ASPECT_RATIO = 1
+const MIN_DIMENSION = 100;
+const ASPECT_RATIO = 1;
 
-const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUrl, setOriginalAvatarSource, setOriginalAvatarSourceUrl,
-                                                          setCroppedAvatar, setCroppedAvatarUrl, setIsAvatarDeleted }: Props, ref) {
-  const avatarRef = React.useRef(null)
-  const previewCanvasRef = React.useRef(null)
-  const [ crop, setCrop ] = React.useState()
+const AvatarCrop = React.forwardRef(function AvatarCrop(
+  {
+    originalAvatarSourceUrl,
+    setOriginalAvatarSource,
+    setOriginalAvatarSourceUrl,
+    setCroppedAvatar,
+    setCroppedAvatarUrl,
+    setIsAvatarDeleted,
+  }: Props,
+  ref,
+) {
+  const avatarRef = React.useRef(null);
+  const previewCanvasRef = React.useRef(null);
+  const [crop, setCrop] = React.useState();
 
   const cancelCrop = React.useCallback(() => {
-    setOriginalAvatarSourceUrl('')
-    setOriginalAvatarSource(undefined)
-    ref.current.style.display = 'none'
-  }, [ setOriginalAvatarSourceUrl, setOriginalAvatarSource ])
+    setOriginalAvatarSourceUrl("");
+    setOriginalAvatarSource(undefined);
+    ref.current.style.display = "none";
+  }, [setOriginalAvatarSourceUrl, setOriginalAvatarSource]);
 
   const onImageLoad = (e) => {
-    const width = e.target.width
-    const height = e.target.height
-    const cropWidthInPercent = (MIN_DIMENSION / width) * 100
+    const width = e.target.width;
+    const height = e.target.height;
+    const cropWidthInPercent = (MIN_DIMENSION / width) * 100;
 
     const crop = makeAspectCrop(
       {
-          unit: '%',
-          width: 50,
+        unit: "%",
+        width: 50,
       },
       ASPECT_RATIO,
       width,
-      height
-    )
-    const centeredCrop = centerCrop(crop, width, height)
-    setCrop(centeredCrop)
-  }
+      height,
+    );
+    const centeredCrop = centerCrop(crop, width, height);
+    setCrop(centeredCrop);
+  };
 
   const dataURLtoFile = (dataUrl, filename) => {
-    const arr = dataUrl.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
+    const arr = dataUrl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
     let n = bstr.length;
-    const u8arr = new Uint8Array(n)
+    const u8arr = new Uint8Array(n);
 
     while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
+      u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, { type: mime })
-  }
+    return new File([u8arr], filename, { type: mime });
+  };
 
   const cropImage = () => {
     setCanvasPreview(
@@ -66,41 +81,42 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
       convertToPixelCrop(
         crop,
         avatarRef.current.width,
-        avatarRef.current.height
-      ))
-    const dataUrl = previewCanvasRef.current.toDataURL()
-    setCroppedAvatarUrl(dataUrl)
-    const file = dataURLtoFile(dataUrl, 'croppedImage.jpeg')
-    setCroppedAvatar(file)
-    setIsAvatarDeleted(false)
-    ref.current.style.display = 'none'
-  }
+        avatarRef.current.height,
+      ),
+    );
+    const dataUrl = previewCanvasRef.current.toDataURL();
+    setCroppedAvatarUrl(dataUrl);
+    const file = dataURLtoFile(dataUrl, "croppedImage.jpeg");
+    setCroppedAvatar(file);
+    setIsAvatarDeleted(false);
+    ref.current.style.display = "none";
+  };
 
   const setCanvasPreview = (
     image: HTMLImageElement,
     canvas: HTMLCanvasElement,
     crop: PixelCrop,
   ) => {
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext("2d");
     if (!ctx) {
-      throw new Error("No 2d context")
+      throw new Error("No 2d context");
     }
 
-    const pixelRatio = window.devicePixelRatio
-    const scaleX = image.naturalWidth / image.width
-    const scaleY = image.naturalHeight / image.height
+    const pixelRatio = window.devicePixelRatio;
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
 
-    canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
-    canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
+    canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
+    canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
 
-    ctx.scale(pixelRatio, pixelRatio)
-    ctx.imageSmoothingQuality = "high"
-    ctx.save()
+    ctx.scale(pixelRatio, pixelRatio);
+    ctx.imageSmoothingQuality = "high";
+    ctx.save();
 
-    const cropX = crop.x * scaleX
-    const cropY = crop.y * scaleY
+    const cropX = crop.x * scaleX;
+    const cropY = crop.y * scaleY;
 
-    ctx.translate(-cropX, -cropY)
+    ctx.translate(-cropX, -cropY);
     ctx.drawImage(
       image,
       0,
@@ -110,10 +126,10 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
       0,
       0,
       image.naturalWidth,
-      image.naturalHeight
-    )
-    ctx.restore()
-  }
+      image.naturalHeight,
+    );
+    ctx.restore();
+  };
 
   return (
     <div className={styles.root}>
@@ -125,7 +141,12 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
         aspect={ASPECT_RATIO}
         minWidth={MIN_DIMENSION}
       >
-        <img src={originalAvatarSourceUrl} ref={avatarRef} onLoad={onImageLoad} alt='' />
+        <img
+          src={originalAvatarSourceUrl}
+          ref={avatarRef}
+          onLoad={onImageLoad}
+          alt=""
+        />
       </ReactCrop>
       {crop && (
         <canvas
@@ -149,7 +170,7 @@ const AvatarCrop = React.forwardRef(function AvatarCrop({ originalAvatarSourceUr
         </button>
       </div>
     </div>
-  )
-})
+  );
+});
 
-export default AvatarCrop
+export default AvatarCrop;

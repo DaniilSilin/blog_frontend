@@ -1,0 +1,20 @@
+.root {
+  margin: 0 10px;
+  display: flex;
+}
+
+.root:hover {
+  background-color: #1677ff;
+  cursor: pointer;
+}
+
+.linkContainer {
+  display: flex;
+}
+
+.linkSubContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 5px;
+}

@@ -1,15 +1,15 @@
-const emailRegex = new RegExp('.+@.+')
+const emailRegex = new RegExp("^.+@.+$");
 
 const emailValidator = (email: string) => {
   if (!email) {
-    return ''
+    return "";
   } else {
     if (!emailRegex.test(email)) {
-      return 'Неверный email. Проверьте правильность указанного адреса. '
+      return "Неверный email. Проверьте правильность указанного адреса. ";
     } else {
-      return ''
+      return "";
     }
   }
-}
+};
 
-export default emailValidator
+export default emailValidator;

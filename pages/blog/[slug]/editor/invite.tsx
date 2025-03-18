@@ -1,9 +1,9 @@
-import React from 'react'
-import EditorMainLayout from "@/app/EditorMainLayout"
-import type { GetServerSidePropsContext } from 'next'
+import React from "react";
+import EditorMainLayout from "@/app/EditorMainLayout";
+import type { GetServerSidePropsContext } from "next";
 import MainLayout from "@/app/MainLayout";
-import BlogEditorInviteView from "@/app/views/BlogEditorInvite"
-import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper"
+import BlogEditorInviteView from "@/app/views/BlogEditorInvite";
+import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
 export default function BlogEditorInvite(props: any) {
   return (
@@ -12,25 +12,25 @@ export default function BlogEditorInvite(props: any) {
         <BlogEditorInviteView slug={props.slug} />
       </EditorMainLayout>
     </MainLayout>
-  )
+  );
 }
 
 const resolveConfig = getConfig([
   ["blogAuthors", (ctx) => ({ slug: ctx!.query.slug })],
   ["getUsers", (ctx) => ({ slug: ctx!.query.slug })],
   ["blogInvitations", (ctx) => ({ slug: ctx!.query.slug })],
-])
+]);
 
 export const getServerSideProps = serverSideResolverWrapper(
   resolveConfig,
-  ctx => {
+  (ctx) => {
     return {
       props: {
         slug: ctx.query.slug,
       },
-    }
+    };
   },
-  results => {
-    return false
-  }
-)
+  (results) => {
+    return false;
+  },
+);

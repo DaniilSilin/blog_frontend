@@ -1,5 +1,4 @@
 .root {
-
 }
 
 .postTags {
@@ -35,7 +34,6 @@
 }
 
 .commentButton {
-
 }
 
 .commentIcon {
@@ -43,11 +41,9 @@
 }
 
 .repostButton {
-
 }
 
 .repostIcon {
-
 }
 
 .setLikeAction {
@@ -70,8 +66,8 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: hidden; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .close {
@@ -97,3 +93,22 @@
   width: 30%; /* Could be more or less, depending on screen size */
 }
 
+.bookmarkContainer {
+  padding: 7px 10px;
+  width: fit-content;
+  margin-left: 8px;
+  background-color: #272727;
+  border-radius: 10px;
+  color: white;
+}
+
+.bookmarkContainer:hover {
+  cursor: pointer;
+  background-color: #3f3f3f;
+}
+
+.bookmarkButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

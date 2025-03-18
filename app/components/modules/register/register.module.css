@@ -1,19 +1,18 @@
 .root {
-   width: 400px;
-   margin: 0 auto;
+  width: 400px;
+  margin: 0 auto;
 }
 
 .registerTitle {
-   font-size: 32px;
+  font-size: 32px;
 }
 
 .formContainer {
-
 }
 
 .registerButton {
-  border:none;
-  background-image:none;
+  border: none;
+  background-image: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -22,4 +21,8 @@
   background-color: blue;
   border-radius: 10px;
   height: 40px;
+}
+
+.registerButton:hover {
+  cursor: pointer;
 }

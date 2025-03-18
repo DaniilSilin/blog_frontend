@@ -1,25 +1,34 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import styles from './Field.module.css'
+import styles from "./Field.module.css";
 
 export interface Props {
-  label?: string | undefined
-  children: React.ReactNode
-  error: string | undefined
-  value: string
-  inputIsFocused: boolean
+  label?: string | undefined;
+  children: React.ReactNode;
+  error: string | undefined;
+  value: string;
+  inputIsFocused: boolean;
 }
 
-export default function Field({ label, children, inputIsFocused, error }: Props) {
+export default function Field({
+  label,
+  children,
+  inputIsFocused,
+  error,
+}: Props) {
   return (
     <div className={styles.root}>
-      <div className={classNames(styles.label, {
-        [styles.active]: inputIsFocused,
-        [styles.non_active]: !inputIsFocused
-      })}>{label}</div>
-        {children}
-      <div style={{ color: 'red' }}>{error}</div>
+      <div
+        className={classNames(styles.label, {
+          [styles.active]: inputIsFocused,
+          [styles.non_active]: !inputIsFocused,
+        })}
+      >
+        {label}
+      </div>
+      {children}
+      <div style={{ color: "red" }}>{error}</div>
     </div>
-  )
+  );
 }

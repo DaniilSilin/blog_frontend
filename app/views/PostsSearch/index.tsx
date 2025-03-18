@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import PostsSearch from "@/app/components/modules/posts_search";
 
 export default function PostsSearchView({ hashtag }) {
@@ -6,5 +6,5 @@ export default function PostsSearchView({ hashtag }) {
     <div>
       <PostsSearch hashtag={hashtag} />
     </div>
-  )
+  );
 }

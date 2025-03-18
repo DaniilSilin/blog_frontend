@@ -1,9 +1,9 @@
 const titleValidator = (title: string) => {
   if (!title) {
-    return 'Обязательное поле.'
+    return "Обязательное поле.";
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default titleValidator
+export default titleValidator;

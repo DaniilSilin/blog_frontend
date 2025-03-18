@@ -1,19 +1,18 @@
-import React from 'react'
-import DjangoService from '@/app/store/services/DjangoService'
-import { useAppSelector } from '@/app/store'
-import Post from '../../../../../types'
+import React from "react";
+import DjangoService from "@/app/store/services/DjangoService";
+import { useAppSelector } from "@/app/store";
+import Post from "../../../../../types";
 
-import styles from './additional_menu_list.module.css'
+import styles from "./additional_menu_list.module.css";
 
 export interface Props {
-  post: Post
+  post: Post;
 }
 
 export default function AdditionalMenuList({ post }: Props) {
-  const [ addBookmark ] = DjangoService.useAddToBookmarksMutation()
-  const [ removeBookmark ] = DjangoService.useRemoveFromBookmarksMutation()
-  const [ deletePost ] = DjangoService.useDeletePostMutation()
-  const user = useAppSelector(state => state.django.profile)
+  const [addOrRemoveBookmark] = DjangoService.useAddOrRemoveBookmarkMutation();
+  const [deletePost] = DjangoService.useDeletePostMutation();
+  const user = useAppSelector((state) => state.django.profile);
 
   // const addToBookmarksRequest = () => {
   //

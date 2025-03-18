@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.root:hover {
+  background-color: #1677ff;
+}
+
+.notificationMenu {
+  top: 64px;
+  color: #a6adb4 !important;
+  width: 480px;
+  position: absolute;
+  padding: 10px;
+  background-color: #001529;
+  right: 120px;
+  border: 2px solid #363738;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.notificationContainer {
+  display: flex;
+}
+
+.avatarContainer {
+  margin-right: 16px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.textContainer {
+  width: 250px;
+  word-break: break-all;
+}

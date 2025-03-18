@@ -1,18 +1,20 @@
-import React from 'react'
-import DjangoService from '@/app/store/services/DjangoService'
-import Link from 'next/link'
+import React from "react";
+import DjangoService from "@/app/store/services/DjangoService";
+import Link from "next/link";
 
-import InvitationList from './InvitationList'
+import InvitationList from "./InvitationList";
 
-import styles from './blog_invitations.module.css'
+import styles from "./blog_invitations.module.css";
 
 export interface Props {
-  slug: string
+  slug: string;
 }
 
 export default function BlogInvitations({ slug }: Props) {
-  const [ page, setPage ] = React.useState(1)
-  const { data: blogInvitations } = DjangoService.useBlogInvitationsQuery({ slug })
+  const [page, setPage] = React.useState(1);
+  const { data: blogInvitations } = DjangoService.useBlogInvitationsQuery({
+    slug,
+  });
 
   return (
     <div>
@@ -23,5 +25,5 @@ export default function BlogInvitations({ slug }: Props) {
         ))}
       </div>
     </div>
-  )
+  );
 }

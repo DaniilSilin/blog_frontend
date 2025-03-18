@@ -1,15 +1,15 @@
-const youtubeLinkRegex = 'https://www.youtube.com/'
+const youtubeLinkRegex = "https://www.youtube.com/";
 
 const youtubeLinkValidator = (youtubeLink: string) => {
   if (youtubeLink) {
     if (!youtubeLink.startsWith(youtubeLinkRegex)) {
-      return 'Неверная ссылка'
+      return "Неверная ссылка";
     } else {
-      return ''
+      return "";
     }
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default youtubeLinkValidator
+export default youtubeLinkValidator;

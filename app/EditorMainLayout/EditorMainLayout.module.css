@@ -1,7 +1,6 @@
 .root {
-
 }
 
- .ant-menu-item-selected {
-    background-color: #B039CC !important;
-  }
+.ant-menu-item-selected {
+  background-color: #b039cc !important;
+}

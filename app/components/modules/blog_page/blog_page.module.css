@@ -1,5 +1,5 @@
 .root {
-    /*display: flex;*/
+  /*display: flex;*/
 }
 
 .blogTitle {
@@ -8,8 +8,8 @@
 }
 
 .blogInfo {
-    margin-right: 10px;
-    margin-left: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .blogContainer {
@@ -19,25 +19,25 @@
 }
 
 .blogUpdateContainer {
-    padding: 50px 15px 15px 15px;
-    margin-left: 20px;
-    border: 1px solid gray;
-    border-radius: 10px;
+  padding: 50px 15px 15px 15px;
+  margin-left: 20px;
+  border: 1px solid gray;
+  border-radius: 10px;
 }
 
 .subscribeButton {
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #070707;
-    color: #b1b0b0;
-    height: 40px;
-    font-weight: 600;
-    width: fit-content;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #070707;
+  color: #b1b0b0;
+  height: 40px;
+  font-weight: 600;
+  width: fit-content;
 }
 
 .subscribeButton:hover {
-    cursor: pointer;
-    background-color: #353535;
+  cursor: pointer;
+  background-color: #353535;
 }
 
 .unsubscribeButton {
@@ -66,10 +66,10 @@
 }
 
 .postContainer {
-    border: 1px solid black;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 
 .postTitle {
@@ -84,12 +84,12 @@
 }
 
 .postLinkTitle:hover {
-  color: #0086B3;
+  color: #0086b3;
 }
 
 .postTitle:hover {
-    color: #3a3ae3;
-    font-size: 24px;
+  color: #3a3ae3;
+  font-size: 24px;
 }
 
 .postDate {
@@ -98,7 +98,7 @@
 }
 
 .postTags {
-    margin-bottom: 7px;
+  margin-bottom: 7px;
 }
 
 .postHeader {
@@ -106,7 +106,7 @@
 }
 
 .postBody {
-    margin: 15px 0;
+  margin: 15px 0;
 }
 
 .blogDescription {
@@ -128,8 +128,8 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: hidden; /* Enable NewsBlock if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .close {
@@ -156,9 +156,9 @@
 }
 
 .modalTitle {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 5px;
 }
 
 .modalDescription {
@@ -169,13 +169,13 @@
 }
 
 .modalList {
-    margin: 24px 0 0;
-    padding-left: 0;
-    list-style: none;
+  margin: 24px 0 0;
+  padding-left: 0;
+  list-style: none;
 }
 
 .li_element {
-    padding: 10px;
+  padding: 10px;
 }
 
 .li_div_element {
@@ -185,7 +185,7 @@
 }
 
 .modal .liTitle {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .li_div_element:hover {
@@ -215,8 +215,8 @@
 }
 
 .sortingMenuTitle:hover {
-    background-color: #474747;
-    cursor: pointer;
+  background-color: #474747;
+  cursor: pointer;
 }
 
 .selectButton {

@@ -17,7 +17,6 @@
 }
 
 .commentHeader {
-
 }
 
 .authorUsername {
@@ -59,7 +58,7 @@
 }
 
 .createReplyContainer {
-   display: flex;
+  display: flex;
 }
 
 .createReplyUserAvatar {
@@ -113,7 +112,6 @@
 }
 
 .notLikedByAuthorHeart {
-
 }
 
 .createReplyButton {
@@ -128,9 +126,7 @@
 }
 
 .moreCommentButton {
-
 }
 
 .lessCommentButton {
-
 }

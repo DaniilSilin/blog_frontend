@@ -1,4 +1,3 @@
 export interface Alex {
-    username: string,
-
+  username: string;
 }

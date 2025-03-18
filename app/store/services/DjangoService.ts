@@ -1,43 +1,46 @@
-import { createApi, fetchBaseQuery, defaultSerializeQueryArgs } from '@reduxjs/toolkit/query/react'
-import { Blog, Post, Register, Login, Author } from '@/app/types'
-import { HYDRATE } from 'next-redux-wrapper'
-import {GetServerSidePropsContext} from "next";
+import {
+  createApi,
+  fetchBaseQuery,
+  defaultSerializeQueryArgs,
+} from "@reduxjs/toolkit/query/react";
+import { Blog, Post, Register, Login, Author } from "@/app/types";
+import { HYDRATE } from "next-redux-wrapper";
+import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";
 
-const API_URL = 'http://127.0.0.1:3001/api/v1/'
-
+const API_URL = "http://127.0.0.1:3001/api/v1/";
 
 const DjangoService = createApi({
-  reducerPath: 'djangoService',
+  reducerPath: "djangoService",
+  tagTypes: ["Comment"],
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
       // headers.set("Content-Type", "application/json")
       // headers.set("Content-Type", "multipart/form-data")
       const token =
-      typeof window === "undefined"
-        ? (api.extra as GetServerSidePropsContext).req?.cookies?.token ||
-          "" // server
-        : CookieHelper.getCookie("token") //client
+        typeof window === "undefined"
+          ? (api.extra as GetServerSidePropsContext).req?.cookies?.token || "" // server
+          : CookieHelper.getCookie("token"); //client
       // const token = localStorage.getItem("authToken")
-      console.log(`token`)
-      console.log(token)
+      console.log(`token`);
+      console.log(token);
       if (token) {
-        headers.set('Authorization', `Token ${token}`)
+        headers.set("Authorization", `Token ${token}`);
       }
-      return headers
-    }
+      return headers;
+    },
   }),
   extractRehydrationInfo(action, { reducerPath }) {
-  if (action.type === HYDRATE) {
-    return action.payload[reducerPath]
-  }
-},
-  endpoints: builder => ({
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
+  endpoints: (builder) => ({
     getUserData: builder.query({
       query: () => ({
-        url: `user_data/`
-      })
+        url: `user_data/`,
+      }),
     }),
     getBlogPaginatedList: builder.query({
       query: ({ search, sorting, after, before, page }) => ({
@@ -47,23 +50,23 @@ const DjangoService = createApi({
           search: search || undefined,
           sorting: sorting || undefined,
           before: before || undefined,
-          after: after || undefined
-        }
+          after: after || undefined,
+        },
       }),
       serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+        return endpointName;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        currentCache.previous = newItems.previous
-        currentCache.next = newItems.next
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
         if (otherArgs.arg.page > 1) {
-          currentCache.results.push(...newItems.results)
+          currentCache.results.push(...newItems.results);
         } else {
-          currentCache.results = newItems.results
+          currentCache.results = newItems.results;
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
+        return currentArg !== previousArg;
       },
     }),
     getPostPaginatedList: builder.query({
@@ -75,63 +78,63 @@ const DjangoService = createApi({
           search: search || undefined,
           before: before || undefined,
           after: after || undefined,
-        }
+        },
       }),
       serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+        return endpointName;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        let currentPage = 1
-        currentCache.previous = newItems.previous
-        currentCache.next = newItems.next
+        let currentPage = 1;
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
         if (currentPage < otherArgs.arg.page) {
-          currentCache.results.push(...newItems.results)
+          currentCache.results.push(...newItems.results);
         } else {
-          currentCache.results = newItems.results
+          currentCache.results = newItems.results;
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
+        return currentArg !== previousArg;
       },
     }),
     register: builder.mutation({
       query: ({ email, username, password }) => ({
-        url: 'register/',
-        method: 'POST',
-        body: {email, username, password},
-      })
+        url: "register/",
+        method: "POST",
+        body: { email, username, password },
+      }),
     }),
-    getLogin: builder.mutation<Login, { username: string, password: string }>({
+    getLogin: builder.mutation<Login, { username: string; password: string }>({
       query: ({ username, password }) => ({
-        url: 'login/',
-        method: 'POST',
-        body: { username, password }
-      })
+        url: "login/",
+        method: "POST",
+        body: { username, password },
+      }),
     }),
     createBlog: builder.mutation({
       query: ({ formData }) => ({
-        url: 'blog/create/',
-        method: 'POST',
+        url: "blog/create/",
+        method: "POST",
         body: formData,
-      })
+      }),
     }),
-    getBlog: builder.query<Blog, {slug: string}>({
+    getBlog: builder.query<Blog, { slug: string }>({
       query: ({ slug }) => ({
         url: `blog/${slug}/`,
-      })
+      }),
     }),
-    deleteBlog: builder.mutation<Blog, {slug: string}>({
+    deleteBlog: builder.mutation<Blog, { slug: string }>({
       query: ({ slug }) => ({
         url: `blog/${slug}/`,
-        method: 'DELETE',
-      })
+        method: "DELETE",
+      }),
     }),
     updateBlog: builder.mutation<Blog>({
       query: ({ formData, slug }) => ({
         url: `blog/${slug}/`,
-        method: 'PUT',
+        method: "PUT",
         body: formData,
-      })
+      }),
     }),
     // getSubscriptions: builder.query<Blog, { username: string }>({
     //   query: ({ username }) => ({
@@ -141,194 +144,192 @@ const DjangoService = createApi({
     subscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/subscribe/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
     unsubscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/unsubscribe/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
-    getPost: builder.query<Post, { slug: string, post_id: number}>({
+    getPost: builder.query<Post, { slug: string; post_id: number }>({
       query: ({ slug, post_id }) => ({
-        url: `blog/${slug}/post/${post_id}/`
-      })
+        url: `blog/${slug}/post/${post_id}/`,
+      }),
     }),
     createPost: builder.mutation({
       query: ({ title, body, is_published, map, blog, tags }) => ({
         url: `blog/${blog}/post/create/`,
-        method: 'POST',
+        method: "POST",
         body: { title, body, map, is_published, blog, tags },
-      })
+      }),
     }),
     deletePost: builder.mutation({
       query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/`,
-        method: 'DELETE'
-      })
+        method: "DELETE",
+      }),
     }),
     getBlogPosts: builder.query({
       query: ({ slug, page, sorting, search }) => ({
-        url:`blog/${slug}/posts/`,
+        url: `blog/${slug}/posts/`,
         params: {
           page: page || undefined,
           sorting: sorting || undefined,
-          search: search || undefined
-        }
+          search: search || undefined,
+        },
       }),
       serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+        return endpointName;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        currentCache.previous = newItems.previous
-        currentCache.next = newItems.next
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
         if (otherArgs.arg.page > 1) {
-          currentCache.results.push(...newItems.results)
+          currentCache.results.push(...newItems.results);
         } else {
-          currentCache.results = newItems.results
+          currentCache.results = newItems.results;
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
+        return currentArg !== previousArg;
       },
     }),
     inviteUserToBlog: builder.mutation({
       query: ({ addressee, description, blog, admin }) => ({
-        url: 'invite/create/',
-        method: 'POST',
-        body: { addressee, description, blog, admin }
-      })
+        url: "invite/create/",
+        method: "POST",
+        body: { addressee, description, blog, admin },
+      }),
     }),
     getInviteList: builder.query({
       query: () => ({
         url: `invite/list/`,
-      })
+      }),
     }),
     getMyPosts: builder.query({
       query: () => ({
         url: `posts/my/`,
-      })
+      }),
     }),
     acceptInvite: builder.mutation({
       query: ({ pk }) => ({
         url: `invite/${pk}/accept/`,
-        method: 'POST',
-        body: { pk }
-      })
+        method: "POST",
+        body: { pk },
+      }),
     }),
     createComment: builder.mutation({
       query: ({ slug, post_id, reply_to, body }) => ({
         url: `blog/${slug}/post/${post_id}/comment/create/`,
-        method: 'POST',
-        body: { body, reply_to }
-      })
+        method: "POST",
+        body: { body, reply_to },
+      }),
     }),
     getComment: builder.query({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/`,
-      })
+      }),
     }),
     getBlogOwnerList: builder.query({
       query: () => ({
         url: `blog_owner/list/`,
-      })
+      }),
     }),
     getBlogSlug: builder.query({
       query: ({ slug }) => ({
         url: `blog/${slug}/available/`,
-      })
+      }),
     }),
     getMySubscriptions: builder.query({
       query: () => ({
-        url: `subscriptions/`
-      })
+        url: `subscriptions/`,
+      }),
     }),
     getBlogAuthors: builder.query({
-      query:({ slug }) => ({
+      query: ({ slug }) => ({
         url: `blog/${slug}/authors/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
     userProfile: builder.query({
-      query:({ username }) => ({
+      query: ({ username }) => ({
         url: `profile/${username}/`,
-      })
+      }),
     }),
     changeUserProfile: builder.mutation({
-      query:({ formData, username }) => ({
+      query: ({ formData, username }) => ({
         url: `profile/${username}/`,
-        method: 'PUT',
+        method: "PUT",
         body: formData,
-      })
+      }),
     }),
     setOrRemoveLike: builder.mutation({
-      query: ({ slug, post_id}) => ({
+      query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/like/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
     setOrRemoveDislike: builder.mutation({
-      query: ({ slug, post_id}) => ({
+      query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/dislike/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
     postsSearch: builder.query({
       query: ({ hashtag }) => ({
         url: `posts/search/${hashtag}/`,
         params: {
-          hashtag: hashtag || undefined
-        }
-      })
+          hashtag: hashtag || undefined,
+        },
+      }),
     }),
     postsSearchData: builder.query({
       query: ({ hashtag }) => ({
         url: `posts/search_data/${hashtag}/`,
-      })
+      }),
     }),
     blogPublications: builder.query({
       query: ({ state, slug }) => ({
         url: `blog/${slug}/publications/`,
         params: {
-          state: state || undefined
-        }
-      })
+          state: state || undefined,
+        },
+      }),
     }),
     addOrRemoveBookmark: builder.mutation({
       query: ({ slug, post_id }) => ({
         url: `/blog/${slug}/post/${post_id}/bookmark/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
     }),
     deleteComment: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/`,
-        method: 'DELETE',
-      })
+        method: "DELETE",
+      }),
     }),
     updateComment: builder.mutation({
       query: ({ slug, post_id, comment_id, body, reply_to }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/`,
-        method: 'PUT',
-        body: { body, reply_to }
-      })
+        method: "PUT",
+        body: { body, reply_to },
+      }),
     }),
     likedUserList: builder.query({
       query: ({ slug, post_id, page }) => ({
         url: `blog/${slug}/post/${post_id}/liked_user_list/`,
         params: {
-          page: page || undefined
-        }
+          page: page || undefined,
+        },
       }),
       serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+        return endpointName;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        currentCache = {
-
-        }
-        currentCache.results.push(...newItems.results)
+        currentCache = {};
+        currentCache.results.push(...newItems.results);
         // let currentPage = 1
         // currentCache.previous = newItems.previous
         // currentCache.next = newItems.next
@@ -339,86 +340,55 @@ const DjangoService = createApi({
         // }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg
-      },
-    }),
-    postCommentList: builder.query({
-      query: ({ slug, post_id, parent_id, page, sort_by }) => ({
-        url: `blog/${slug}/post/${post_id}/comment/list/`,
-        params: {
-          page: page || undefined,
-          parent_id: parent_id || undefined,
-          sort_by: sort_by || undefined
-        }
-      }),
-      serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        const args = { ...queryArgs }
-        // console.log(queryArgs)
-        // console.log(args)
-        delete args.page
-        // console.log(args)
-        // console.log(`${endpointName}${JSON.stringify(args)}`)
-        return `${endpointName}(${JSON.stringify(args)})`
-      },
-      merge: (currentCache, newItems, otherArgs) => {
-        currentCache.previous = newItems.previous
-        currentCache.next = newItems.next
-        if (otherArgs.arg.page > 1) {
-          currentCache.results.push(...newItems.results)
-        } else {
-          currentCache.results = newItems.results
-        }
-      },
-      forceRefetch({ currentArg, previousArg }) {
-        return true
+        return currentArg !== previousArg;
       },
     }),
     getUsers: builder.query({
       query: ({ slug, username }) => ({
-        url: `invite/blog/${slug}/get_users/?query=${username}`
-      })
+        url: `invite/blog/${slug}/get_users/?query=${username}`,
+      }),
     }),
     isUsernameAvailable: builder.query({
       query: ({ username }) => ({
-        url: `${username}/available/`
-      })
+        url: `${username}/available/`,
+      }),
     }),
     changeAvatar: builder.mutation({
       query: ({ formData, username }) => ({
         url: `profile/${username}/change/avatar/`,
-        method: 'PUT',
+        method: "PUT",
         body: formData,
-      })
+      }),
     }),
     blogEditorPosts: builder.query({
       query: ({ slug, state, columnType, sortOrder }) => ({
         url: `blog/${slug}/editor/posts?state=${state}`,
         params: {
           columnType: columnType || undefined,
-          sortOrder: sortOrder || undefined
-        }
-      })
+          sortOrder: sortOrder || undefined,
+        },
+      }),
     }),
     blogsWhereUserIsOwner: builder.query({
       query: ({ username }) => ({
-        url: `${username}/blogs/owner/`
-      })
+        url: `${username}/blogs/owner/`,
+      }),
     }),
     blogsWhereUserIsAuthor: builder.query({
       query: ({ username }) => ({
-        url: `${username}/blogs/author/`
-      })
+        url: `${username}/blogs/author/`,
+      }),
     }),
     leaveBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/leave/`,
-        method: 'POST'
-      })
+        method: "POST",
+      }),
     }),
     blogInvitations: builder.query({
       query: ({ slug }) => ({
         url: `blog/${slug}/invitations/`,
-      })
+      }),
     }),
     blogComments: builder.query({
       query: ({ slug, page, search_query, sort_by, parent_id }) => ({
@@ -428,90 +398,186 @@ const DjangoService = createApi({
           search_query: search_query || undefined,
           sort_by: sort_by || undefined,
           parent_id: parent_id || undefined,
-        }
+        },
       }),
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        const args = { ...queryArgs }
-        delete args.page
-        return `${endpointName}(${JSON.stringify(args)})`
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        currentCache.previous = newItems.previous
-        currentCache.next = newItems.next
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
         if (otherArgs.arg.page > 1) {
-          currentCache.results.push(...newItems.results)
+          currentCache.results.push(...newItems.results);
         } else {
-          currentCache.results = newItems.results
+          currentCache.results = newItems.results;
         }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return true
+        return true;
       },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ comment_id }) => ({
+                type: "Comment" as const,
+                id: comment_id,
+              })),
+              { type: "Comment", id: "LIST" },
+            ]
+          : [{ type: "Comment", id: "LIST" }],
     }),
     likedPostList: builder.query({
       query: () => ({
-        url: `liked_posts/`
-      })
+        url: `liked_posts/`,
+      }),
     }),
     bookmarkedPostList: builder.query({
       query: () => ({
-        url: `bookmarked_posts/`
-      })
+        url: `bookmarked_posts/`,
+      }),
     }),
     subscriptionList: builder.query({
       query: () => ({
         url: `subscriptions/`,
-      })
+      }),
     }),
     subscriptionListMini: builder.query({
       query: () => ({
-        url: `subscriptions/mini/`
-      })
+        url: `subscriptions/mini/`,
+      }),
     }),
     blogAuthors: builder.query({
       query: ({ slug, username }) => ({
-        url: `blog/${slug}/authors/?query=${username}`
-      })
+        url: `blog/${slug}/authors/?query=${username}`,
+      }),
     }),
     kickUser: builder.mutation({
       query: ({ slug, username }) => ({
         url: `blog/${slug}/kick/${username}/`,
-        method: 'POST',
-      })
+        method: "POST",
+      }),
+    }),
+    postCommentList: builder.query({
+      query: ({ slug, post_id, parent_id, page, sort_by }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/list/`,
+        params: {
+          page: page || undefined,
+          parent_id: parent_id || undefined,
+          sort_by: sort_by || undefined,
+        },
+      }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+        console.log(currentCache.results);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ comment_id }) => ({
+                type: "Comment" as const,
+                id: comment_id,
+              })),
+              { type: "Comment", id: "LIST" },
+            ]
+          : [{ type: "Comment", id: "LIST" }],
     }),
     setOrRemoveCommentLike: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like/`,
-        method: 'POST'
-      })
+        method: "POST",
+      }),
+      async onQueryStarted(
+        { comment_id, listArg },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  if (comment.isDisliked) {
+                    comment.isDisliked = false;
+                    comment.dislikes -= 1;
+                  }
+                  if (comment.isLiked) {
+                    comment.isLiked = false;
+                    comment.likes -= 1;
+                  } else {
+                    comment.isLiked = true;
+                    comment.likes += 1;
+                  }
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     setOrRemoveCommentDislike: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/dislike/`,
-        method: 'POST'
-      })
+        method: "POST",
+      }),
     }),
     setOrRemoveLikeByAuthor: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like_by_author/`,
-        method: 'POST'
-      })
+        method: "POST",
+      }),
     }),
     blogCommentListDelete: builder.mutation({
       query: ({ slug, comment_list }) => ({
         url: `blog/${slug}/comment/list/delete/`,
-        method: 'DELETE',
-        body: { comment_list }
-      })
+        method: "DELETE",
+        body: { comment_list },
+      }),
     }),
     updatePost: builder.mutation({
       query: ({ slug, post_id, formData }) => ({
         url: `/blog/${slug}/post/${post_id}/`,
-        method: 'PUT',
-        body: formData
-      })
-    })
+        method: "PUT",
+        body: formData,
+      }),
+    }),
+    notificationList: builder.query({
+      query: ({ username }) => ({
+        url: `profile/${username}/notification/list/`,
+      }),
+    }),
   }),
-})
+});
 
-export default DjangoService
+export default DjangoService;

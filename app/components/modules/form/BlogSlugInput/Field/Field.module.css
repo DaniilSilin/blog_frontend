@@ -10,7 +10,7 @@
 }
 
 .label.active {
-  color: #404040
+  color: #404040;
 }
 
 .label.non_active {
@@ -31,7 +31,7 @@
 }
 
 .available.active {
-   color: #15ea15;
+  color: #15ea15;
 }
 
 .not_available {

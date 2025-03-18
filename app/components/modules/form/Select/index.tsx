@@ -1,22 +1,30 @@
-import React from 'react'
-import { Select as BaseSelect, Space } from 'antd/lib'
+import React from "react";
+import { Select as BaseSelect, Space } from "antd/lib";
 
 export interface Props {
-  data: any
-  defaultValue: any
-  onChange: any
-  gender: any
-  label: string
+  data: any;
+  defaultValue: any;
+  onChange: any;
+  gender: any;
+  label: string;
 }
 
-export default function Select({ data, defaultValue, onChange, gender, label }: Props) {
+export default function Select({
+  data,
+  defaultValue,
+  onChange,
+  gender,
+  label,
+}: Props) {
   const handleChange = (value: string) => {
-    onChange(value)
-  }
+    onChange(value);
+  };
 
   return (
-    <div style={{ margin: '20px 0' }}>
-      <div style={{ marginBottom: '4px', fontSize: '15px', fontWeight: '500' }} >{label}</div>
+    <div style={{ margin: "20px 0" }}>
+      <div style={{ marginBottom: "4px", fontSize: "15px", fontWeight: "500" }}>
+        {label}
+      </div>
       <Space wrap>
         <BaseSelect
           defaultValue={defaultValue}
@@ -27,5 +35,5 @@ export default function Select({ data, defaultValue, onChange, gender, label }: 
         />
       </Space>
     </div>
-  )
+  );
 }

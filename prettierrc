@@ -1,0 +1,32 @@
+{
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "semi": false,
+  "arrowParens": "avoid",
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "^react$",
+    "^classnames$",
+    "react-",
+    "next/",
+    "^[^@./]+$",
+    "^@[a-zA-Z-]+",
+    "@/components/common/util",
+    "@/components/common/",
+    "@/components/",
+    "@/",
+    "^(?!.*[.]scss$)(?!.*[.]lang$)(?!.*[.][\\/]breadcrumbs$)[.\\/]*.*$",
+    "",
+    ".lang$",
+    ".scss$",
+    "./breadcrumbs$"
+  ],
+  "importOrderParserPlugins": [
+    "typescript",
+    "jsx",
+    "decorators-legacy"
+  ],
+  "importOrderTypeScriptVersion": "5.0.0"
+}

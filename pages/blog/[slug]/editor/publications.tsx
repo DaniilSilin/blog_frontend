@@ -1,9 +1,9 @@
-import React from 'react'
-import EditorMainLayout from "@/app/EditorMainLayout"
-import BlogEditorPublicationsView from "@/app/views/BlogEditorPublications"
-import type { GetServerSidePropsContext } from 'next'
+import React from "react";
+import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
+
+import EditorMainLayout from "@/app/EditorMainLayout";
+import BlogEditorPublicationsView from "@/app/views/BlogEditorPublications";
 import MainLayout from "@/app/MainLayout";
-import {getConfig, serverSideResolverWrapper} from "@/app/store/wrapper";
 
 export default function BlogEditorPublications(props: any) {
   return (
@@ -12,23 +12,23 @@ export default function BlogEditorPublications(props: any) {
         <BlogEditorPublicationsView slug={props.slug} />
       </EditorMainLayout>
     </MainLayout>
-  )
+  );
 }
 
 const resolveConfig = getConfig([
   ["blogEditorPosts", (ctx) => ({ slug: ctx!.query.slug, page: 1 })],
-])
+]);
 
 export const getServerSideProps = serverSideResolverWrapper(
   resolveConfig,
-  ctx => {
+  (ctx) => {
     return {
       props: {
         slug: ctx.query.slug,
       },
-    }
+    };
   },
-  results => {
-    return false
-  }
-)
+  (results) => {
+    return false;
+  },
+);

@@ -1,16 +1,16 @@
 const genderList = [
   {
     value: true,
-    label: 'Мужской'
+    label: "Мужской",
   },
   {
     value: false,
-    label: 'Женский'
+    label: "Женский",
   },
   {
     value: null,
-    label: 'Не выбран'
-  }
-]
+    label: "Не выбран",
+  },
+];
 
-export default genderList
+export default genderList;

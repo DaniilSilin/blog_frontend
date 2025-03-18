@@ -3,29 +3,29 @@ import {
   GetServerSidePropsContext,
   GetStaticProps,
   GetStaticPropsContext,
-} from "next"
-import { initializeStore } from "./store"
+} from "next";
+import { initializeStore } from "./store";
 
 const makeProps = async ({
   callback,
   context,
 }: {
-  callback: any
-  context: any
-  addStoreToContext?: boolean
+  callback: any;
+  context: any;
+  addStoreToContext?: boolean;
 }): Promise<any> => {
-  const store = initializeStore({}, context)
+  const store = initializeStore({}, context);
 
-  const nextCallback = callback && callback(store)
-  const initialProps = (nextCallback && (await nextCallback(context))) || {}
+  const nextCallback = callback && callback(store);
+  const initialProps = (nextCallback && (await nextCallback(context))) || {};
 
-  const state = store.getState()
+  const state = store.getState();
 
   return {
     initialProps,
     initialState: state,
-  }
-}
+  };
+};
 
 const getStaticProps =
   (callback: any): GetStaticProps =>
@@ -33,24 +33,24 @@ const getStaticProps =
     const { initialProps, initialState } = await makeProps({
       callback,
       context,
-    })
+    });
     return {
       ...initialProps,
       props: {
         ...initialProps.props,
         initialState,
       },
-    } as any
-  }
+    } as any;
+  };
 
 const getServerSideProps =
   (callback: any): GetServerSideProps =>
-  async context =>
-    await getStaticProps(callback as any)(context)
+  async (context) =>
+    await getStaticProps(callback as any)(context);
 
 const wrapper = {
   getStaticProps,
   getServerSideProps,
-}
+};
 
-export default wrapper
+export default wrapper;

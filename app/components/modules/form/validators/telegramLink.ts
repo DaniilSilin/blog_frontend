@@ -1,15 +1,15 @@
-const telegramLinkRegex = 'https://t.me/'
+const telegramLinkRegex = "https://t.me/";
 
 const telegramLinkValidator = (telegramLink: string) => {
   if (telegramLink) {
     if (!telegramLink.startsWith(telegramLinkRegex)) {
-      return 'Неверная ссылка'
+      return "Неверная ссылка";
     } else {
-      return ''
+      return "";
     }
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default telegramLinkValidator
+export default telegramLinkValidator;

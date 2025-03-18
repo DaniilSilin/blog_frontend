@@ -1,13 +1,7 @@
-import React from 'react'
+import React from "react";
 
-export interface Props {
+export interface Props {}
 
-}
-
-export default function LikeDislikeFooter({  }: Props) {
-  return (
-    <div>
-
-    </div>
-  )
+export default function LikeDislikeFooter({}: Props) {
+  return <div></div>;
 }

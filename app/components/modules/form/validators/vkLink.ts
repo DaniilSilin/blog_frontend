@@ -1,15 +1,15 @@
-const vkLinkRegex = 'https://vk.com/'
+const vkLinkRegex = "https://vk.com/";
 
 const vkLinkValidator = (vkLink: string) => {
   if (vkLink) {
     if (!vkLink.startsWith(vkLinkRegex)) {
-      return 'Неверная ссылка'
+      return "Неверная ссылка";
     } else {
-      return ''
+      return "";
     }
   } else {
-    return ''
+    return "";
   }
-}
+};
 
-export default vkLinkValidator
+export default vkLinkValidator;

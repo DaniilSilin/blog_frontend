@@ -1,17 +1,26 @@
-import { getCookie, getCookies, setCookie, deleteCookie, hasCookie } from 'cookies-next'
+import {
+  getCookie,
+  getCookies,
+  setCookie,
+  deleteCookie,
+  hasCookie,
+} from "cookies-next";
 
 class CookieHelper {
   static setCookie(cname: string, cvalue: string, exdays: number) {
-    setCookie(cname, cvalue, { maxAge: exdays * 24 * 60 * 60 * 1000, path: '/' })
+    setCookie(cname, cvalue, {
+      maxAge: exdays * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
   }
 
   static getCookie(cname: string) {
-    return getCookie(cname)
+    return getCookie(cname);
   }
 
   static removeCookie(cname: string) {
-    deleteCookie(cname)
+    deleteCookie(cname);
   }
 }
 
-export default CookieHelper
+export default CookieHelper;

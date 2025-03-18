@@ -1,10 +1,10 @@
-import { useMemo } from "react"
-import { initializeStore } from "./index"
-import { AppProps } from "next/app"
+import { useMemo } from "react";
+import { initializeStore } from "./index";
+import { AppProps } from "next/app";
 
 export interface WrapperProps {
-  initialProps: any
-  initialState: any
+  initialProps: any;
+  initialState: any;
 }
 
 const useGetAppStoreAndProps = (incomingProps: any, context: any) => {
@@ -13,15 +13,15 @@ const useGetAppStoreAndProps = (incomingProps: any, context: any) => {
     initialState: giapState,
     initialProps,
     ...props
-  } = incomingProps as AppProps & WrapperProps
+  } = incomingProps as AppProps & WrapperProps;
 
   // getStaticProps state
-  const gspState = props?.__N_SSG ? props?.pageProps?.initialState : null
+  const gspState = props?.__N_SSG ? props?.pageProps?.initialState : null;
   // getServerSideProps state
-  const gsspState = props?.__N_SSP ? props?.pageProps?.initialState : null
+  const gsspState = props?.__N_SSP ? props?.pageProps?.initialState : null;
   // getInitialPageProps state
   const gippState =
-    !gspState && !gsspState ? props?.pageProps?.initialState ?? null : null
+    !gspState && !gsspState ? (props?.pageProps?.initialState ?? null) : null;
 
   const store = useMemo(
     () =>
@@ -32,14 +32,14 @@ const useGetAppStoreAndProps = (incomingProps: any, context: any) => {
           ...(gsspState || {}),
           ...(gippState || {}),
         },
-        context
+        context,
       ),
-    [giapState, gspState, gsspState, gippState]
-  )
+    [giapState, gspState, gsspState, gippState],
+  );
 
   // useHybridHydrate(store, giapState, gspState, gsspState, gippState);
 
-  let resultProps: any = props
+  let resultProps: any = props;
 
   // order is important! Next.js overwrites props from pages/_app with getStaticProps from page
   // @see https://github.com/zeit/next.js/issues/11648
@@ -47,13 +47,13 @@ const useGetAppStoreAndProps = (incomingProps: any, context: any) => {
     resultProps.pageProps = {
       ...initialProps.pageProps, // this comes from wrapper in _app mode
       ...props.pageProps, // this comes from gssp/gsp in _app mode
-    }
+    };
   }
 
   // just some cleanup to prevent passing it as props, we need to clone props to safely delete initialState
   if (props?.pageProps?.initialState) {
-    resultProps = { ...props, pageProps: { ...props.pageProps } }
-    delete resultProps.pageProps.initialState
+    resultProps = { ...props, pageProps: { ...props.pageProps } };
+    delete resultProps.pageProps.initialState;
   }
 
   // unwrap getInitialPageProps
@@ -61,11 +61,11 @@ const useGetAppStoreAndProps = (incomingProps: any, context: any) => {
     resultProps.pageProps = {
       ...resultProps.pageProps,
       ...resultProps.pageProps.initialProps,
-    }
-    delete resultProps.pageProps.initialProps
+    };
+    delete resultProps.pageProps.initialProps;
   }
 
-  return { store, props: { ...initialProps, ...resultProps } }
-}
+  return { store, props: { ...initialProps, ...resultProps } };
+};
 
-export default useGetAppStoreAndProps
+export default useGetAppStoreAndProps;

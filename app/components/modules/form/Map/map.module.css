@@ -1,7 +1,6 @@
 .root {
-
 }
 
-.elem input[type='text'] {
+.elem input[type="text"] {
   text-decoration: underline;
 }

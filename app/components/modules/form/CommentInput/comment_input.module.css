@@ -1,0 +1,30 @@
+.disabled {
+  display: block;
+  height: 40px;
+  width: 1000px;
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  border: 1px solid #d0d0d0;
+  cursor: text;
+  opacity: 1;
+}
+
+.disabled:hover {
+  display: block;
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  border: 1px solid #d0d0d0;
+  cursor: text;
+  opacity: 1;
+  outline: none;
+}
+
+.disabled:focus {
+  display: block;
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  border: 1px solid #d0d0d0;
+  cursor: text;
+  opacity: 1;
+  outline: none;
+}

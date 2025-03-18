@@ -3,13 +3,13 @@
 }
 
 @keyframes expand {
-    from {
-        max-height: 2px;
-    }
+  from {
+    max-height: 2px;
+  }
 
-    to {
-        max-height: 100%;
-    }
+  to {
+    max-height: 100%;
+  }
 }
 
 .title {
