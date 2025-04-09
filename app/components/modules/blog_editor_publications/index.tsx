@@ -93,8 +93,6 @@ export default function BlogEditorPublications({ slug }) {
     setSelectedPosts([]);
   }, [setSelectedPosts]);
 
-  console.log(selectedPosts);
-
   return (
     <div className={styles.root}>
       <div className={styles.title}>Публикации</div>

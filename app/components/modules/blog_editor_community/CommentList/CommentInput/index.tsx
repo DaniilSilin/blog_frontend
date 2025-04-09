@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from "react";
-import classNames from "classnames";
 
 import styles from "./comment_input.module.css";
 
@@ -7,15 +6,9 @@ export interface Props {
   comment: any;
   checked: boolean;
   onChange: any;
-  isParent: boolean;
 }
 
-export default function CommentInput({
-  comment,
-  checked,
-  onChange,
-  isParent,
-}: Props) {
+export default function CommentInput({ comment, checked, onChange }: Props) {
   const handleChange = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.checked, comment);
@@ -24,11 +17,7 @@ export default function CommentInput({
   );
 
   return (
-    <label
-      className={classNames(styles.rootIsNotParent, {
-        [styles.rootIsParent]: isParent,
-      })}
-    >
+    <label className={styles.root}>
       <input
         className={styles.inputCheckbox}
         type={"checkbox"}

@@ -67,7 +67,20 @@
 }
 
 .likedByAuthorContainer {
-  margin: 0 5px;
+  margin: 0 9px 0 2px;
+}
+
+.likedByAuthorButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  flex-direction: row-reverse;
+}
+
+.notLikedByAuthorButton {
+  display: flex;
+  align-items: center;
 }
 
 .likedByAuthorAvatar {
@@ -81,17 +94,45 @@
 
 .likeButtonContainer {
   display: flex;
+  align-items: center;
 }
 
 .dislikeButtonContainer {
   display: flex;
+  align-items: center;
 }
 
-.likeIconLiked {
+.likeButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 25px;
+  justify-content: center;
+}
+
+.likeButton:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.dislikeButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 25px;
+  justify-content: center;
+}
+
+.dislikeButton:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.likeIcon {
   color: black;
 }
 
-.likeIconNotLiked {
+.dislikeIcon {
   color: black;
 }
 
@@ -112,21 +153,39 @@
 }
 
 .notLikedByAuthorHeart {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-top: 10px;
+  margin-left: -10px;
 }
 
 .createReplyButton {
-  color: #5a5454;
+  color: black;
   font-weight: 600;
   padding: 7px 10px;
   border-radius: 25px;
 }
 
 .createReplyButton:hover {
-  background-color: #3f3f3f;
+  background-color: #e5e5e5;
 }
 
 .moreCommentButton {
 }
 
 .lessCommentButton {
+}
+
+.commentActionMenuButton {
+  display: flex;
+  height: 25px;
+  width: 25px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+}
+
+.commentActionMenuButton:hover {
+  background-color: rgba(0,0,0,0.1);
 }

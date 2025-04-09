@@ -1,0 +1,228 @@
+.root {
+  margin-top: 8px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.replyButton {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: white;
+  margin-right: 8px;
+}
+
+.noRepliesButton {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #3e3e3e;
+  color: #6e6e6e;
+  margin-right: 26px;
+}
+
+.replyButton:hover {
+  background-color: #535353;
+}
+
+.showMoreRepliesButton {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: white;
+  margin-right: 26px;
+}
+
+.likeButtonContainer {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.likeButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 25px;
+  justify-content: center;
+}
+
+.likeButton:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.likeIcon {
+  color: black;
+}
+
+.likeCounter {
+  margin-right: 8px;
+}
+
+.dislikeButtonContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.dislikeButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 25px;
+  justify-content: center;
+}
+
+.dislikeButton:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.dislikeIcon {
+  color: black;
+}
+
+.dislikeCounter {
+  margin-right: 8px;
+}
+
+.likedByAuthorContainer {
+  display: flex;
+  margin: 0 20px 0 2px;
+}
+
+.likedByAuthorButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  flex-direction: row-reverse;
+}
+
+.notLikedByAuthorButton {
+  display: flex;
+  align-items: center;
+}
+
+.likedByAuthorAvatar {
+  border-radius: 50%;
+}
+
+.actionMenuContainer {
+  padding: 5px;
+  border-radius: 25px;
+}
+
+.actionMenuContainer:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.actionMenuButton {
+  display: flex;
+  width: 28px;
+  height: 28px;
+}
+
+.actionMenu {
+  display: flex;
+  position: absolute;
+  background-color: #3a3a3a;
+  padding: 5px 10px;
+}
+
+
+.showMoreRepliesButton:hover {
+  background-color: #535353;
+}
+
+.commentAndInputReplyContainer {
+  padding: 16px 24px 12px 24px;
+}
+
+.userCommentContainer {
+  display: flex;
+}
+
+.relatedPostContainer {
+  display: flex;
+}
+
+.authorAvatarContainer {
+  margin-right: 16px;
+}
+
+.authorAvatar {
+  border-radius: 50%;
+}
+
+.commentHeader {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.commentMain {
+}
+
+.commentBody {
+  width: 600px;
+  overflow-wrap: anywhere;
+}
+
+.commentFooter {
+  display: flex;
+}
+
+.commentActionButtons {
+  margin-top: 8px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.likedByAuthor {
+  cursor: default;
+}
+
+.likedByAuthor.active {
+  cursor: pointer;
+}
+
+.commentBodyCollapsed {
+  max-height: 190px;
+  overflow: hidden;
+}
+
+.commentBodyFull {
+  max-height: 100%;
+}
+
+.bodyButton:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.relatedPostAvatar {
+  border-radius: 50%;
+}
+
+.arrow {
+  margin-left: 8px;
+}
+
+.delimiter {
+  margin: 0 4px 0 4px;
+}
+
+.showMoreReplies {
+  color: #065fd4;
+}
+
+.showMoreReplies:hover {
+  background-color: #def1ff;
+}

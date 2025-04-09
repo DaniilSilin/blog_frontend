@@ -19,7 +19,8 @@ export interface Props {
   setDisplayReplyInput?: (value: boolean) => void;
   setEditMode?: (value: boolean) => void;
   editMode?: boolean;
-  isReplyToParentComment: boolean;
+  isReplyToParentComment?: boolean;
+  setLoading: (value: boolean) => void;
 }
 
 export default function CommentBox({
@@ -33,10 +34,13 @@ export default function CommentBox({
   slug,
   post_id,
   isReplyToParentComment,
+  setLoading,
 }: Props) {
   const inputRef = React.useRef(null);
   const emojiPickerRef = React.useRef(null);
-  const [commentBody, setCommentBody] = React.useState<string>("");
+  const [commentBody, setCommentBody] = React.useState<string>(
+    editMode ? comment?.body : "",
+  );
   const [focusOnInput, setFocusOnInput] = React.useState<boolean>(false);
   const [displayEmojiPicker, setDisplayEmojiPicker] = React.useState(false);
 
@@ -47,7 +51,7 @@ export default function CommentBox({
     if (editMode) {
       setEditMode(false);
     }
-
+    setCommentBody("");
     setFocusOnInput(false);
     if (displayReplyInput) {
       setDisplayReplyInput(false);
@@ -58,6 +62,7 @@ export default function CommentBox({
     displayReplyInput,
     setDisplayReplyInput,
     setFocusOnInput,
+    setCommentBody,
   ]);
 
   React.useEffect(() => {
@@ -73,31 +78,62 @@ export default function CommentBox({
         slug: slug,
         post_id: post_id,
         comment_id: comment?.comment_id,
+        body: commentBody,
       });
+      setEditMode(false);
     } else {
       if (comment) {
         if (comment?.reply_to) {
-          await createComment({
+          createComment({
+            comment_id: comment.comment_id,
             body: commentBody,
             post_id: post_id,
             slug: slug,
             reply_to: comment?.reply_to,
           });
+          setDisplayReplyInput(false);
         } else {
-          await createComment({
+          createComment({
+            comment_id: comment.comment_id,
             body: commentBody,
             post_id: post_id,
             slug: slug,
             reply_to: comment?.comment_id,
           });
+          setDisplayReplyInput(false);
         }
       } else {
-        createComment({ body: commentBody, post_id: post_id, slug: slug });
+        const result = await createComment({
+          body: commentBody,
+          post_id: post_id,
+          slug: slug,
+        });
+        setLoading(true);
+        setFocusOnInput(false);
+        setCommentBody("");
+        try {
+          if (result && result.data && result.data.status) {
+            setLoading(false);
+          } else {
+            console.warn(
+              "Статус не определён или ответ не соответствует ожиданиям",
+            );
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Ошибка при создании комментария:", error);
+          setLoading(false);
+        }
+        // console.log(result.data.status);
+        // if (!!result.data.status) {
+        //   setLoading(false);
+        // }
       }
     }
   };
 
   const onEmojiHandleClick = (emoji: any) => {
+    // @ts-ignore
     const input = inputRef.current.resizableTextArea.textArea;
     const cursorPosition = input.selectionStart;
     setCommentBody(
@@ -148,18 +184,19 @@ export default function CommentBox({
         focusOnInput={focusOnInput}
         value={commentBody}
         defaultValue={comment?.body}
+        editMode={editMode}
       />
       {focusOnInput && (
         <div className={styles.commentFooter}>
           <div ref={emojiPickerRef}>
-            <HiOutlineEmojiHappy
-              className={styles.emojiIcon}
-              onClick={openEmojiMenuHandleClick}
-              size={20}
-            />
+            <div className={styles.emojiIcon}>
+              <HiOutlineEmojiHappy
+                onClick={openEmojiMenuHandleClick}
+                size={20}
+              />
+            </div>
             {displayEmojiPicker && (
               <EmojiPicker
-                style={{ position: "absolute" }}
                 className={styles.emojiPicker}
                 open={displayEmojiPicker}
                 onEmojiClick={onEmojiHandleClick}
@@ -173,15 +210,29 @@ export default function CommentBox({
             >
               <span>Отмена</span>
             </button>
-            <button
-              onClick={leaveComment}
-              disabled={!commentBody}
-              className={classNames(styles.leaveCommentButton, {
-                [styles.notEmpty]: !!commentBody,
-              })}
-            >
-              <span>{submitButtonText}</span>
-            </button>
+            {editMode ? (
+              <button
+                onClick={leaveComment}
+                disabled={commentBody === comment?.body || commentBody === ""}
+                className={classNames(styles.leaveCommentButton, {
+                  [styles.notEmpty]: !(
+                    commentBody === comment?.body || commentBody === ""
+                  ),
+                })}
+              >
+                <span>Сохранить</span>
+              </button>
+            ) : (
+              <button
+                onClick={leaveComment}
+                disabled={!commentBody}
+                className={classNames(styles.leaveCommentButton, {
+                  [styles.notEmpty]: !!commentBody,
+                })}
+              >
+                <span>{submitButtonText}</span>
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -48,7 +48,6 @@ export default function BlogCreate() {
       if (!file) return;
 
       const fileSize = file?.size;
-      console.log(fileSize);
       if (fileSize >= MIN_AVATAR_SIZE_IN_MB) {
         setImageErrorMessage("Файл не может превышать размер 4 Мб!");
       }

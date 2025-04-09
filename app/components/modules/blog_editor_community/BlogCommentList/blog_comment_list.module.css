@@ -1,0 +1,10 @@
+.loadMoreContainer {
+  padding: 10px 0;
+  margin-left: 80px;
+}
+
+.showMoreReplies {
+  font-size: 18px;
+  color: black;
+  font-weight: 600;
+}

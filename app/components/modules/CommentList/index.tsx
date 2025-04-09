@@ -3,13 +3,19 @@ import DjangoService from "@/app/store/services/DjangoService";
 
 import Comment from "../comment";
 
+import { Comment as CommentType } from "@/app/types";
+
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
+
+import styles from "./comment_list.module.css";
 
 export interface CommentListProps {
   slug: string;
   post_id: number;
   sort_by?: string;
   parent_id?: number;
+  postData: any;
+  isReplyToParentComment?: boolean;
 }
 
 const CommentList: FC<CommentListProps> = ({
@@ -17,6 +23,8 @@ const CommentList: FC<CommentListProps> = ({
   post_id,
   sort_by,
   parent_id,
+  postData,
+  isReplyToParentComment,
 }) => {
   const [page, setPage] = React.useState(1);
 
@@ -24,14 +32,13 @@ const CommentList: FC<CommentListProps> = ({
     setPage(1);
   }, [sort_by]);
 
-  const { data: postCommentList, isFetching } =
-    DjangoService.usePostCommentListQuery({
-      slug,
-      post_id,
-      page,
-      sort_by,
-      parent_id,
-    });
+  const { data: postCommentList } = DjangoService.usePostCommentListQuery({
+    slug,
+    post_id,
+    page,
+    sort_by,
+    parent_id,
+  });
 
   // React.useEffect(() => {
   //   const onScroll = () => {
@@ -55,18 +62,22 @@ const CommentList: FC<CommentListProps> = ({
 
   return (
     <div>
-      {postCommentList?.results.map((comment: Comment, index: number) => (
+      {postCommentList?.results.map((comment: CommentType, index: number) => (
         <Comment
           key={index}
           slug={slug}
           post_id={post_id}
           comment={comment}
-          isPinned={false}
+          postData={postData}
+          isReplyToParentComment={isReplyToParentComment}
         />
       ))}
       {!!postCommentList?.next && (
-        <button onClick={loadMoreReplies}>
-          <MdOutlineSubdirectoryArrowRight size={20} />
+        <button onClick={loadMoreReplies} className={styles.showMoreReplies}>
+          <MdOutlineSubdirectoryArrowRight
+            size={20}
+            className={styles.subdirectoryArrow}
+          />
           Другие ответы
         </button>
       )}

@@ -23,4 +23,6 @@ export interface Post {
   subscribers: number;
   isSubscribed: boolean;
   map: string;
+  author_is_hidden: boolean;
+  comments_allowed: boolean;
 }

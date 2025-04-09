@@ -1,0 +1,139 @@
+.root {
+  border: 1px solid #3e3e3e;
+}
+
+.commentAndInputReplyContainer {
+  padding: 16px 24px 12px 24px;
+}
+
+.userCommentContainer {
+  display: flex;
+}
+
+.relatedPostContainer {
+  display: flex;
+}
+
+.authorAvatarChildContainer {
+  margin-left: 56px;
+  margin-right: 16px;
+}
+
+.authorAvatarParentContainer {
+  margin-right: 16px;
+}
+
+.parentAuthorAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.childAuthorAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.commentHeader {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.commentMain {
+}
+
+.commentBody {
+  width: 600px;
+  overflow-wrap: anywhere;
+}
+
+.commentFooter {
+  display: flex;
+}
+
+.commentActionButtons {
+  margin-top: 8px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.likedByAuthor {
+  cursor: default;
+}
+
+.likedByAuthor.active {
+  cursor: pointer;
+}
+
+.commentBodyCollapsed {
+  max-height: 190px;
+  overflow: hidden;
+}
+
+.commentBodyFull {
+  max-height: 100%;
+}
+
+.bodyButton:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.relatedPostAvatar {
+  border-radius: 50%;
+}
+
+.replyButton {
+  padding: 10px;
+  border-radius: 25px;
+  background-color: #363636;
+  color: white;
+  margin-right: 8px;
+}
+
+.replyButton:hover {
+  background-color: #535353;
+}
+
+.showMoreRepliesButton {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 25px;
+  background-color: #363636;
+  color: white;
+  margin-right: 26px;
+}
+
+.showMoreRepliesButton:hover {
+  background-color: #535353;
+}
+
+.noRepliesButton {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  padding: 10px;
+  border-radius: 25px;
+  background-color: #3e3e3e;
+  color: #6e6e6e;
+  margin-right: 26px;
+}
+
+.arrow {
+  margin-left: 8px;
+}
+
+.delimiter {
+  margin: 0 4px 0 4px;
+}
+
+.showMoreReplies {
+  color: #065fd4;
+}
+
+.showMoreReplies:hover {
+  background-color: #def1ff;
+}

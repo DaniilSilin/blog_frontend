@@ -27,13 +27,8 @@ export default function PostList() {
   const router = useRouter();
   const [page, setPage] = React.useState<number>(1);
 
-  const {
-    data: postPaginatedList,
-    isLoading,
-    isFetching,
-  } = DjangoService.useGetPostPaginatedListQuery(
-    cleanParams(router.query, page),
-  );
+  const { data: postPaginatedList, isFetching } =
+    DjangoService.useGetPostPaginatedListQuery(cleanParams(router.query, page));
 
   React.useEffect(() => {
     const onScroll = () => {
@@ -50,10 +45,6 @@ export default function PostList() {
     document.addEventListener("scroll", onScroll);
     return () => document.removeEventListener("scroll", onScroll);
   }, [page, isFetching]);
-
-  if (isLoading) {
-    return <div>Загрузка данных</div>;
-  }
 
   return (
     <div className={styles.root}>

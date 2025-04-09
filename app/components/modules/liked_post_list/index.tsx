@@ -23,12 +23,10 @@ const cleanParams = (query, page: number) => {
 export default function LikedPostList() {
   const router = useRouter();
   const [page, setPage] = React.useState(1);
-  const {
-    data: likedPosts,
-    isLoading,
-    isFetching,
-  } = DjangoService.useLikedPostListQuery(cleanParams(router.query, page));
-
+  const { data: likedPosts, isFetching } = DjangoService.useLikedPostListQuery(
+    cleanParams(router.query, page),
+  );
+  console.log(likedPosts);
   React.useEffect(() => {
     const onScroll = () => {
       const scrolledToBottom =
@@ -44,10 +42,6 @@ export default function LikedPostList() {
     document.addEventListener("scroll", onScroll);
     return () => document.removeEventListener("scroll", onScroll);
   }, [page, isFetching]);
-
-  if (isLoading) {
-    return <div>Загрузка данных</div>;
-  }
 
   return (
     <div>

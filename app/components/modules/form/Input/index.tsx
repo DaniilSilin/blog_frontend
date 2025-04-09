@@ -15,6 +15,7 @@ export interface Props {
   value?: string;
   description?: string;
   setInputOnFocus?: any;
+  isPassword?: boolean;
 }
 
 const Input = React.forwardRef(function Input(
@@ -30,9 +31,11 @@ const Input = React.forwardRef(function Input(
     value,
     description,
     setInputOnFocus,
+    isPassword,
   }: Props,
   ref,
 ) {
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
   const handleChangeInput = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -62,7 +65,45 @@ const Input = React.forwardRef(function Input(
         value={value}
         description={description}
       >
-        <>
+        {isPassword ? (
+          <>
+            <BaseInput.Password
+              onChange={handleChangeInput}
+              placeholder={placeholder}
+              defaultValue={defaultValue}
+              maxLength={maxLength}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              ref={ref}
+              style={{
+                display: "block",
+                width: `${width}px`,
+                height: `${height}px`,
+                padding: "12px",
+                paddingRight: "39px",
+              }}
+              iconRender={(visible) =>
+                visible ? (
+                  <EyeTwoTone
+                    style={{
+                      position: "absolute",
+                      right: "20px",
+                      marginBottom: "20px",
+                    }}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    style={{
+                      position: "absolute",
+                      right: "20px",
+                      marginBottom: "20px",
+                    }}
+                  />
+                )
+              }
+            />
+          </>
+        ) : (
           <BaseInput
             onChange={handleChangeInput}
             placeholder={placeholder}
@@ -77,7 +118,7 @@ const Input = React.forwardRef(function Input(
               height: `${height}px`,
             }}
           />
-        </>
+        )}
       </Field>
     </div>
   );

@@ -1,20 +1,30 @@
 .root {
   position: absolute;
-  background-color: gray;
+  background-color: #272727;
   padding: 15px;
   border-radius: 15px;
   /*box-shadow: ;*/
+  z-index: 120;
 }
 
 .shareTitle {
+  display: flex;
   justify-content: center;
   font-weight: 600;
+  color: white;
+}
+
+.shareIcon {
+  display: flex;
+  align-items: center;
+  margin-right: 7px;
 }
 
 .shareMenuListItem {
   display: flex;
+  align-items: center;
   border-radius: 10px;
-  padding: 10px;
+  padding: 5px 7px;
 }
 
 .shareMenuListItem:hover {

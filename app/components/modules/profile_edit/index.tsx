@@ -514,7 +514,7 @@ export default function ProfileEdit({ username }) {
     formData.append("description", description);
     formData.append("email", email);
     formData.append("gender", gender);
-    formData.append("date_of_birth", birthDate);
+    // formData.append("date_of_birth", birthDate);
     changeUserProfile({ formData, username });
   };
   console.log(data);

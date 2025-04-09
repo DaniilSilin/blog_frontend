@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import CookieHelper from "@/app/store/cookieHelper";
 import { useDispatch } from "react-redux";
 import { logout as reduxLogout } from "@/app/store/reducers/slices/djangoSlice";
-
+import { IoMdPersonAdd } from "react-icons/io";
 import { MdOutlineCreate } from "react-icons/md";
 import {
   IoIosCheckmark,
@@ -17,7 +17,6 @@ import {
 import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
 import { BsPaletteFill } from "react-icons/bs";
 import { ImBooks } from "react-icons/im";
-import { FaRegUserCircle } from "react-icons/fa";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -34,6 +33,7 @@ export default function HeaderProfile() {
   const logout = () => {
     CookieHelper.removeCookie("token");
     dispatch(reduxLogout());
+    setOpenUserMenu(false);
     router.push("/");
   };
 
@@ -59,6 +59,10 @@ export default function HeaderProfile() {
     // setOpenUserMenu(!openUserMenu)
   }, [openUserMenu, setOpenUserMenu]);
 
+  const hideProfileHeaderHandleClick = React.useCallback(() => {
+    setOpenUserMenu(false);
+  }, [setOpenUserMenu]);
+
   if (!user.isGuest) {
     return (
       <div ref={userRef} className={styles.root}>
@@ -82,7 +86,10 @@ export default function HeaderProfile() {
         <div>
           {openUserMenu && (
             <div className={styles.profileMenu}>
-              <div className={styles.profileMenuElement}>
+              <div
+                className={styles.profileMenuElement}
+                onClick={hideProfileHeaderHandleClick}
+              >
                 <Link href={`/profile/${user?.username}`}>
                   <div className={styles.profileMenuContainer}>
                     <ImBooks
@@ -93,7 +100,10 @@ export default function HeaderProfile() {
                   </div>
                 </Link>
               </div>
-              <div className={styles.profileMenuElement}>
+              <div
+                className={styles.profileMenuElement}
+                onClick={hideProfileHeaderHandleClick}
+              >
                 <Link href={`/blog/create`}>
                   <div className={styles.profileMenuContainer}>
                     <MdOutlineCreate
@@ -101,6 +111,20 @@ export default function HeaderProfile() {
                       size={24}
                     />
                     <div>Создать блог</div>
+                  </div>
+                </Link>
+              </div>
+              <div
+                className={styles.profileMenuElement}
+                onClick={hideProfileHeaderHandleClick}
+              >
+                <Link href={`/invite/list/`}>
+                  <div className={styles.profileMenuContainer}>
+                    <IoMdPersonAdd
+                      className={styles.profileMenuElementIcon}
+                      size={24}
+                    />
+                    <div>Приглашения</div>
                   </div>
                 </Link>
               </div>
@@ -114,7 +138,10 @@ export default function HeaderProfile() {
                 />
                 <div>Тема: темная</div>
               </div>
-              <div className={styles.profileMenuElement}>
+              <div
+                className={styles.profileMenuElement}
+                onClick={hideProfileHeaderHandleClick}
+              >
                 <Link href={`/blogs/my`}>
                   <div className={styles.profileMenuContainer}>
                     <ImBooks
@@ -125,7 +152,10 @@ export default function HeaderProfile() {
                   </div>
                 </Link>
               </div>
-              <div className={styles.profileMenuElement}>
+              <div
+                className={styles.profileMenuElement}
+                onClick={hideProfileHeaderHandleClick}
+              >
                 <Link href={`/profile/${user?.username}/edit`}>
                   <div className={styles.profileMenuContainer}>
                     <IoSettingsOutline

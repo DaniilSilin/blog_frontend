@@ -1,18 +1,18 @@
 import React from "react";
 import { IoLink } from "react-icons/io5";
 import Link from "next/link";
-import { FaSquareOdnoklassniki } from "react-icons/fa6";
 import { ImTelegram, ImVk } from "react-icons/im";
 
 import styles from "./share_menu.module.css";
 
 export interface Props {
+  setDisplayShareMenu: (value: boolean) => void;
   post: any;
 }
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = "http://127.0.0.1:3001";
 
-export default function ShareMenu({ post }: Props) {
+export default function ShareMenu({ post, setDisplayShareMenu }: Props) {
   const [copiedText, setCopiedText] = React.useState("");
   const menuRef = React.useRef(null);
 
@@ -20,14 +20,23 @@ export default function ShareMenu({ post }: Props) {
     console.log(menuRef.current);
   });
 
+  React.useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      // @ts-ignore
+      if (!menuRef.current.contains(e.target)) {
+        setDisplayShareMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouse);
+    return () => document.removeEventListener("mousedown", handleMouse);
+  });
+
   return (
     <div ref={menuRef} className={styles.root}>
-      <div>
-        <div className={styles.shareTitle}>Поделиться</div>
-      </div>
+      <div className={styles.shareTitle}>Поделиться</div>
       <div className={styles.shareMenuListItem}>
         <div>
-          <IoLink size={25} />
+          <IoLink size={25} className={styles.shareIcon} />
         </div>
         <div
           onClick={() => {
@@ -38,16 +47,6 @@ export default function ShareMenu({ post }: Props) {
         >
           Скопировать
         </div>
-      </div>
-      <div className={styles.shareMenuListItem}>
-        <div>
-          <FaSquareOdnoklassniki size={25} />
-        </div>
-        <Link
-          href={`https://connect.ok.ru/dk?st.cmd=WidgetSharePreview&st.shareUrl=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}`}
-        >
-          Одноклассники
-        </Link>
       </div>
       <div className={styles.shareMenuListItem}>
         <ImVk size={25} />

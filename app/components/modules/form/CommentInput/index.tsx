@@ -11,7 +11,8 @@ export interface Props {
   defaultValue?: string;
   setFocusOnInput?: any;
   value?: string;
-  isGuest: boolean;
+  isGuest?: boolean;
+  editMode?: boolean;
 }
 
 const CommentInput = React.forwardRef(function CommentInput(
@@ -23,6 +24,7 @@ const CommentInput = React.forwardRef(function CommentInput(
     setFocusOnInput,
     value,
     isGuest,
+    editMode,
   }: Props,
   ref,
 ) {
@@ -38,22 +40,20 @@ const CommentInput = React.forwardRef(function CommentInput(
 
   const handleFocus = React.useCallback(() => {
     setFocusOnInput(true);
+    // if (editMode) {
+    // }
+    // setFocusOnInput(true);
+    // inputRef.current.setSelectionRange(
+    //   inputRef.current.value.length,
+    //   inputRef.current.value.length,
+    // );
   }, [setFocusOnInput]);
-
-  const guestInputHandleClick = () => {
-    console.log(123);
-  };
-
-  React.useEffect(() => {
-    console.log(inputRef);
-  });
 
   return (
     <>
       {isGuest ? (
         <div ref={inputRef}>
           <TextArea
-            onClick={guestInputHandleClick}
             value={value}
             placeholder={placeholder}
             defaultValue={defaultValue}

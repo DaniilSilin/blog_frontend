@@ -14,7 +14,12 @@
   display: flex;
 }
 
-.authorAvatarContainer {
+.authorAvatarChildContainer {
+  margin-left: 56px;
+  margin-right: 16px;
+}
+
+.authorAvatarParentContainer {
   margin-right: 16px;
 }
 

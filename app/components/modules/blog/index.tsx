@@ -28,7 +28,6 @@ export default function BlogList() {
   const [page, setPage] = React.useState<number>(1);
   const {
     data: blogList,
-    isLoading,
     isFetching,
     refetch: refetchBlogList,
   } = DjangoService.useGetBlogPaginatedListQuery(

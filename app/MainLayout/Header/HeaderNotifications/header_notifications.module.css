@@ -1,7 +1,6 @@
 .root {
   display: flex;
   align-items: center;
-  margin: 0 10px;
 }
 
 .root:hover {
@@ -12,8 +11,9 @@
   top: 64px;
   color: #a6adb4 !important;
   width: 480px;
+  height: 500px;
   position: absolute;
-  padding: 10px;
+  /*padding: 10px;*/
   background-color: #001529;
   right: 120px;
   border: 2px solid #363738;
@@ -23,6 +23,12 @@
 
 .notificationContainer {
   display: flex;
+  padding: 16px 16px 16px 0;
+}
+
+.notificationContainer:hover {
+  cursor: pointer;
+  background-color: #3e3e3e;
 }
 
 .avatarContainer {
@@ -35,5 +41,12 @@
 
 .textContainer {
   width: 250px;
+  line-height: 24px;
+  color: #f0f0f0;
   word-break: break-all;
+  margin-bottom: 8px;
+}
+
+.postContainer {
+  margin: 0 16px;
 }

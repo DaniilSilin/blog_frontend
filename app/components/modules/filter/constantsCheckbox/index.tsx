@@ -12,8 +12,6 @@ export interface Props {
 export default function ConstantsCheckbox({ cleanParams, item }: Props) {
   const router = useRouter();
 
-  console.log(cleanParams.sort_by);
-
   const setSortByDateParam = React.useCallback(
     (e: MouseEvent) => {
       router.push(

@@ -29,53 +29,61 @@ export default function CommentaryActionMenu({
   isParent,
 }: Props) {
   const user = useAppSelector((state) => state.django.profile);
+
   const [deleteComment] = DjangoService.useDeleteCommentMutation();
+  const [pinComment] = DjangoService.usePinCommentMutation();
+
+  const pinCommentButton = () => {
+    pinComment({ slug, post_id, comment_id: comment.comment_id });
+    setDisplayAdditionalMenu(false);
+  };
 
   const deleteCurrentComment = () => {
     deleteComment({
-      slug: slug,
-      post_id: post_id,
+      slug,
+      post_id,
       comment_id: comment.comment_id,
     });
+    setDisplayAdditionalMenu(false);
   };
 
   const editCommentButton = () => {
-    // setDisplayAdditionalMenu(false)
     setEditMode(true);
+    setDisplayAdditionalMenu(false);
   };
 
   if (isParent) {
     if (user.is_admin || user.username === postData.blog.owner.username) {
       return (
         <div className={styles.root}>
-          <div>
+          <div onClick={pinCommentButton}>
             <GoPin size={21} className={styles.icon} />
-            <div>Закрепить</div>
+            Закрепить
           </div>
           <div onClick={editCommentButton}>
             <TiPen size={21} className={styles.icon} />
-            <div>Изменить</div>
+            Изменить
           </div>
           <div onClick={deleteCurrentComment}>
             <FaRegTrashCan size={21} className={styles.icon} />
-            <div>Удалить</div>
+            Удалить
           </div>
         </div>
       );
     } else if (user.username === postData.author.username) {
       return (
         <div className={styles.root}>
-          <div>
+          <div onClick={pinCommentButton}>
             <GoPin size={21} className={styles.icon} />
-            <div>Закрепить</div>
+            Закрепить
           </div>
           <div onClick={editCommentButton}>
             <TiPen size={21} className={styles.icon} />
-            <div>Изменить</div>
+            Изменить
           </div>
           <div onClick={deleteCurrentComment}>
             <FaRegTrashCan size={21} className={styles.icon} />
-            <div>Удалить</div>
+            Удалить
           </div>
         </div>
       );
@@ -96,7 +104,7 @@ export default function CommentaryActionMenu({
       return (
         <div className={styles.root}>
           <div onClick={deleteCurrentComment}>
-            <FaRegTrashCan size={21} className={styles.icon} />
+            <CiFlag1 size={21} className={styles.icon} />
             <div>Пожаловаться</div>
           </div>
         </div>
@@ -146,7 +154,7 @@ export default function CommentaryActionMenu({
       return (
         <div className={styles.root}>
           <div onClick={deleteCurrentComment}>
-            <FaRegTrashCan size={21} className={styles.icon} />
+            <CiFlag1 size={21} className={styles.icon} />
             <div>Пожаловаться</div>
           </div>
         </div>

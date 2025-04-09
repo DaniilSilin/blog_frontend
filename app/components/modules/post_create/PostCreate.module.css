@@ -1,4 +1,13 @@
 .root {
+
+}
+
+.returnToBlog {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-left: -80px;
+  gap: 10px;
 }
 
 .mapTitle {
@@ -13,6 +22,24 @@
 }
 
 .tagListContainer {
-  margin: 7px 0;
+  margin: 12px 0;
   width: 400px;
+}
+
+.submitButton {
+  padding: 7px 10px;
+  color: #b1b0b0;
+  background-color: #363636;
+  border-radius: 10px;
+  cursor: default;
+}
+
+.submitButton.active {
+  color: white;
+  cursor: pointer;
+}
+
+.submitButton.active:hover {
+  color: white;
+  background-color: #424141;
 }

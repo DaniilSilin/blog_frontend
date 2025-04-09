@@ -15,7 +15,6 @@
 }
 
 .acceptInvite {
-  cursor: pointer;
   margin-right: 5px;
   padding: 10px;
   border-radius: 10px;
@@ -23,7 +22,6 @@
 }
 
 .rejectInvite {
-  cursor: pointer;
   padding: 10px;
   border-radius: 10px;
   background-color: red;

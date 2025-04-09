@@ -19,22 +19,22 @@ export interface Props {
 const params = [
   {
     id: 1,
-    sorting: "-date",
+    sort_by: "-date",
     label: "Новые",
   },
   {
     id: 2,
-    sorting: "date",
+    sort_by: "date",
     label: "Старые",
   },
   {
     id: 3,
-    sorting: "title_asc",
+    sort_by: "title_asc",
     label: "По названию (вверх)",
   },
   {
     id: 4,
-    sorting: "title_desc",
+    sort_by: "title_desc",
     label: "По названию (вниз)",
   },
 ];

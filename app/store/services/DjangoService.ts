@@ -12,17 +12,14 @@ const API_URL = "http://127.0.0.1:3001/api/v1/";
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
-  tagTypes: ["Comment"],
+  tagTypes: ["Comment", "Post", "Blog"],
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
-      // headers.set("Content-Type", "application/json")
-      // headers.set("Content-Type", "multipart/form-data")
       const token =
         typeof window === "undefined"
           ? (api.extra as GetServerSidePropsContext).req?.cookies?.token || "" // server
           : CookieHelper.getCookie("token"); //client
-      // const token = localStorage.getItem("authToken")
       console.log(`token`);
       console.log(token);
       if (token) {
@@ -68,6 +65,16 @@ const DjangoService = createApi({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ slug }) => ({
+                type: "Blog" as const,
+                slug: slug,
+              })),
+              { type: "Blog", id: "LIST" },
+            ]
+          : [{ type: "Blog", id: "LIST" }],
     }),
     getPostPaginatedList: builder.query({
       query: ({ page, sort_by, search, before, after }) => ({
@@ -96,6 +103,17 @@ const DjangoService = createApi({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ post_id, slug }) => ({
+                type: "Post" as const,
+                id: post_id,
+                slug: slug,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
     }),
     register: builder.mutation({
       query: ({ email, username, password }) => ({
@@ -141,6 +159,39 @@ const DjangoService = createApi({
     //     url: `${username}/subscriptions/`,
     //   })
     // }),
+    blogSubscription: builder.mutation({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/subscription/`,
+        method: "POST",
+      }),
+      async onQueryStarted({ slug }, { dispatch, queryFulfilled, getState }) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Blog", slug: slug },
+        ])) {
+          if (!["getBlogPaginatedList"].includes(endpointName)) continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const blog = draft.results.find((blog) => blog.slug === slug);
+                if (blog) {
+                  blog.isSubscribed = !blog.isSubscribed;
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
+    }),
     subscribeBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/subscribe/`,
@@ -195,17 +246,22 @@ const DjangoService = createApi({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ post_id }) => ({
+                type: "Post" as const,
+                id: post_id,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
     }),
     inviteUserToBlog: builder.mutation({
       query: ({ addressee, description, blog, admin }) => ({
         url: "invite/create/",
         method: "POST",
         body: { addressee, description, blog, admin },
-      }),
-    }),
-    getInviteList: builder.query({
-      query: () => ({
-        url: `invite/list/`,
       }),
     }),
     getMyPosts: builder.query({
@@ -220,12 +276,87 @@ const DjangoService = createApi({
         body: { pk },
       }),
     }),
+    getInviteList: builder.query({
+      query: () => ({
+        url: `invite/list/`,
+      }),
+    }),
+    rejectInvite: builder.mutation({
+      query: ({ pk }) => ({
+        url: `invite/${pk}/accept/`,
+        method: "POST",
+        body: { pk },
+      }),
+    }),
     createComment: builder.mutation({
       query: ({ slug, post_id, reply_to, body }) => ({
         url: `blog/${slug}/post/${post_id}/comment/create/`,
         method: "POST",
         body: { body, reply_to },
       }),
+      async onQueryStarted(
+        { post_id, slug, reply_to },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        try {
+          const { data: createdComment } = await queryFulfilled;
+          if (reply_to) {
+            for (const {
+              endpointName,
+              originalArgs,
+            } of DjangoService.util.selectInvalidatedBy(getState(), [
+              { type: "Comment", id: reply_to },
+            ])) {
+              if (!["postCommentList", "blogComments"].includes(endpointName))
+                continue;
+              dispatch(
+                DjangoService.util.updateQueryData(
+                  endpointName,
+                  originalArgs,
+                  (draft) => {
+                    const comment = draft.results.find(
+                      (comment: any) => comment.comment_id === reply_to,
+                    );
+                    comment.count_of_replies += 1;
+                    if (comment.count_of_replies === 1) {
+                      comment.forceRender = true;
+                    }
+                  },
+                ),
+              );
+            }
+          }
+          for (const {
+            endpointName,
+            originalArgs,
+          } of DjangoService.util.selectInvalidatedBy(getState(), [
+            { type: "Comment", id: "LIST" },
+          ])) {
+            if (!["postCommentList"].includes(endpointName)) continue;
+            if (
+              originalArgs.slug !== slug ||
+              originalArgs.post_id !== post_id ||
+              originalArgs.parent_id !== reply_to
+            )
+              continue;
+            dispatch(
+              DjangoService.util.updateQueryData(
+                endpointName,
+                originalArgs,
+                (draft) => {
+                  if (!createdComment.reply_to) {
+                    draft.results = [createdComment, ...draft.results];
+                  } else {
+                    draft.results = [...draft.results, createdComment];
+                  }
+                },
+              ),
+            );
+          }
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     getComment: builder.query({
       query: ({ slug, post_id, comment_id }) => ({
@@ -270,12 +401,114 @@ const DjangoService = createApi({
         url: `blog/${slug}/post/${post_id}/like/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { post_id, slug },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Post", id: post_id, slug: slug },
+        ])) {
+          if (
+            ![
+              "getBlogPosts",
+              "likedPostList",
+              "bookmarkedPostList",
+              "getPostPaginatedList",
+              "subscriptionList",
+            ].includes(endpointName)
+          )
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const post = draft.results.find(
+                  (post) => post.post_id === post_id && post.blog.slug === slug,
+                );
+                if (post) {
+                  if (post.isDisliked) {
+                    post.isDisliked = false;
+                    post.dislikes -= 1;
+                  }
+                  if (post.isLiked) {
+                    post.isLiked = false;
+                    post.likes -= 1;
+                  } else {
+                    post.isLiked = true;
+                    post.likes += 1;
+                  }
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     setOrRemoveDislike: builder.mutation({
       query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/dislike/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { post_id, slug },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Post", id: post_id, slug: slug },
+        ])) {
+          if (
+            ![
+              "getBlogPosts",
+              "likedPostList",
+              "bookmarkedPostList",
+              "getPostPaginatedList",
+              "subscriptionList",
+            ].includes(endpointName)
+          )
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const post = draft.results.find(
+                  (post) => post.post_id === post_id && post.blog.slug === slug,
+                );
+                if (post) {
+                  if (post.isLiked) {
+                    post.isLiked = false;
+                    post.likes -= 1;
+                  }
+                  if (post.isDisliked) {
+                    post.isDisliked = false;
+                    post.dislikes -= 1;
+                  } else {
+                    post.isDisliked = true;
+                    post.dislikes += 1;
+                  }
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     postsSearch: builder.query({
       query: ({ hashtag }) => ({
@@ -303,11 +536,87 @@ const DjangoService = createApi({
         url: `/blog/${slug}/post/${post_id}/bookmark/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { slug, post_id },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Post", id: post_id, slug: slug },
+        ])) {
+          if (
+            !["getPostPaginatedList", "subscriptionList"].includes(endpointName)
+          )
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const post = draft.results.find(
+                  (post) => post.post_id === post_id && post.blog.slug === slug,
+                );
+                if (post) {
+                  post.isBookmarked = !post.isBookmarked;
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     deleteComment: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/`,
         method: "DELETE",
+      }),
+      async onQueryStarted(
+        { comment_id },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  draft.results = draft.results.filter(
+                    (comment) => comment.comment_id !== comment_id,
+                  );
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
+    }),
+    pinComment: builder.mutation({
+      query: ({ slug, post_id, comment_id }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/${comment_id}/pin/`,
+        method: "POST",
       }),
     }),
     updateComment: builder.mutation({
@@ -316,6 +625,40 @@ const DjangoService = createApi({
         method: "PUT",
         body: { body, reply_to },
       }),
+      async onQueryStarted(
+        { comment_id, body },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  comment.body = body;
+                  comment.is_edited = true;
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     likedUserList: builder.query({
       query: ({ slug, post_id, page }) => ({
@@ -429,19 +772,110 @@ const DjangoService = createApi({
           : [{ type: "Comment", id: "LIST" }],
     }),
     likedPostList: builder.query({
-      query: () => ({
+      query: ({ page }) => ({
         url: `liked_posts/`,
+        params: {
+          page: page || undefined,
+        },
       }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ post_id, slug }) => ({
+                type: "Post" as const,
+                id: post_id,
+                slug: slug,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
     }),
     bookmarkedPostList: builder.query({
-      query: () => ({
+      query: ({ page }) => ({
         url: `bookmarked_posts/`,
+        params: {
+          page: page || undefined,
+        },
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        let currentPage = 1;
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (currentPage < otherArgs.arg.page) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ post_id, slug }) => ({
+                type: "Post" as const,
+                id: post_id,
+                slug: slug,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
     }),
     subscriptionList: builder.query({
-      query: () => ({
+      query: ({ page }) => ({
         url: `subscriptions/`,
+        params: {
+          page: page || undefined,
+        },
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        let currentPage = 1;
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (currentPage < otherArgs.arg.page) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ post_id, slug }) => ({
+                type: "Post" as const,
+                id: post_id,
+                slug: slug,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
     }),
     subscriptionListMini: builder.query({
       query: () => ({
@@ -471,6 +905,7 @@ const DjangoService = createApi({
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
         const args = { ...queryArgs };
         delete args.page;
+        console.log(`${endpointName}(${JSON.stringify(args)})`);
         return `${endpointName}(${JSON.stringify(args)})`;
       },
       merge: (currentCache, newItems, otherArgs) => {
@@ -481,7 +916,6 @@ const DjangoService = createApi({
         } else {
           currentCache.results = newItems.results;
         }
-        console.log(currentCache.results);
       },
       forceRefetch({ currentArg, previousArg }) {
         return true;
@@ -503,7 +937,7 @@ const DjangoService = createApi({
         method: "POST",
       }),
       async onQueryStarted(
-        { comment_id, listArg },
+        { comment_id },
         { dispatch, queryFulfilled, getState },
       ) {
         for (const {
@@ -551,12 +985,119 @@ const DjangoService = createApi({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/dislike/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { comment_id },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  if (comment.isLiked) {
+                    comment.isLiked = false;
+                    comment.likes -= 1;
+                  }
+                  if (comment.isDisliked) {
+                    comment.isDisliked = false;
+                    comment.dislikes -= 1;
+                  } else {
+                    comment.isDisliked = true;
+                    comment.dislikes += 1;
+                  }
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     setOrRemoveLikeByAuthor: builder.mutation({
       query: ({ slug, post_id, comment_id }) => ({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/like_by_author/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { comment_id },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  comment.liked_by_author =
+                    comment.liked_by_author.toString() !== "true";
+                }
+              },
+            ),
+          );
+        }
+      },
+    }),
+    subscribeOrUnsubscribeBlog: builder.mutation({
+      query: ({ slug }) => ({
+        url: `blog/${slug}/subscribe/`,
+        method: "POST",
+      }),
+      async onQueryStarted(
+        { comment_id },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Post", id: comment_id },
+        ])) {
+          if (!["postCommentList", "blogComments"].includes(endpointName))
+            continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                if (comment) {
+                  comment.liked_by_author =
+                    comment.liked_by_author.toString() !== "true";
+                }
+              },
+            ),
+          );
+        }
+      },
     }),
     blogCommentListDelete: builder.mutation({
       query: ({ slug, comment_list }) => ({
@@ -576,6 +1117,43 @@ const DjangoService = createApi({
       query: ({ username }) => ({
         url: `profile/${username}/notification/list/`,
       }),
+    }),
+    postCommentListReply: builder.query({
+      query: ({ slug, post_id, parent_id, page, comment_reply }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/list/reply`,
+        params: {
+          page: page || undefined,
+          parent_id: parent_id || undefined,
+          comment_reply: comment_reply || undefined,
+        },
+      }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ comment_id }) => ({
+                type: "Comment" as const,
+                id: comment_id,
+              })),
+              { type: "Comment", id: "LIST" },
+            ]
+          : [{ type: "Comment", id: "LIST" }],
     }),
   }),
 });

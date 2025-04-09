@@ -23,6 +23,7 @@ import CommentCreate from "../../../modules/comment_create";
 import styles from "./post_page.module.css";
 import CommentList from "../../CommentList";
 import BlogCommentList from "@/app/components/modules/blog_editor_community/CommentList";
+import ShareMenu from "@/app/components/modules/post_page/PostFooter/ShareMenu";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -42,18 +43,14 @@ export default function PostPage({ slug, post_id }) {
   const [displayDislikePopup, setDisplayDislikePopup] = React.useState(false);
   const [displayBookmarkPopup, setDisplayBookmarkPopup] = React.useState(false);
 
+  const [displayShareMenu, setDisplayShareMenu] = React.useState(false);
+
   const { data: postData, refetch: refetchPost } =
     DjangoService.useGetPostQuery({ slug, post_id });
 
-  const { data: blogCommentList, isFetching } =
-    DjangoService.useBlogCommentsQuery({ slug, page: 1 });
-  console.log(`blogCommentList`);
-  console.log(blogCommentList);
-
   const [setOrRemoveLike] = DjangoService.useSetOrRemoveLikeMutation();
   const [setOrRemoveDislike] = DjangoService.useSetOrRemoveDislikeMutation();
-  const [subscribeBlog] = DjangoService.useSubscribeBlogMutation();
-  const [unsubscribeBlog] = DjangoService.useUnsubscribeBlogMutation();
+  const [blogSubscription] = DjangoService.useBlogSubscriptionMutation();
   const [addOrRemoveBookmark] = DjangoService.useAddOrRemoveBookmarkMutation();
 
   const addOrRemoveBookmarksFunction = async () => {
@@ -77,15 +74,8 @@ export default function PostPage({ slug, post_id }) {
     }
   };
 
-  const subscribeButton = async () => {
-    const result = await subscribeBlog({ slug });
-    if (!result.error && result.data.status !== "unsuccessful") {
-      refetchPost();
-    }
-  };
-
-  const unsubscribeButton = async () => {
-    const result = await unsubscribeBlog({ slug });
+  const toggleBlogSubscription = async () => {
+    const result = await blogSubscription({ slug });
     if (!result.error && result.data.status !== "unsuccessful") {
       refetchPost();
     }
@@ -113,6 +103,10 @@ export default function PostPage({ slug, post_id }) {
     setDisplayBookmarkPopup(!displayBookmarkPopup);
   }, [setDisplayBookmarkPopup, displayBookmarkPopup]);
 
+  const handleDisplayShareMenu = React.useCallback(() => {
+    setDisplayShareMenu((displayShareMenu) => !displayShareMenu);
+  }, []);
+
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
       // @ts-ignore
@@ -138,6 +132,25 @@ export default function PostPage({ slug, post_id }) {
     document.addEventListener("mousedown", handleMouse);
     return () => document.removeEventListener("mousedown", handleMouse);
   });
+
+  const subscribersCount = React.useMemo(() => {
+    const subscribers = postData?.subscribers.toString() || "0";
+
+    if (subscribers.slice(-1) === "1" && subscribers.slice(-2) !== "11") {
+      return `${subscribers} подписчик`;
+    } else if (
+      (subscribers.slice(-1) === "2" ||
+        subscribers.slice(-1) === "3" ||
+        subscribers.slice(-1) === "4") &&
+      subscribers.slice(-2) !== "12" &&
+      subscribers.slice(-2) !== "13" &&
+      subscribers.slice(-2) !== "14"
+    ) {
+      return `${subscribers} подписчика`;
+    } else {
+      return `${subscribers} подписчиков`;
+    }
+  }, [postData?.subscribers]);
 
   const commentsCount = React.useMemo(() => {
     const commentCount = postData?.commentCount.toString() || "0";
@@ -184,7 +197,7 @@ export default function PostPage({ slug, post_id }) {
                 {postData?.blog.title}
               </div>
             </Link>
-            <div>{postData?.subscribers} подписчиков</div>
+            <div>{subscribersCount}</div>
           </div>
         </div>
         <div className={styles.subscribeBlock}>
@@ -192,14 +205,14 @@ export default function PostPage({ slug, post_id }) {
             <>
               {postData?.isSubscribed.toString() === "true" ? (
                 <button
-                  onClick={unsubscribeButton}
+                  onClick={toggleBlogSubscription}
                   className={styles.subscribeButton}
                 >
                   Отписаться
                 </button>
               ) : (
                 <button
-                  onClick={subscribeButton}
+                  onClick={toggleBlogSubscription}
                   className={styles.unsubscribeButton}
                 >
                   Подписаться
@@ -232,10 +245,14 @@ export default function PostPage({ slug, post_id }) {
           {postData?.title}
         </div>
         <div className={styles.postInformation}>
-          <Link href={`/profile/${postData?.author.username}/`}>
-            <div>{postData?.author.username}</div>
-          </Link>
-          <div className={styles.delimiter}>·</div>
+          {postData?.author_is_hidden.toString() === "false" ? (
+            <>
+              <Link href={`/profile/${postData?.author.username}/`}>
+                <div>{postData?.author.username}</div>
+              </Link>
+              <div className={styles.delimiter}>·</div>
+            </>
+          ) : null}
           <div>{moment(postData?.created_at).format("D MMMM hh:mm")}</div>
           <div className={styles.delimiter}>·</div>
           <div>{postData?.views} просмотров</div>
@@ -263,20 +280,22 @@ export default function PostPage({ slug, post_id }) {
                 className={styles.likeButton}
                 onClick={handleShowLikePopup}
               >
-                <AiFillLike className={styles.likeIcon} size={20} />
+                <AiOutlineLike className={styles.likeIconNotLiked} size={20} />
                 <div className={styles.likeCounter}>{postData?.likes}</div>
               </button>
               {displayLikePopup && (
                 <div
                   style={{
-                    marginTop: "37px",
+                    marginTop: "35px",
                     marginLeft: "-50px",
                     cursor: "default",
                   }}
                 >
                   <NoUserPopup
                     title={"Нравится эта публикация?"}
-                    description={"Войдите, чтобы поставить лайк на этот канал"}
+                    description={
+                      "Войдите, чтобы поставить лайк на эту публикацию."
+                    }
                     redirectTo={`/blog/${slug}/post/${post_id}`}
                   />
                 </div>
@@ -307,14 +326,22 @@ export default function PostPage({ slug, post_id }) {
                   className={styles.dislikeIconNotLiked}
                   size={20}
                 />
+                <div className={styles.dislikeCounter}>
+                  {postData?.dislikes}
+                </div>
               </button>
-              <div className={styles.dislikeCounter}>{postData?.dislikes}</div>
               {displayDislikePopup && (
-                <div style={{ marginTop: "35px", marginLeft: "-30px" }}>
+                <div
+                  style={{
+                    marginTop: "35px",
+                    marginLeft: "-30px",
+                    cursor: "default",
+                  }}
+                >
                   <NoUserPopup
                     title={"Не нравится эта публикация?"}
                     description={
-                      "Войдите, чтобы поставить дизлайк на этот канал"
+                      "Войдите, чтобы поставить дизлайк на эту публикацию."
                     }
                     redirectTo={`/blog/${slug}/post/${post_id}`}
                   />
@@ -348,11 +375,24 @@ export default function PostPage({ slug, post_id }) {
         <div className={styles.bookmarkContainer}>
           {user.isGuest ? (
             <div ref={bookmarkRef}>
-              <button className={styles.boo} onClick={handleShowBookmarkPopup}>
-                <IoBookmarkSharp style={{ color: "white" }} size={20} />
+              <button
+                className={styles.bookmarkButton}
+                onClick={handleShowBookmarkPopup}
+              >
+                <IoBookmarkOutline
+                  className={styles.bookmarkIconNotAdded}
+                  size={20}
+                />
+                Сохранить
               </button>
               {displayBookmarkPopup && (
-                <div style={{ marginTop: "35px", marginLeft: "-30px" }}>
+                <div
+                  style={{
+                    marginTop: "10px",
+                    marginLeft: "-10px",
+                    cursor: "default",
+                  }}
+                >
                   <NoUserPopup
                     title={"Хотите посмотреть публикацию позже?"}
                     description={
@@ -385,37 +425,48 @@ export default function PostPage({ slug, post_id }) {
             </div>
           )}
         </div>
-        <div className={styles.shareButton}>
-          <TiArrowForwardOutline className={styles.shareIcon} size={20} />
-          <div>Поделиться</div>
+        <div>
+          <button
+            className={styles.shareButton}
+            onClick={handleDisplayShareMenu}
+          >
+            <TiArrowForwardOutline className={styles.shareIcon} size={20} />
+            Поделиться
+          </button>
+          {displayShareMenu && (
+            <ShareMenu
+              post={postData}
+              setDisplayShareMenu={setDisplayShareMenu}
+            />
+          )}
         </div>
       </div>
-      <div>
-        <div className={styles.commentsDataAndCreateComment}>
-          <div className={styles.commentsData}>
-            <h2 className={styles.commentsCountTitle}>
-              <span>{commentsCount}</span>
-            </h2>
-            <CommentListSort setSortBy={setSortBy} sortBy={sortBy} />
+      {postData?.comments_allowed ? (
+        <div>
+          <div className={styles.commentsDataAndCreateComment}>
+            <div className={styles.commentsData}>
+              <h2 className={styles.commentsCountTitle}>
+                <span>{commentsCount}</span>
+              </h2>
+              <CommentListSort setSortBy={setSortBy} sortBy={sortBy} />
+            </div>
+            <CommentCreate slug={slug} post_id={post_id} />
           </div>
-          <CommentCreate slug={slug} post_id={post_id} />
+          <div className={styles.commentsBlock}>
+            <CommentList
+              slug={slug}
+              post_id={post_id}
+              sort_by={sortBy}
+              postData={postData}
+              isReplyToParentComment
+            />
+          </div>
         </div>
-        <div className={styles.commentsBlock}>
-          <CommentList slug={slug} post_id={post_id} sort_by={sortBy} />
+      ) : (
+        <div className={styles.commentsNotAllowedContainer}>
+          Комментарии отключены
         </div>
-        {/*<div>*/}
-        {/*  123123123*/}
-        {/*  {blogCommentList?.results.map((comment: Comment, index: number) => (*/}
-        {/*    <BlogCommentList*/}
-        {/*      key={index}*/}
-        {/*      comment={comment}*/}
-        {/*      slug={slug}*/}
-        {/*      setSelectedBlogComments={() => {}}*/}
-        {/*      selectedBlogComments={[]}*/}
-        {/*    />*/}
-        {/*  ))}*/}
-        {/*</div>*/}
-      </div>
+      )}
     </div>
   );
 }

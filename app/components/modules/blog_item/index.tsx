@@ -20,21 +20,11 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 export default function BlogItem({ blog, refetchBlogList }: Props) {
   const user = useAppSelector((state) => state.django.profile);
-  const [subscribeBlog] = DjangoService.useSubscribeBlogMutation();
-  const [unsubscribeBlog] = DjangoService.useUnsubscribeBlogMutation();
 
-  const subscribeRequest = async () => {
-    const result = await subscribeBlog({ slug: blog?.slug });
-    if (!result.error && result.data.status !== "unsuccessful") {
-      refetchBlogList();
-    }
-  };
+  const [blogSubscription] = DjangoService.useBlogSubscriptionMutation();
 
-  const unsubscribeRequest = async () => {
-    const result = await unsubscribeBlog({ slug: blog?.slug });
-    if (!result.error && result.data.status !== "unsuccessful") {
-      refetchBlogList();
-    }
+  const blogSubscriptionFunction = () => {
+    blogSubscription({ slug: blog?.slug });
   };
 
   return (
@@ -80,14 +70,14 @@ export default function BlogItem({ blog, refetchBlogList }: Props) {
             {blog?.isSubscribed.toString() === "true" ? (
               <div
                 className={styles.unsubscribeButton}
-                onClick={unsubscribeRequest}
+                onClick={blogSubscriptionFunction}
               >
                 Отписаться
               </div>
             ) : (
               <div
                 className={styles.subscribeButton}
-                onClick={subscribeRequest}
+                onClick={blogSubscriptionFunction}
               >
                 Подписаться
               </div>

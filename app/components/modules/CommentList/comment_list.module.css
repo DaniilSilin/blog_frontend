@@ -1,0 +1,14 @@
+.showMoreReplies {
+  display: inline-flex;
+  color: #3ea6ff;
+  padding: 8px 12px 8px 12px;
+  border-radius: 20px;
+}
+
+.showMoreReplies:hover {
+  background: #def1ff;
+}
+
+.subdirectoryArrow {
+  margin-right: 5px;
+}

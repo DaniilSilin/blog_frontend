@@ -18,8 +18,8 @@ import CommentInput from "../CommentInput";
 import styles from "./reply_list.module.css";
 
 export interface Props {
-  commentReply: any;
   slug: string;
+  commentReply: any;
   selectedBlogComments: any;
   setSelectedBlogComments: any;
 }
@@ -49,7 +49,7 @@ export default function ReplyList({
 
   const likeCommentButton = () => {
     setOrRemoveCommentLike({
-      slug: slug,
+      slug,
       post_id: commentReply.post.post_id,
       comment_id: commentReply?.comment_id,
     });
@@ -57,7 +57,7 @@ export default function ReplyList({
 
   const dislikeCommentButton = () => {
     setOrRemoveCommentDislike({
-      slug: slug,
+      slug,
       post_id: commentReply.post.post_id,
       comment_id: commentReply?.comment_id,
     });
@@ -65,7 +65,7 @@ export default function ReplyList({
 
   const setOrRemoveLikeByAuthorButton = () => {
     setOrRemoveLikeByAuthor({
-      slug: slug,
+      slug,
       post_id: commentReply.post.post_id,
       comment_id: commentReply?.comment_id,
     });
@@ -102,27 +102,6 @@ export default function ReplyList({
       setIsNormalMode(true);
     }
   }, [bodyRef.current]);
-
-  const CustomText = (text: string) => {
-    const renderText = () => {
-      console.log(text);
-      const parts = text.split(" ");
-      console.log(parts);
-      return parts.map((part, index) => {
-        console.log(part);
-        if (part === "@admin") {
-          const username = part.slice(1);
-          return (
-            <Link href={`/profile/${username}/`} key={index}>
-              @admin
-            </Link>
-          );
-        }
-        return part;
-      });
-    };
-    return <span>{renderText()}</span>;
-  };
 
   const blogCommentInputCheckboxHandleChange = React.useCallback(
     (checked: boolean, comment: any) => {
@@ -180,7 +159,7 @@ export default function ReplyList({
           </div>
           <div ref={bodyRef} className={styles.commentBody}>
             {isNormalMode ? (
-              <div>{CustomText(commentReply.body)}</div>
+              <div>{commentReply.body}</div>
             ) : (
               <>
                 <div

@@ -55,21 +55,26 @@ export default function CommentListSort({ setSortBy, sortBy }: Props) {
         <BsListNested size={20} className={styles.titleIcon} />
         Упорядочить
       </div>
-      {showDropdown && (
-        <div className={styles.dropdown}>
-          {sortingList.map((param, index) => (
-            <button
-              key={index}
-              className={classNames(styles.dropdownElement, {
-                [styles.active]: param.queryParam === sortBy,
-              })}
-              onClick={() => setParam(param.queryParam)}
-            >
-              {param.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {/*{showDropdown && (*/}
+      <div
+        className={classNames(styles.dropdown, {
+          [styles.open]: showDropdown,
+          [styles.close]: !showDropdown,
+        })}
+      >
+        {sortingList.map((param, index) => (
+          <button
+            key={index}
+            className={classNames(styles.dropdownElement, {
+              [styles.active]: param.queryParam === sortBy,
+            })}
+            onClick={() => setParam(param.queryParam)}
+          >
+            {param.label}
+          </button>
+        ))}
+      </div>
+      {/*)}*/}
     </div>
   );
 }

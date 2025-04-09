@@ -1,4 +1,4 @@
-import { Author, Post, Owner } from "./index";
+import { Post, User } from "./index";
 
 export interface Blog {
   id: number;
@@ -14,9 +14,9 @@ export interface Blog {
   count_of_posts: number;
   count_of_commentaries: number;
   subscribers: number;
-  owner: Owner;
+  owner: User;
   pinned_post: Post;
-  authors: Author[];
+  authors: User[];
   isSubscribed: boolean;
   email?: string;
   vk_link?: string;

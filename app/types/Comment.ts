@@ -10,7 +10,9 @@ export interface Comment {
   dislikes: number;
   date: string;
   is_edited: boolean;
-  is_liked_by_author: boolean;
+  liked_by_author: boolean;
   reply_to?: number;
   count_of_replies?: number;
+  forceRender?: boolean;
+  is_pinned: boolean;
 }
