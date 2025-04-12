@@ -1155,6 +1155,16 @@ const DjangoService = createApi({
             ]
           : [{ type: "Comment", id: "LIST" }],
     }),
+    readNotification: builder.mutation({
+      query: ({ pk }) => ({
+        url: `/notification/${pk}/is_read/`,
+      }),
+    }),
+    hideNotification: builder.mutation({
+      query: ({ pk }) => ({
+        url: `/notification/${pk}/hide/`,
+      }),
+    }),
   }),
 });
 

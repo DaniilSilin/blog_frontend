@@ -5,6 +5,8 @@ import Image from "next/image";
 import moment from "moment";
 import "moment/locale/ru";
 
+import { NotificationType } from "@/app/types";
+
 import { CiBellOn } from "react-icons/ci";
 
 import styles from "./header_notifications.module.css";
@@ -23,6 +25,14 @@ export default function HeaderNotifications() {
   const displayWindow = React.useCallback(() => {
     setDisplayNotificationListWindow(!displayNotificationListWindow);
   }, [displayNotificationListWindow, setDisplayNotificationListWindow]);
+
+  const [readNotification] = DjangoService.useReadNotificationMutation();
+
+  const readNotificationFunction = ({ pk }) => {
+    readNotification({ pk });
+  };
+
+  console.log(notificationList);
 
   return (
     <div onClick={displayWindow} className={styles.root}>
@@ -43,28 +53,39 @@ export default function HeaderNotifications() {
           </div>
           <div style={{ overflowY: "scroll" }}>
             {notificationList.results.map(
-              (notification: any, index: number) => (
-                <div key={index} className={styles.notificationContainer}>
+              (notification: NotificationType, index: number) => (
+                <div
+                  key={index}
+                  className={styles.notificationContainer}
+                  onClick={() => readNotificationFunction(notification.pk)}
+                >
                   <div
                     style={{
-                      width: "4px",
-                      height: "4px",
-                      borderRadius: "2px",
-                      margin: "22px 6px 0",
+                      display: "flex",
                     }}
-                  ></div>
-                  <div className={styles.avatarContainer}>
-                    <Image
-                      src={
-                        notification.addressee.avatar_small
-                          ? `${BASE_URL}${notification.addressee.avatar_small}`
-                          : "/img/default/avatar_default.jpg"
-                      }
-                      className={styles.avatar}
-                      width={40}
-                      height={40}
-                      alt={""}
-                    />
+                  >
+                    <div
+                      style={{
+                        width: "4px",
+                        height: "4px",
+                        borderRadius: "2px",
+                        backgroundColor: "blue",
+                        margin: "24px 5px",
+                      }}
+                    ></div>
+                    <div className={styles.avatarContainer}>
+                      <Image
+                        src={
+                          notification.addressee.avatar_small
+                            ? `${BASE_URL}${notification.addressee.avatar_small}`
+                            : "/img/default/avatar_default.jpg"
+                        }
+                        className={styles.avatar}
+                        width={48}
+                        height={48}
+                        alt={""}
+                      />
+                    </div>
                   </div>
                   <div>
                     <div className={styles.textContainer}>

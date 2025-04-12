@@ -16,7 +16,6 @@ export interface Post {
   blog: Blog;
   tags: Tag[];
   liked_users: User[];
-  pinned_comment: Comment;
   isBookmarked: boolean;
   commentCount: number;
   comments: number;
@@ -25,4 +24,8 @@ export interface Post {
   map: string;
   author_is_hidden: boolean;
   comments_allowed: boolean;
+  avatar: string;
+  avatar_small: string;
+  banner: string;
+  banner_small: string;
 }
