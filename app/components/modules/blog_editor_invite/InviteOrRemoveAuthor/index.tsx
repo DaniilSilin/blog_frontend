@@ -23,20 +23,32 @@ export default function InviteOrRemoveAuthor({ slug }: Props) {
   const [inviteToBlog] = DjangoService.useInviteUserToBlogMutation();
   const [kickAuthor] = DjangoService.useKickUserMutation();
 
-  const inviteToBlogOnClick = () => {
-    inviteToBlog({ addressee, description, blog: slug, admin: user?.id });
+  const inviteToBlogOnClick = async () => {
+    const result = await inviteToBlog({
+      addressee,
+      description,
+      blog: slug,
+      admin: user?.id,
+    });
+    if (!result.error) {
+      setDescription("");
+      setUsername("");
+      setAddressee("");
+    }
   };
 
+  const onClear = () => {};
+
   const kickAuthorHandleSubmit = () => {
-    kickAuthor({ slug: slug, username: kickAddressee });
+    kickAuthor({ slug, username: kickAddressee });
   };
 
   const { data: userList } = DjangoService.useGetUsersQuery({
     username: username,
-    slug: slug,
+    slug,
   });
   const { data: blogAuthors } = DjangoService.useBlogAuthorsQuery({
-    slug: slug,
+    slug,
     username: authorUsername,
   });
 
@@ -50,15 +62,15 @@ export default function InviteOrRemoveAuthor({ slug }: Props) {
             data={userList}
             setAddressee={setAddressee}
             setUsername={setUsername}
+            onClear={onClear}
           />
           <TextArea
             width={400}
             height={100}
             onChange={setDescription}
-            autoSize={false}
-            showCount={true}
             maxLength={300}
             label={"Текст приглашения"}
+            showCount
           />
           <button
             className={classNames(styles.inviteButton, {

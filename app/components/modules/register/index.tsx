@@ -1,6 +1,7 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 import { useRouter } from "next/router";
+import classNames from "classnames";
 
 import Input from "@/app/components/modules/form/Input";
 import YandexCaptcha from "../../../components/modules/form/YandexCaptcha";
@@ -15,7 +16,6 @@ import {
 
 import styles from "./register.module.css";
 
-const emailDescription = "Адрес вашей электронной почты.";
 const usernameDescription =
   "Минимальная длина: 3 символа. Ваше имя пользователя может содержать латинские буквы, цифры и знак нижнего подчёркивания.";
 const passwordDescription =
@@ -45,68 +45,59 @@ export default function Register() {
 
   const [token, setToken] = React.useState<string | undefined>("");
   const [registerUser] = DjangoService.useRegisterMutation();
+  const [readyToSubmit, setReadyToSubmit] = React.useState(false);
   const { data: isUsernameAvailable } =
-    DjangoService.useIsUsernameAvailableQuery({ username: username });
+    DjangoService.useIsUsernameAvailableQuery({ username });
 
   const formValidation = React.useCallback(() => {
-    let isValid = false;
+    let isValid = true;
 
-    if (firstNameValidator(firstName)) {
-      setFirstNameError(firstNameValidator(firstName));
-      isValid = false;
-    } else {
-      setFirstNameError("");
-      isValid = true;
-    }
+    const validators = [
+      {
+        validator: firstNameValidator,
+        value: firstName,
+        setError: setFirstNameError,
+      },
+      {
+        validator: lastNameValidator,
+        value: lastName,
+        setError: setLastNameError,
+      },
+      { validator: emailValidator, value: email, setError: setEmailError },
+      {
+        validator: (username) =>
+          usernameValidator(username, isUsernameAvailable),
+        value: username,
+        setError: setUsernameError,
+      },
+      {
+        validator: passwordValidator,
+        value: password,
+        setError: setPasswordError,
+      },
+      {
+        validator: (confirmPassword) =>
+          confirmPasswordValidator(password, confirmPassword),
+        value: confirmPassword,
+        setError: setConfirmPasswordError,
+      },
+    ];
 
-    if (lastNameValidator(lastName)) {
-      setLastNameError(lastNameValidator(lastName));
-      isValid = false;
-    } else {
-      setLastNameError("");
-      isValid = true;
-    }
-
-    if (emailValidator(email)) {
-      setEmailError(emailValidator(email));
-      isValid = false;
-    } else {
-      setEmailError("");
-      isValid = true;
-    }
-
-    if (usernameValidator(username, isUsernameAvailable)) {
-      setUsernameError(usernameValidator(username, isUsernameAvailable));
-      isValid = false;
-    } else {
-      setUsernameError("");
-      isValid = true;
-    }
-
-    if (passwordValidator(password)) {
-      isValid = false;
-      setPasswordError(passwordValidator(password));
-    } else {
-      setPasswordError("");
-      isValid = true;
+    for (const { validator, value, setError } of validators) {
+      const error = validator(value);
+      if (error) {
+        setError(error);
+        isValid = false;
+      } else {
+        setError("");
+      }
     }
 
     if (!token) {
-      isValid = false;
       setCaptchaError("Не пройдена капча");
-    } else {
-      setCaptchaError("Не пройдена капча");
-      isValid = true;
-    }
-
-    if (confirmPasswordValidator(password, confirmPassword)) {
-      setConfirmPasswordError(
-        confirmPasswordValidator(password, confirmPassword),
-      );
       isValid = false;
     } else {
-      setConfirmPasswordError("");
-      isValid = true;
+      setCaptchaError("");
     }
 
     return isValid;
@@ -133,16 +124,27 @@ export default function Register() {
     }
   }, [setFirstNameError, firstName]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     const isValid = formValidation();
     focusErrorInputOnHandleSubmit();
     if (isValid) {
-      const register = await registerUser({ email, username, password });
+      const register = await registerUser({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        username,
+        password,
+      });
+      if (!register.error) {
+        router.push("/login");
+      }
     }
   };
 
   React.useEffect(() => {
-    formValidation();
+    const submit = formValidation();
+    setReadyToSubmit(submit);
   }, [
     firstName,
     lastName,
@@ -151,82 +153,88 @@ export default function Register() {
     password,
     passwordConfirm,
     isUsernameAvailable,
+    setReadyToSubmit,
   ]);
 
   return (
     <div className={styles.root}>
-      <div className={styles.registerTitle}>Регистрация</div>
-      <div className={styles.formContainer}>
-        <Input
-          width={400}
-          height={40}
-          onChange={setFirstName}
-          label={"Имя"}
-          error={firstNameError}
-          value={firstName}
-          description={"Введите ваше имя."}
-          ref={firstNameRef}
-        />
-        <Input
-          width={400}
-          height={40}
-          onChange={setLastName}
-          label={"Фамилия"}
-          error={lastNameError}
-          value={lastName}
-          description={"Введите вашу фамилию."}
-        />
-        <Input
-          width={400}
-          height={40}
-          onChange={setEmail}
-          label={"E-mail"}
-          error={emailError}
-          value={email}
-          description={emailDescription}
-        />
-        <Input
-          width={400}
-          height={40}
-          onChange={setUsername}
-          label={"Имя пользователя"}
-          error={usernameError}
-          maxLength={15}
-          value={username}
-          description={usernameDescription}
-        />
-        <Input
-          width={400}
-          height={40}
-          onChange={setPassword}
-          label={"Пароль"}
-          isPassword={true}
-          error={passwordError}
-          value={password}
-          description={passwordDescription}
-        />
-        <Input
-          width={400}
-          height={40}
-          onChange={setConfirmPassword}
-          label={"Повторите пароль"}
-          isPassword={true}
-          error={confirmPasswordError}
-          description={passwordConfirm}
-          value={confirmPassword}
-        />
-        <YandexCaptcha
-          language={"ru"}
-          setToken={setToken}
-          error={captchaError}
-        />
-        <input
-          type="submit"
-          value={"Войти"}
-          onClick={handleSubmit}
-          className={styles.registerButton}
-        />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.registerTitle}>Регистрация</div>
+        <div className={styles.formContainer}>
+          <Input
+            width={400}
+            height={40}
+            onChange={setFirstName}
+            label={"Имя"}
+            error={firstNameError}
+            value={firstName}
+            description={"Введите ваше имя."}
+            ref={firstNameRef}
+          />
+          <Input
+            width={400}
+            height={40}
+            onChange={setLastName}
+            label={"Фамилия"}
+            error={lastNameError}
+            value={lastName}
+            description={"Введите вашу фамилию."}
+          />
+          <Input
+            width={400}
+            height={40}
+            onChange={setEmail}
+            label={"E-mail"}
+            error={emailError}
+            value={email}
+            description={"Адрес вашей электронной почты."}
+          />
+          <Input
+            width={400}
+            height={40}
+            onChange={setUsername}
+            label={"Имя пользователя"}
+            error={usernameError}
+            maxLength={15}
+            value={username}
+            description={usernameDescription}
+          />
+          <Input
+            width={400}
+            height={40}
+            onChange={setPassword}
+            label={"Пароль"}
+            isPassword={true}
+            error={passwordError}
+            value={password}
+            description={passwordDescription}
+          />
+          <Input
+            width={400}
+            height={40}
+            onChange={setConfirmPassword}
+            label={"Повторите пароль"}
+            isPassword={true}
+            error={confirmPasswordError}
+            description={passwordConfirm}
+            value={confirmPassword}
+          />
+          <YandexCaptcha
+            language={"ru"}
+            setToken={setToken}
+            error={captchaError}
+          />
+          <input
+            type="submit"
+            disabled={!readyToSubmit}
+            value={"Войти"}
+            onClick={handleSubmit}
+            className={classNames(styles.registerButton, {
+              [styles.active]: readyToSubmit,
+            })}
+          />
+        </div>
+      </form>
     </div>
   );
 }

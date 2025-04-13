@@ -157,7 +157,7 @@ export default function BlogItem({ slug, children }: Props) {
                 </div>
               </div>
               <div>
-                {/*<BlogActionMenu hasAccess={hasAccess} blogData={blogData} slug={slug} />*/}
+                <BlogActionMenu blog={blogData} slug={slug} />
               </div>
             </div>
           </div>

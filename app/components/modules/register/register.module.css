@@ -23,6 +23,11 @@
   height: 40px;
 }
 
-.registerButton:hover {
+.registerButton.active {
+  cursor: pointer;
+  background-color: #545491;
+}
+
+.registerButton.active:hover {
   cursor: pointer;
 }

@@ -51,28 +51,28 @@ export default function BlogPosts({ slug }) {
             cleanParams={cleanParams(router.query, page, slug)}
             slug={slug}
           />
-          {user.username === blog?.owner ||
-            (blog?.authors.find(
+          {(user.username === blog?.owner.username ||
+            blog.authors.find(
               (author) => author.username === user.username,
-            ) && (
-              <div>
-                <Link
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "30px",
-                    justifyContent: "center",
-                    border: "2px solid black",
-                    borderRadius: "15px",
-                    marginBottom: "10px",
-                  }}
-                  href={`/blog/${blog.slug}/post/create/`}
-                >
-                  <GoPlus />
-                  <div>Создать пост</div>
-                </Link>
-              </div>
-            ))}
+            )) && (
+            <div>
+              <Link
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "30px",
+                  justifyContent: "center",
+                  border: "2px solid black",
+                  borderRadius: "15px",
+                  marginBottom: "10px",
+                }}
+                href={`/blog/${blog.slug}/post/create/`}
+              >
+                <GoPlus />
+                <div>Создать пост</div>
+              </Link>
+            </div>
+          )}
           <div>
             {blogPosts?.results.map((post, index) => (
               <PostItem key={index} post={post} />

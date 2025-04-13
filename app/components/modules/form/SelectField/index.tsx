@@ -7,6 +7,7 @@ export interface Props {
   data: any;
   setAddressee: (value: string) => void;
   setUsername: (value: string) => void;
+  onClear: any;
 }
 
 import styles from "./SelectField.module.css";
@@ -18,6 +19,7 @@ export default function SelectField({
   data,
   setAddressee,
   setUsername,
+  onClear,
 }: Props) {
   const searchUserByUsername = React.useCallback(
     (value: string) => {
@@ -25,6 +27,10 @@ export default function SelectField({
     },
     [setUsername],
   );
+
+  const clearUser = React.useCallback(() => {
+    setAddressee("");
+  }, []);
 
   const selectUser = React.useCallback(
     (value: any) => {
@@ -44,6 +50,8 @@ export default function SelectField({
         placeholder="Выберите пользователя"
         onSelect={selectUser}
         options={data}
+        allowClear={true}
+        onClear={clearUser}
         optionRender={(option) => (
           <Space>
             <span role="img" aria-label={option.data.username}>

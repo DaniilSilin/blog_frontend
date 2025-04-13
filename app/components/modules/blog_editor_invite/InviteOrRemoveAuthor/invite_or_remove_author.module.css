@@ -15,29 +15,39 @@
 }
 
 .inviteButton {
-  padding: 10px;
+  padding: 7px 15px;
   background-color: #363636;
   color: #6e6e6e;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: default;
 }
 
 .inviteButton.active {
   color: white;
   background-color: #363636;
+}
+
+.inviteButton.active:hover {
+  background-color: #515151;
   cursor: pointer;
 }
 
 .kickButton {
-  padding: 10px;
+  margin-top: 10px;
+  padding: 7px 15px;
   background-color: #363636;
   color: #6e6e6e;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: default;
 }
 
 .kickButton.active {
   color: white;
   background-color: #363636;
+}
+
+.kickButton.active:hover {
+  color: white;
+  background-color: #4e4d4d;
   cursor: pointer;
 }

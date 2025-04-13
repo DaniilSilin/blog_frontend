@@ -12,9 +12,9 @@ export interface Props {
   error?: string | undefined;
   placeholder?: string;
   defaultValue?: string;
-  autoSize: boolean;
+  autoSize?: boolean;
   maxLength?: number;
-  showCount: boolean;
+  showCount?: boolean;
   value?: string;
 }
 
@@ -50,6 +50,10 @@ export default function TextArea({
     setWasFocusedOnce(true);
   }, [setWasFocusedOnce, setInputIsFocused]);
 
+  const handleClear = React.useCallback(() => {
+    onChange("");
+  }, [onChange]);
+
   return (
     <div>
       <Field label={label} error={error}>
@@ -62,6 +66,7 @@ export default function TextArea({
           showCount={showCount}
           onBlur={handleBlur}
           onFocus={handleFocus}
+          onClear={handleClear}
           value={value}
           style={{
             display: "block",

@@ -1,5 +1,9 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
+import Image from "next/image";
+import moment from "moment";
+import "moment/locale/ru";
+
 import { IoSettingsOutline } from "react-icons/io5";
 
 export interface Props {
@@ -30,7 +34,7 @@ export default function AuthorBlogList({ blog }: Props) {
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img
+        <Image
           src={`${BASE_URL}${blog.avatar_small}`}
           alt={""}
           width={"60"}
@@ -50,7 +54,9 @@ export default function AuthorBlogList({ blog }: Props) {
       </div>
       <div>
         <div>Создатель блога: {blog.owner.username}</div>
-        <div>Дата создания: {blog.created_at}</div>
+        <div>
+          Дата создания: {moment(blog?.created_at).format("D MMMM YYYY")}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import moment from "moment";
+import "moment/locale/ru";
 
 import styles from "./invitation_list.module.css";
 
@@ -35,10 +37,11 @@ export default function InvitationList({ invite }: Props) {
           <div>{invite.addressee}</div>
         </Link>
       </div>
-      <div>Дата создания: {invite.created_at}</div>
-      <div>Статус:</div>
-      <div>{inviteStatus}</div>
-      <div>Текст сообщения {invite.description}</div>
+      <div>
+        Дата создания: {moment(invite.created_at).format("D MMMM hh:mm")}
+      </div>
+      <div>Текст сообщения: {invite.description}</div>
+      <div>Статус: {inviteStatus}</div>
     </div>
   );
 }

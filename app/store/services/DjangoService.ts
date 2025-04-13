@@ -12,7 +12,7 @@ const API_URL = "http://127.0.0.1:3001/api/v1/";
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
-  tagTypes: ["Comment", "Post", "Blog"],
+  tagTypes: ["Comment", "Post", "Blog", "Invite"],
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
@@ -116,10 +116,10 @@ const DjangoService = createApi({
           : [{ type: "Post", id: "LIST" }],
     }),
     register: builder.mutation({
-      query: ({ email, username, password }) => ({
+      query: ({ first_name, last_name, email, username, password }) => ({
         url: "register/",
         method: "POST",
-        body: { email, username, password },
+        body: { first_name, last_name, email, username, password },
       }),
     }),
     getLogin: builder.mutation<Login, { username: string; password: string }>({
@@ -275,18 +275,100 @@ const DjangoService = createApi({
         method: "POST",
         body: { pk },
       }),
-    }),
-    getInviteList: builder.query({
-      query: () => ({
-        url: `invite/list/`,
-      }),
+      async onQueryStarted({ pk }, { dispatch, queryFulfilled, getState }) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Invite", id: pk },
+        ])) {
+          if (!["getInviteList"].includes(endpointName)) continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const invite = draft.results.find((invite) => invite.pk === pk);
+                if (invite) {
+                  invite.status = true;
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     rejectInvite: builder.mutation({
       query: ({ pk }) => ({
-        url: `invite/${pk}/accept/`,
+        url: `invite/${pk}/reject/`,
         method: "POST",
         body: { pk },
       }),
+      async onQueryStarted({ pk }, { dispatch, queryFulfilled, getState }) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Invite", id: pk },
+        ])) {
+          if (!["getInviteList"].includes(endpointName)) continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const invite = draft.results.find((invite) => invite.pk === pk);
+                if (invite) {
+                  invite.status = false;
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
+    }),
+    getInviteList: builder.query({
+      query: ({ page }) => ({
+        url: `invite/list/`,
+        params: {
+          page: page || undefined,
+        },
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ pk }) => ({
+                type: "Invite" as const,
+                id: pk,
+              })),
+              { type: "Invite", id: "LIST" },
+            ]
+          : [{ type: "Invite", id: "LIST" }],
     }),
     createComment: builder.mutation({
       query: ({ slug, post_id, reply_to, body }) => ({
@@ -729,9 +811,29 @@ const DjangoService = createApi({
       }),
     }),
     blogInvitations: builder.query({
-      query: ({ slug }) => ({
+      query: ({ slug, page }) => ({
         url: `blog/${slug}/invitations/`,
+        params: {
+          page: page || undefined,
+        },
       }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
     }),
     blogComments: builder.query({
       query: ({ slug, page, search_query, sort_by, parent_id }) => ({

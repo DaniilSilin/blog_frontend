@@ -1,4 +1,4 @@
-const passwordRegex = new RegExp("^(?=.*[a-zA-Z])(?=.*d).{5,}$\n");
+const passwordRegex = new RegExp("[a-zA-Z0-9_]{3,15}");
 
 const passwordValidator = (password: string) => {
   if (!password) {

@@ -21,4 +21,7 @@ export const getServerSideProps = serverSideResolverWrapper(
       props: {},
     };
   },
+  (results) => {
+    return !!results.getInviteList.isError;
+  },
 );
