@@ -19,3 +19,27 @@
   font-size: 32px;
   font-weight: 600;
 }
+
+.profileInformationMain {
+  margin-top: 25px;
+  margin-left: 15px;
+}
+
+.detailsButton {
+  display: flex;
+}
+
+.detailsButton:hover {
+  text-decoration: underline;
+}
+
+.editProfileButton {
+  background-color: #000000;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: white !important;
+}
+
+.editProfileButton:hover {
+  background-color: #232323;
+}

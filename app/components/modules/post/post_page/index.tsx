@@ -1,10 +1,7 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 import { useAppSelector } from "@/app/store";
-import Image from "next/image";
 import Link from "next/link";
-import moment from "moment";
-import "moment/locale/ru";
 
 import {
   AiFillLike,
@@ -24,11 +21,9 @@ import styles from "./post_page.module.css";
 import CommentList from "../../CommentList";
 import BlogCommentList from "@/app/components/modules/blog_editor_community/CommentList";
 import ShareMenu from "@/app/components/modules/post_page/PostFooter/ShareMenu";
-
-const BASE_URL = "http://127.0.0.1:8000";
+import PostHeader from "./PostHeader";
 
 export default function PostPage({ slug, post_id }) {
-  const subscribeRef = React.useRef(null);
   const likeRef = React.useRef(null);
   const dislikeRef = React.useRef(null);
   const bookmarkRef = React.useRef(null);
@@ -37,8 +32,6 @@ export default function PostPage({ slug, post_id }) {
   const [sortBy, setSortBy] = React.useState<string>("newest");
   const [tags, setTags] = React.useState([]);
 
-  const [displaySubscribePopup, setDisplaySubscribePopup] =
-    React.useState(false);
   const [displayLikePopup, setDisplayLikePopup] = React.useState(false);
   const [displayDislikePopup, setDisplayDislikePopup] = React.useState(false);
   const [displayBookmarkPopup, setDisplayBookmarkPopup] = React.useState(false);
@@ -50,7 +43,6 @@ export default function PostPage({ slug, post_id }) {
 
   const [setOrRemoveLike] = DjangoService.useSetOrRemoveLikeMutation();
   const [setOrRemoveDislike] = DjangoService.useSetOrRemoveDislikeMutation();
-  const [blogSubscription] = DjangoService.useBlogSubscriptionMutation();
   const [addOrRemoveBookmark] = DjangoService.useAddOrRemoveBookmarkMutation();
 
   const addOrRemoveBookmarksFunction = async () => {
@@ -74,22 +66,11 @@ export default function PostPage({ slug, post_id }) {
     }
   };
 
-  const toggleBlogSubscription = async () => {
-    const result = await blogSubscription({ slug });
-    if (!result.error && result.data.status !== "unsuccessful") {
-      refetchPost();
-    }
-  };
-
   React.useEffect(() => {
     if (postData?.tags) {
       setTags(postData?.tags.split(" "));
     }
   }, [postData]);
-
-  const handleShowSubscribePopup = React.useCallback(() => {
-    setDisplaySubscribePopup(!displaySubscribePopup);
-  }, [setDisplaySubscribePopup, displaySubscribePopup]);
 
   const handleShowLikePopup = React.useCallback(() => {
     setDisplayLikePopup(!displayLikePopup);
@@ -133,25 +114,6 @@ export default function PostPage({ slug, post_id }) {
     return () => document.removeEventListener("mousedown", handleMouse);
   });
 
-  const subscribersCount = React.useMemo(() => {
-    const subscribers = postData?.subscribers.toString() || "0";
-
-    if (subscribers.slice(-1) === "1" && subscribers.slice(-2) !== "11") {
-      return `${subscribers} подписчик`;
-    } else if (
-      (subscribers.slice(-1) === "2" ||
-        subscribers.slice(-1) === "3" ||
-        subscribers.slice(-1) === "4") &&
-      subscribers.slice(-2) !== "12" &&
-      subscribers.slice(-2) !== "13" &&
-      subscribers.slice(-2) !== "14"
-    ) {
-      return `${subscribers} подписчика`;
-    } else {
-      return `${subscribers} подписчиков`;
-    }
-  }, [postData?.subscribers]);
-
   const commentsCount = React.useMemo(() => {
     const commentCount = postData?.commentCount.toString() || "0";
 
@@ -173,91 +135,7 @@ export default function PostPage({ slug, post_id }) {
 
   return (
     <div>
-      <div className={styles.contentPublishedInformationBlock}>
-        <div className={styles.postHeaderInformation}>
-          <Link href={`/blog/${slug}/`}>
-            <Image
-              src={
-                postData?.blog.avatar_small
-                  ? `${BASE_URL}${postData?.blog.avatar_small}`
-                  : "/img/default/avatar_default.jpg"
-              }
-              className={styles.blogAvatar}
-              alt={""}
-              width={60}
-              height={60}
-            />
-          </Link>
-          <div className={styles.contentPublisher}>
-            <Link href={`/blog/${slug}/`}>
-              <div
-                className={styles.channelName}
-                title={`${postData?.blog.title}`}
-              >
-                {postData?.blog.title}
-              </div>
-            </Link>
-            <div>{subscribersCount}</div>
-          </div>
-        </div>
-        <div className={styles.subscribeBlock}>
-          {!user?.isGuest ? (
-            <>
-              {postData?.isSubscribed.toString() === "true" ? (
-                <button
-                  onClick={toggleBlogSubscription}
-                  className={styles.subscribeButton}
-                >
-                  Отписаться
-                </button>
-              ) : (
-                <button
-                  onClick={toggleBlogSubscription}
-                  className={styles.unsubscribeButton}
-                >
-                  Подписаться
-                </button>
-              )}
-            </>
-          ) : (
-            <>
-              <div ref={subscribeRef}>
-                <button
-                  onClick={handleShowSubscribePopup}
-                  className={styles.unsubscribeButton}
-                >
-                  Подписаться
-                </button>
-                {displaySubscribePopup && (
-                  <NoUserPopup
-                    title={"Хотите подписаться на этот канал?"}
-                    description={"Войдите, чтобы подписаться на этот канал"}
-                    redirectTo={`/blog/${slug}/post/${post_id}`}
-                  />
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-      <div>
-        <div className={styles.postTitle} title={`${postData?.title}`}>
-          {postData?.title}
-        </div>
-        <div className={styles.postInformation}>
-          {postData?.author_is_hidden.toString() === "false" ? (
-            <>
-              <Link href={`/profile/${postData?.author.username}/`}>
-                <div>{postData?.author.username}</div>
-              </Link>
-              <div className={styles.delimiter}>·</div>
-            </>
-          ) : null}
-          <div>{moment(postData?.created_at).format("D MMMM hh:mm")}</div>
-          <div className={styles.delimiter}>·</div>
-          <div>{postData?.views} просмотров</div>
-        </div>
-      </div>
+      <PostHeader post={postData} slug={slug} post_id={post_id} />
       <div style={{ margin: "15px 0", overflowWrap: "break-word" }}>
         {postData?.body}
       </div>

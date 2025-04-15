@@ -1209,10 +1209,28 @@ const DjangoService = createApi({
       }),
     }),
     updatePost: builder.mutation({
-      query: ({ slug, post_id, formData }) => ({
+      query: ({
+        slug,
+        post_id,
+        title,
+        body,
+        map,
+        tags,
+        is_published,
+        author_is_hidden,
+        comments_allowed,
+      }) => ({
         url: `/blog/${slug}/post/${post_id}/`,
         method: "PUT",
-        body: formData,
+        body: {
+          title,
+          body,
+          map,
+          tags,
+          is_published,
+          author_is_hidden,
+          comments_allowed,
+        },
       }),
     }),
     notificationList: builder.query({

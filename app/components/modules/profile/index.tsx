@@ -1,13 +1,16 @@
 import React from "react";
 import DjangoService from "../../../store/services/DjangoService";
 import { useAppSelector } from "@/app/store";
+import Link from "next/link";
+import Image from "next/image";
+import moment from "moment";
+import "moment/locale/ru";
 
 import { UserProfile } from "@/app/types";
-import ProfileHeader from "./ProfileHeader";
 
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import ProfileDetails from "@/app/components/modules/profile/ProfileHeader/ProfileDetails";
-import Image from "next/image";
+import ProfileSider from "@/app/components/modules/profile/ProfileSider";
 
 import styles from "./profile.module.css";
 
@@ -22,6 +25,7 @@ export default function Profile({ username }) {
   const details = React.useCallback(
     (e: any) => {
       let elem = e.target;
+      console.log(elem);
       if (displayModal) {
         if (elem.className === "modal_3") {
           elem.style.display = "none";
@@ -29,8 +33,9 @@ export default function Profile({ username }) {
         }
       } else {
         let modalNode = null;
-        if (elem.className.startsWith("ProfileHeader_details")) {
-          modalNode = elem.parentNode.nextSibling;
+        if (elem.className.startsWith("profile_detailsB")) {
+          modalNode = elem.nextSibling;
+          console.log(modalNode);
           modalNode.style.display = "block";
           setDisplayModal(true);
         }
@@ -71,18 +76,40 @@ export default function Profile({ username }) {
             alt={""}
           />
         </div>
-        <div>
-          <div className={styles.username}>{user.username}</div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <div className={styles.profileInformationMain}>
+            <div className={styles.username}>{user.username}</div>
+            <button className={styles.detailsButton} onClick={details}>
+              <IoIosInformationCircleOutline size={20} />
+              Подробнее
+            </button>
+            <div className={"modal_3"}>
+              <div className={"modalContent_3"}>
+                <ProfileDetails />
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: "40px", marginRight: "150px" }}>
+            {(user.username === _user.username || user.is_admin) && (
+              <Link href={`/profile/${user.username}/edit/`}>
+                <button className={styles.editProfileButton}>
+                  Редактировать профиль
+                </button>
+              </Link>
+            )}
+          </div>
         </div>
-        {/*<div className={styles.profileInformationMain}>*/}
-        {/*  <div className={styles.username}>{user.username}</div>*/}
-        {/*  <div style={{ display: 'flex' }} onClick={details}>*/}
-        {/*  <IoIosInformationCircleOutline size={20}/>*/}
-        {/*    <div className={styles.details}>Подробнее</div>*/}
-        {/*  </div>*/}
-        {/*  <ProfileDetails />*/}
-        {/*</div>*/}
       </div>
+      {/*<div style={{ display: "flex" }}>*/}
+      {/*  <div style={{ width: "70%" }}>123123</div>*/}
+      {/*  <ProfileSider user={user} />*/}
+      {/*</div>*/}
     </div>
   );
 }

@@ -14,8 +14,8 @@ export default function ProfileDetails() {
   const user = useAppSelector((state) => state.django.profile);
 
   return (
-    <div className="modal_3">
-      <div className="modalContent_3">
+    <div>
+      <div>
         <div className={styles.modalHeader}>Подробная информация</div>
         <div className={styles.divider}></div>
         <div className={styles.modalContent}>

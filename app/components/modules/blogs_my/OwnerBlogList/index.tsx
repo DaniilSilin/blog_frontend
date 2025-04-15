@@ -6,15 +6,22 @@ import Image from "next/image";
 import moment from "moment";
 import "moment/locale/ru";
 
+import styles from "./my_blog_list.module.css";
+
 export interface Props {
   blog: any;
+  owner?: boolean;
 }
 
 const BASE_URL = "http://127.0.0.1:8000/";
 
-export default function OwnerBlogList({ blog }: Props) {
+const OwnerBlogList = React.forwardRef(function OwnerBlogList(
+  { blog, owner }: Props,
+  ref,
+) {
   const [showBlogActionsMenu, setShowBlogActionsMenu] = React.useState(false);
   const [deleteBlog] = DjangoService.useDeleteBlogMutation();
+  const [leaveBlog] = DjangoService.useLeaveBlogMutation();
   const showBlogActionsMenuHandleFunction = React.useCallback(() => {
     setShowBlogActionsMenu(!showBlogActionsMenu);
   }, [showBlogActionsMenu, setShowBlogActionsMenu]);
@@ -23,16 +30,24 @@ export default function OwnerBlogList({ blog }: Props) {
     deleteBlog({ slug: blog.slug });
   };
 
+  const leaveBlogFunction = () => {
+    leaveBlog({ slug: blog.slug });
+  };
+
+  React.useEffect(() => {
+    if (showBlogActionsMenu) {
+      const handleMouse = (e: MouseEvent) => {
+        if (!ref.current.contains(e.target)) {
+          setShowBlogActionsMenu(false);
+        }
+      };
+      document.addEventListener("mousedown", handleMouse);
+      return () => document.removeEventListener("mousedown", handleMouse);
+    }
+  }, [showBlogActionsMenu]);
+
   return (
-    <div
-      style={{
-        border: "1px solid black",
-        padding: "10px",
-        borderRadius: "10px",
-        marginRight: "10px",
-        marginBottom: "10px",
-      }}
-    >
+    <div className={styles.root}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Link href={`/blog/${blog.slug}/`}>
           <Image
@@ -44,33 +59,91 @@ export default function OwnerBlogList({ blog }: Props) {
             alt={""}
             width={"60"}
             height={"60"}
-            style={{ borderRadius: "50%" }}
+            className={styles.avatar}
           />
         </Link>
         <Link href={`/blog/${blog.slug}/`}>
-          <div style={{ fontSize: "24px", marginLeft: "10px" }}>
+          <div style={{ fontSize: "24px", margin: "0 10px" }}>
             {blog?.title}
           </div>
         </Link>
         <IoSettingsOutline
           size={24}
           onClick={showBlogActionsMenuHandleFunction}
+          style={{ marginTop: "5px", cursor: "pointer" }}
         />
-        {showBlogActionsMenu && (
-          <div style={{ position: "absolute" }}>
-            <div>
-              <Link href={`/blog/${blog.slug}/editor/settings/`}>
-                Настройки
-              </Link>
-            </div>
-          </div>
+        {owner ? (
+          <>
+            {showBlogActionsMenu && (
+              <div
+                ref={ref}
+                className={styles.blogMenu}
+                onClick={() => setShowBlogActionsMenu(false)}
+              >
+                <div>
+                  <Link
+                    className={styles.blogMenuItem}
+                    href={`/blog/${blog.slug}/editor/settings/`}
+                  >
+                    Настройки
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className={styles.blogMenuItem}
+                    href={`/blog/${blog.slug}/post/create/`}
+                  >
+                    Создать публикацию
+                  </Link>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {showBlogActionsMenu && (
+              <div
+                ref={ref}
+                className={styles.blogMenu}
+                onClick={() => setShowBlogActionsMenu(false)}
+              >
+                <div className={styles.blogMenuItem} onClick={deleteChosenBlog}>
+                  Покинуть блог
+                </div>
+                <div>
+                  <Link
+                    className={styles.blogMenuItem}
+                    href={`/blog/${blog.slug}/post/create/`}
+                  >
+                    Создать публикацию
+                  </Link>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
-      <div>
+      {owner ? (
         <div>
-          Дата создания: {moment(blog?.created_at).format("D MMMM YYYY hh:mm")}
+          <div>
+            Автор блога:&nbsp;
+            <Link
+              href={`/profile/${blog.owner.username}/`}
+            >{`${blog.owner.username}`}</Link>
+          </div>
+          <div>
+            Дата создания: {moment(blog?.created_at).format("D MMMM YYYY")}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <div>
+            Дата создания: {moment(blog?.created_at).format("D MMMM YYYY")}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+});
+
+export default OwnerBlogList;
