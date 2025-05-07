@@ -1,80 +1,40 @@
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { FormEvent } from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import { useRouter } from "next/router";
-import { PlusOutlined } from "@ant-design/icons/lib";
-import type { InputRef } from "antd/lib";
-import { Input, Tag, theme } from "antd/lib";
-import TweenOne from "rc-tween-one/lib/TweenOne";
-import { IoReturnDownBack } from "react-icons/io5";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import classNames from "classnames";
+
+import { IoReturnDownBack } from "react-icons/io5";
 import {
   titleValidator,
   bodyValidator,
   mapValidator,
 } from "../form/validators";
-import classNames from "classnames";
 import {
   Map,
   PostDataInput,
   PostDataTextArea,
 } from "../../../components/modules/form";
 
+import MapContainer from "@/app/components/modules/post_create/MapContainer";
+import Tags from "@/app/components/modules/post_create/Tags";
+
 import styles from "./PostCreate.module.css";
+import CheckboxContainer from "@/app/components/modules/post_create/CheckboxContainer";
 
 export default function PostCreate({ slug }) {
   const router = useRouter();
   const [displayMapInput, setDisplayMapInput] = React.useState(false);
-  const { token } = theme.useToken();
-  const [inputVisible, setInputVisible] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
-  const inputRef = React.useRef<InputRef>(null);
-
-  const handleClose = (removedTag: string) => {
-    const newTags = tags.filter((tag) => tag !== removedTag);
-    setTags(newTags);
-  };
-
-  const showInput = () => {
-    setInputVisible(true);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      setTags([...tags, `#${inputValue}`]);
-    }
-    setInputVisible(false);
-    setInputValue("");
-  };
-
-  const forMap = (tag: string) => (
-    <span key={tag} style={{ display: "inline-block" }}>
-      <Tag
-        closable
-        onClose={(e) => {
-          e.preventDefault();
-          handleClose(tag);
-        }}
-      >
-        {tag}
-      </Tag>
-    </span>
-  );
-
-  const tagPlusStyle: React.CSSProperties = {
-    background: token.colorBgContainer,
-    borderStyle: "dashed",
-  };
 
   const [title, setTitle] = React.useState<string>("");
   const [body, setBody] = React.useState<string>("");
+  const [mapType, setMapType] = React.useState<string>("");
   const [map, setMap] = React.useState<string>("");
-  const [isPublished, setIsPublished] = React.useState<boolean>(false);
   const [tags, setTags] = React.useState([]);
-  const tagChild = tags.map(forMap);
+  const [isPublished, setIsPublished] = React.useState<boolean>(false);
+  const [authorIsHidden, setAuthorIsHidden] = React.useState<boolean>(false);
+  const [commentsAllowed, setCommentsAllowed] = React.useState<boolean>(false);
+
   const [availableToSubmit, setAvailableToSubmit] = React.useState(false);
 
   const [createPost] = DjangoService.useCreatePostMutation();
@@ -82,19 +42,6 @@ export default function PostCreate({ slug }) {
   const [titleError, setTitleError] = React.useState<string>("");
   const [bodyError, setBodyError] = React.useState<string>("");
   const [mapError, setMapError] = React.useState<string>("");
-
-  const handleChangeCheckbox = React.useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setIsPublished(e.target.checked);
-    },
-    [],
-  );
-
-  React.useEffect(() => {
-    if (inputVisible) {
-      inputRef.current?.focus();
-    }
-  }, [inputVisible]);
 
   const formValidation = React.useCallback(() => {
     let isValid;
@@ -140,8 +87,11 @@ export default function PostCreate({ slug }) {
     const result = await createPost({
       title,
       body,
+      map_type: mapType,
       map,
       is_published: isPublished,
+      comments_allowed: commentsAllowed,
+      author_is_hidden: authorIsHidden,
       blog: slug,
       tags: tags.join(" "),
     });
@@ -162,12 +112,10 @@ export default function PostCreate({ slug }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <Link href={`/blog/${slug}/`} className={styles.returnToBlog}>
-            <IoReturnDownBack />
-            <div>Вернуться на страницу блога</div>
-          </Link>
-        </div>
+        <Link href={`/blog/${slug}/`} className={styles.returnToBlog}>
+          <IoReturnDownBack />
+          <div>Вернуться на страницу блога</div>
+        </Link>
         <h1>Создать публикацию</h1>
         <PostDataInput
           width={400}
@@ -192,64 +140,27 @@ export default function PostCreate({ slug }) {
           Хотите вставить карту?
         </div>
         {displayMapInput && (
-          <>
-            <Map
-              width={400}
-              height={120}
-              onChange={setMap}
-              label={"Вставьте ссылку на карту"}
-              error={mapError}
-              defaultValue={map}
-              value={map}
-            />
-            <div>
-              <a href={`https://yandex.ru/map-constructor/`} target={"_blank"}>
-                Вставьте карту через сервис Яндекса
-              </a>
-            </div>
-          </>
+          <MapContainer
+            map={map}
+            setMap={setMap}
+            mapError={mapError}
+            mapType={mapType}
+            setMapType={setMapType}
+          />
         )}
-        <div className={styles.tagListContainer}>
-          <TweenOne
-            style={{ marginBottom: "10px" }}
-            appear={false}
-            enter={{ scale: 0.8, opacity: 0, type: "from", duration: 100 }}
-            leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-            onEnd={(e) => {
-              if (e.type === "appear" || e.type === "enter") {
-                (e.target as any).style = "display: inline-block";
-              }
-            }}
-          >
-            {tagChild}
-          </TweenOne>
-          {inputVisible ? (
-            <Input
-              ref={inputRef}
-              type="text"
-              size="small"
-              style={{ width: 78 }}
-              value={inputValue}
-              onChange={handleInputChange}
-              onBlur={handleInputConfirm}
-              onPressEnter={handleInputConfirm}
-            />
-          ) : (
-            <Tag onClick={showInput} style={tagPlusStyle}>
-              <PlusOutlined /> Новый тэг
-            </Tag>
-          )}
-        </div>
-        <div style={{ margin: "10px 0", cursor: "pointer" }}>
-          <label style={{ cursor: "pointer" }}>
-            <input
-              type={"checkbox"}
-              style={{ marginRight: "5px", cursor: "pointer" }}
-              onChange={handleChangeCheckbox}
-            />
-            Опубликовать
-          </label>
-        </div>
+        <Tags tags={tags} setTags={setTags} />
+        <CheckboxContainer
+          onChange={setIsPublished}
+          title={"Опубликовать сразу"}
+        />
+        <CheckboxContainer
+          onChange={setCommentsAllowed}
+          title={"Отключить комментарии"}
+        />
+        <CheckboxContainer
+          onChange={setAuthorIsHidden}
+          title={"Скрыть автора"}
+        />
         <button
           className={classNames(styles.submitButton, {
             [styles.active]: availableToSubmit,

@@ -1,0 +1,63 @@
+.likedAndDislikeContainer {
+  display: flex;
+}
+
+.likeContainer {
+  display: flex;
+  height: 48px;
+  width: 75px;
+  padding: 0 16px;
+  background-color: #272727;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.likeButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.likeIconLiked {
+  color: white;
+  margin-right: 6px;
+}
+
+.likeIconNotLiked {
+  color: white;
+  margin-right: 6px;
+}
+
+.likeCounter {
+  color: white;
+}
+
+.dislikeContainer {
+  display: flex;
+  background-color: #272727;
+  width: 75px;
+  padding: 0 16px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  align-items: center;
+}
+
+.dislikeButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.dislikeIconLiked {
+  color: white;
+  margin-right: 6px;
+}
+
+.dislikeIconNotLiked {
+  color: white;
+  margin-right: 6px;
+}
+
+.dislikeCounter {
+  color: white;
+}

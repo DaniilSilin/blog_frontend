@@ -1,0 +1,73 @@
+@keyframes animationAppear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 100%;
+  }
+}
+  
+@keyframes animationDisappear {
+  from {
+    opacity: 100%;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.notification {
+  display: flex;
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  background-color: #343639;
+  color: white;
+  border-radius: 10px;
+  justify-content: space-between;
+  height: 38px;
+  width: 300px;
+  align-items: center;
+  padding: 0 20px;
+  animation: animationAppear 1s ease-out forwards;
+}
+
+.notification.close {
+  animation: animationDisappear 1s ease-out forwards;
+}
+
+.close {}
+
+.close:hover {
+  color: #c5c3c3;
+}
+
+.dataSentSuccessfullyNotification {
+  font-weight: 600;
+  display: flex;
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  padding: 8px 12px;
+  background-color: #343639;
+  border-radius: 10px;
+  color: #fff;
+  height: 48px;
+  margin: 0;
+  font-size: 15px;
+  align-items: center;
+}
+
+.blogLink {
+  margin-left: 10px;
+  font-weight: 600;
+  padding: 5px 13px;
+  color: #065fd4;
+  border-radius: 12px;
+}
+
+.blogLink:hover {
+  background-color: #57aef8;
+}

@@ -7,6 +7,8 @@ import moment from "moment";
 import "moment/locale/ru";
 import classNames from "classnames";
 
+import { PostType, CommentType } from "@/app/types";
+
 import {
   AiFillLike,
   AiFillDislike,
@@ -27,12 +29,12 @@ import styles from "./commentary.module.css";
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
 
 export interface Props {
-  comment: any;
+  comment: CommentType;
   slug: string;
   post_id: number;
   width: number;
   height: number;
-  postData: any;
+  post: PostType;
   isReplyToParentComment?: boolean;
   isParent?: boolean;
 }
@@ -45,7 +47,7 @@ export default function Commentary({
   comment,
   width,
   height,
-  postData,
+  post,
   isReplyToParentComment,
   isParent,
 }: Props) {
@@ -199,7 +201,7 @@ export default function Commentary({
             <div className={styles.commentContainer}>123</div>
           ) : (
             <div className={styles.commentContainer}>
-              <div style={{ width: "1000px" }}>
+              <div style={{ width: "inherit" }}>
                 <div className={styles.commentHeader}>
                   {comment.is_pinned && (
                     <div
@@ -218,8 +220,7 @@ export default function Commentary({
                   )}
                   <div style={{ display: "flex" }}>
                     <Link href={`/profile/${comment.author.username}/`}>
-                      {postData?.author.username ===
-                      comment?.author.username ? (
+                      {post?.author.username === comment?.author.username ? (
                         <div className={styles.commentAuthorIsPostAuthor}>
                           {comment?.author.username}
                         </div>
@@ -390,8 +391,7 @@ export default function Commentary({
                       </div>
                     </div>
                   )}
-                  {!user.isGuest &&
-                  user?.username === postData?.author.username ? (
+                  {!user.isGuest && user?.username === post?.author.username ? (
                     <div className={styles.likedByAuthorContainer}>
                       {comment?.liked_by_author ? (
                         <button
@@ -401,8 +401,8 @@ export default function Commentary({
                         >
                           <Image
                             src={
-                              postData?.author.avatar_small
-                                ? `${BASE_URL}${postData?.author.avatar_small}`
+                              post?.author.avatar_small
+                                ? `${BASE_URL}${post?.author.avatar_small}`
                                 : "/img/default/avatar_default.jpg"
                             }
                             className={styles.likedByAuthorAvatar}
@@ -431,12 +431,12 @@ export default function Commentary({
                       {comment?.liked_by_author.toString() === "true" && (
                         <div
                           className={styles.likedByAuthorContainer}
-                          title={`❤️ от автора поста "${postData?.author.username}"`}
+                          title={`❤️ от автора поста "${post?.author.username}"`}
                         >
                           <Image
                             src={
-                              postData?.author.avatar_small
-                                ? `${BASE_URL}${postData?.author.avatar_small}`
+                              post?.author.avatar_small
+                                ? `${BASE_URL}${post?.author.avatar_small}`
                                 : "/img/default/avatar_default.jpg"
                             }
                             className={styles.likedByAuthorAvatar}
@@ -506,7 +506,7 @@ export default function Commentary({
                         comment={comment}
                         slug={slug}
                         post_id={post_id}
-                        postData={postData}
+                        postData={post}
                         setEditMode={setEditMode}
                         isParent={isParent}
                       />

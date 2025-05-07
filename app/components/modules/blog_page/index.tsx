@@ -7,7 +7,6 @@ import Link from "next/link";
 import classNames from "classnames";
 
 import AdditionalBlogInformation from "./AdditionalBlogInformation";
-import PostItem from "@/app/components/modules/post_page";
 import BlogActionMenu from "./BlogActionMenu";
 import createBlogMenu from "./constants";
 
@@ -28,11 +27,11 @@ export default function BlogItem({ slug, children }: Props) {
   const [dynamicContentModalDisplayed, setDynamicContentModalDisplayed] =
     React.useState(false);
   const freezeBody = React.useCallback(
-    () => document.querySelector("body")?.classList.add("freeze"),
+    () => document.querySelector(".modal_3")?.classList.add("freeze"),
     [],
   );
   const unfreezeBody = React.useCallback(
-    () => document.querySelector("body")?.classList.remove("freeze"),
+    () => document.querySelector(".modal_3")?.classList.remove("freeze"),
     [],
   );
 
@@ -113,8 +112,8 @@ export default function BlogItem({ slug, children }: Props) {
             }
             style={{ borderRadius: "50%" }}
             alt=""
-            width="150"
-            height="150"
+            width={150}
+            height={150}
           />
           <div
             style={{
@@ -150,9 +149,12 @@ export default function BlogItem({ slug, children }: Props) {
                     <>...ещё</>
                   </>
                 )}
-                <div className={"modal_3"}>
-                  <div className={"modalContent_3"}>
-                    <AdditionalBlogInformation blogData={blogData} />
+                <div className={"modal_3"} style={{ overflow: "hidden" }}>
+                  <div
+                    className={"modalContent_3"}
+                    style={{ margin: "10% auto" }}
+                  >
+                    <AdditionalBlogInformation blog={blogData} />
                   </div>
                 </div>
               </div>
@@ -176,6 +178,7 @@ export default function BlogItem({ slug, children }: Props) {
           </Link>
         ))}
       </div>
+      <div className={styles.divider}></div>
       {children}
     </div>
   );

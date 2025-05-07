@@ -1,0 +1,35 @@
+.root {
+  display: flex;
+}
+
+.commentAuthorAvatarBlock {
+  margin-right: 16px;
+}
+
+.commentAuthorAvatar {
+  border-radius: 50%;
+}
+
+.actionMenuContainer {
+  width: 40px;
+}
+
+.notificationCommentActionMenu {
+  position: fixed;
+  top: 70px;
+  left: 1170px;
+  z-index: 100;
+}
+
+.commentActionMenuButton {
+  display: flex;
+  height: 25px;
+  width: 25px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+}
+
+.commentActionMenuButton:hover {
+  background-color: rgba(0,0,0,0.1);
+}

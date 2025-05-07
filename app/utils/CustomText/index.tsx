@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React from "react";
+
+const userMentionRegex = new RegExp("@\\w+");
 
 const CustomText = (text: string) => {
   const renderText = () => {
@@ -7,19 +8,36 @@ const CustomText = (text: string) => {
     const parts = text.split(" ");
     console.log(parts);
     return parts.map((part, index) => {
-      console.log(part);
-      if (part === "@admin") {
+      if (userMentionRegex.test(part)) {
         const username = part.slice(1);
-        return (
-          <Link href={`/profile/${username}/`} key={index}>
-            @admin
-          </Link>
-        );
+        return <Link href={`/profile/${username}/`}>{part}</Link>;
       }
       return part;
     });
   };
   return <span>{renderText()}</span>;
 };
+
+const cursiveTextRegex = new RegExp("\-[\\w\\s]+\-");
+
+// const CustomText2 = (text: string) => {
+//   const renderText = () => {
+//     console.log(text);
+//
+//     if
+//
+//     const parts = text.split(" ");
+//     console.log(parts);
+//     return parts.map((part, index) => {
+//       console.log(part);
+//       if (part === "@admin") {
+//         const username = part.slice(1);
+//         return <s>{part}</s>;
+//       }
+//       return <span> {part}</span>;
+//     });
+//   };
+//   return <span>{renderText()}</span>;
+// };
 
 export default CustomText;

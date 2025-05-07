@@ -77,27 +77,72 @@ export default function LikedUserList({
   //   modalWindowUseRef.current.addEventListener("scroll", handleScroll)
   // }, [ modalWindowUseRef.current, setCurrentHeight, setMaxHeight ])
 
-  return (
-    <div>
-      <div className={styles.close}>x</div>
-      <div>Понравилось {post.likes} пользователям</div>
-      <div ref={modalWindowUseRef} style={{ overflow: "auto", height: "80px" }}>
-        {likedUserList?.results.map((user: User) => (
-          <div key={user.id} style={{ display: "flex", padding: "8px" }}>
-            <Image
-              src={
-                user.avatar_small
-                  ? `${BASE_URL}${user.avatar_small}`
-                  : "/img/default/avatar_default.jpg"
-              }
-              width={30}
-              height={30}
-              alt=""
-            />
-            <div>{user.username}</div>
-          </div>
-        ))}
-      </div>
+  <div>
+    {post.likes > 0 && (
+        <>
+          {isVisible && (
+              <div className={styles.liked_users_container}>
+                {post?.liked_users.map((user: User) => (
+                    <div key={user.id}>
+                      <Link href={`/profile/${user.username}/`}>
+                        <Image
+                            src={
+                              user.avatar_small
+                                  ? `${BASE_URL}${user.avatar_small}`
+                                  : "/img/default/avatar_default.jpg"
+                            }
+                            width={20}
+                            height={20}
+                            alt=""
+                        />
+                      </Link>
+                      <Link href={`/profile/${user.username}/`}>
+                        {user.username}
+                      </Link>
+                    </div>
+                ))}
+                <div onClick={handleDynamicContentClick}>
+                  Посмотреть всех пользователей
+                </div>
+              </div>
+          )}
+        </>
+    )}
+  </div>
+  <div className={styles.modal}>
+    <div className={styles.modalContent}>
+      <LikedUserList
+          setPage={setPage}
+          likedUserList={likedUserList}
+          page={page}
+          triggerQuery={triggerQuery}
+          isFetching={isFetching}
+          post={post}
+      />
     </div>
+  </div>
+
+  return (
+      <div>
+        <div className={styles.close}>x</div>
+        <div>Понравилось {post.likes} пользователям</div>
+        <div ref={modalWindowUseRef} style={{overflow: "auto", height: "80px"}}>
+          {likedUserList?.results.map((user: User) => (
+              <div key={user.id} style={{display: "flex", padding: "8px"}}>
+                <Image
+                    src={
+                      user.avatar_small
+                          ? `${BASE_URL}${user.avatar_small}`
+                          : "/img/default/avatar_default.jpg"
+                    }
+                    width={30}
+                    height={30}
+                    alt=""
+                />
+                <div>{user.username}</div>
+              </div>
+          ))}
+        </div>
+      </div>
   );
 }

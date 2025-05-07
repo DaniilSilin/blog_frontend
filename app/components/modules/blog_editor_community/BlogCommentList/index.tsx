@@ -1,7 +1,7 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import { Comment as CommentType } from "@/app/types";
 
+import { CommentType } from "@/app/types";
 import BlogComment from "../CommentList";
 
 import styles from "./blog_comment_list.module.css";
@@ -64,13 +64,13 @@ export default function BlogCommentList({
           isParentComment={isParentComment}
         />
       ))}
-      <div className={styles.loadMoreContainer}>
-        {!!blogCommentList?.next && !isParentComment && (
+      {!!blogCommentList?.next && !isParentComment && (
+        <div className={styles.loadMoreContainer}>
           <button className={styles.showMoreReplies} onClick={loadMoreReplies}>
             Другие ответы
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

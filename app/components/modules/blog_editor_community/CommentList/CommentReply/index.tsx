@@ -39,6 +39,7 @@ export default function CommentReply({
         reply_to: comment?.comment_id,
       });
     }
+    setDisplayCommentInputReply(false);
   };
 
   return (

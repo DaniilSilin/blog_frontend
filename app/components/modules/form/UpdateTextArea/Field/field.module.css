@@ -3,16 +3,8 @@
 }
 
 .label {
-  color: #666;
+  color: black;
   margin-bottom: 5px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
-}
-
-.label.active {
-  color: #404040;
-}
-
-.label.non_active {
-  color: #666;
 }

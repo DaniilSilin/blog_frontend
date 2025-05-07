@@ -5,7 +5,7 @@ import EmojiPicker from "emoji-picker-react";
 
 import CommentInput from "@/app/components/modules/form/CommentInput";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
-import { Comment } from "@/app/types";
+import { CommentType } from "@/app/types";
 
 import styles from "./commentBox.module.css";
 

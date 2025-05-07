@@ -1,0 +1,45 @@
+.linksContainer {
+
+}
+
+.linksContainerTitle {
+  font-size: 21px;
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.externalLinksContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.externalLinkContainer {
+  display: flex;
+  align-items: center;
+}
+
+.externalLinkIcon {
+  margin-right: 16px;
+}
+
+.externalLinkSubContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.externalLinkTitle {
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.externalLink {
+  color: #065fd4 !important;
+  font-weight: 400;
+}
+
+.externalLink:hover {
+  color: inherit;
+  font-weight: 400;
+}

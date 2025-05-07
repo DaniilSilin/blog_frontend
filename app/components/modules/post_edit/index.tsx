@@ -209,7 +209,7 @@ export default function PostEdit({ slug, post_id }) {
           <div>Вернуться на страницу публикации</div>
         </Link>
       </div>
-      <div></div>
+      <h1>Редактировать публикацию</h1>
       <UpdateInput
         width={600}
         height={40}

@@ -28,6 +28,11 @@
   margin-right: 10px;
 }
 
+.avatar {
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
 .postBlogTitle {
   text-decoration: none;
   color: black;
@@ -53,10 +58,15 @@
 }
 
 .postHeaderDate {
-  font-weight: 700;
+  font-weight: 600;
   color: #757373;
 }
 
 .postHeaderAuthor {
   font-weight: 700;
+}
+
+.postHeaderViews {
+  font-weight: 600;
+  color: #757373;
 }

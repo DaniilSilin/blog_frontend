@@ -1,13 +1,17 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
+import { useAppSelector } from "@/app/store";
+import Link from "next/link";
 import { useRouter } from "next/router";
+
+import { PostType } from "@/app/types";
+import { GoPlus } from "react-icons/go";
+
+import SortingBlogPosts from "./SortingBlogPosts";
 import BlogItem from "@/app/components/modules/blog_page";
 import PostItem from "@/app/components/modules/post_page";
-import Link from "next/link";
-import { GoPlus } from "react-icons/go";
+
 import styles from "./blog_posts.module.css";
-import SortingBlogPosts from "@/app/components/modules/blog_posts/SortingBlogPosts";
-import { useAppSelector } from "@/app/store";
 
 const cleanParams = (queryParams: any, page: number, slug: string) => {
   const sorting = queryParams.sorting ? queryParams.sorting : undefined;
@@ -23,7 +27,7 @@ export default function BlogPosts({ slug }) {
   const { data: blogPosts, isFetching } = DjangoService.useGetBlogPostsQuery(
     cleanParams(router.query, page, slug),
   );
-  const { data: blog } = DjangoService.useGetBlogQuery({ slug: slug });
+  const { data: blog } = DjangoService.useGetBlogQuery({ slug });
 
   React.useEffect(() => {
     const onScroll = () => {
@@ -44,41 +48,53 @@ export default function BlogPosts({ slug }) {
   return (
     <div className={styles.root}>
       <BlogItem slug={slug}>
-        <>
-          <SortingBlogPosts
-            page={page}
-            setPage={setPage}
-            cleanParams={cleanParams(router.query, page, slug)}
-            slug={slug}
-          />
-          {(user.username === blog?.owner.username ||
-            blog.authors.find(
-              (author) => author.username === user.username,
-            )) && (
+        {blogPosts?.results.length > 0 ? (
+          <>
+            <SortingBlogPosts
+              page={page}
+              setPage={setPage}
+              cleanParams={cleanParams(router.query, page, slug)}
+              slug={slug}
+            />
+            {(user.username === blog?.owner.username ||
+              blog.authors.find(
+                (author) => author.username === user.username,
+              )) && (
+              <div>
+                <Link
+                  className={styles.createPostButton}
+                  href={`/blog/${blog?.slug}/post/create/`}
+                >
+                  <GoPlus />
+                  <div>Создать публикацию</div>
+                </Link>
+              </div>
+            )}
             <div>
-              <Link
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "30px",
-                  justifyContent: "center",
-                  border: "2px solid black",
-                  borderRadius: "15px",
-                  marginBottom: "10px",
-                }}
-                href={`/blog/${blog.slug}/post/create/`}
-              >
-                <GoPlus />
-                <div>Создать пост</div>
-              </Link>
+              {blogPosts?.results.map((post: PostType, index: number) => (
+                <PostItem key={index} post={post} />
+              ))}
             </div>
-          )}
-          <div>
-            {blogPosts?.results.map((post, index) => (
-              <PostItem key={index} post={post} />
-            ))}
-          </div>
-        </>
+          </>
+        ) : (
+          <>
+            {(user.username === blog?.owner.username ||
+              blog.authors.find(
+                (author) => author.username === user.username,
+              )) && (
+              <div style={{ marginTop: "15px" }}>
+                <Link
+                  className={styles.createPostButton}
+                  href={`/blog/${blog?.slug}/post/create/`}
+                >
+                  <GoPlus />
+                  <div>Создать публикацию</div>
+                </Link>
+              </div>
+            )}
+            <h1>В блоге не размещены какие-либо пуликации</h1>
+          </>
+        )}
       </BlogItem>
     </div>
   );

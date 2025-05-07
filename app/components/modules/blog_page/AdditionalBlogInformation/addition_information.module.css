@@ -8,7 +8,9 @@
   margin-bottom: 10px;
 }
 
-.aboutChannelContainer > .descriptionItem {
+.description {
+  display: flex;
+  margin-bottom: 10px;
 }
 
 .aboutChannelTitle {
@@ -20,4 +22,17 @@
 .descriptionItem {
   display: flex;
   margin-bottom: 15px;
+}
+
+.mainInformationContainer {
+  padding: 0 24px 24px;
+  max-height: 660px;
+  overflow-y: auto;
+}
+
+.descriptionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 8px;
 }

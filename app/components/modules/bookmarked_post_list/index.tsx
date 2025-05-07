@@ -1,7 +1,8 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import { Post } from "@/app/types";
 import { useRouter } from "next/router";
+
+import { PostType } from "@/app/types";
 
 import PostItem from "@/app/components/modules/post_page";
 import Filter from "@/app/components/modules/filter";
@@ -56,7 +57,7 @@ export default function BookmarkedPostList() {
         setPage={setPage}
         cleanParams={cleanParams(router.query, page)}
       />
-      {bookmarkedPostList?.results.map((post: Post[], index: number) => (
+      {bookmarkedPostList?.results.map((post: PostType[], index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

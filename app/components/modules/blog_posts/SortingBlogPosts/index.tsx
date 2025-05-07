@@ -1,10 +1,11 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
-import styles from "@/app/components/modules/blog_posts/blog_posts.module.css";
 import BlogPageInput from "@/app/components/modules/form/BlogPageInput";
+
+import styles from "./sorting_blog_posts.module.css";
 
 export interface Props {
   slug: string;
@@ -26,12 +27,12 @@ const SORTING_LIST = [
   },
   {
     id: 3,
-    title: "Название",
+    title: "Название (↓)",
     query_param: "title_asc",
   },
   {
     id: 4,
-    title: "Название",
+    title: "Название (↑)",
     query_param: "title_desc",
   },
 ];
@@ -46,6 +47,7 @@ export default function SortingBlogPosts({
     cleanParams.sorting ? cleanParams.sorting : "newest",
   );
   const [blogSearchInput, setBlogSearchInput] = React.useState("");
+  const [displaySearchInput, setDisplaySearchInput] = React.useState("");
   const router = useRouter();
 
   const setSortingParam = React.useCallback(
@@ -57,7 +59,7 @@ export default function SortingBlogPosts({
       router.push(
         {
           pathname: `/blog/${slug}/posts/`,
-          query: { sorting: param },
+          query: { ...router.query, sorting: param },
         },
         undefined,
         { shallow: true },
@@ -66,9 +68,21 @@ export default function SortingBlogPosts({
     [router],
   );
 
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    router.push(
+      {
+        pathname: `/blog/${slug}/posts/`,
+        query: { ...router.query, search: blogSearchInput },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
-    <div style={{ display: "flex", marginTop: "15px" }}>
-      <div style={{ display: "flex", marginBottom: "10px" }}>
+    <div className={styles.root}>
+      <div className={styles.sortingButtonsContainer}>
         {SORTING_LIST.map((item) => (
           <button
             className={classNames(styles.sortingItem, {
@@ -80,16 +94,22 @@ export default function SortingBlogPosts({
           </button>
         ))}
       </div>
-      <form style={{ marginTop: "3px" }}>
-        {/*<HiMiniMagnifyingGlass />*/}
-        <BlogPageInput
-          width={100}
-          height={40}
-          onChange={setBlogSearchInput}
-          placeholder={"Поиск"}
-        />
-      </form>
-      <div style={{ marginBottom: "2px solid black", height: "1px" }}></div>
+      <button onClick={() => setDisplaySearchInput(true)}>
+        <HiMiniMagnifyingGlass size={35} />
+      </button>
+      {displaySearchInput && (
+        <form
+          style={{ marginTop: "3px", marginLeft: "10px" }}
+          onSubmit={handleSubmit}
+        >
+          <BlogPageInput
+            width={200}
+            height={40}
+            onChange={setBlogSearchInput}
+            placeholder={"Поиск"}
+          />
+        </form>
+      )}
     </div>
   );
 }

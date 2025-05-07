@@ -1,13 +1,22 @@
 .root {
-  border: 1px solid #3e3e3e;
+
+}
+
+.root.parent {
+  border: 1px solid #e5e5e5;
 }
 
 .commentAndInputReplyContainer {
   padding: 16px 24px 12px 24px;
 }
 
+.commentAndInputReplyContainer:hover {
+  background-color: #f9f9f9;
+}
+
 .userCommentContainer {
   display: flex;
+  width: 550px;
 }
 
 .relatedPostContainer {
@@ -36,8 +45,7 @@
 }
 
 .commentBody {
-  width: 600px;
-  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .commentFooter {

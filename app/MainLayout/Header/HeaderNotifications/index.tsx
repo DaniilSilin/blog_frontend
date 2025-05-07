@@ -6,14 +6,16 @@ import moment from "moment";
 import "moment/locale/ru";
 
 import { NotificationType } from "@/app/types";
-
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiBellOn } from "react-icons/ci";
+import CommentReply from "./CommentReply";
 
 import styles from "./header_notifications.module.css";
 
 const BASE_URL = "http://127.0.0.1:8000/";
 
 export default function HeaderNotifications() {
+  const notificationMenuRef = React.useRef(null);
   const user = useAppSelector((state) => state.django.profile);
   const { data: notificationList } = DjangoService.useNotificationListQuery({
     username: user.username,
@@ -21,58 +23,69 @@ export default function HeaderNotifications() {
 
   const [displayNotificationListWindow, setDisplayNotificationListWindow] =
     React.useState(false);
+  const [displayCommentList, setDisplayCommentList] = React.useState(false);
+  const [displayAdditionalMenu, setDisplayAdditionalMenu] =
+    React.useState(false);
 
   const displayWindow = React.useCallback(() => {
     setDisplayNotificationListWindow(!displayNotificationListWindow);
   }, [displayNotificationListWindow, setDisplayNotificationListWindow]);
 
   const [readNotification] = DjangoService.useReadNotificationMutation();
+  const [hideNotification] = DjangoService.useHideNotificationMutation();
 
-  const readNotificationFunction = ({ pk }) => {
-    readNotification({ pk });
-  };
+  const [notification, setNotification] = React.useState(null);
 
-  console.log(notificationList);
+  const readNotificationFunction = React.useCallback(
+    (notificationData: NotificationType) => {
+      setNotification(notificationData);
+      readNotification({ pk: notificationData?.pk });
+      setDisplayCommentList(true);
+    },
+    [setNotification, setDisplayCommentList],
+  );
+
+  if (displayCommentList && notification) {
+    return (
+      <CommentReply
+        slug={notification?.post.blog.slug}
+        post={notification?.post}
+        setDisplayCommentList={setDisplayCommentList}
+        setDisplayNotificationListWindow={setDisplayNotificationListWindow}
+      />
+    );
+  }
 
   return (
-    <div onClick={displayWindow} className={styles.root}>
+    <div
+      onClick={displayWindow}
+      className={styles.root}
+      ref={notificationMenuRef}
+    >
       <CiBellOn size={45} />
       {displayNotificationListWindow && (
         <div className={styles.notificationMenu}>
-          <div
-            style={{
-              height: "49px",
-              display: "flex",
-              alignItems: "center",
-              fontSize: "18px",
-              fontWeight: "600",
-              borderBottom: "1px solid #535353",
-            }}
-          >
+          <div className={styles.notificationHeaderContainer}>
             <div style={{ marginLeft: "16px" }}>Уведомления</div>
           </div>
-          <div style={{ overflowY: "scroll" }}>
+          <div style={{ overflowY: "auto", maxHeight: "430px" }}>
             {notificationList.results.map(
               (notification: NotificationType, index: number) => (
                 <div
                   key={index}
                   className={styles.notificationContainer}
-                  onClick={() => readNotificationFunction(notification.pk)}
+                  onClick={() => readNotificationFunction(notification)}
                 >
                   <div
                     style={{
                       display: "flex",
                     }}
                   >
-                    <div
-                      style={{
-                        width: "4px",
-                        height: "4px",
-                        borderRadius: "2px",
-                        backgroundColor: "blue",
-                        margin: "24px 5px",
-                      }}
-                    ></div>
+                    {!notification.is_read ? (
+                      <div className={styles.notificationRenderer}></div>
+                    ) : (
+                      <div className={styles.notificationRendererIsRead}></div>
+                    )}
                     <div className={styles.avatarContainer}>
                       <Image
                         src={
@@ -107,6 +120,11 @@ export default function HeaderNotifications() {
                       height={40}
                       alt={""}
                     />
+                  </div>
+                  <div style={{ width: "25px" }}>
+                    <button>
+                      <BsThreeDotsVertical size={20} />
+                    </button>
                   </div>
                 </div>
               ),

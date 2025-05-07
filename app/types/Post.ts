@@ -1,6 +1,6 @@
 import { Blog, Tag, User, Author, Comment } from "./index";
 
-export interface Post {
+export interface PostType {
   id: number;
   post_id: number;
   title: string;
@@ -28,4 +28,5 @@ export interface Post {
   avatar_small: string;
   banner: string;
   banner_small: string;
+  is_pinned: boolean;
 }

@@ -90,7 +90,7 @@ export default function BlogCreate() {
   }, [imageSource]);
 
   const formValidation = React.useCallback(() => {
-    let isValid = false;
+    let isValid;
 
     if (titleValidator(title)) {
       setTitleError(titleValidator(title));
@@ -99,33 +99,25 @@ export default function BlogCreate() {
       setTitleError("");
       isValid = true;
     }
-
-    if (slugValidator(slug)) {
-      setSlugError(slugValidator(slug));
+    if (slugValidator(slug, blog_slug)) {
+      setSlugError(slugValidator(slug, blog_slug));
       isValid = false;
     } else {
       setSlugError("");
       isValid = true;
     }
-    if (blog_slug === "Адрес свободен") {
-      isValid = true;
-    }
-    if (blog_slug === "Этот адрес уже занят") {
-      isValid = false;
-    }
-
     return isValid;
-  }, [title, slug, setSlugError, setTitleError]);
+  }, [title, slug, blog_slug, setSlugError, setTitleError]);
 
   React.useEffect(() => {
     formValidation();
     const isValid = formValidation();
-    if (isValid && title && slug) {
+    if (isValid && title && slug && blog_slug === "Адрес свободен") {
       setSubmitIsAvailable(true);
     } else {
       setSubmitIsAvailable(false);
     }
-  }, [title, slug]);
+  }, [title, slug, blog_slug, formValidation]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -219,7 +211,7 @@ export default function BlogCreate() {
           height={120}
           label={"Описание"}
           onChange={setDescription}
-          maxLength={200}
+          maxLength={300}
           autoSize={true}
           showCount={true}
         />

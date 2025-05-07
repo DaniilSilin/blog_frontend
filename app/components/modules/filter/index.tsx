@@ -1,17 +1,17 @@
 import React, { FormEvent } from "react";
-import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { ConfigProvider, DatePicker, Space } from "antd/lib";
 const { RangePicker } = DatePicker;
 import moment from "moment";
 import classNames from "classnames";
-import FilterInput from "@/app/components/modules/form/FilterInput";
 import locale from "antd/locale/ru_RU";
 import { useRouter } from "next/router";
+
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
+import FilterInput from "@/app/components/modules/form/FilterInput";
 
 import styles from "./filter.module.css";
 
 export interface Props {
-  page: number;
   setPage: (value: number) => void;
   cleanParams: any;
 }
@@ -30,18 +30,18 @@ const params = [
   {
     id: 3,
     sort_by: "title_asc",
-    label: "По названию (вверх)",
+    label: "По названию (↑)",
   },
   {
     id: 4,
     sort_by: "title_desc",
-    label: "По названию (вниз)",
+    label: "По названию (↓)",
   },
 ];
 
 const dateFormat = "YYYY-MM-DD";
 
-export default function Filter({ cleanParams, page, setPage }: Props) {
+export default function Filter({ cleanParams, setPage }: Props) {
   const router = useRouter();
   const [inputSearch, setInputSearch] = React.useState<string>(
     cleanParams.search ? cleanParams.search : "",
@@ -66,15 +66,15 @@ export default function Filter({ cleanParams, page, setPage }: Props) {
   );
 
   const setSortingParam = React.useCallback(
-    (sorting: string) => {
-      if (currentSortParam !== sorting) {
-        setCurrentSortParam(sorting);
+    (sort_by: string) => {
+      if (currentSortParam !== sort_by) {
+        setCurrentSortParam(sort_by);
         setPage(1);
       }
       router.push(
         {
           pathname: `${router.pathname}`,
-          query: { ...router.query, sorting: sorting },
+          query: { ...router.query, sort_by: sort_by },
         },
         undefined,
         { shallow: true },
@@ -135,16 +135,16 @@ export default function Filter({ cleanParams, page, setPage }: Props) {
               />
             </form>
             {inputSearch && (
-              <div
+              <button
                 style={{ position: "relative", right: "20px", top: "-3.5px" }}
                 onClick={clearInput}
               >
                 x
-              </div>
+              </button>
             )}
-            <div>
+            <button style={{ marginLeft: "5px" }}>
               <HiMiniMagnifyingGlass onClick={filterInputHandleSubmit} />
-            </div>
+            </button>
           </div>
         </div>
         <div className={styles.additionalSettings}>
@@ -163,9 +163,9 @@ export default function Filter({ cleanParams, page, setPage }: Props) {
           {params.map((item) => (
             <button
               className={classNames(styles.sortingItem, {
-                [styles.active]: currentSortParam === item.sorting,
+                [styles.active]: currentSortParam === item.sort_by,
               })}
-              onClick={() => setSortingParam(item.sorting)}
+              onClick={() => setSortingParam(item.sort_by)}
             >
               <div>{item.label}</div>
             </button>

@@ -32,7 +32,8 @@
 }
 
 .commentAuthor {
-  margin-right: 10px;
+  font-weight: 600;
+  color: #0f0f0f !important;
 }
 
 .date {

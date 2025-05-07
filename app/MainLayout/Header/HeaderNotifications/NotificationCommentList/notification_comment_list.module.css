@@ -1,0 +1,15 @@
+.showMoreReplies {
+  display: flex;
+  align-items: center;
+  color: #3ea6ff;
+  padding: 3px 14px;
+  border-radius: 20px;
+}
+
+.showMoreReplies:hover {
+  background: #263850;
+}
+
+.subdirectoryArrow {
+  margin-right: 5px;
+}

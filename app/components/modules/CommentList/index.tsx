@@ -3,7 +3,7 @@ import DjangoService from "@/app/store/services/DjangoService";
 
 import Comment from "../comment";
 
-import { Comment as CommentType } from "@/app/types";
+import { CommentType, PostType } from "@/app/types";
 
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
 
@@ -14,7 +14,7 @@ export interface CommentListProps {
   post_id: number;
   sort_by?: string;
   parent_id?: number;
-  postData: any;
+  post: PostType;
   isReplyToParentComment?: boolean;
 }
 
@@ -23,7 +23,7 @@ const CommentList: FC<CommentListProps> = ({
   post_id,
   sort_by,
   parent_id,
-  postData,
+  post,
   isReplyToParentComment,
 }) => {
   const [page, setPage] = React.useState(1);
@@ -32,29 +32,32 @@ const CommentList: FC<CommentListProps> = ({
     setPage(1);
   }, [sort_by]);
 
-  const { data: postCommentList } = DjangoService.usePostCommentListQuery({
-    slug,
-    post_id,
-    page,
-    sort_by,
-    parent_id,
-  });
+  const { data: postCommentList, isFetching } =
+    DjangoService.usePostCommentListQuery({
+      slug,
+      post_id,
+      page,
+      sort_by,
+      parent_id,
+    });
 
-  // React.useEffect(() => {
-  //   const onScroll = () => {
-  //     const scrolledToBottom =
-  //       window.innerHeight + window.scrollY >= document.body.offsetHeight;
-  //     if (scrolledToBottom && !isFetching) {
-  //       if (postCommentList.next != null) {
-  //         setPage(page + 1);
-  //       } else {
-  //         return;
-  //       }
-  //     }
-  //   };
-  //   document.addEventListener("scroll", onScroll);
-  //   return () => document.removeEventListener("scroll", onScroll);
-  // }, [page, isFetching]);
+  React.useEffect(() => {
+    if (isReplyToParentComment) {
+      const onScroll = () => {
+        const scrolledToBottom =
+          window.innerHeight + window.scrollY >= document.body.offsetHeight;
+        if (scrolledToBottom && !isFetching) {
+          if (postCommentList.next != null) {
+            setPage(page + 1);
+          } else {
+            return;
+          }
+        }
+      };
+      document.addEventListener("scroll", onScroll);
+      return () => document.removeEventListener("scroll", onScroll);
+    }
+  }, [page, isFetching]);
 
   const loadMoreReplies = React.useCallback(() => {
     setPage((page) => page + 1);
@@ -68,11 +71,11 @@ const CommentList: FC<CommentListProps> = ({
           slug={slug}
           post_id={post_id}
           comment={comment}
-          postData={postData}
+          post={post}
           isReplyToParentComment={isReplyToParentComment}
         />
       ))}
-      {!!postCommentList?.next && (
+      {!!postCommentList?.next && !isReplyToParentComment && (
         <button onClick={loadMoreReplies} className={styles.showMoreReplies}>
           <MdOutlineSubdirectoryArrowRight
             size={20}

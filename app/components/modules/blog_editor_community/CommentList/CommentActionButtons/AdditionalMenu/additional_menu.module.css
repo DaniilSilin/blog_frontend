@@ -1,0 +1,32 @@
+.root {
+  padding: 5px;
+  border-radius: 25px;
+}
+
+.root:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.actionMenu {
+  position: absolute;
+  padding: 8px 0;
+  background-color: #282828;
+  color: #f1f1f1;
+  border-radius: 10px;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  font-size: 16px;
+  padding: 0 12px 0 16px;
+}
+
+.menuButton:hover {
+  background-color: #535353;
+}
+
+.icon {
+  margin-right: 16px;
+}

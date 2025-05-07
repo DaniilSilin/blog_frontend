@@ -114,6 +114,14 @@
   border-radius: 50%;
 }
 
+.likedByAuthorHeart {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-top: 10px;
+  margin-left: -10px;
+}
+
 .actionMenuContainer {
   padding: 5px;
   border-radius: 25px;

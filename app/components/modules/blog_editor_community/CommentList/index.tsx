@@ -6,6 +6,7 @@ import moment from "moment/moment";
 import "moment/locale/ru";
 import classNames from "classnames";
 
+import { CommentType } from "@/app/types";
 import CommentReply from "./CommentReply";
 import CommentInput from "./CommentInput";
 import BlogCommentList from "@/app/components/modules/blog_editor_community/BlogCommentList";
@@ -13,10 +14,11 @@ import CommentActionButtons from "./CommentActionButtons";
 import BlogCommentAvatar from "./BlogCommentAvatar";
 
 import styles from "./comment_list.module.css";
+import CommentEditMode from "@/app/components/modules/blog_editor_community/CommentList/CommentEditMode";
 
 export interface Props {
   slug: string;
-  comment: any;
+  comment: CommentType;
   setSelectedBlogComments: (value: any) => void;
   selectedBlogComments: Record<string, any>;
   isParentComment?: boolean;
@@ -39,6 +41,7 @@ export default function BlogComment({
   const [commentButtonLabel, setCommentButtonLabel] =
     React.useState<string>("Читать дальше");
   const [shouldDisplayReplies, setShouldDisplayReplies] = React.useState(false);
+  const [isEditModeOn, setIsEditModeOn] = React.useState(false);
 
   React.useEffect(() => {
     // @ts-ignore
@@ -78,89 +81,112 @@ export default function BlogComment({
   );
 
   return (
-    <div className={styles.root}>
+    <div
+      className={classNames(styles.root, { [styles.parent]: isParentComment })}
+    >
       <div className={styles.commentAndInputReplyContainer}>
-        <div style={{ display: "flex" }}>
-          <div className={styles.userCommentContainer}>
-            <CommentInput
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {isEditModeOn ? (
+            <CommentEditMode
+              slug={slug}
               comment={comment}
-              checked={selectedBlogComments.find(
-                (item: any) => item.comment_id === comment.comment_id,
-              )}
-              onChange={blogCommentInputCheckboxHandleChange}
+              setIsEditModeOn={setIsEditModeOn}
             />
-            <BlogCommentAvatar
-              comment={comment}
-              isParentComment={isParentComment}
-            />
-            <div className={styles.commentMain}>
-              <div className={styles.commentHeader}>
-                <div>
-                  <Link href={`/profile/${comment.author.username}/`}>
-                    <div>{comment.author.username}</div>
-                  </Link>
-                </div>
-                <div className={styles.delimiter}>•</div>
-                <div>{moment(comment.created_at).fromNow()}</div>
-              </div>
-              <div ref={bodyRef} className={styles.commentBody}>
-                {isNormalMode ? (
-                  <div>{comment.body}</div>
-                ) : (
-                  <>
-                    <div
-                      className={classNames(styles.commentBodyCollapsed, {
-                        [styles.commentBodyFull]:
-                          commentButtonLabel === "Свернуть",
-                      })}
-                    >
-                      {comment.body}
-                    </div>
-                    <button
-                      className={styles.bodyButton}
-                      onClick={resizeBodyHandleChange}
-                    >
-                      {commentButtonLabel}
-                    </button>
-                  </>
-                )}
-              </div>
-              <CommentActionButtons
-                slug={slug}
+          ) : (
+            <div className={styles.userCommentContainer}>
+              <CommentInput
                 comment={comment}
-                setDisplayCommentInputReply={setDisplayCommentInputReply}
-                isParentComment={isParentComment}
-                shouldDisplayReplies={shouldDisplayReplies}
-                shouldDisplayRepliesButton={shouldDisplayRepliesButton}
+                checked={selectedBlogComments.find(
+                  (item: any) => item.comment_id === comment.comment_id,
+                )}
+                onChange={blogCommentInputCheckboxHandleChange}
               />
-            </div>
-          </div>
-          <div className={styles.relatedPostContainer}>
-            <div>
-              <Link
-                href={`/blog/${comment.post.blog.slug}/post/${comment.post.post_id}/`}
-              >
-                <Image
-                  src={
-                    comment.post.blog.avatar_small
-                      ? `${BASE_URL}${comment.post.blog.avatar_small}`
-                      : "/img/default/avatar_default.jpg"
-                  }
-                  className={styles.relatedPostAvatar}
-                  alt={""}
-                  width={50}
-                  height={50}
+              <BlogCommentAvatar
+                comment={comment}
+                isParentComment={isParentComment}
+              />
+              <div className={styles.commentMain}>
+                <div className={styles.commentHeader}>
+                  <div>
+                    <Link href={`/profile/${comment.author.username}/`}>
+                      <div>{comment.author.username}</div>
+                    </Link>
+                  </div>
+                  <div className={styles.delimiter}>•</div>
+                  {comment.is_edited ? (
+                    <div className={styles.date}>
+                      {moment(comment.created_at).fromNow()}
+                      &nbsp;
+                      {`(изменено)`}
+                    </div>
+                  ) : (
+                    <div className={styles.date}>
+                      {moment(comment.created_at).fromNow()}
+                    </div>
+                  )}
+                </div>
+                <div ref={bodyRef} className={styles.commentBody}>
+                  {isNormalMode ? (
+                    <div>{comment.body}</div>
+                  ) : (
+                    <>
+                      <div
+                        className={classNames(styles.commentBodyCollapsed, {
+                          [styles.commentBodyFull]:
+                            commentButtonLabel === "Свернуть",
+                        })}
+                      >
+                        {comment.body}
+                      </div>
+                      <button
+                        className={styles.bodyButton}
+                        onClick={resizeBodyHandleChange}
+                      >
+                        {commentButtonLabel}
+                      </button>
+                    </>
+                  )}
+                </div>
+                <CommentActionButtons
+                  slug={slug}
+                  comment={comment}
+                  setDisplayCommentInputReply={setDisplayCommentInputReply}
+                  isParentComment={isParentComment}
+                  shouldDisplayReplies={shouldDisplayReplies}
+                  shouldDisplayRepliesButton={shouldDisplayRepliesButton}
+                  setIsEditModeOn={setIsEditModeOn}
                 />
-              </Link>
+              </div>
             </div>
-            <div>
-              <Link
-                href={`/blog/${comment.post.blog.slug}/post/${comment.post.post_id}/`}
-              >
-                <div>{comment.post.title}</div>
-              </Link>
+          )}
+          {isParentComment && (
+            <div className={styles.relatedPostContainer}>
+              <div>
+                <Link
+                  href={`/blog/${comment?.post.blog.slug}/post/${comment?.post.post_id}/`}
+                >
+                  <Image
+                    src={
+                      comment?.post.blog.avatar_small
+                        ? `${BASE_URL}${comment?.post.blog.avatar_small}`
+                        : "/img/default/avatar_default.jpg"
+                    }
+                    className={styles.relatedPostAvatar}
+                    alt={""}
+                    width={50}
+                    height={50}
+                  />
+                </Link>
+              </div>
+              <div style={{ width: "150px", paddingLeft: "10px" }}>
+                <Link
+                  href={`/blog/${comment?.post.blog.slug}/post/${comment?.post.post_id}/`}
+                >
+                  <div>{comment?.post.title}</div>
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div>
           {displayCommentInputReply && (

@@ -1,0 +1,58 @@
+.root {
+  display: flex;
+}
+
+.commentBox {
+  display: flex;
+  padding-top: 8px;
+}
+
+.avatarContainer {
+  margin-right: 12px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.inputComment {
+
+}
+
+.footerComment {
+  display: flex;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: #6e6e6e;
+  margin-right: 8px;
+  cursor: default;
+}
+
+
+
+.submitButton.active {
+  cursor: pointer;
+  color: white
+}
+
+.submitButton.active:hover {
+  background-color: #535353;
+}
+
+.cancelButton {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: white;
+  margin-right: 8px;
+}
+
+.cancelButton:hover {
+  background-color: #535353;
+}

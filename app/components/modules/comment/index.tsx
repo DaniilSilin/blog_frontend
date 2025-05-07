@@ -2,7 +2,7 @@ import React from "react";
 
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
-import { Comment as CommentType, Post } from "@/app/types";
+import { CommentType, PostType } from "@/app/types";
 
 import Commentary from "@/app/components/modules/comment/Commentary";
 import CommentList from "../CommentList";
@@ -13,7 +13,7 @@ export interface Props {
   slug: string;
   post_id: number;
   comment: CommentType;
-  postData: Post;
+  post: PostType;
   isReplyToParentComment?: boolean;
 }
 
@@ -21,7 +21,7 @@ export default function Comment({
   post_id,
   slug,
   comment,
-  postData,
+  post,
   isReplyToParentComment,
 }: Props) {
   const [shouldShowReplies, setShouldShowReplies] = React.useState(false);
@@ -57,7 +57,7 @@ export default function Comment({
         comment={comment}
         post_id={post_id}
         slug={slug}
-        postData={postData}
+        post={post}
         isParent
         isReplyToParentComment={isReplyToParentComment}
       />
@@ -81,7 +81,7 @@ export default function Comment({
               slug={slug}
               post_id={post_id}
               parent_id={comment.comment_id}
-              postData={postData}
+              post={post}
             />
           )}
         </div>

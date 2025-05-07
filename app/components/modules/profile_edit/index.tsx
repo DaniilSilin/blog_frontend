@@ -5,8 +5,8 @@ import classNames from "classnames";
 import moment from "moment/moment";
 import "moment/locale/ru";
 
-import AvatarCrop from "@/app/components/modules/blog_edit/AvatarCrop";
-import BannerCrop from "@/app/components/modules/blog_edit/BannerCrop";
+import AvatarCrop from "../blog_edit/Avatar/AvatarCrop";
+import BannerCrop from "../blog_edit/Banner/BannerCrop";
 import { UpdateInput } from "@/app/components/modules/form";
 import {
   emailValidator,
@@ -517,7 +517,6 @@ export default function ProfileEdit({ username }) {
     // formData.append("date_of_birth", birthDate);
     changeUserProfile({ formData, username });
   };
-  console.log(data);
 
   return (
     <div>

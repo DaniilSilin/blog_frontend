@@ -26,18 +26,37 @@
 .sortingItem {
   padding: 10px;
   border-radius: 10px;
-  background-color: #3a3a3a;
-  font-size: 18px;
-  margin-right: 12px;
-}
-
-.sortingItem.active {
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #8b8686;
+  color: #0f0f0f;
+  background-color: #f2f2f2;
   font-size: 18px;
   margin-right: 12px;
 }
 
 .sortingItem:hover {
+  background-color: #e5e5e5;
+}
+
+.sortingItem.active {
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  background-color: #0f0f0f;
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.sortingItem.active:hover {
+  color: white;
+  background-color: #0f0f0f;
+}
+
+.createPostButton {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  justify-content: center;
+  border: 2px solid black;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  padding: 10px 0;
 }

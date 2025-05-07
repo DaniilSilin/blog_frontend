@@ -15,8 +15,13 @@ export default function PostInputCheckbox({ onChange, checked, post }: Props) {
   );
 
   return (
-    <label>
-      <input type={"checkbox"} onChange={handleChange} checked={checked} />
+    <label style={{ cursor: "pointer" }}>
+      <input
+        type={"checkbox"}
+        onChange={handleChange}
+        checked={checked}
+        style={{ cursor: "pointer" }}
+      />
     </label>
   );
 }

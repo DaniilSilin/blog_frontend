@@ -3,7 +3,7 @@ import {
   fetchBaseQuery,
   defaultSerializeQueryArgs,
 } from "@reduxjs/toolkit/query/react";
-import { Blog, Post, Register, Login, Author } from "@/app/types";
+import { Blog, PostType, Register, Login, Author } from "@/app/types";
 import { HYDRATE } from "next-redux-wrapper";
 import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";
@@ -12,7 +12,7 @@ const API_URL = "http://127.0.0.1:3001/api/v1/";
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
-  tagTypes: ["Comment", "Post", "Blog", "Invite"],
+  tagTypes: ["Comment", "Post", "Blog", "Invite", "Notification"],
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers, api) => {
@@ -210,10 +210,30 @@ const DjangoService = createApi({
       }),
     }),
     createPost: builder.mutation({
-      query: ({ title, body, is_published, map, blog, tags }) => ({
+      query: ({
+        title,
+        body,
+        is_published,
+        map_type,
+        map,
+        blog,
+        tags,
+        comments_allowed,
+        author_is_hidden,
+      }) => ({
         url: `blog/${blog}/post/create/`,
         method: "POST",
-        body: { title, body, map, is_published, blog, tags },
+        body: {
+          title,
+          body,
+          map_type,
+          map,
+          tags,
+          is_published,
+          comments_allowed,
+          author_is_hidden,
+          blog,
+        },
       }),
     }),
     deletePost: builder.mutation({
@@ -382,6 +402,7 @@ const DjangoService = createApi({
       ) {
         try {
           const { data: createdComment } = await queryFulfilled;
+          console.log(createdComment);
           if (reply_to) {
             for (const {
               endpointName,
@@ -389,7 +410,13 @@ const DjangoService = createApi({
             } of DjangoService.util.selectInvalidatedBy(getState(), [
               { type: "Comment", id: reply_to },
             ])) {
-              if (!["postCommentList", "blogComments"].includes(endpointName))
+              if (
+                ![
+                  "postCommentList",
+                  "blogComments",
+                  "notificationCommentList",
+                ].includes(endpointName)
+              )
                 continue;
               dispatch(
                 DjangoService.util.updateQueryData(
@@ -414,7 +441,14 @@ const DjangoService = createApi({
           } of DjangoService.util.selectInvalidatedBy(getState(), [
             { type: "Comment", id: "LIST" },
           ])) {
-            if (!["postCommentList"].includes(endpointName)) continue;
+            if (
+              ![
+                "postCommentList",
+                "notificationCommentList",
+                "blogComments",
+              ].includes(endpointName)
+            )
+              continue;
             if (
               originalArgs.slug !== slug ||
               originalArgs.post_id !== post_id ||
@@ -429,7 +463,7 @@ const DjangoService = createApi({
                   if (!createdComment.reply_to) {
                     draft.results = [createdComment, ...draft.results];
                   } else {
-                    draft.results = [...draft.results, createdComment];
+                    draft.results = [createdComment, ...draft.results];
                   }
                 },
               ),
@@ -500,6 +534,7 @@ const DjangoService = createApi({
               "bookmarkedPostList",
               "getPostPaginatedList",
               "subscriptionList",
+              "postsSearch",
             ].includes(endpointName)
           )
             continue;
@@ -557,6 +592,7 @@ const DjangoService = createApi({
               "bookmarkedPostList",
               "getPostPaginatedList",
               "subscriptionList",
+              "postsSearch",
             ].includes(endpointName)
           )
             continue;
@@ -593,9 +629,10 @@ const DjangoService = createApi({
       },
     }),
     postsSearch: builder.query({
-      query: ({ hashtag }) => ({
+      query: ({ hashtag, page }) => ({
         url: `posts/search/${hashtag}/`,
         params: {
+          page: page || undefined,
           hashtag: hashtag || undefined,
         },
       }),
@@ -629,7 +666,12 @@ const DjangoService = createApi({
           { type: "Post", id: post_id, slug: slug },
         ])) {
           if (
-            !["getPostPaginatedList", "subscriptionList"].includes(endpointName)
+            ![
+              "getPostPaginatedList",
+              "subscriptionList",
+              "getBlogPosts",
+              "likedPostList",
+            ].includes(endpointName)
           )
             continue;
           dispatch(
@@ -700,6 +742,41 @@ const DjangoService = createApi({
         url: `blog/${slug}/post/${post_id}/comment/${comment_id}/pin/`,
         method: "POST",
       }),
+      async onQueryStarted(
+        { comment_id, body },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const {
+          endpointName,
+          originalArgs,
+        } of DjangoService.util.selectInvalidatedBy(getState(), [
+          { type: "Comment", id: comment_id },
+        ])) {
+          if (!["postCommentList"].includes(endpointName)) continue;
+          dispatch(
+            DjangoService.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                const comment = draft.results.find(
+                  (comment) => comment.comment_id === comment_id,
+                );
+                console.log(comment);
+                if (comment) {
+                  comment.is_pinned = true;
+                  comment.pinned_by_user = user.username;
+                  draft.results = [comment, ...draft.results];
+                }
+              },
+            ),
+          );
+        }
+        try {
+          await queryFulfilled;
+        } catch {
+          // patchResult.undo();
+        }
+      },
     }),
     updateComment: builder.mutation({
       query: ({ slug, post_id, comment_id, body, reply_to }) => ({
@@ -749,23 +826,22 @@ const DjangoService = createApi({
           page: page || undefined,
         },
       }),
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
       },
       merge: (currentCache, newItems, otherArgs) => {
-        currentCache = {};
-        currentCache.results.push(...newItems.results);
-        // let currentPage = 1
-        // currentCache.previous = newItems.previous
-        // currentCache.next = newItems.next
-        // if (currentPage < otherArgs.arg.page) {
-        //   currentCache.results.push(...newItems.results)
-        // } else {
-        //   currentCache.results = newItems.results
-        // }
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
+        return true;
       },
     }),
     getUsers: builder.query({
@@ -945,10 +1021,14 @@ const DjangoService = createApi({
           : [{ type: "Post", id: "LIST" }],
     }),
     subscriptionList: builder.query({
-      query: ({ page }) => ({
+      query: ({ page, after, before, sort_by, search }) => ({
         url: `subscriptions/`,
         params: {
           page: page || undefined,
+          after: after || undefined,
+          before: before || undefined,
+          sort_by: sort_by || undefined,
+          search: search || undefined,
         },
       }),
       serializeQueryArgs: ({ endpointName }) => {
@@ -1048,7 +1128,13 @@ const DjangoService = createApi({
         } of DjangoService.util.selectInvalidatedBy(getState(), [
           { type: "Comment", id: comment_id },
         ])) {
-          if (!["postCommentList", "blogComments"].includes(endpointName))
+          if (
+            ![
+              "postCommentList",
+              "blogComments",
+              "notificationCommentList",
+            ].includes(endpointName)
+          )
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
@@ -1058,6 +1144,7 @@ const DjangoService = createApi({
                 const comment = draft.results.find(
                   (comment) => comment.comment_id === comment_id,
                 );
+                console.log(comment);
                 if (comment) {
                   if (comment.isDisliked) {
                     comment.isDisliked = false;
@@ -1097,7 +1184,13 @@ const DjangoService = createApi({
         } of DjangoService.util.selectInvalidatedBy(getState(), [
           { type: "Comment", id: comment_id },
         ])) {
-          if (!["postCommentList", "blogComments"].includes(endpointName))
+          if (
+            ![
+              "postCommentList",
+              "blogComments",
+              "notificationCommentList",
+            ].includes(endpointName)
+          )
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
@@ -1146,7 +1239,13 @@ const DjangoService = createApi({
         } of DjangoService.util.selectInvalidatedBy(getState(), [
           { type: "Comment", id: comment_id },
         ])) {
-          if (!["postCommentList", "blogComments"].includes(endpointName))
+          if (
+            ![
+              "postCommentList",
+              "blogComments",
+              "notificationCommentList",
+            ].includes(endpointName)
+          )
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
@@ -1278,11 +1377,56 @@ const DjangoService = createApi({
     readNotification: builder.mutation({
       query: ({ pk }) => ({
         url: `/notification/${pk}/is_read/`,
+        method: "POST",
       }),
     }),
     hideNotification: builder.mutation({
       query: ({ pk }) => ({
         url: `/notification/${pk}/hide/`,
+        method: "POST",
+      }),
+    }),
+    notificationCommentList: builder.query({
+      query: ({ slug, post_id, parent_id, page }) => ({
+        url: `blog/${slug}/post/${post_id}/comment/list/reply/`,
+        params: {
+          page: page || undefined,
+          parent_id: parent_id || undefined,
+        },
+      }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const args = { ...queryArgs };
+        delete args.page;
+        return `${endpointName}(${JSON.stringify(args)})`;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.results.map(({ comment_id }) => ({
+                type: "Comment" as const,
+                id: comment_id,
+              })),
+              { type: "Comment", id: "LIST" },
+            ]
+          : [{ type: "Comment", id: "LIST" }],
+    }),
+    blogDeletePosts: builder.mutation({
+      query: ({ slug, selectedPosts }) => ({
+        url: `blog/${slug}/posts/delete/`,
+        method: "DELETE",
+        body: { selectedPosts },
       }),
     }),
   }),

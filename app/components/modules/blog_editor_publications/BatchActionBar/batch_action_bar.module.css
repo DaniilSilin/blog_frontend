@@ -1,0 +1,48 @@
+.root {
+  display: flex;
+  align-items: center;
+  background-color: #1f1f1f;
+  color: white;
+  height: 48px;
+  margin-top: 5px;
+}
+
+.selectedCounterTitle {
+  margin-left: 24px
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  margin-left: 32px;
+  margin-right: 26px;
+  border-left: 1px solid #353535;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 20px;
+  border-radius: 25px;
+}
+
+.deleteButton:hover {
+  background-color: #3a3a3a;
+}
+
+.resetButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 20px;
+  border-radius: 25px;
+}
+
+.resetButton:hover {
+  background-color: #3a3a3a;
+}

@@ -1,0 +1,73 @@
+.root {
+  display: flex;
+  align-items: center;
+  z-index: 100;
+}
+
+.root:hover {
+  background-color: #1677ff;
+}
+
+.notificationMenu {
+  top: 64px;
+  color: #a6adb4 !important;
+  width: 480px;
+  height: 500px;
+  position: absolute;
+  /*padding: 10px;*/
+  background-color: #001529;
+  right: 120px;
+  border: 2px solid #363738;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.notificationHeaderContainer {
+  height: 49px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid #535353;
+}
+
+.headerTitle {
+  margin-left: 16px;
+}
+
+.arrow {
+  height: 35px;
+  width: 35px;
+  margin: 0 0 0 20px;
+}
+
+.arrow:hover {
+  background-color: #535353;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.relatedPostContainer {
+  display: flex;
+  padding: 16px 8px 16px 16px;
+  border-bottom: 1px solid #535353;
+}
+
+.relatedPostSubContainer {
+  display: inherit;
+  color: white !important;
+}
+
+.relatedPostText {
+  display: flex;
+  align-items: center;
+  width: 350px;
+  line-height: 20px;
+  margin-right: 16px;
+}
+
+.relatedPostAvatar {
+  border-radius: 50%;
+}

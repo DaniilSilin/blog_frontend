@@ -1,7 +1,7 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 import Filter from "@/app/components/modules/filter";
-import { Post } from "@/app/types";
+import { PostType } from "@/app/types";
 import PostItem from "@/app/components/modules/post_page";
 import { useRouter } from "next/router";
 
@@ -51,7 +51,7 @@ export default function LikedPostList() {
         setPage={setPage}
         cleanParams={cleanParams(router.query, page)}
       />
-      {likedPosts?.results.map((post: Post[], index: number) => (
+      {likedPosts?.results.map((post: PostType[], index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

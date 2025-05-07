@@ -20,28 +20,41 @@ export default function Profile({ username }) {
   const { data: user } = DjangoService.useUserProfileQuery({ username });
   const _user = useAppSelector((state) => state.django.profile);
 
-  const [displayModal, setDisplayModal] = React.useState(false);
+  const [dynamicContentModalDisplayed, setDynamicContentModalDisplayed] =
+    React.useState(false);
 
-  const details = React.useCallback(
-    (e: any) => {
+  console.log(dynamicContentModalDisplayed);
+
+  const freezeBody = React.useCallback(
+    () => document.querySelector("body")?.classList.add("freeze"),
+    [],
+  );
+  const unfreezeBody = React.useCallback(
+    () => document.querySelector("body")?.classList.remove("freeze"),
+    [],
+  );
+
+  const handleDynamicContentClick = React.useCallback(
+    (e) => {
       let elem = e.target;
       console.log(elem);
-      if (displayModal) {
-        if (elem.className === "modal_3") {
+      if (dynamicContentModalDisplayed) {
+        if (elem.className.startsWith("modal_3")) {
           elem.style.display = "none";
-          setDisplayModal(false);
+          setDynamicContentModalDisplayed(false);
         }
+        console.log(e.target);
       } else {
         let modalNode = null;
-        if (elem.className.startsWith("profile_detailsB")) {
+        console.log(elem);
+        if (elem.nextSibling.className.startsWith("modal_3")) {
           modalNode = elem.nextSibling;
-          console.log(modalNode);
           modalNode.style.display = "block";
-          setDisplayModal(true);
+          setDynamicContentModalDisplayed(true);
         }
       }
     },
-    [displayModal],
+    [dynamicContentModalDisplayed],
   );
 
   return (
@@ -85,15 +98,20 @@ export default function Profile({ username }) {
         >
           <div className={styles.profileInformationMain}>
             <div className={styles.username}>{user.username}</div>
-            <button className={styles.detailsButton} onClick={details}>
-              <IoIosInformationCircleOutline size={20} />
-              Подробнее
-            </button>
-            <div className={"modal_3"}>
-              <div className={"modalContent_3"}>
-                <ProfileDetails />
+            <button
+              className={styles.detailsButton}
+              onClick={handleDynamicContentClick}
+            >
+              <div style={{ display: "flex" }}>
+                <IoIosInformationCircleOutline size={20} />
+                Подробнее
               </div>
-            </div>
+              <div className={"modal_3"}>
+                <div className={"modalContent_3"}>
+                  <ProfileDetails />
+                </div>
+              </div>
+            </button>
           </div>
           <div style={{ marginTop: "40px", marginRight: "150px" }}>
             {(user.username === _user.username || user.is_admin) && (
@@ -106,10 +124,12 @@ export default function Profile({ username }) {
           </div>
         </div>
       </div>
-      {/*<div style={{ display: "flex" }}>*/}
-      {/*  <div style={{ width: "70%" }}>123123</div>*/}
-      {/*  <ProfileSider user={user} />*/}
-      {/*</div>*/}
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "75%" }}>123123</div>
+        <div style={{ width: "25%" }}>
+          <ProfileSider user={user} />
+        </div>
+      </div>
     </div>
   );
 }

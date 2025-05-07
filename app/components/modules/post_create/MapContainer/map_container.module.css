@@ -1,0 +1,8 @@
+.root {
+
+}
+
+.mapTypeSelectorContainer {
+  display: flex;
+  gap: 20px;
+}

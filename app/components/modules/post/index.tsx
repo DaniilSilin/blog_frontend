@@ -1,10 +1,10 @@
 import React from "react";
 import DjangoService from "../../../store/services/DjangoService";
+import { useRouter } from "next/router";
 
+import { PostType } from "@/app/types";
 import Filter from "../filter";
 import PostItem from "../post_page";
-import { Post } from "@/app/types";
-import { useRouter } from "next/router";
 
 import styles from "./post_list.module.css";
 
@@ -49,12 +49,8 @@ export default function PostList() {
   return (
     <div className={styles.root}>
       <h1>Публикации</h1>
-      <Filter
-        page={page}
-        setPage={setPage}
-        cleanParams={cleanParams(router.query, page)}
-      />
-      {postPaginatedList?.results.map((post: Post[], index: number) => (
+      <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
+      {postPaginatedList?.results.map((post: PostType[], index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

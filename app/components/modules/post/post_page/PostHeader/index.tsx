@@ -5,6 +5,8 @@ import Image from "next/image";
 import moment from "moment";
 import "moment/locale/ru";
 
+import { PostType } from "@/app/types";
+
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
 
 import styles from "@/app/components/modules/post/post_page/post_page.module.css";
@@ -13,7 +15,7 @@ import { useAppSelector } from "@/app/store";
 const BASE_URL = "http://127.0.0.1:8000";
 
 export interface Props {
-  post: any;
+  post: PostType;
   slug: string;
   post_id: number;
 }
@@ -46,6 +48,25 @@ export default function PostHeader({ post, slug, post_id }: Props) {
       return `${subscribers} подписчика`;
     } else {
       return `${subscribers} подписчиков`;
+    }
+  }, [post?.subscribers]);
+
+  const viewsCount = React.useMemo(() => {
+    const views = post?.views.toString() || "0";
+
+    if (views.slice(-1) === "1" && views.slice(-2) !== "11") {
+      return `${views} просмотр`;
+    } else if (
+      (views.slice(-1) === "2" ||
+        views.slice(-1) === "3" ||
+        views.slice(-1) === "4") &&
+      views.slice(-2) !== "12" &&
+      views.slice(-2) !== "13" &&
+      views.slice(-2) !== "14"
+    ) {
+      return `${views} просмотра`;
+    } else {
+      return `${views} просмотров`;
     }
   }, [post?.subscribers]);
 
@@ -85,7 +106,7 @@ export default function PostHeader({ post, slug, post_id }: Props) {
         <div className={styles.subscribeBlock}>
           {!user?.isGuest ? (
             <>
-              {post.blog.authors.find(
+              {post?.blog.authors.find(
                 (author) => author.username === user.username,
               ) ||
                 (user.username === post.blog.owner.username && (
@@ -97,21 +118,25 @@ export default function PostHeader({ post, slug, post_id }: Props) {
                     </button>
                   </Link>
                 ))}
-              {post?.isSubscribed.toString() === "true" ? (
-                <button
-                  onClick={toggleBlogSubscription}
-                  className={styles.subscribeButton}
-                >
-                  Отписаться
-                </button>
-              ) : (
-                <button
-                  onClick={toggleBlogSubscription}
-                  className={styles.unsubscribeButton}
-                >
-                  Подписаться
-                </button>
-              )}
+              {!(user.username === post.blog.owner.username) ? (
+                <>
+                  {post?.isSubscribed.toString() === "true" ? (
+                    <button
+                      onClick={toggleBlogSubscription}
+                      className={styles.subscribeButton}
+                    >
+                      Отписаться
+                    </button>
+                  ) : (
+                    <button
+                      onClick={toggleBlogSubscription}
+                      className={styles.unsubscribeButton}
+                    >
+                      Подписаться
+                    </button>
+                  )}
+                </>
+              ) : null}
             </>
           ) : (
             <>
@@ -149,7 +174,7 @@ export default function PostHeader({ post, slug, post_id }: Props) {
           ) : null}
           <div>{moment(post?.created_at).format("D MMMM hh:mm")}</div>
           <div className={styles.delimiter}>·</div>
-          <div>{post?.views} просмотров</div>
+          <div>{viewsCount}</div>
         </div>
       </div>
     </div>

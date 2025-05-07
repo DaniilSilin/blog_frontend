@@ -133,6 +133,31 @@ body {
   cursor: default;
 }
 
+.modalContentUserList {
+  background-color: #292929;
+  margin: 15% auto; /* 15% from the top and centered */
+  /*padding: 20px;*/
+  border: 1px solid #888;
+  border-radius: 10px;
+  min-width: 450px;
+  max-width: 800px;
+  width: 37%; /* Could be more or less, depending on screen size */
+  cursor: default;
+}
+
+.cancel {
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-weight: 600;
+  background-color: #3e3e3e;
+}
+
+.cancel:hover {
+  background-color: #535353;
+}
+
+
 body.freeze {
   overflow: hidden;
 }

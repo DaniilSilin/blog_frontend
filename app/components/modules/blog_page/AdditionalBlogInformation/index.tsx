@@ -1,143 +1,57 @@
 import React from "react";
-import moment from "moment";
-import "moment/locale/ru";
 
-import { ImVk, ImYoutube, ImTelegram } from "react-icons/im";
-import { TbBrandYandex } from "react-icons/tb";
-import { IoCalendar } from "react-icons/io5";
-import { IoIosPeople } from "react-icons/io";
-import { AiOutlineRise, AiOutlineMail } from "react-icons/ai";
-import { FaSignsPost, FaPhone } from "react-icons/fa6";
-import { BiPlanet } from "react-icons/bi";
-import { Blog } from "@/app/types";
+import { BlogType } from "@/app/types";
+import BlogExternalLinks from "./BlogExternalLinks";
+import BlogSummary from "./BlogSummary";
 
 import styles from "./addition_information.module.css";
 
 export interface Props {
-  blogData: Blog;
+  blog: BlogType;
 }
 
-export default function AdditionalBlogInformation({ blogData }: Props) {
+export default function AdditionalBlogInformation({ blog }: Props) {
   const [doesHaveLink, setDoesHaveLinks] = React.useState(false);
+  const [blogSummaryTitle, setBlogSummaryTitle] = React.useState("О канале");
 
   React.useEffect(() => {
     if (
-      blogData?.phone_number ||
-      blogData?.site_link ||
-      blogData?.vk_link ||
-      blogData?.telegram_link ||
-      blogData?.dzen_link ||
-      blogData?.youtube_link
+      blog?.phone_number ||
+      blog?.email ||
+      blog?.site_link ||
+      blog?.vk_link ||
+      blog?.telegram_link ||
+      blog?.dzen_link ||
+      blog?.youtube_link
     ) {
       setDoesHaveLinks(true);
+      setBlogSummaryTitle("Дополнительная информация");
     } else {
       setDoesHaveLinks(false);
     }
-  }, [blogData]);
+  }, [blog]);
 
   return (
     <div className={styles.root}>
-      <div className={styles.blogModalTitle}>О канале</div>
-      {blogData?.description && (
-        <div style={{ display: "flex", marginBottom: "10px" }}>
-          <div>{blogData?.description}</div>
-        </div>
-      )}
-      <div className={styles.aboutChannelContainer}>
-        <div className={styles.aboutChannelTitle}>О канале</div>
-        {blogData?.email && (
-          <div className={styles.descriptionItem}>
-            <AiOutlineMail size={20} style={{ marginRight: "10px" }} />
-            <a href={`mailto:${blogData?.email}`}>{blogData?.email}</a>
+      <div style={{ margin: "8px 8px 0" }}>
+        <div style={{ padding: "4px 2px 4px 16px" }}>
+          <div style={{ margin: "10px 8px 10px 0" }}>
+            <h2>{blog.title}</h2>
           </div>
-        )}
-        <div className={styles.descriptionItem}>
-          <AiOutlineRise size={20} style={{ marginRight: "10px" }} />
-          <div>{blogData?.views} просмотров</div>
-        </div>
-        <div className={styles.descriptionItem}>
-          <IoIosPeople size={20} style={{ marginRight: "10px" }} />
-          <div>{blogData?.count_of_posts} подписчиков</div>
-        </div>
-        <div className={styles.descriptionItem}>
-          <FaSignsPost size={20} style={{ marginRight: "10px" }} />
-          <div>{blogData?.subscriberList} постов</div>
-        </div>
-        <div className={styles.descriptionItem}>
-          <IoCalendar size={20} style={{ marginRight: "10px" }} />
-          <div>
-            Дата регистрации:{" "}
-            {moment(blogData?.created_at).format("D MMMM hh:mm")}
-          </div>
+          <div>x</div>
         </div>
       </div>
-      {doesHaveLink && (
-        <div>
-          <div
-            style={{
-              fontSize: "21px",
-              fontWeight: "700",
-              marginBottom: "10px",
-            }}
-          >
-            Ссылки
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <ImVk size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={blogData?.vk_link}
-            >
-              {blogData?.vk_link}
-            </a>
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <ImTelegram size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={blogData?.telegram_link}
-            >
-              {blogData?.telegram_link}
-            </a>
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <ImYoutube size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={blogData?.youtube_link}
-            >
-              {blogData?.youtube_link}
-            </a>
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <TbBrandYandex size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={blogData?.dzen_link}
-            >
-              {blogData?.dzen_link}
-            </a>
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <BiPlanet size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={blogData?.site_link}
-            >
-              {blogData?.site_link}
-            </a>
-          </div>
-          <div style={{ display: "flex", marginBottom: "15px" }}>
-            <FaPhone size={20} style={{ marginRight: "10px" }} />
-            <a
-              style={{ textDecoration: "none", color: "black" }}
-              href={`tel:${blogData?.site_link}`}
-            >
-              ${blogData?.site_link}
-            </a>
-          </div>
-        </div>
-      )}
+      <div className={styles.mainInformationContainer}>
+        {blog?.description && (
+          <>
+            <h1 className={styles.descriptionTitle}>Описание</h1>
+            <div className={styles.description}>{blog?.description}</div>
+          </>
+        )}
+
+        {doesHaveLink && <BlogExternalLinks blog={blog} />}
+        <BlogSummary blog={blog} blogSummaryTitle={blogSummaryTitle} />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,39 @@
+.root {
+  padding: 0 11px 55px;
+  width: fit-content;
+}
+
+.avatarContainer {
+
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.likeReaction {
+  height: 28px;
+  width: 28px;
+  background-image: url("/img/default/like-reaction.png");
+  background-repeat: no-repeat;
+  position: absolute;
+  background-size: 100%;
+  margin-top: -30px;
+  margin-left: 80px;
+}
+
+.usernameContainer {
+
+}
+
+.username {
+  font-size: 20px;
+  padding-top: 6px;
+  display: flex;
+  justify-content: center;
+  color: white !important;
+}
+
+.username:hover {
+  text-decoration: underline;
+}

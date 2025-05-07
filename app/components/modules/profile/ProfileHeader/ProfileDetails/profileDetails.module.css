@@ -18,6 +18,7 @@
   display: flex;
   padding: 0 10px;
   margin-bottom: 10px;
+  word-break: break-word;
 }
 
 .modalContentIcon {

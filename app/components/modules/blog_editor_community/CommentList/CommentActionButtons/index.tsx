@@ -20,6 +20,7 @@ import styles from "./comment_action_buttons.module.css";
 import { GoPin } from "react-icons/go";
 import { TiPen } from "react-icons/ti";
 import { FaRegTrashCan } from "react-icons/fa6";
+import AdditionalMenu from "@/app/components/modules/blog_editor_community/CommentList/CommentActionButtons/AdditionalMenu";
 
 export interface Props {
   slug: string;
@@ -28,6 +29,7 @@ export interface Props {
   isParentComment?: boolean;
   shouldDisplayRepliesButton: any;
   shouldDisplayReplies: boolean;
+  setIsEditModeOn: (value: boolean) => void;
 }
 
 const BASE_URL = "http://127.0.0.1:8000";
@@ -39,8 +41,8 @@ export default function CommentActionButtons({
   isParentComment,
   shouldDisplayRepliesButton,
   shouldDisplayReplies,
+  setIsEditModeOn,
 }: Props) {
-  const menuRef = React.useRef(null);
   const user = useAppSelector((state) => state.django.profile);
 
   const [setOrRemoveCommentLike] =
@@ -49,14 +51,6 @@ export default function CommentActionButtons({
     DjangoService.useSetOrRemoveCommentDislikeMutation();
   const [setOrRemoveLikeByAuthor] =
     DjangoService.useSetOrRemoveLikeByAuthorMutation();
-  const [deleteComment] = DjangoService.useDeleteCommentMutation();
-
-  const [displayAdditionalMenu, setDisplayAdditionalMenu] =
-    React.useState(false);
-
-  const additionalMenuMouseHandleChange = React.useCallback(() => {
-    setDisplayAdditionalMenu((displayAdditionalMenu) => !displayAdditionalMenu);
-  }, []);
 
   const commentReplyInputHandle = React.useCallback(() => {
     setDisplayCommentInputReply(
@@ -93,14 +87,6 @@ export default function CommentActionButtons({
 
   const dislikeCommentButton = () => {
     setOrRemoveCommentDislike({
-      slug,
-      post_id: comment.post.post_id,
-      comment_id: comment?.comment_id,
-    });
-  };
-
-  const deleteCommentButton = () => {
-    deleteComment({
       slug,
       post_id: comment.post.post_id,
       comment_id: comment?.comment_id,
@@ -262,23 +248,11 @@ export default function CommentActionButtons({
           </>
         )}
       </div>
-      <div className={styles.actionMenuContainer} ref={menuRef}>
-        <button onClick={additionalMenuMouseHandleChange}>
-          <BsThreeDotsVertical />
-          {displayAdditionalMenu && (
-            <div className={styles.actionMenu}>
-              <button onClick={deleteCommentButton}>
-                <FaRegTrashCan size={21} className={styles.icon} />
-                Удалить
-              </button>
-              <button>
-                <TiPen size={21} className={styles.icon} />
-                Изменить
-              </button>
-            </div>
-          )}
-        </button>
-      </div>
+      <AdditionalMenu
+        slug={slug}
+        comment={comment}
+        setIsEditModeOn={setIsEditModeOn}
+      />
     </div>
   );
 }

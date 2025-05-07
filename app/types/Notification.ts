@@ -1,9 +1,9 @@
-import { User, Post } from "./index";
+import { User, PostType } from "./index";
 
 export interface NotificationType {
   pk: number;
   addressee: User;
-  post: Post;
+  post: PostType;
   text: string;
   author: User;
   created_at: string;

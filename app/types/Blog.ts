@@ -1,6 +1,6 @@
-import { Post, User } from "./index";
+import { PostType, User } from "./index";
 
-export interface Blog {
+export interface BlogType {
   id: number;
   avatar?: string;
   avatar_small?: string;
@@ -15,7 +15,6 @@ export interface Blog {
   count_of_commentaries: number;
   subscribers: number;
   owner: User;
-  pinned_post: Post;
   authors: User[];
   isSubscribed: boolean;
   email?: string;

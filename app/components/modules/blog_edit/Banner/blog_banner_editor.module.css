@@ -1,0 +1,81 @@
+.root {
+
+}
+
+.bannerContainerTitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bannerContainerDescription {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.bannerImageContainer {
+  display: flex;
+  margin-top: 8px
+}
+
+.bannerBackground {
+  width: 290px;
+  height: 160px;
+  background-color: #1f1f1f;
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.bannerImage {
+  border: 2px solid white;
+}
+
+.avatarUploadContainer {
+  width: 330px;
+  margin-left: 30px;
+}
+
+.bannerGuide {
+  font-size: 13px;
+}
+
+.bannerActionsContainer {
+  display: flex;
+  margin-top: 8px;
+}
+
+.bannerUploadButton {
+  padding: 0 16px;
+  height: 36px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  justify-content: center;
+  background-color: #3e3e3e;
+}
+
+.bannerUploadButton:hover {
+  background-color: #535353;
+  cursor: pointer;
+}
+
+.bannerUploadButton input[type="file"] {
+  display: none;
+}
+
+.bannerDeleteButton {
+  margin-left: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: white;
+  background-color: #3e3e3e;
+}
+
+.bannerDeleteButton:hover {
+  background-color: #535353;
+}
