@@ -1,6 +1,5 @@
 import React from "react";
 import EditorMainLayout from "@/app/EditorMainLayout";
-import type { GetServerSidePropsContext } from "next";
 import MainLayout from "@/app/MainLayout";
 import BlogEditorInviteView from "@/app/views/BlogEditorInvite";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";

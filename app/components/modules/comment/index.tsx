@@ -3,7 +3,6 @@ import React from "react";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 import { CommentType, PostType } from "@/app/types";
-
 import Commentary from "@/app/components/modules/comment/Commentary";
 import CommentList from "../CommentList";
 
@@ -14,7 +13,7 @@ export interface Props {
   post_id: number;
   comment: CommentType;
   post: PostType;
-  isReplyToParentComment?: boolean;
+  isParent?: boolean;
 }
 
 export default function Comment({
@@ -22,7 +21,7 @@ export default function Comment({
   slug,
   comment,
   post,
-  isReplyToParentComment,
+  isParent,
 }: Props) {
   const [shouldShowReplies, setShouldShowReplies] = React.useState(false);
   const toggleReplies = React.useCallback(() => {
@@ -58,8 +57,7 @@ export default function Comment({
         post_id={post_id}
         slug={slug}
         post={post}
-        isParent
-        isReplyToParentComment={isReplyToParentComment}
+        isParent={isParent}
       />
       {!!comment?.count_of_replies && (
         <div className={styles.commentRepliesContainer}>

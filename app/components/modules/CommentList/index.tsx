@@ -1,11 +1,10 @@
 import React, { FC } from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 
-import Comment from "../comment";
-
 import { CommentType, PostType } from "@/app/types";
-
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
+
+import Comment from "../comment";
 
 import styles from "./comment_list.module.css";
 
@@ -15,7 +14,7 @@ export interface CommentListProps {
   sort_by?: string;
   parent_id?: number;
   post: PostType;
-  isReplyToParentComment?: boolean;
+  isParent?: boolean;
 }
 
 const CommentList: FC<CommentListProps> = ({
@@ -24,7 +23,7 @@ const CommentList: FC<CommentListProps> = ({
   sort_by,
   parent_id,
   post,
-  isReplyToParentComment,
+  isParent,
 }) => {
   const [page, setPage] = React.useState(1);
 
@@ -42,7 +41,7 @@ const CommentList: FC<CommentListProps> = ({
     });
 
   React.useEffect(() => {
-    if (isReplyToParentComment) {
+    if (isParent) {
       const onScroll = () => {
         const scrolledToBottom =
           window.innerHeight + window.scrollY >= document.body.offsetHeight;
@@ -72,10 +71,17 @@ const CommentList: FC<CommentListProps> = ({
           post_id={post_id}
           comment={comment}
           post={post}
-          isReplyToParentComment={isReplyToParentComment}
+          isParent
         />
       ))}
-      {!!postCommentList?.next && !isReplyToParentComment && (
+      {isParent && isFetching && (
+        <div className={styles.loaderContainer}>
+          <div className={styles.loaderSubContainer}>
+            <div className={"loader"}></div>
+          </div>
+        </div>
+      )}
+      {!!postCommentList?.next && !isParent && (
         <button onClick={loadMoreReplies} className={styles.showMoreReplies}>
           <MdOutlineSubdirectoryArrowRight
             size={20}

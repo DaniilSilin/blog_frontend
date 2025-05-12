@@ -1,5 +1,5 @@
 import "../public/style/style.css";
-
+import CookieHelper from "@/app/store/cookieHelper";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 
@@ -15,6 +15,12 @@ export default function App(props: AppProps) {
     store,
     props: { Component, pageProps },
   } = useGetAppStoreAndProps(props, router);
+
+  React.useEffect(() => {
+    if (CookieHelper.getCookie("theme") === "dark") {
+      document.body.setAttribute("dark-theme", "dark");
+    }
+  }, []);
 
   return (
     <Provider store={store}>

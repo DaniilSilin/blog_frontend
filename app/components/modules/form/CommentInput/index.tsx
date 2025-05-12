@@ -71,6 +71,7 @@ const CommentInput = React.forwardRef(function CommentInput(
             defaultValue={defaultValue}
             onFocus={handleFocus}
             autoSize={true}
+            className={styles.textarea}
             style={{ display: "block", height: `${height}px` }}
           />
         </div>

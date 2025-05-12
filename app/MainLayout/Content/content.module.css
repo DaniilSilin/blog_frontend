@@ -18,6 +18,11 @@
   }
 }
 
+.global {
+  background-color: var(--body-background);
+  color: var(--body-color)
+}
+
 .notification {
   display: flex;
   position: fixed;

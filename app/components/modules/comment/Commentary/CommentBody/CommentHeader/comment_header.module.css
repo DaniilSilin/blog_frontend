@@ -1,0 +1,35 @@
+.root {
+  margin-bottom: 2px;
+}
+
+.commentIsPinnedContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: var(--text-color-primary-1)
+}
+
+.pinIcon {
+  margin-right: 5px;
+}
+
+.commentAuthorHeader {
+  display: flex;
+  align-items: center;
+}
+
+.commentAuthorIsPostAuthor {
+  color: white;
+  border-radius: 10px;
+  padding: 2px 10px;
+  background-color: #888888;
+}
+
+.commentAuthor {
+  font-weight: 600;
+  color: var(--text-color-primary);
+}
+
+.date {
+  margin-left: 5px;
+}

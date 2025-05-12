@@ -4,24 +4,24 @@
 
 .showRepliesButton {
   display: inline-flex;
-  color: #3ea6ff;
+  color: var(--text-color-primary-2);
   padding: 8px 12px 8px 12px;
   border-radius: 20px;
 }
 
 .showRepliesButton:hover {
-  background: #def1ff;
+  background: var(--button-hover-background-4);
 }
 
 .showMoreReplies {
   display: inline-flex;
-  color: #3ea6ff;
+  color: var(--text-color-primary-2);
   padding: 8px 12px 8px 12px;
   border-radius: 20px;
 }
 
 .showMoreReplies:hover {
-  background: #263850;
+  background: var(--button-hover-background-4);
 }
 
 .arrow {

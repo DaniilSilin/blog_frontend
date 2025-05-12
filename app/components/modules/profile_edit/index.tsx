@@ -1,12 +1,8 @@
 import React, { ChangeEvent } from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import NextImage from "next/image";
-import classNames from "classnames";
 import moment from "moment/moment";
 import "moment/locale/ru";
 
-import AvatarCrop from "../blog_edit/Avatar/AvatarCrop";
-import BannerCrop from "../blog_edit/Banner/BannerCrop";
 import { UpdateInput } from "@/app/components/modules/form";
 import {
   emailValidator,
@@ -19,23 +15,20 @@ import UpdateTextArea from "@/app/components/modules/form/UpdateTextArea";
 import type { DatePickerProps } from "antd/lib";
 import { DatePicker, Space } from "antd/lib";
 
-import styles from "./profile_edit.module.css";
 import Select from "@/app/components/modules/form/Select";
 import genderList from "./constants";
+import ProfileEditActionBar from "./ProfileEditActionBar";
+import ProfileEditBanner from "./ProfileEditBanner";
+import ProfileEditAvatar from "./ProfileEditAvatar";
+import ProfileUploadErrorModal from "./ProfileUploadErrorModal";
 
 const BASE_URL = "http://127.0.0.1:8000/";
 
-const titleDescription =
-  "Придумайте название канала, которое будет представлять вас и ваш контент. Если вы укажете другое название или " +
-  "поменяете фото профиля, эти изменения будут видны только на YouTube. Изменить имя можно дважды в течение 14 дней. ";
-const slugDescription =
-  "Ваше имя пользователя. Менять имя пользователя нельзя.";
+import styles from "./profile_edit.module.css";
+
 const descriptionDescription = "Придумайте описание для вашего блога.";
 const emailDescription =
   ' Укажите, как связаться с вами по вопросам сотрудничества. Зрители могут увидеть адрес электронной почты на вкладке "О канале".';
-
-const AVATAR_SMALL_PATH = "/img/default/avatar_default.jpg";
-const BANNER_SMALL_PATH = "/img/default/banner.jpg";
 
 const dateFormat = "YYYY-MM-DD";
 
@@ -47,11 +40,9 @@ const MIN_WIDTH_BANNER = 1024;
 
 export default function ProfileEdit({ username }) {
   const { data } = DjangoService.useUserProfileQuery({ username });
-  console.log(data);
   const [chosenFile, setChosenFile] = React.useState<string>("");
 
   const [changeUserProfile] = DjangoService.useChangeUserProfileMutation();
-  const [deleteBlog] = DjangoService.useDeleteBlogMutation();
 
   const avatarRef = React.useRef(null);
   const bannerRef = React.useRef(null);
@@ -132,7 +123,8 @@ export default function ProfileEdit({ username }) {
   const [emailError, setEmailError] = React.useState<string>("");
   const [mapError, setMapError] = React.useState<string>("");
 
-  const [hasPostChanged, setHasPostChanged] = React.useState(false);
+  const [hasProfileDataChanged, setHasProfileDataChanged] =
+    React.useState(false);
   const [isReadyToSubmit, setIsReadyToSubmit] = React.useState(false);
 
   console.log(data);
@@ -228,12 +220,12 @@ export default function ProfileEdit({ username }) {
 
   React.useEffect(() => {
     const isValid = formValidator();
-    if (hasPostChanged && isValid) {
+    if (hasProfileDataChanged && isValid) {
       setIsReadyToSubmit(true);
     } else {
       setIsReadyToSubmit(false);
     }
-  }, [setIsReadyToSubmit, hasPostChanged, formValidator]);
+  }, [setIsReadyToSubmit, hasProfileDataChanged, formValidator]);
 
   const bannerState = React.useMemo(() => {
     const defaultImage = "/img/default/banner.jpg";
@@ -278,18 +270,6 @@ export default function ProfileEdit({ username }) {
     data,
     initialAvatarSmall,
   ]);
-
-  const deleteBanner = React.useCallback(() => {
-    setIsBannerDeleted(true);
-    setCroppedBannerUrl("");
-    setCroppedBanner(undefined);
-  }, [setCroppedBannerUrl, setCroppedBanner, setIsBannerDeleted]);
-
-  const deleteAvatar = React.useCallback(() => {
-    setIsAvatarDeleted(true);
-    setCroppedAvatarUrl("");
-    setCroppedAvatar(undefined);
-  }, [setCroppedAvatarUrl, setCroppedAvatar, setIsAvatarDeleted]);
 
   const onSelectBannerImage = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -421,9 +401,9 @@ export default function ProfileEdit({ username }) {
       initialBannerSmall === bannerState &&
       initialAvatarSmall === avatarState
     ) {
-      setHasPostChanged(false);
+      setHasProfileDataChanged(false);
     } else {
-      setHasPostChanged(true);
+      setHasProfileDataChanged(true);
     }
   }, [
     title,
@@ -437,14 +417,12 @@ export default function ProfileEdit({ username }) {
     initialMap,
     initialGender,
     initialBirthDate,
-    setHasPostChanged,
+    setHasProfileDataChanged,
     initialAvatarSmall,
     avatarState,
     initialBannerSmall,
     bannerState,
   ]);
-
-  const deleteBlogFunction = () => {};
 
   const bannerOriginal = React.useMemo(() => {
     if (originalBannerSource) {
@@ -499,7 +477,7 @@ export default function ProfileEdit({ username }) {
     : undefined;
   console.log(defaultBirthDateValue);
 
-  const updateBlogData = async () => {
+  const updateProfileData = async () => {
     const formData = new FormData();
     if (avatarState !== `${BASE_URL}${initialAvatarSmall}`) {
       formData.append("avatar", avatarOriginal);
@@ -521,216 +499,48 @@ export default function ProfileEdit({ username }) {
   return (
     <div>
       <div className={styles.tabTitle}>Настройки</div>
-      <div className={styles.bannerContainer}>
-        <div className={styles.bannerContainerTitle}>Баннер</div>
-        <div className={styles.bannerContainerDescription}>
-          Это изображение показывается в верхней части страницы канала.
-        </div>
-        <div style={{ display: "flex", marginTop: "8px" }}>
-          <div
-            style={{
-              width: "290px",
-              height: "160px",
-              backgroundColor: "#1f1f1f",
-              alignItems: "center",
-              borderRadius: "15px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <NextImage
-              src={bannerState}
-              style={{ border: "2px solid white" }}
-              width={175}
-              height={100}
-              alt={""}
-            />
-          </div>
-          <div className={styles.avatarUploadContainer}>
-            <div className={styles.bannerGuide}>
-              Чтобы канал выглядел привлекательно на всех устройствах, советуем
-              загрузить изображение размером не менее 2048 x 1152 пикс. Размер
-              файла – не более 6 МБ.
-            </div>
-            <div className={styles.bannerActionsContainer}>
-              {bannerState === BANNER_SMALL_PATH ||
-              isBannerDeleted.toString() === "true" ? (
-                <button className={styles.bannerUploadButton}>
-                  <label>
-                    Загрузить
-                    <input
-                      type={"file"}
-                      accept="image/png,image/jpeg,image/gif"
-                      onChange={onSelectBannerImage}
-                    />
-                  </label>
-                </button>
-              ) : (
-                <>
-                  <button className={styles.bannerUploadButton}>
-                    <label>
-                      Изменить
-                      <input
-                        type={"file"}
-                        accept="image/png,image/jpeg,image/gif"
-                        style={{ cursor: "pointer" }}
-                        onChange={onSelectBannerImage}
-                      />
-                    </label>
-                  </button>
-                  <button
-                    onClick={deleteBanner}
-                    className={styles.bannerDeleteButton}
-                  >
-                    Удалить
-                  </button>
-                </>
-              )}
-              <div
-                onClick={handleDisplayModal}
-                ref={bannerRef}
-                className="modal_3"
-              >
-                <div className="modalContent_3">
-                  <BannerCrop
-                    originalBannerSourceUrl={originalBannerSourceUrl}
-                    setOriginalBannerSource={setOriginalBannerSource}
-                    setOriginalBannerSourceUrl={setOriginalBannerSourceUrl}
-                    setCroppedBanner={setCroppedBanner}
-                    setCroppedBannerUrl={setCroppedBannerUrl}
-                    setIsBannerDeleted={setIsBannerDeleted}
-                    ref={bannerRef}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.avatarContainer}>
-          <div className={styles.avatarContainerTitle}>Фото профиля</div>
-          <div className={styles.bannerContainerDescription}>
-            Фото профиля показывается, например, рядом с вашими видео или
-            комментариями на сайте.
-          </div>
-          <div style={{ display: "flex", marginTop: "8px" }}>
-            <div className={styles.avatarBackground}>
-              <NextImage
-                src={avatarState}
-                className={styles.avatarImage}
-                width={140}
-                height={140}
-                alt={""}
-              />
-            </div>
-            <div className={styles.avatarUploadContainer}>
-              <div className={styles.avatarGuide}>
-                Рекомендуем использовать изображение размером не менее 98 х 98
-                пикселей в формате PNG или GIF. Анимированные картинки загружать
-                нельзя. Размер файла – не более 4 МБ.
-              </div>
-              <div className={styles.avatarActionsContainer}>
-                {avatarState === AVATAR_SMALL_PATH ||
-                isAvatarDeleted.toString() === "true" ? (
-                  <div className={styles.avatarUploadButton}>
-                    <label>
-                      Загрузить
-                      <input
-                        type={"file"}
-                        accept="image/png,image/jpeg,image/gif"
-                        onChange={onSelectAvatar}
-                      />
-                    </label>
-                  </div>
-                ) : (
-                  <>
-                    <button className={styles.avatarUploadButton}>
-                      <label>
-                        Изменить
-                        <input
-                          type={"file"}
-                          accept="image/png,image/jpeg,image/gif"
-                          onChange={onSelectAvatar}
-                        />
-                      </label>
-                    </button>
-                    <button
-                      onClick={deleteAvatar}
-                      className={styles.avatarDeleteButton}
-                    >
-                      Удалить
-                    </button>
-                  </>
-                )}
-                <div
-                  onClick={handleDisplayModal}
-                  ref={avatarRef}
-                  className="modal_3"
-                >
-                  <div className="modalContent_3">
-                    <AvatarCrop
-                      originalAvatarSource={originalAvatarSource}
-                      originalAvatarSourceUrl={originalAvatarSourceUrl}
-                      setOriginalAvatarSource={setOriginalAvatarSource}
-                      setOriginalAvatarSourceUrl={setOriginalAvatarSourceUrl}
-                      croppedAvatar={croppedAvatar}
-                      setCroppedAvatar={setCroppedAvatar}
-                      croppedAvatarUrl={croppedAvatarUrl}
-                      setCroppedAvatarUrl={setCroppedAvatarUrl}
-                      setIsAvatarDeleted={setIsAvatarDeleted}
-                      ref={avatarRef}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          ref={uploadErrorRef}
-          onClick={handleDisplayModal}
-          className="modal_3"
-        >
-          <div className={styles.modalContentError}>
-            <div
-              style={{
-                padding: "7px 8px 5px",
-                fontWeight: "500",
-                fontSize: "20px",
-                lineHeight: "28px",
-              }}
-            >
-              Ошибка
-            </div>
-            <div style={{ paddingLeft: "24px", paddingRight: "24px" }}>
-              <div>{imageErrorMessage}</div>
-            </div>
-            <div className={styles.errorMessageActionContainer}>
-              <button className={"cancel"}>Отмена</button>
-              <button className={styles.retryErrorButton}>
-                <label style={{ cursor: "pointer" }}>
-                  Повторить
-                  {chosenFile === "banner" && (
-                    <input
-                      type={"file"}
-                      accept="image/png,image/jpeg,image/gif"
-                      style={{ display: "none" }}
-                      onChange={onSelectBannerImage}
-                    />
-                  )}
-                  {chosenFile === "avatar" && (
-                    <input
-                      type={"file"}
-                      accept="image/png,image/jpeg,image/gif"
-                      style={{ display: "none" }}
-                      onChange={onSelectAvatar}
-                    />
-                  )}
-                </label>
-              </button>
-            </div>
-          </div>
-        </div>
+      <ProfileEditActionBar
+        username={username}
+        isReadyToSubmit={isReadyToSubmit}
+        updateProfileData={updateProfileData}
+        hasProfileDataChanged={hasProfileDataChanged}
+        setToDefaultHandleChange={setToDefaultHandleChange}
+      />
+      <div style={{ padding: "12px 12px 12px 0" }}>
+        <ProfileEditBanner
+          bannerState={bannerState}
+          isBannerDeleted={isBannerDeleted}
+          setIsBannerDeleted={setIsBannerDeleted}
+          setImageErrorMessage={setImageErrorMessage}
+          setChosenFile={setChosenFile}
+          setCroppedBanner={setCroppedBanner}
+          setCroppedBannerUrl={setCroppedBannerUrl}
+          handleDisplayModal={handleDisplayModal}
+          originalBannerSource={originalBannerSource}
+          setOriginalBannerSource={setOriginalBannerSource}
+          originalBannerSourceUrl={originalBannerSourceUrl}
+          setOriginalBannerSourceUrl={setOriginalBannerSourceUrl}
+        />
+        <ProfileEditAvatar
+          avatarState={avatarState}
+          isAvatarDeleted={isAvatarDeleted}
+          setIsAvatarDeleted={setIsAvatarDeleted}
+          setChosenFile={setChosenFile}
+          setImageErrorMessage={setImageErrorMessage}
+          setCroppedAvatar={setCroppedAvatar}
+          setCroppedAvatarUrl={setCroppedAvatarUrl}
+          handleDisplayModal={handleDisplayModal}
+          originalAvatarSource={originalAvatarSource}
+          setOriginalAvatarSource={setOriginalAvatarSource}
+          originalAvatarSourceUrl={originalAvatarSourceUrl}
+          setOriginalAvatarSourceUrl={setOriginalAvatarSourceUrl}
+        />
       </div>
+      <ProfileUploadErrorModal
+        imageErrorMessage={imageErrorMessage}
+        handleDisplayModal={handleDisplayModal}
+        chosenFile={chosenFile}
+      />
       <div className={styles.otherFields}>
         <UpdateInput
           width={400}
@@ -755,12 +565,13 @@ export default function ProfileEdit({ username }) {
           height={40}
           label={"Имя пользователя"}
           defaultValue={data.username}
-          description={slugDescription}
+          description={"Ваше имя пользователя. Менять имя пользователя нельзя."}
           disabled={true}
         />
         <UpdateTextArea
           width={400}
           height={100}
+          maxLength={300}
           label={"Описание"}
           defaultValue={initialDescription}
           value={description}
@@ -793,29 +604,6 @@ export default function ProfileEdit({ username }) {
             format={dateFormat}
           />
         </Space>
-      </div>
-      <div className={styles.actionButtonsContainer}>
-        <button className={styles.deleteButton} onClick={deleteBlogFunction}>
-          Удалить блог
-        </button>
-        <button
-          className={classNames(styles.cancelButton, {
-            [styles.active]: hasPostChanged,
-          })}
-          disabled={!hasPostChanged}
-          onClick={setToDefaultHandleChange}
-        >
-          Отмена
-        </button>
-        <button
-          className={classNames(styles.submitButton, {
-            [styles.active]: isReadyToSubmit,
-          })}
-          disabled={!isReadyToSubmit}
-          onClick={updateBlogData}
-        >
-          Сохранить
-        </button>
       </div>
     </div>
   );

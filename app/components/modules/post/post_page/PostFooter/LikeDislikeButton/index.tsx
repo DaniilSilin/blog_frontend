@@ -9,7 +9,8 @@ import {
 } from "react-icons/ai";
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
 import { PostType } from "@/app/types";
-import styles from "@/app/components/modules/post/post_page/post_page.module.css";
+
+import styles from "./post_like_dislike_button.module.css";
 
 export interface Props {
   post: PostType;

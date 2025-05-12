@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.likeButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 25px;
+  justify-content: center;
+}
+
+.likeButton:hover {
+  background-color: var(--button-hover-background-2);
+}
+
+.likeIcon {
+  color: var(--icon-color-primary);
+}
+
+.likeCounter {
+  margin-right: 8px;
+}

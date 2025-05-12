@@ -16,7 +16,7 @@ export interface Props {
   postData: any;
   setEditMode: (value: boolean) => void;
   setDisplayAdditionalMenu: (value: boolean) => void;
-  isParent: boolean;
+  isParent?: boolean;
 }
 
 export default function CommentaryActionMenu({
@@ -49,6 +49,10 @@ export default function CommentaryActionMenu({
 
   const editCommentButton = () => {
     setEditMode(true);
+    setDisplayAdditionalMenu(false);
+  };
+
+  const complainButton = () => {
     setDisplayAdditionalMenu(false);
   };
 
@@ -153,7 +157,7 @@ export default function CommentaryActionMenu({
     } else {
       return (
         <div className={styles.root}>
-          <div onClick={deleteCurrentComment}>
+          <div onClick={complainButton}>
             <CiFlag1 size={21} className={styles.icon} />
             <div>Пожаловаться</div>
           </div>

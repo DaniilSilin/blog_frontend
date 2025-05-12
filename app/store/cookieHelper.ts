@@ -1,10 +1,4 @@
-import {
-  getCookie,
-  getCookies,
-  setCookie,
-  deleteCookie,
-  hasCookie,
-} from "cookies-next";
+import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
 class CookieHelper {
   static setCookie(cname: string, cvalue: string, exdays: number) {

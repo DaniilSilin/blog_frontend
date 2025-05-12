@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.loaderContainer {
+  margin: 0 auto;
+}
+
 .avatarCreateComment {
   border-radius: 50%;
   margin-right: 16px;

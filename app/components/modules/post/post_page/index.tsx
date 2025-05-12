@@ -66,9 +66,9 @@ export default function PostPage({ slug, post_id }) {
         <div>
           <div className={styles.commentsDataAndCreateComment}>
             <div className={styles.commentsData}>
-              <h2 className={styles.commentsCountTitle}>
+              <h3 className={styles.commentsCountTitle}>
                 <span>{commentsCount}</span>
-              </h2>
+              </h3>
               <CommentListSort setSortBy={setSortBy} sortBy={sortBy} />
             </div>
             <CommentCreate slug={slug} post_id={post_id} />
@@ -79,7 +79,7 @@ export default function PostPage({ slug, post_id }) {
               post_id={post_id}
               sort_by={sortBy}
               post={post}
-              isReplyToParentComment
+              isParent
             />
           </div>
         </div>

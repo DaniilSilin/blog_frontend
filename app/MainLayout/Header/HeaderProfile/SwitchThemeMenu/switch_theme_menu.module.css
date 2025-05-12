@@ -1,0 +1,14 @@
+.root {
+
+}
+
+.header {
+  display: flex;
+  border-bottom: 1px solid #979fa7;
+}
+
+.description {
+  padding: 16px 0;
+  color: #606060;
+  line-height: 25px;
+}

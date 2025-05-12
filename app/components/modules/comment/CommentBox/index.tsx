@@ -1,25 +1,23 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import classNames from "classnames";
-import EmojiPicker from "emoji-picker-react";
 
 import CommentInput from "@/app/components/modules/form/CommentInput";
-import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { CommentType } from "@/app/types";
 
 import styles from "./commentBox.module.css";
+import FooterCommentBox from "@/app/components/modules/comment/CommentBox/FooterCommentBox";
 
 export interface Props {
   placeholder: string;
   submitButtonText: string;
   displayReplyInput?: boolean;
-  comment?: Comment;
+  comment?: CommentType;
   slug: string;
   post_id: number;
   setDisplayReplyInput?: (value: boolean) => void;
   setEditMode?: (value: boolean) => void;
   editMode?: boolean;
-  isReplyToParentComment?: boolean;
+  isParent?: boolean;
   setLoading: (value: boolean) => void;
 }
 
@@ -33,16 +31,14 @@ export default function CommentBox({
   comment,
   slug,
   post_id,
-  isReplyToParentComment,
+  isParent,
   setLoading,
 }: Props) {
   const inputRef = React.useRef(null);
-  const emojiPickerRef = React.useRef(null);
   const [commentBody, setCommentBody] = React.useState<string>(
     editMode ? comment?.body : "",
   );
   const [focusOnInput, setFocusOnInput] = React.useState<boolean>(false);
-  const [displayEmojiPicker, setDisplayEmojiPicker] = React.useState(false);
 
   const [updateComment] = DjangoService.useUpdateCommentMutation();
   const [createComment] = DjangoService.useCreateCommentMutation();
@@ -72,11 +68,11 @@ export default function CommentBox({
     }
   }, [editMode]);
 
-  const leaveComment = async () => {
+  const leaveComment = React.useCallback(async () => {
     if (editMode) {
       updateComment({
-        slug: slug,
-        post_id: post_id,
+        slug,
+        post_id,
         comment_id: comment?.comment_id,
         body: commentBody,
       });
@@ -87,91 +83,46 @@ export default function CommentBox({
           createComment({
             comment_id: comment.comment_id,
             body: commentBody,
-            post_id: post_id,
-            slug: slug,
+            post_id,
+            slug,
             reply_to: comment?.reply_to,
           });
-          setDisplayReplyInput(false);
         } else {
           createComment({
             comment_id: comment.comment_id,
             body: commentBody,
-            post_id: post_id,
-            slug: slug,
+            post_id,
+            slug,
             reply_to: comment?.comment_id,
           });
-          setDisplayReplyInput(false);
         }
+        setDisplayReplyInput(false);
       } else {
-        const result = await createComment({
-          body: commentBody,
-          post_id: post_id,
-          slug: slug,
-        });
         setLoading(true);
-        setFocusOnInput(false);
-        setCommentBody("");
         try {
-          if (result && result.data && result.data.status) {
-            setLoading(false);
-          } else {
-            console.warn(
-              "Статус не определён или ответ не соответствует ожиданиям",
-            );
-            setLoading(false);
-          }
+          const result = await createComment({
+            body: commentBody,
+            post_id,
+            slug,
+          });
         } catch (error) {
-          console.error("Ошибка при создании комментария:", error);
+          console.error("Ошибка при отправке комментария:", error);
+        } finally {
           setLoading(false);
         }
-        // console.log(result.data.status);
-        // if (!!result.data.status) {
-        //   setLoading(false);
-        // }
       }
     }
-  };
-
-  const onEmojiHandleClick = (emoji: any) => {
-    // @ts-ignore
-    const input = inputRef.current.resizableTextArea.textArea;
-    const cursorPosition = input.selectionStart;
-    setCommentBody(
-      `${commentBody.slice(0, cursorPosition)}${emoji.emoji}${commentBody.slice(cursorPosition)}`,
-    );
-    input.focus();
-    setTimeout(() => {
-      input.setSelectionRange(cursorPosition + 2, cursorPosition + 2);
-    }, 0);
-  };
-
-  const openEmojiMenuHandleClick = React.useCallback(() => {
-    setDisplayEmojiPicker(!displayEmojiPicker);
-  }, [setDisplayEmojiPicker, displayEmojiPicker]);
+  }, [setLoading, commentBody]);
 
   React.useEffect(() => {
     if (displayReplyInput) {
-      if (!isReplyToParentComment) {
+      if (!isParent) {
         setCommentBody(`@${comment?.author.username} `);
       }
       // @ts-ignore
       inputRef?.current.focus();
     }
   }, [displayReplyInput]);
-
-  React.useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      // @ts-ignore
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(e.target)
-      ) {
-        setDisplayEmojiPicker(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [emojiPickerRef]);
 
   return (
     <div className={styles.root}>
@@ -187,54 +138,16 @@ export default function CommentBox({
         editMode={editMode}
       />
       {focusOnInput && (
-        <div className={styles.commentFooter}>
-          <div ref={emojiPickerRef}>
-            <div className={styles.emojiIcon}>
-              <HiOutlineEmojiHappy
-                onClick={openEmojiMenuHandleClick}
-                size={20}
-              />
-            </div>
-            {displayEmojiPicker && (
-              <EmojiPicker
-                className={styles.emojiPicker}
-                open={displayEmojiPicker}
-                onEmojiClick={onEmojiHandleClick}
-              />
-            )}
-          </div>
-          <div className={styles.buttons}>
-            <button
-              className={styles.cancelCommentButton}
-              onClick={cancelComment}
-            >
-              <span>Отмена</span>
-            </button>
-            {editMode ? (
-              <button
-                onClick={leaveComment}
-                disabled={commentBody === comment?.body || commentBody === ""}
-                className={classNames(styles.leaveCommentButton, {
-                  [styles.notEmpty]: !(
-                    commentBody === comment?.body || commentBody === ""
-                  ),
-                })}
-              >
-                <span>Сохранить</span>
-              </button>
-            ) : (
-              <button
-                onClick={leaveComment}
-                disabled={!commentBody}
-                className={classNames(styles.leaveCommentButton, {
-                  [styles.notEmpty]: !!commentBody,
-                })}
-              >
-                <span>{submitButtonText}</span>
-              </button>
-            )}
-          </div>
-        </div>
+        <FooterCommentBox
+          submitButtonText={submitButtonText}
+          cancelComment={cancelComment}
+          leaveComment={leaveComment}
+          setCommentBody={setCommentBody}
+          commentBody={commentBody}
+          comment={comment}
+          editMode={editMode}
+          ref={inputRef}
+        />
       )}
     </div>
   );

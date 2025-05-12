@@ -1,4 +1,4 @@
-import { Author, PostType } from "@/app/types";
+import { Author, PostType, User } from "@/app/types";
 
 export interface CommentType {
   id: number;
@@ -16,6 +16,7 @@ export interface CommentType {
   count_of_replies?: number;
   forceRender?: boolean;
   is_pinned: boolean;
+  pinned_by_user: User;
   isLiked: boolean;
   isDisliked: boolean;
 }

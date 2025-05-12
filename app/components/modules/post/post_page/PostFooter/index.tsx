@@ -12,6 +12,7 @@ import ShareMenu from "@/app/components/modules/post_page/PostFooter/ShareMenu";
 import LikeDislikeButton from "./LikeDislikeButton";
 
 import styles from "@/app/components/modules/post/post_page/post_page.module.css";
+import PostSubscribeButton from "@/app/components/modules/post/post_page/PostFooter/PostSubscribeButton";
 
 export interface Props {
   post: PostType;
@@ -62,6 +63,7 @@ export default function PostFooter({ post, refetch }: Props) {
   return (
     <div className={styles.actionContainer}>
       <LikeDislikeButton post={post} refetch={refetch} />
+      {/*<PostSubscribeButton />*/}
       <div className={styles.bookmarkContainer}>
         {user.isGuest ? (
           <div ref={bookmarkRef}>

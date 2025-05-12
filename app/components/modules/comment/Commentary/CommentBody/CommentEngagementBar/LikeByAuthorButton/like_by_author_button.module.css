@@ -1,0 +1,28 @@
+.root {
+  margin: 0 9px 0 2px;
+}
+
+.likedByAuthorButton {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  flex-direction: row-reverse;
+}
+
+.likedByAuthorAvatar {
+  border-radius: 50%;
+}
+
+.likedByAuthorHeart {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-top: 10px;
+  margin-left: -10px;
+}
+
+.notLikedByAuthorButton {
+  display: flex;
+  align-items: center;
+}

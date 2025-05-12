@@ -32,6 +32,7 @@
   border: 2px solid #363738;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+  z-index: 9999;
 }
 
 .profileMenu > .profileMenuElement {

@@ -13,10 +13,13 @@ import {
   IoIosArrowUp,
   IoIosArrowDown,
   IoIosLogOut,
+  IoIosArrowForward,
 } from "react-icons/io";
 import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
 import { BsPaletteFill } from "react-icons/bs";
 import { ImBooks } from "react-icons/im";
+
+import SwitchThemeMenu from "./SwitchThemeMenu";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -28,6 +31,14 @@ export default function HeaderProfile() {
 
   const userRef = React.useRef(null);
   const [openUserMenu, setOpenUserMenu] = React.useState<boolean>(false);
+  const [currentTheme, setCurrentTheme] = React.useState(
+    CookieHelper.getCookie("theme") ? CookieHelper.getCookie("theme") : "light",
+  );
+  const [currentThemeLabel, setCurrenThemeLabel] = React.useState(
+    currentTheme === "light" ? "светлая" : "тёмная",
+  );
+  const [displaySwitchThemeMenu, setDisplaySwitchThemeMenu] =
+    React.useState(false);
   const user = useAppSelector((state) => state.django.profile);
 
   const logout = () => {
@@ -43,6 +54,7 @@ export default function HeaderProfile() {
         // @ts-ignore
         if (!userRef.current.contains(e.target)) {
           setOpenUserMenu(false);
+          setDisplaySwitchThemeMenu(false);
         }
       } else {
         // @ts-ignore
@@ -54,6 +66,10 @@ export default function HeaderProfile() {
     document.addEventListener("mousedown", handleMouseDown);
     return () => document.removeEventListener("mousedown", handleMouseDown);
   });
+
+  const displaySwitchThemeMenuHandleChange = React.useCallback(() => {
+    setDisplaySwitchThemeMenu(true);
+  }, [setDisplaySwitchThemeMenu]);
 
   const displayProfileHandleChange = React.useCallback(() => {
     // setOpenUserMenu(!openUserMenu)
@@ -85,99 +101,117 @@ export default function HeaderProfile() {
         </div>
         <div>
           {openUserMenu && (
-            <div className={styles.profileMenu}>
-              <div
-                className={styles.profileMenuElement}
-                onClick={hideProfileHeaderHandleClick}
-              >
-                <Link href={`/profile/${user?.username}`}>
-                  <div className={styles.profileMenuContainer}>
-                    <ImBooks
+            <>
+              {displaySwitchThemeMenu ? (
+                <div className={styles.profileMenu}>
+                  <SwitchThemeMenu
+                    currentTheme={currentTheme}
+                    setCurrentTheme={setCurrentTheme}
+                    setCurrenThemeLabel={setCurrenThemeLabel}
+                    setDisplaySwitchThemeMenu={setDisplaySwitchThemeMenu}
+                  />
+                </div>
+              ) : (
+                <div className={styles.profileMenu}>
+                  <div
+                    className={styles.profileMenuElement}
+                    onClick={hideProfileHeaderHandleClick}
+                  >
+                    <Link href={`/profile/${user?.username}`}>
+                      <div className={styles.profileMenuContainer}>
+                        <ImBooks
+                          className={styles.profileMenuElementIcon}
+                          size={24}
+                        />
+                        <div>Профиль</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div
+                    className={styles.profileMenuElement}
+                    onClick={hideProfileHeaderHandleClick}
+                  >
+                    <Link href={`/blog/create`}>
+                      <div className={styles.profileMenuContainer}>
+                        <MdOutlineCreate
+                          className={styles.profileMenuElementIcon}
+                          size={24}
+                        />
+                        <div>Создать блог</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div
+                    className={styles.profileMenuElement}
+                    onClick={hideProfileHeaderHandleClick}
+                  >
+                    <Link href={`/invite/list/`}>
+                      <div className={styles.profileMenuContainer}>
+                        <IoMdPersonAdd
+                          className={styles.profileMenuElementIcon}
+                          size={24}
+                        />
+                        <div>Приглашения</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div
+                    className={styles.profileMenuElement}
+                    style={{ padding: "10px 16px" }}
+                    onClick={displaySwitchThemeMenuHandleChange}
+                  >
+                    <BsPaletteFill
                       className={styles.profileMenuElementIcon}
                       size={24}
                     />
-                    <div>Профиль</div>
+                    <div>Тема: {currentThemeLabel}</div>
+                    <IoIosArrowForward
+                      size={24}
+                      style={{ marginLeft: "40px" }}
+                    />
                   </div>
-                </Link>
-              </div>
-              <div
-                className={styles.profileMenuElement}
-                onClick={hideProfileHeaderHandleClick}
-              >
-                <Link href={`/blog/create`}>
-                  <div className={styles.profileMenuContainer}>
-                    <MdOutlineCreate
+                  <div
+                    className={styles.profileMenuElement}
+                    onClick={hideProfileHeaderHandleClick}
+                  >
+                    <Link href={`/blogs/my`}>
+                      <div className={styles.profileMenuContainer}>
+                        <ImBooks
+                          className={styles.profileMenuElementIcon}
+                          size={24}
+                        />
+                        <div>Мои Блоги</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div
+                    className={styles.profileMenuElement}
+                    onClick={hideProfileHeaderHandleClick}
+                  >
+                    <Link href={`/profile/${user?.username}/edit`}>
+                      <div className={styles.profileMenuContainer}>
+                        <IoSettingsOutline
+                          className={styles.profileMenuElementIcon}
+                          size={24}
+                        />
+                        <div>Настройки</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div
+                    onClick={logout}
+                    className={styles.profileMenuElement}
+                    style={{ padding: "10px 16px" }}
+                  >
+                    <IoIosLogOut
                       className={styles.profileMenuElementIcon}
                       size={24}
                     />
-                    <div>Создать блог</div>
+                    <div>Выйти</div>
                   </div>
-                </Link>
-              </div>
-              <div
-                className={styles.profileMenuElement}
-                onClick={hideProfileHeaderHandleClick}
-              >
-                <Link href={`/invite/list/`}>
-                  <div className={styles.profileMenuContainer}>
-                    <IoMdPersonAdd
-                      className={styles.profileMenuElementIcon}
-                      size={24}
-                    />
-                    <div>Приглашения</div>
-                  </div>
-                </Link>
-              </div>
-              <div
-                className={styles.profileMenuElement}
-                style={{ padding: "10px 16px" }}
-              >
-                <BsPaletteFill
-                  className={styles.profileMenuElementIcon}
-                  size={24}
-                />
-                <div>Тема: темная</div>
-              </div>
-              <div
-                className={styles.profileMenuElement}
-                onClick={hideProfileHeaderHandleClick}
-              >
-                <Link href={`/blogs/my`}>
-                  <div className={styles.profileMenuContainer}>
-                    <ImBooks
-                      className={styles.profileMenuElementIcon}
-                      size={24}
-                    />
-                    <div>Мои Блоги</div>
-                  </div>
-                </Link>
-              </div>
-              <div
-                className={styles.profileMenuElement}
-                onClick={hideProfileHeaderHandleClick}
-              >
-                <Link href={`/profile/${user?.username}/edit`}>
-                  <div className={styles.profileMenuContainer}>
-                    <IoSettingsOutline
-                      className={styles.profileMenuElementIcon}
-                      size={24}
-                    />
-                    <div>Настройки</div>
-                  </div>
-                </Link>
-              </div>
-              <div
-                onClick={logout}
-                className={styles.profileMenuElement}
-                style={{ padding: "10px 16px" }}
-              >
-                <IoIosLogOut
-                  className={styles.profileMenuElementIcon}
-                  size={24}
-                />
-                <div>Выйти</div>
-              </div>
-            </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

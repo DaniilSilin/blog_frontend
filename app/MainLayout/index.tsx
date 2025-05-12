@@ -10,6 +10,8 @@ import DataSentSuccessfullyNotification from "../contexts/DataSentSuccessfully";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
+import styles from "./mainlayout.module.css";
+
 export interface Props {
   children: React.ReactNode;
 }

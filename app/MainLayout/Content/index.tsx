@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 const { Content } = Layout;
 import { Layout, theme } from "antd/lib";
 
+import "@/public/style/style.css";
 import styles from "./content.module.css";
 
 export interface Props {
@@ -25,9 +26,9 @@ export default function ContentReact({
 }: Props) {
   const router = useRouter();
   console.log(router);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer, borderRadiusLG },
+  // } = theme.useToken();
 
   const closeNotification = React.useCallback(() => {
     setIsCopied(false);
@@ -36,11 +37,10 @@ export default function ContentReact({
   return (
     <Content>
       <div
+        className={styles.global}
         style={{
-          background: colorBgContainer,
           minHeight: 720,
           padding: 24,
-          borderRadius: borderRadiusLG,
         }}
       >
         <div style={{ width: "1100px", margin: "20px auto" }}>{children}</div>

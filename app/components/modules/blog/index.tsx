@@ -1,6 +1,6 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import { Blog } from "@/app/types";
+import { BlogType } from "@/app/types";
 import { useRouter } from "next/router";
 
 import BlogItem from "@/app/components/modules/blog_item";
@@ -58,7 +58,7 @@ export default function BlogList() {
         setPage={setPage}
         cleanParams={cleanParams(router.query, page)}
       />
-      {blogList?.results.map((blog: Blog[], index: number) => (
+      {blogList?.results.map((blog: BlogType[], index: number) => (
         <BlogItem key={index} blog={blog} refetchBlogList={refetchBlogList} />
       ))}
     </div>

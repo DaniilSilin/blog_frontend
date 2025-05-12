@@ -1,0 +1,10 @@
+.createReplyButton {
+  color: var(--text-color-primary);
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 25px;
+}
+
+.createReplyButton:hover {
+  background-color: var(--button-hover-background-2)
+}

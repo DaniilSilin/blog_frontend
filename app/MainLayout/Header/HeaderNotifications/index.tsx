@@ -45,6 +45,16 @@ export default function HeaderNotifications() {
     [setNotification, setDisplayCommentList],
   );
 
+  React.useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      if (!notificationMenuRef.current.contains(e.target)) {
+        setDisplayNotificationListWindow(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouse);
+    return () => document.removeEventListener("mousedown", handleMouse);
+  });
+
   if (displayCommentList && notification) {
     return (
       <CommentReply
@@ -62,7 +72,7 @@ export default function HeaderNotifications() {
       className={styles.root}
       ref={notificationMenuRef}
     >
-      <CiBellOn size={45} />
+      <CiBellOn size={45} className={styles.bellIcon} />
       {displayNotificationListWindow && (
         <div className={styles.notificationMenu}>
           <div className={styles.notificationHeaderContainer}>

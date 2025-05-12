@@ -1,3 +1,24 @@
+.textarea {
+  display: block;
+  background-color: var(--textarea-backround);
+}
+
+.textarea:hover {
+  background-color: var(--textarea-backround);
+}
+
+.textarea:focus {
+  background-color: var(--textarea-backround);
+}
+
+.textarea {
+  color: var(--text-color-primary)
+}
+
+.textarea::placeholder {
+  color: var(--text-color-primary-1)
+}
+
 .disabled {
   display: block;
   height: 40px;

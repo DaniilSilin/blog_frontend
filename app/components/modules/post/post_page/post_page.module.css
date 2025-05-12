@@ -167,14 +167,14 @@
   padding: 7px 10px;
   width: fit-content;
   margin-left: 8px;
-  background-color: #272727;
+  background-color: var(--button-background);
   border-radius: 10px;
-  color: white;
+  color: var(--text-color-primary);
 }
 
 .bookmarkContainer:hover {
   cursor: pointer;
-  background-color: #3f3f3f;
+  background-color: var(--button-hover-background);
 }
 
 .bookmarkButton {
@@ -185,12 +185,12 @@
 
 .bookmarkIconAdded {
   margin-right: 16px;
-  color: white;
+  color: var(--icon-color-primary);
 }
 
 .bookmarkIconNotAdded {
   margin-right: 16px;
-  color: white;
+  color: var(--icon-color-primary);
 }
 
 .shareButton {
@@ -199,14 +199,14 @@
   padding: 7px 10px;
   width: fit-content;
   margin-left: 8px;
-  background-color: #272727;
+  background-color: var(--button-background);
   border-radius: 10px;
-  color: white;
+  color: var(--icon-color-primary);
 }
 
 .shareButton:hover {
   cursor: pointer;
-  background-color: #3f3f3f;
+  background-color: var(--button-hover-background);
 }
 
 .shareIcon {
@@ -230,21 +230,21 @@
 .subscribeButton {
   border-radius: 10px;
   padding: 10px;
-  background-color: #070707;
-  color: #b1b0b0;
+  background-color: var(--button-background);
+  color: var(--text-color-primary);
   height: 40px;
   font-weight: 600;
 }
 
 .subscribeButton:hover {
   cursor: pointer;
-  background-color: #353535;
+  background-color: var(--button-hover-background);
 }
 
 .unsubscribeButton {
   border-radius: 10px;
   padding: 10px;
-  background-color: black;
+  background-color: var(--button-background-1);
   color: #b1b0b0;
   cursor: pointer;
   height: 40px;
@@ -253,7 +253,7 @@
 
 .unsubscribeButton:hover {
   cursor: pointer;
-  background-color: #303030;
+  background-color: var(--button-hover-background-1);
 }
 
 .commentsBlock > input {
@@ -261,8 +261,8 @@
 }
 
 .map {
-  display: block;
-  margin: 30px 0;
+  display: flex;
+  justify-content: space-around;
 }
 
 .createReplyButton {

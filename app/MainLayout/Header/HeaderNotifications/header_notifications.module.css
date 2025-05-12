@@ -1,11 +1,16 @@
 .root {
   display: flex;
   align-items: center;
-  z-index: 100;
+  z-index: 9999;
 }
 
 .root:hover {
   background-color: #1677ff;
+}
+
+.bellIcon {
+  height: 100%;
+  cursor: pointer;
 }
 
 .notificationMenu {

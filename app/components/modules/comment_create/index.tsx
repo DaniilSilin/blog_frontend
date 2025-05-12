@@ -23,7 +23,9 @@ export default function CommentCreate({ post_id, slug }: Props) {
     return (
       <div className={styles.root}>
         {loading ? (
-          <div>Загрузка...</div>
+          <div className={styles.loaderContainer}>
+            <div className={"loader"}></div>
+          </div>
         ) : (
           <>
             <Image

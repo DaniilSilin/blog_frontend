@@ -1,8 +1,9 @@
 .root {
   position: absolute;
   padding: 8px 0;
-  background-color: #282828;
-  color: #f1f1f1;
+  background-color: var(--menu-background);
+  color: var(--text-color-primary);
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
@@ -15,7 +16,7 @@
 }
 
 .root > div:hover {
-  background-color: #535353;
+  background-color: var(--menu-hover-background);
   cursor: pointer;
 }
 

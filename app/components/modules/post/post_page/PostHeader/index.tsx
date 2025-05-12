@@ -1,16 +1,15 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
+import { useAppSelector } from "@/app/store";
 import Link from "next/link";
 import Image from "next/image";
 import moment from "moment";
 import "moment/locale/ru";
 
 import { PostType } from "@/app/types";
-
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
 
 import styles from "@/app/components/modules/post/post_page/post_page.module.css";
-import { useAppSelector } from "@/app/store";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -22,15 +21,7 @@ export interface Props {
 
 export default function PostHeader({ post, slug, post_id }: Props) {
   const user = useAppSelector((state) => state.django.profile);
-  const subscribeRef = React.useRef(null);
   const [blogSubscription] = DjangoService.useBlogSubscriptionMutation();
-
-  const [displaySubscribePopup, setDisplaySubscribePopup] =
-    React.useState(false);
-
-  const handleShowSubscribePopup = React.useCallback(() => {
-    setDisplaySubscribePopup(!displaySubscribePopup);
-  }, [setDisplaySubscribePopup, displaySubscribePopup]);
 
   const subscribersCount = React.useMemo(() => {
     const subscribers = post?.subscribers.toString() || "0";
