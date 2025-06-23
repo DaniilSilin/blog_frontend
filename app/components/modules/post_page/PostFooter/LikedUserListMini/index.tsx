@@ -58,32 +58,32 @@ export default function LikedUserListMini({ post }: Props) {
 
   return (
     <div className={styles.root}>
-      <div className={styles.title} onClick={handleChangeModal}>
-        {likedUserListCount}
-        <div className={"modal_3"}>
-          <LikedUserList post={post} />
-        </div>
-      </div>
-      <div className={styles.likedUserListContainer}>
-        {post?.liked_users.map((user: User, index: number) => (
-          <div key={index}>
-            <Link href={`/profile/${user.username}/`}>
-              <Image
-                title={user.username}
-                src={
-                  user.avatar_small
-                    ? `${BASE_URL}${user.avatar_small}`
-                    : "/img/default/avatar_default.jpg"
-                }
-                className={styles.avatar}
-                width={35}
-                height={35}
-                alt={""}
-              />
-            </Link>
-          </div>
-        ))}
-      </div>
+      {/*<div className={styles.title} onClick={handleChangeModal}>*/}
+      {/*  {likedUserListCount}*/}
+      {/*  <div className={"modal_3"}>*/}
+      {/*    <LikedUserList post={post} />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+      {/*<div className={styles.likedUserListContainer}>*/}
+      {/*  {post?.liked_users.map((user: User, index: number) => (*/}
+      {/*    <div key={index}>*/}
+      {/*      <Link href={`/profile/${user.username}/`}>*/}
+      {/*        <Image*/}
+      {/*          title={user.username}*/}
+      {/*          src={*/}
+      {/*            user.avatar_small*/}
+      {/*              ? `${BASE_URL}${user.avatar_small}`*/}
+      {/*              : "/img/default/avatar_default.jpg"*/}
+      {/*          }*/}
+      {/*          className={styles.avatar}*/}
+      {/*          width={35}*/}
+      {/*          height={35}*/}
+      {/*          alt={""}*/}
+      {/*        />*/}
+      {/*      </Link>*/}
+      {/*    </div>*/}
+      {/*  ))}*/}
+      {/*</div>*/}
     </div>
   );
 }

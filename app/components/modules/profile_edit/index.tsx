@@ -366,12 +366,12 @@ export default function ProfileEdit({ username }) {
     }
   };
 
-  React.useEffect(() => {
-    if (imageErrorMessage) {
-      // @ts-ignore
-      uploadErrorRef.current.style.display = "block";
-    }
-  }, [imageErrorMessage]);
+  // React.useEffect(() => {
+  //   if (imageErrorMessage) {
+  //     // @ts-ignore
+  //     uploadErrorRef.current.style.display = "block";
+  //   }
+  // }, [imageErrorMessage]);
 
   React.useEffect(() => {
     if (originalAvatarSource && originalAvatarSourceUrl) {

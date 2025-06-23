@@ -21,6 +21,7 @@ export interface Props {
 
 const MIN_WIDTH_DIMENSION = 1024;
 const MIN_HEIGHT_DIMENSION = 576;
+const MIN_DIMENSION = 100;
 const ASPECT_RATIO = 1;
 
 const BannerCrop = React.forwardRef(function BannerCrop(
@@ -47,20 +48,18 @@ const BannerCrop = React.forwardRef(function BannerCrop(
   const onImageLoad = (e) => {
     const width = e.target.width;
     const height = e.target.height;
-    const cropWidthInPercent = MIN_WIDTH_DIMENSION;
-    const cropHeightInPercent = MIN_HEIGHT_DIMENSION;
+    const cropWidthInPercent = MIN_DIMENSION / width;
 
     const crop = makeAspectCrop(
       {
         unit: "px",
-        width: MIN_WIDTH_DIMENSION,
-        height: MIN_HEIGHT_DIMENSION,
+        width: 400,
       },
       ASPECT_RATIO,
       width,
       height,
     );
-    const centeredCrop = centerCrop(crop, 300, 100);
+    const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
   };
 
@@ -109,8 +108,8 @@ const BannerCrop = React.forwardRef(function BannerCrop(
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
-    canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+    canvas.width = Math.floor(crop.width);
+    canvas.height = Math.floor(crop.height);
 
     ctx.scale(pixelRatio, pixelRatio);
     ctx.imageSmoothingQuality = "high";
@@ -141,11 +140,10 @@ const BannerCrop = React.forwardRef(function BannerCrop(
         crop={crop}
         keepSelection
         aspect={ASPECT_RATIO}
-        minWidth={MIN_WIDTH_DIMENSION}
-        minHeight={MIN_HEIGHT_DIMENSION}
+        minWidth={400}
+        minHeight={200}
       >
         <img
-          style={{ height: "500px", width: "900px" }}
           src={originalBannerSourceUrl}
           ref={bannerRef}
           onLoad={onImageLoad}

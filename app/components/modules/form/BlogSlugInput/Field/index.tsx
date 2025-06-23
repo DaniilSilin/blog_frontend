@@ -31,7 +31,6 @@ export default function Field({
     }
   }, [value, error]);
   console.log(descriptionState);
-  console.log(blog_slug);
   return (
     <div style={{ margin: "10px 0" }}>
       <div

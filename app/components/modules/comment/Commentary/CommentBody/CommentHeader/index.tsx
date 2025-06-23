@@ -19,7 +19,7 @@ export default function CommentHeader({ comment, post }: Props) {
       {comment.is_pinned && (
         <div className={styles.commentIsPinnedContainer}>
           <VscPinned className={styles.pinIcon} />
-          <div>Закреплено пользователем {comment.pinned_by_user.username}</div>
+          <div>Закреплено</div>
         </div>
       )}
       <div className={styles.commentAuthorHeader}>

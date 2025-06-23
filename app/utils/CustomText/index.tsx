@@ -10,9 +10,9 @@ const CustomText = (text: string) => {
     return parts.map((part, index) => {
       if (userMentionRegex.test(part)) {
         const username = part.slice(1);
-        return <Link href={`/profile/${username}/`}>{part}</Link>;
+        return <Link href={`/profile/${username}/`}>{part}&nbsp;</Link>;
       }
-      return part;
+      return <span key={index}>{part} </span>;
     });
   };
   return <span>{renderText()}</span>;

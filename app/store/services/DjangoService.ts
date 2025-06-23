@@ -20,8 +20,6 @@ const DjangoService = createApi({
         typeof window === "undefined"
           ? (api.extra as GetServerSidePropsContext).req?.cookies?.token || "" // server
           : CookieHelper.getCookie("token"); //client
-      console.log(`token`);
-      console.log(token);
       if (token) {
         headers.set("Authorization", `Token ${token}`);
       }
@@ -210,30 +208,10 @@ const DjangoService = createApi({
       }),
     }),
     createPost: builder.mutation({
-      query: ({
-        title,
-        body,
-        is_published,
-        map_type,
-        map,
-        blog,
-        tags,
-        comments_allowed,
-        author_is_hidden,
-      }) => ({
-        url: `blog/${blog}/post/create/`,
+      query: ({ formData, slug }) => ({
+        url: `blog/${slug}/post/create/`,
         method: "POST",
-        body: {
-          title,
-          body,
-          map_type,
-          map,
-          tags,
-          is_published,
-          comments_allowed,
-          author_is_hidden,
-          blog,
-        },
+        body: formData,
       }),
     }),
     deletePost: builder.mutation({
@@ -402,7 +380,6 @@ const DjangoService = createApi({
       ) {
         try {
           const { data: createdComment } = await queryFulfilled;
-          console.log(createdComment);
           if (reply_to) {
             for (const {
               endpointName,
@@ -764,7 +741,7 @@ const DjangoService = createApi({
                 console.log(comment);
                 if (comment) {
                   comment.is_pinned = true;
-                  comment.pinned_by_user = user.username;
+                  comment.pinned_by_user = "admin";
                   draft.results = [comment, ...draft.results];
                 }
               },
@@ -1087,7 +1064,6 @@ const DjangoService = createApi({
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
         const args = { ...queryArgs };
         delete args.page;
-        console.log(`${endpointName}(${JSON.stringify(args)})`);
         return `${endpointName}(${JSON.stringify(args)})`;
       },
       merge: (currentCache, newItems, otherArgs) => {

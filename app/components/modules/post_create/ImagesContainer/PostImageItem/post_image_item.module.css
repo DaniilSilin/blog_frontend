@@ -1,0 +1,45 @@
+.root {
+}
+
+.imageContainer {
+  position: relative;
+  width: fit-content;
+}
+
+.swapButton {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  right: 40px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  color: var(--text-color-primary);
+  background-color: var(--button-background);
+}
+
+.reUploadButton {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  right: 20px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  color: var(--text-color-primary);
+  background-color: var(--button-background);
+}
+
+.closeButton {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  color: var(--text-color-primary);
+  background-color: var(--button-background);
+}

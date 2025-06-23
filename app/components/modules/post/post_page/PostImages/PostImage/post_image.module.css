@@ -1,0 +1,29 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Задайте нужную высоту */
+  overflow: hidden;
+}
+
+.root:hover {
+  cursor: pointer;
+}
+
+.blurredBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover; /* Обеспечивает полное заполнение фона */
+  filter: blur(10px); /* Степень размытия */
+  z-index: 1; /* Убедитесь, что фон находится под изображением */
+}
+
+.foregroundImage {
+  margin: 0 auto;
+  position: relative;
+  z-index: 2; /* Убедитесь, что изображение поверх размытого фона */
+  max-width: none; /* Позволяет изображению иметь свои размеры */
+  max-height: none; /* Позволяет изображению иметь свои размеры */
+}

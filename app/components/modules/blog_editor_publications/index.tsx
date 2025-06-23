@@ -34,7 +34,6 @@ export default function BlogEditorPublications({ slug }) {
     },
     [setState],
   );
-  console.log(selectedPosts);
 
   return (
     <div className={styles.root}>

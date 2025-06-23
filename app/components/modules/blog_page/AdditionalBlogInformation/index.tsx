@@ -38,7 +38,7 @@ export default function AdditionalBlogInformation({ blog }: Props) {
           <div style={{ margin: "10px 8px 10px 0" }}>
             <h2>{blog.title}</h2>
           </div>
-          <div>x</div>
+          {/*<div>x</div>*/}
         </div>
       </div>
       <div className={styles.mainInformationContainer}>

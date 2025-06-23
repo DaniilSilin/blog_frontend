@@ -9,6 +9,12 @@ import {
   titleValidator,
   bodyValidator,
   mapValidator,
+  emailValidator,
+  vkValidator,
+  telegramValidator,
+  youtubeValidator,
+  dzenValidator,
+  ownSiteLinkValidator,
 } from "../form/validators";
 import {
   Map,
@@ -21,6 +27,7 @@ import Tags from "@/app/components/modules/post_create/Tags";
 
 import styles from "./PostCreate.module.css";
 import CheckboxContainer from "@/app/components/modules/post_create/CheckboxContainer";
+import ImagesContainer from "@/app/components/modules/post_create/ImagesContainer";
 
 export default function PostCreate({ slug }) {
   const router = useRouter();
@@ -34,6 +41,7 @@ export default function PostCreate({ slug }) {
   const [isPublished, setIsPublished] = React.useState<boolean>(false);
   const [authorIsHidden, setAuthorIsHidden] = React.useState<boolean>(false);
   const [commentsAllowed, setCommentsAllowed] = React.useState<boolean>(false);
+  const [images, setImages] = React.useState<File[]>();
 
   const [availableToSubmit, setAvailableToSubmit] = React.useState(false);
 
@@ -43,58 +51,84 @@ export default function PostCreate({ slug }) {
   const [bodyError, setBodyError] = React.useState<string>("");
   const [mapError, setMapError] = React.useState<string>("");
 
+  // const formValidation = React.useCallback(() => {
+  //   let isValid;
+  //
+  //   if (titleValidator(title)) {
+  //     setTitleError(titleValidator(title));
+  //     isValid = false;
+  //   } else {
+  //     setTitleError("");
+  //     isValid = true;
+  //   }
+  //
+  //   if (map) {
+  //     if (mapValidator(map)) {
+  //       setMapError(mapValidator(map));
+  //       isValid = false;
+  //     } else {
+  //       setMapError("");
+  //       isValid = true;
+  //     }
+  //   } else {
+  //     setMapError("");
+  //   }
+  //
+  //   if (body) {
+  //     if (bodyValidator(body)) {
+  //       setBodyError(bodyValidator(body));
+  //       isValid = false;
+  //     } else {
+  //       setBodyError("");
+  //       isValid = true;
+  //     }
+  //   } else {
+  //     setBodyError("");
+  //   }
+  //
+  //   return isValid;
+  // }, [title, body, map, setTitleError, bodyError, mapValidator]);
+
   const formValidation = React.useCallback(() => {
-    let isValid;
+    const validateField = (value, validator, setError) => {
+      let isValid;
+      const error = validator(value);
 
-    if (titleValidator(title)) {
-      setTitleError(titleValidator(title));
-      isValid = false;
-    } else {
-      setTitleError("");
-      isValid = true;
-    }
-
-    if (map) {
-      if (mapValidator(map)) {
-        setMapError(mapValidator(map));
+      if (error) {
+        setError(error);
         isValid = false;
       } else {
-        setMapError("");
+        setError("");
         isValid = true;
       }
-    } else {
-      setMapError("");
-    }
+      return isValid;
+    };
 
-    if (body) {
-      if (bodyValidator(body)) {
-        setBodyError(bodyValidator(body));
-        isValid = false;
-      } else {
-        setBodyError("");
-        isValid = true;
-      }
-    } else {
-      setBodyError("");
-    }
+    const title_value = validateField(title, titleValidator, setTitleError);
+    const map_value = validateField(map, mapValidator, setMapError);
+    const body_value = validateField(body, bodyValidator, setBodyError);
 
-    return isValid;
-  }, [title, body, map, setTitleError, bodyError, mapValidator]);
+    return title_value && map_value && body_value;
+  }, [title, map]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
 
-    const result = await createPost({
-      title,
-      body,
-      map_type: mapType,
-      map,
-      is_published: isPublished,
-      comments_allowed: commentsAllowed,
-      author_is_hidden: authorIsHidden,
-      blog: slug,
-      tags: tags.join(" "),
+    formData.append("title", title);
+    formData.append("body", body);
+    formData.append("map_type", mapType);
+    formData.append("map", map);
+    formData.append("is_published", isPublished);
+    formData.append("comments_allowed", commentsAllowed);
+    formData.append("author_is_hidden", authorIsHidden);
+    formData.append("blog", slug);
+    formData.append("tags", tags.join(" "));
+    images?.forEach((image2) => {
+      formData.append("images", image2);
     });
+    const result = await createPost({ formData, slug });
+
     if (!result.error) {
       router.push(`/blog/${slug}/post/${result.data.post_id}/`);
     }
@@ -148,6 +182,7 @@ export default function PostCreate({ slug }) {
             setMapType={setMapType}
           />
         )}
+        <ImagesContainer images={images} setImages={setImages} />
         <Tags tags={tags} setTags={setTags} />
         <CheckboxContainer
           onChange={setIsPublished}
@@ -155,7 +190,7 @@ export default function PostCreate({ slug }) {
         />
         <CheckboxContainer
           onChange={setCommentsAllowed}
-          title={"Отключить комментарии"}
+          title={"Комментарии доступны"}
         />
         <CheckboxContainer
           onChange={setAuthorIsHidden}

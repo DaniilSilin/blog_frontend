@@ -24,6 +24,7 @@ export interface Props {
   setOriginalBannerSource: any;
   originalBannerSourceUrl: any;
   setOriginalBannerSourceUrl: any;
+  onSelectBannerImage: any;
 }
 
 const Banner = React.forwardRef(function Banner(
@@ -39,54 +40,53 @@ const Banner = React.forwardRef(function Banner(
     setOriginalBannerSource,
     originalBannerSourceUrl,
     setOriginalBannerSourceUrl,
+    onSelectBannerImage,
   }: Props,
   ref,
 ) {
-  const onSelectBannerImage = React.useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setImageErrorMessage("");
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      const fileSize = file?.size;
-      if (fileSize >= MIN_BANNER_SIZE_IN_MB) {
-        setImageErrorMessage("Максимальный размер изображения - 6 Мб.");
-      }
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const imageElement = new Image();
-        const imageUrl = reader.result?.toString() || "";
-        imageElement.src = imageUrl;
-
-        imageElement.addEventListener("load", (e) => {
-          // @ts-ignore
-          const width = e.currentTarget.width;
-          // @ts-ignore
-          const height = e.currentTarget.height;
-          if (width < MIN_WIDTH_BANNER || MIN_HEIGHT_BANNER > height) {
-            setChosenFile("banner");
-            setImageErrorMessage(
-              "Минимальный размер изображения – 1024 x 576 пикс.",
-            );
-            setOriginalBannerSource(undefined);
-            setOriginalBannerSourceUrl("");
-          } else {
-            setOriginalBannerSource(file);
-            setOriginalBannerSourceUrl(imageUrl);
-          }
-        });
-      });
-      reader.readAsDataURL(file);
-    },
-    [
-      setOriginalBannerSource,
-      setOriginalBannerSourceUrl,
-      setImageErrorMessage,
-      setChosenFile,
-    ],
-  );
-
-  const onSelectBanner = React.useContext(SelectImage);
+  // const onSelectBannerImage = React.useCallback(
+  //   (e: ChangeEvent<HTMLInputElement>) => {
+  //     setImageErrorMessage("");
+  //     const file = e.target.files?.[0];
+  //     if (!file) return;
+  //
+  //     const fileSize = file?.size;
+  //     if (fileSize >= MIN_BANNER_SIZE_IN_MB) {
+  //       setImageErrorMessage("Максимальный размер изображения - 6 Мб.");
+  //     }
+  //     const reader = new FileReader();
+  //     reader.addEventListener("load", () => {
+  //       const imageElement = new Image();
+  //       const imageUrl = reader.result?.toString() || "";
+  //       imageElement.src = imageUrl;
+  //
+  //       imageElement.addEventListener("load", (e) => {
+  //         // @ts-ignore
+  //         const width = e.currentTarget.width;
+  //         // @ts-ignore
+  //         const height = e.currentTarget.height;
+  //         if (width < MIN_WIDTH_BANNER || MIN_HEIGHT_BANNER > height) {
+  //           setChosenFile("banner");
+  //           setImageErrorMessage(
+  //             "Минимальный размер изображения – 1024 x 576 пикс.",
+  //           );
+  //           setOriginalBannerSource(undefined);
+  //           setOriginalBannerSourceUrl("");
+  //         } else {
+  //           setOriginalBannerSource(file);
+  //           setOriginalBannerSourceUrl(imageUrl);
+  //         }
+  //       });
+  //     });
+  //     reader.readAsDataURL(file);
+  //   },
+  //   [
+  //     setOriginalBannerSource,
+  //     setOriginalBannerSourceUrl,
+  //     setImageErrorMessage,
+  //     setChosenFile,
+  //   ],
+  // );
 
   const deleteBanner = React.useCallback(() => {
     setIsBannerDeleted(true);

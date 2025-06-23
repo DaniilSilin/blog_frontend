@@ -1,0 +1,30 @@
+.root {
+
+}
+
+.icon {
+  margin-right: 10px;
+}
+
+.uploadContainer {
+  display: flex;
+}
+
+.uploadedImagesTitle {
+
+}
+
+.uploadButton {
+  display: flex;
+  padding: 5px 7px;
+  border-radius: 15px;
+  border: 1px solid black;
+}
+
+.imagesContainer {
+  margin: 25px 0;
+}
+
+.chosenImagesTitle {
+  margin-bottom: 20px;
+}

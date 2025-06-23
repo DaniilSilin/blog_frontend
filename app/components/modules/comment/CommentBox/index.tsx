@@ -64,7 +64,12 @@ export default function CommentBox({
   React.useEffect(() => {
     if (editMode) {
       // @ts-ignore
-      inputRef?.current.focus();
+      const input = inputRef.current.resizableTextArea.textArea;
+      if (input) {
+        input.focus();
+        const length = input.textLength;
+        input.setSelectionRange(length, length);
+      }
     }
   }, [editMode]);
 
@@ -116,13 +121,13 @@ export default function CommentBox({
 
   React.useEffect(() => {
     if (displayReplyInput) {
-      if (!isParent) {
+      if (isParent) {
         setCommentBody(`@${comment?.author.username} `);
       }
       // @ts-ignore
       inputRef?.current.focus();
     }
-  }, [displayReplyInput]);
+  }, [displayReplyInput, isParent]);
 
   return (
     <div className={styles.root}>

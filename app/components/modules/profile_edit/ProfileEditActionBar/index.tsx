@@ -48,7 +48,6 @@ export default function ProfileEditActionBar({
         }
       } else {
         let modalNode = null;
-        console.log(elem);
         if (elem.firstElementChild.className.startsWith("modal_3")) {
           modalNode = elem.firstElementChild;
           modalNode.style.display = "block";

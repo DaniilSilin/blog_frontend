@@ -37,13 +37,11 @@ export default function Profile({ username }) {
   const handleDynamicContentClick = React.useCallback(
     (e) => {
       let elem = e.target;
-      console.log(elem);
       if (dynamicContentModalDisplayed) {
         if (elem.className.startsWith("modal_3")) {
           elem.style.display = "none";
           setDynamicContentModalDisplayed(false);
         }
-        console.log(e.target);
       } else {
         let modalNode = null;
         console.log(elem);

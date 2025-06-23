@@ -6,18 +6,37 @@ export interface Props {
   imageErrorMessage: string;
   handleDisplayModal: any;
   chosenFile: any;
+  onSelectBannerImage: any;
+  onSelectAvatar: any;
+  setImageErrorMessage: any;
 }
 
 const UploadErrorModal = React.forwardRef(function UploadErrorModal(
-  { imageErrorMessage, handleDisplayModal, chosenFile }: Props,
+  {
+    imageErrorMessage,
+    handleDisplayModal,
+    chosenFile,
+    onSelectBannerImage,
+    onSelectAvatar,
+    setImageErrorMessage,
+  }: Props,
   ref,
 ) {
   React.useEffect(() => {
     if (imageErrorMessage) {
       // @ts-ignore
       ref.current.style.display = "block";
+    } else {
+      setImageErrorMessage(false);
+      // @ts-ignore
+      // ref.current.style.display = "none";
     }
   }, [imageErrorMessage]);
+
+  const handleUploadButtonClick = () => {
+    const input = document.querySelector('input[type="file"]');
+    if (input) input.click();
+  };
 
   return (
     <div ref={ref} onClick={handleDisplayModal} className="modal_3">
@@ -26,20 +45,23 @@ const UploadErrorModal = React.forwardRef(function UploadErrorModal(
         <div className={styles.message}>{imageErrorMessage}</div>
         <div className={styles.errorMessageActionContainer}>
           <button className={"cancel"}>Отмена</button>
-          <button className={styles.retryErrorButton}>
+          <button
+            className={styles.retryErrorButton}
+            onClick={handleUploadButtonClick}
+          >
             Повторить
             {chosenFile === "banner" && (
               <input
                 type={"file"}
                 accept="image/png,image/jpeg,image/gif"
-                // onChange={onSelectBannerImage}
+                onChange={onSelectBannerImage}
               />
             )}
             {chosenFile === "avatar" && (
               <input
                 type={"file"}
                 accept="image/png,image/jpeg,image/gif"
-                // onChange={onSelectAvatar}
+                onChange={onSelectAvatar}
               />
             )}
           </button>

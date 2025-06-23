@@ -70,11 +70,11 @@ export default function LikeDislikeButton({ post }: Props) {
           <button className={styles.likeButton} onClick={handleShowLikePopup}>
             <AiOutlineLike className={styles.likeIconNotLiked} size={20} />
             <div className={styles.likeCounter}>{post?.likes}</div>
-            <div>
-              {post?.likes > 0 && visibleLikedUserList && (
-                <LikedUserListMini post={post} />
-              )}
-            </div>
+            {/*<div>*/}
+            {/*  {post?.likes > 0 && visibleLikedUserList && (*/}
+            {/*    <LikedUserListMini post={post} />*/}
+            {/*  )}*/}
+            {/*</div>*/}
           </button>
           {displayLikePopup && (
             <div

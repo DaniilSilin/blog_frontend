@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 
 import { UpdateInput } from "@/app/components/modules/form";
@@ -28,6 +28,12 @@ import DataSentSuccessfullyNotification from "@/app/contexts/DataSentSuccessfull
 
 const emailDescription =
   ' Укажите, как связаться с вами. Зрители могут увидеть адрес электронной почты на вкладке "О канале".';
+
+const MIN_BANNER_SIZE_IN_MB = 50331648;
+const MIN_WIDTH_BANNER = 1024;
+const MIN_HEIGHT_BANNER = 576;
+const MIN_DIMENSION_AVATAR = 100;
+const MIN_AVATAR_SIZE_IN_MB = 33554432;
 
 import styles from "./blog_edit.module.css";
 
@@ -382,10 +388,13 @@ export default function BlogEdit({ slug }) {
       initialTelegramLink === telegramLink &&
       initialYoutubeLink === youtubeLink &&
       initialDzenLink === dzenLink &&
-      initialOwnSiteLink === ownSiteLink
-      //   bannerState === "/img/default/banner.jpg" &&
-      //   initialBannerSmall === null) ||
-      // `${BASE_URL}${initialBannerSmall}` === bannerState
+      initialOwnSiteLink === ownSiteLink &&
+      ((bannerState === "/img/default/banner.jpg" &&
+        initialBannerSmall === null) ||
+        `${BASE_URL}${initialBannerSmall}` === bannerState) &&
+      ((avatarState === "/img/default/avatar_default.jpg" &&
+        initialAvatarSmall === null) ||
+        `${BASE_URL}${initialAvatarSmall}` === avatarState)
     ) {
       setHasPostChanged(false);
     } else {
@@ -482,6 +491,94 @@ export default function BlogEdit({ slug }) {
     }
   };
 
+  const onSelectBannerImage = React.useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setImageErrorMessage("");
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const fileSize = file?.size;
+      if (fileSize >= MIN_BANNER_SIZE_IN_MB) {
+        setImageErrorMessage("Максимальный размер изображения - 6 Мб.");
+      }
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const imageElement = new Image();
+        const imageUrl = reader.result?.toString() || "";
+        imageElement.src = imageUrl;
+
+        imageElement.addEventListener("load", (e) => {
+          // @ts-ignore
+          const width = e.currentTarget.width;
+          // @ts-ignore
+          const height = e.currentTarget.height;
+          if (width < MIN_WIDTH_BANNER || MIN_HEIGHT_BANNER > height) {
+            setChosenFile("banner");
+            setImageErrorMessage(
+              "Минимальный размер изображения – 1024 x 576 пикс.",
+            );
+            setOriginalBannerSource(undefined);
+            setOriginalBannerSourceUrl("");
+          } else {
+            setOriginalBannerSource(file);
+            setOriginalBannerSourceUrl(imageUrl);
+          }
+        });
+      });
+      reader.readAsDataURL(file);
+    },
+    [
+      setOriginalBannerSource,
+      setOriginalBannerSourceUrl,
+      setImageErrorMessage,
+      setChosenFile,
+    ],
+  );
+
+  const onSelectAvatar = React.useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setImageErrorMessage("");
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const fileSize = file?.size;
+      if (fileSize >= MIN_AVATAR_SIZE_IN_MB) {
+        setImageErrorMessage("Файл не может превышать размер 4 Мб!");
+      }
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const imageElement = new Image();
+        const imageUrl = reader.result?.toString() || "";
+        imageElement.src = imageUrl;
+
+        imageElement.addEventListener("load", (e) => {
+          // @ts-ignore
+          const width = e.currentTarget.width;
+          // @ts-ignore
+          const height = e.currentTarget.height;
+          if (width < MIN_DIMENSION_AVATAR || MIN_DIMENSION_AVATAR > height) {
+            setChosenFile("avatar");
+            setImageErrorMessage(
+              "Минимальный размер изображения – 99 x 99 пикс.",
+            );
+            setOriginalAvatarSource(undefined);
+            setOriginalAvatarSourceUrl("");
+          } else {
+            setOriginalAvatarSource(file);
+            setOriginalAvatarSourceUrl(imageUrl);
+          }
+        });
+      });
+      reader.readAsDataURL(file);
+    },
+    [
+      setOriginalAvatarSource,
+      setOriginalAvatarSourceUrl,
+      setChosenFile,
+      setImageErrorMessage,
+    ],
+  );
+
   const [childFunction, setChildFunction] = React.useState(null);
 
   return (
@@ -510,6 +607,7 @@ export default function BlogEdit({ slug }) {
               setOriginalBannerSource={setOriginalBannerSource}
               originalBannerSourceUrl={originalBannerSourceUrl}
               setOriginalBannerSourceUrl={setOriginalBannerSourceUrl}
+              onSelectBannerImage={onSelectBannerImage}
               ref={bannerRef}
             />
             <Avatar
@@ -529,9 +627,12 @@ export default function BlogEdit({ slug }) {
             />
           </div>
           <UploadErrorModal
+            onSelectBannerImage={onSelectBannerImage}
             imageErrorMessage={imageErrorMessage}
             chosenFile={chosenFile}
             handleDisplayModal={handleDisplayModal}
+            onSelectAvatar={onSelectAvatar}
+            setImageErrorMessage={setImageErrorMessage}
             ref={uploadErrorRef}
           />
         </div>

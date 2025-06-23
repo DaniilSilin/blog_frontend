@@ -9,6 +9,7 @@ import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 
 import styles from "./post_page.module.css";
+import PostImages from "@/app/components/modules/post/post_page/PostImages";
 
 export default function PostPage({ slug, post_id }) {
   const [sortBy, setSortBy] = React.useState<string>("newest");
@@ -44,6 +45,8 @@ export default function PostPage({ slug, post_id }) {
     }
   }, [post?.commentCount]);
 
+  console.log(post);
+
   return (
     <div>
       <PostHeader post={post} slug={slug} post_id={post_id} />
@@ -54,6 +57,7 @@ export default function PostPage({ slug, post_id }) {
         className={styles.map}
         dangerouslySetInnerHTML={{ __html: post?.map }}
       ></div>
+      <PostImages post={post} />
       <div className={styles.tagsContainer}>
         {tags?.map((tag, index) => (
           <Link key={index} href={`/hashtag/${tag.slice(1)}/`}>

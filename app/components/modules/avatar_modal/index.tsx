@@ -130,21 +130,25 @@ const AvatarModal = React.forwardRef(function AvatarModal(
     <div>
       {imageSource && (
         <div style={{ padding: "25px 25px" }}>
-          <ReactCrop
-            crop={crop}
-            onChange={(pixelCrop, percentCrop) => setCrop(pixelCrop)}
-            circularCrop
-            keepSelection
-            aspect={1}
-            minWidth={150}
+          <div
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
-            <img
-              ref={imgRef}
-              src={imageSourceUrl}
-              alt=""
-              onLoad={onImageLoad}
-            />
-          </ReactCrop>
+            <ReactCrop
+              crop={crop}
+              onChange={(pixelCrop, percentCrop) => setCrop(pixelCrop)}
+              circularCrop
+              keepSelection
+              aspect={1}
+              minWidth={150}
+            >
+              <img
+                ref={imgRef}
+                src={imageSourceUrl}
+                alt=""
+                onLoad={onImageLoad}
+              />
+            </ReactCrop>
+          </div>
         </div>
       )}
       <div className={styles.actionButtonsContainer}>

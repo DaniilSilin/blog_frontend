@@ -23,7 +23,6 @@ export default function CommunityBatchActionBar({
   const blogCommentListDeleteButton = () => {
     blogCommentListDelete({ slug, comment_list: selectedBlogComments });
   };
-  console.log(selectedBlogComments);
 
   const resetSelectedBlogCommentsHandleChange = () => {
     setSelectedBlogComments([]);
