@@ -3,6 +3,8 @@ import { Input as BaseInput } from "antd/lib";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons/lib";
 import Field from "../Field";
 
+import styles from "./input.module.css";
+
 export interface Props {
   width: number;
   height: number;
@@ -75,16 +77,15 @@ const Input = React.forwardRef(function Input(
               onFocus={handleFocus}
               onBlur={handleBlur}
               ref={ref}
+              className={styles.basePasswordInput}
               style={{
-                display: "block",
                 width: `${width}px`,
                 height: `${height}px`,
-                padding: "12px",
-                paddingRight: "39px",
               }}
               iconRender={(visible) =>
                 visible ? (
                   <EyeTwoTone
+                    className={styles.eyeIcon}
                     style={{
                       position: "absolute",
                       right: "20px",
@@ -93,6 +94,7 @@ const Input = React.forwardRef(function Input(
                   />
                 ) : (
                   <EyeInvisibleOutlined
+                    className={styles.eyeIcon}
                     style={{
                       position: "absolute",
                       right: "20px",
@@ -112,8 +114,8 @@ const Input = React.forwardRef(function Input(
             onFocus={handleFocus}
             onBlur={handleBlur}
             ref={ref}
+            className={styles.baseInput}
             style={{
-              display: "block",
               width: `${width}px`,
               height: `${height}px`,
             }}

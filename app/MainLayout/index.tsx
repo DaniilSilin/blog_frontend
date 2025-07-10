@@ -11,6 +11,8 @@ import DataSentSuccessfullyNotification from "../contexts/DataSentSuccessfully";
 const BASE_URL = "http://127.0.0.1:8000";
 
 import styles from "./mainlayout.module.css";
+import CookieHelper from "@/app/store/cookieHelper";
+import { Cookie } from "undici-types";
 
 export interface Props {
   children: React.ReactNode;
@@ -20,6 +22,7 @@ export default function MainLayout({ children }: Props) {
   const [wasCopiedOnce, setWasCopiedOnce] = React.useState(false);
   const [isCopied, setIsCopied] = React.useState(false);
   const [dataSentSuccessfully, setDataSentSuccessfully] = React.useState(false);
+  const currentTheme = CookieHelper.getCookie("theme");
 
   const createDataSentSuccessfullyNotification = (value: any) => {
     setDataSentSuccessfully(true);

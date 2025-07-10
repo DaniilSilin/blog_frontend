@@ -1,0 +1,7 @@
+.root {
+  position: absolute;
+  background-color: var(--inteface-background-color);
+  border: 1px solid var(--interface-border-color);
+  top: 65px;
+  right: 150px;
+}

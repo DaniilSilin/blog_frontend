@@ -1,0 +1,35 @@
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menuButton {
+
+}
+
+.menuButton:hover {
+  background-color: var(--interface-background-hover-color);
+}
+
+.settingsMenu {
+  position: absolute;
+  top: 65px;
+  left: 1000px;
+  background-color: var(--inteface-background-color);
+  border: 1px solid var(--interface-border-color);
+  z-index: 9999;
+  right: 150px;
+  width: 200px;
+  padding: 10px;
+}
+
+.settingsMenuItem {
+
+}
+
+.settingsMenuItem:hover {
+  cursor: pointer;
+  background-color: var(--interface-background-hover-color);
+}
+

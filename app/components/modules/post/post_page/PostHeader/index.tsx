@@ -131,21 +131,21 @@ export default function PostHeader({ post, slug, post_id }: Props) {
             </>
           ) : (
             <>
-              <div ref={subscribeRef}>
-                <button
-                  onClick={handleShowSubscribePopup}
-                  className={styles.unsubscribeButton}
-                >
-                  Подписаться
-                </button>
-                {displaySubscribePopup && (
-                  <NoUserPopup
-                    title={"Хотите подписаться на этот канал?"}
-                    description={"Войдите, чтобы подписаться на этот канал"}
-                    redirectTo={`/blog/${slug}/post/${post_id}`}
-                  />
-                )}
-              </div>
+              {/*<div ref={subscribeRef}>*/}
+              {/*  <button*/}
+              {/*    onClick={handleShowSubscribePopup}*/}
+              {/*    className={styles.unsubscribeButton}*/}
+              {/*  >*/}
+              {/*    Подписаться*/}
+              {/*  </button>*/}
+              {/*  {displaySubscribePopup && (*/}
+              {/*    <NoUserPopup*/}
+              {/*      title={"Хотите подписаться на этот канал?"}*/}
+              {/*      description={"Войдите, чтобы подписаться на этот канал"}*/}
+              {/*      redirectTo={`/blog/${slug}/post/${post_id}`}*/}
+              {/*    />*/}
+              {/*  )}*/}
+              {/*</div>*/}
             </>
           )}
         </div>

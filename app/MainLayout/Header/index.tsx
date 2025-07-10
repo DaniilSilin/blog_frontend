@@ -6,6 +6,7 @@ const { Header } = Layout;
 import HeaderProfile from "./HeaderProfile";
 import HeaderNotifications from "./HeaderNotifications";
 import SignIn from "./SignIn";
+import HeaderSettings from "@/app/MainLayout/Header/HeaderSettings";
 
 export default function HeaderReact() {
   const user = useAppSelector((state) => state.django.profile);
@@ -26,6 +27,7 @@ export default function HeaderReact() {
           </>
         ) : (
           <>
+            <HeaderSettings />
             <SignIn />
           </>
         )}

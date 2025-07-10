@@ -20,8 +20,6 @@ const usernameDescription =
   "Минимальная длина: 3 символа. Ваше имя пользователя может содержать латинские буквы, цифры и знак нижнего подчёркивания.";
 const passwordDescription =
   "Минимальная длина: 8 символов. Ваш пароль должен содержать строчные и заглавные буквы, а также цифры.";
-const passwordConfirm =
-  "Повторите пароль, чтобы исключить вероятность опечатки.";
 
 export default function Register() {
   const router = useRouter();
@@ -50,57 +48,78 @@ export default function Register() {
     DjangoService.useIsUsernameAvailableQuery({ username });
 
   const formValidation = React.useCallback(() => {
-    let isValid = true;
+    const validateField = (value, value2, validator, setError) => {
+      let isValid;
+      let error;
 
-    const validators = [
-      {
-        validator: firstNameValidator,
-        value: firstName,
-        setError: setFirstNameError,
-      },
-      {
-        validator: lastNameValidator,
-        value: lastName,
-        setError: setLastNameError,
-      },
-      { validator: emailValidator, value: email, setError: setEmailError },
-      {
-        validator: (username) =>
-          usernameValidator(username, isUsernameAvailable),
-        value: username,
-        setError: setUsernameError,
-      },
-      {
-        validator: passwordValidator,
-        value: password,
-        setError: setPasswordError,
-      },
-      {
-        validator: (confirmPassword) =>
-          confirmPasswordValidator(password, confirmPassword),
-        value: confirmPassword,
-        setError: setConfirmPasswordError,
-      },
-    ];
+      if (value && value2) {
+        error = validator(value, value2);
+      } else {
+        error = validator(value);
+      }
 
-    for (const { validator, value, setError } of validators) {
-      const error = validator(value);
-      if (error) {
+      if (error || !value) {
         setError(error);
         isValid = false;
       } else {
         setError("");
+        isValid = true;
       }
-    }
+      return isValid;
+    };
 
-    if (!token) {
-      setCaptchaError("Не пройдена капча");
-      isValid = false;
-    } else {
-      setCaptchaError("");
-    }
+    const firstNameField = validateField(
+      firstName,
+      undefined,
+      firstNameValidator,
+      setFirstNameError,
+    );
+    const lastNameField = validateField(
+      lastName,
+      undefined,
+      lastNameValidator,
+      setLastNameError,
+    );
+    const emailField = validateField(
+      email,
+      undefined,
+      emailValidator,
+      setEmailError,
+    );
+    const usernameField = validateField(
+      username,
+      isUsernameAvailable,
+      usernameValidator,
+      setUsernameError,
+    );
+    const passwordField = validateField(
+      password,
+      undefined,
+      passwordValidator,
+      setPasswordError,
+    );
+    const passwordConfirmField = validateField(
+      confirmPassword,
+      password,
+      confirmPasswordValidator,
+      setConfirmPasswordError,
+    );
 
-    return isValid;
+    // if (!token) {
+    //   setCaptchaError("Не пройдена капча");
+    //   isValid = false;
+    // } else {
+    //   setCaptchaError("");
+    // }
+
+    return (
+      firstNameField &&
+      lastNameField &&
+      emailField &&
+      usernameField &&
+      passwordField &&
+      passwordConfirmField
+    );
   }, [
     firstName,
     lastName,
@@ -108,26 +127,25 @@ export default function Register() {
     username,
     password,
     confirmPassword,
-    token,
+    firstNameError,
     setFirstNameError,
-    setCaptchaError,
     setLastNameError,
     setEmailError,
-    setPasswordError,
     setUsernameError,
-    isUsernameAvailable,
+    setPasswordError,
     setConfirmPasswordError,
+    isUsernameAvailable,
   ]);
 
-  const focusErrorInputOnHandleSubmit = React.useCallback(() => {
-    if ((setFirstNameError && firstName) || !firstName) {
-    }
-  }, [setFirstNameError, firstName]);
+  // const focusErrorInputOnHandleSubmit = React.useCallback(() => {
+  //   if ((setFirstNameError && firstName) || !firstName) {
+  //   }
+  // }, [setFirstNameError, firstName]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const isValid = formValidation();
-    focusErrorInputOnHandleSubmit();
+    // focusErrorInputOnHandleSubmit();
     if (isValid) {
       const register = await registerUser({
         first_name: firstName,
@@ -144,16 +162,21 @@ export default function Register() {
 
   React.useEffect(() => {
     const submit = formValidation();
-    setReadyToSubmit(submit);
+    if (submit === true) {
+      setReadyToSubmit(true);
+    } else {
+      setReadyToSubmit(false);
+    }
   }, [
     firstName,
     lastName,
     email,
     username,
     password,
-    passwordConfirm,
+    confirmPassword,
     isUsernameAvailable,
     setReadyToSubmit,
+    formValidation,
   ]);
 
   return (
@@ -204,20 +227,22 @@ export default function Register() {
             height={40}
             onChange={setPassword}
             label={"Пароль"}
-            isPassword={true}
             error={passwordError}
             value={password}
             description={passwordDescription}
+            isPassword
           />
           <Input
             width={400}
             height={40}
             onChange={setConfirmPassword}
             label={"Повторите пароль"}
-            isPassword={true}
             error={confirmPasswordError}
-            description={passwordConfirm}
+            description={
+              "Повторите пароль, чтобы исключить вероятность опечатки."
+            }
             value={confirmPassword}
+            isPassword
           />
           <YandexCaptcha
             language={"ru"}

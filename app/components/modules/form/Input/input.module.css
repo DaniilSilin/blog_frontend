@@ -1,0 +1,45 @@
+.root {
+
+}
+
+.basePasswordInput {
+  display: block;
+  padding: 12px 39px 12px 12px;
+  background-color: var(--textarea-backround);
+  color: var(--text-color-primary)
+}
+
+.basePasswordInput:hover {
+  background-color: var(--textarea-backround);
+}
+
+.basePasswordInput:focus {
+  background-color: var(--textarea-backround);
+}
+
+.basePasswordInput::placeholder {
+  color: var(--text-color-primary-1)
+}
+
+.baseInput {
+  display: block;
+  background-color: var(--textarea-backround);
+  color: var(--text-color-primary);
+}
+
+.baseInput:hover {
+  background-color: var(--textarea-backround);
+}
+
+.baseInput:focus {
+  background-color: var(--textarea-backround);
+}
+
+.baseInput::placeholder {
+  color: var(--text-color-primary-1)
+}
+
+.eyeIcon {
+  color: var(--text-color-primary);
+  background-color: var(--text-color-primary);
+}

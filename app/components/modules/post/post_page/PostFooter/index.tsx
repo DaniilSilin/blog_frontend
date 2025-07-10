@@ -22,6 +22,7 @@ export interface Props {
 export default function PostFooter({ post, refetch }: Props) {
   const bookmarkRef = React.useRef(null);
   const user = useAppSelector((state) => state.django.profile);
+  const shareButtonRef = React.useRef(null);
 
   const [displayBookmarkPopup, setDisplayBookmarkPopup] = React.useState(false);
   const [displayShareMenu, setDisplayShareMenu] = React.useState(false);
@@ -36,6 +37,10 @@ export default function PostFooter({ post, refetch }: Props) {
     setDisplayShareMenu((displayShareMenu) => !displayShareMenu);
   }, []);
 
+  // const handleDisplayShareMenu = React.useCallback(() => {
+  //   setDisplayShareMenu(!displayShareMenu);
+  // }, [setDisplayShareMenu, displayShareMenu]);
+
   const addOrRemoveBookmarksFunction = async () => {
     const result = await addOrRemoveBookmark({
       slug: post.blog.slug,
@@ -45,6 +50,8 @@ export default function PostFooter({ post, refetch }: Props) {
       refetch();
     }
   };
+
+  console.log(displayShareMenu);
 
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
@@ -123,7 +130,11 @@ export default function PostFooter({ post, refetch }: Props) {
           Поделиться
         </button>
         {displayShareMenu && (
-          <ShareMenu post={post} setDisplayShareMenu={setDisplayShareMenu} />
+          <ShareMenu
+            post={post}
+            setDisplayShareMenu={setDisplayShareMenu}
+            shareButtonRef={shareButtonRef}
+          />
         )}
       </div>
     </div>
