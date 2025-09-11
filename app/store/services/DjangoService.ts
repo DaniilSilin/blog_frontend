@@ -379,6 +379,7 @@ const DjangoService = createApi({
         { dispatch, queryFulfilled, getState },
       ) {
         try {
+          console.log(getState);
           const { data: createdComment } = await queryFulfilled;
           if (reply_to) {
             for (const {

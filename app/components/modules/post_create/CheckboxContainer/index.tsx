@@ -1,5 +1,7 @@
 import React, { ChangeEvent } from "react";
 
+import styles from "./checkbox_container.module.css";
+
 export interface Props {
   title: string;
   onChange: (value: boolean) => void;
@@ -14,11 +16,11 @@ export default function CheckboxContainer({ title, onChange }: Props) {
   );
 
   return (
-    <div style={{ margin: "10px 0", cursor: "pointer" }}>
-      <label style={{ cursor: "pointer" }}>
+    <div className={styles.root}>
+      <label className={styles.inputLabel}>
         <input
           type={"checkbox"}
-          style={{ marginRight: "5px", cursor: "pointer" }}
+          className={styles.inputCheckbox}
           onChange={handleChangeCheckbox}
         />
         {title}

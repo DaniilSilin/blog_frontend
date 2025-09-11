@@ -45,8 +45,6 @@ export default function PostPage({ slug, post_id }) {
     }
   }, [post?.commentCount]);
 
-  console.log(post);
-
   return (
     <div>
       <PostHeader post={post} slug={slug} post_id={post_id} />

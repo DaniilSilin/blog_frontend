@@ -1,0 +1,73 @@
+.root {
+  color: #a6adb4 !important;
+  width: 250px;
+  position: absolute;
+  padding: 10px 0;
+  background-color: #001529;
+  right: 50px;
+  border: 2px solid #363738;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  z-index: 9999;
+
+  .header {
+    display: flex;
+    min-height: 48px;
+    border-bottom: 1px solid #979fa7;
+    align-items: center;
+    gap: 5px;
+
+    .backToMenuButton {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 5px;
+
+      &:hover {
+        border-radius: 50%;
+        background-color: #3a3a3a;
+      }
+    }
+
+    .themeLabel {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+    }
+  }
+
+  .selectionContainer {
+    display: block;
+
+    .description {
+      padding: 16px;
+      color: #606060;
+      line-height: 25px;
+    }
+  }
+}
+
+.description {
+  padding: 16px 0;
+  color: #606060;
+  line-height: 25px;
+}
+
+.themeItem {
+  display: flex;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--interface-background-hover-color);
+  }
+
+  .themeItemChosen {
+
+  }
+
+  .themeItemLabel {
+    margin-left: 30px;
+  }
+}

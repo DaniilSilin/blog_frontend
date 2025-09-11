@@ -22,6 +22,19 @@
   border-radius: 50%;
 }
 
+.themeMenu {
+  color: #a6adb4 !important;
+  width: 250px;
+  position: absolute;
+  padding: 10px 0;
+  background-color: #001529;
+  right: 50px;
+  border: 2px solid #363738;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  z-index: 9999;
+}
+
 .profileMenu {
   color: #a6adb4 !important;
   width: 250px;

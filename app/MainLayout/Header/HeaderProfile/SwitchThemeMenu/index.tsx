@@ -2,8 +2,9 @@ import React from "react";
 import CookieHelper from "@/app/store/cookieHelper";
 
 import { FaArrowLeft } from "react-icons/fa";
+import { IoIosCheckmark } from "react-icons/io";
 
-import styles from "./switch_theme_menu.module.css";
+import styles from "./switch_theme.module.scss";
 
 export interface Props {
   currentTheme: string;
@@ -12,16 +13,22 @@ export interface Props {
   setDisplaySwitchThemeMenu: (value: boolean) => void;
 }
 
-const themeList = [
+interface Theme {
+  id: number;
+  label: string;
+  name: string;
+}
+
+const themeList: Theme[] = [
   {
     id: 1,
     label: "Тёмная",
-    theme: "dark",
+    name: "dark",
   },
   {
     id: 2,
     label: "Светлая",
-    theme: "light",
+    name: "light",
   },
 ];
 
@@ -32,10 +39,10 @@ export default function SwitchThemeMenu({
   currentTheme,
 }: Props) {
   const themeSwitchHandleChange = React.useCallback(
-    (theme: any) => {
-      CookieHelper.setCookie("theme", theme.theme, 365);
-      setCurrentTheme(theme.theme);
-      if (theme.theme === "dark") {
+    (theme: string) => {
+      CookieHelper.setCookie("theme", theme, 365);
+      setCurrentTheme(theme);
+      if (theme === "dark") {
         document.body.setAttribute("dark-theme", "dark");
         setCurrenThemeLabel("тёмная");
       } else {
@@ -46,31 +53,43 @@ export default function SwitchThemeMenu({
     [setCurrentTheme, setCurrenThemeLabel],
   );
 
+  const switchBackToMainMenu = () => {
+    setDisplaySwitchThemeMenu(false);
+  };
+
   return (
     <div className={styles.root}>
-      <div
-        className={styles.header}
-        onClick={() => setDisplaySwitchThemeMenu(false)}
-      >
-        <button>
+      <div className={styles.header}>
+        <button
+          className={styles.backToMenuButton}
+          onClick={switchBackToMainMenu}
+        >
           <FaArrowLeft size={24} />
         </button>
-        <div>Тема</div>
+        <div className={styles.themeLabel}>Тема</div>
       </div>
-      <div className={styles.description}>
-        Настройка будет применена только в этом браузере.
-      </div>
-      <div>
-        {themeList.map((item: any, index: number) => (
-          <div
-            style={{ display: "flex" }}
-            key={index}
-            onClick={() => themeSwitchHandleChange(item)}
-          >
-            {currentTheme === item.theme && <div>check</div>}
-            <div>{item.label}</div>
-          </div>
-        ))}
+      <div className={styles.selectionContainer}>
+        <div className={styles.description}>
+          Настройка будет применена только в этом браузере.
+        </div>
+        <div>
+          {themeList.map((theme: Theme) => (
+            <button
+              key={theme.id}
+              className={styles.themeItem}
+              onClick={() => themeSwitchHandleChange(theme.name)}
+            >
+              {currentTheme === theme.name ? (
+                <>
+                  <IoIosCheckmark size={30} className={styles.themeItemIcon} />
+                  <div className={styles.themeItemChosen}>{theme.label}</div>
+                </>
+              ) : (
+                <div className={styles.themeItemLabel}>{theme.label}</div>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -26,6 +26,9 @@
 }
 
 .submitButton {
+  display: flex;
+  justify-content: center;
+  width: 155px;
   padding: 7px 10px;
   color: #b1b0b0;
   background-color: #363636;

@@ -20,7 +20,6 @@ export default function Field({
   wasFocusedOnce,
   inputIsFocused,
 }: Props) {
-  console.log(error);
   return (
     <div className={styles.root}>
       <div

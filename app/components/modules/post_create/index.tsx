@@ -9,29 +9,25 @@ import {
   titleValidator,
   bodyValidator,
   mapValidator,
-  emailValidator,
-  vkValidator,
-  telegramValidator,
-  youtubeValidator,
-  dzenValidator,
-  ownSiteLinkValidator,
 } from "../form/validators";
 import {
-  Map,
   PostDataInput,
   PostDataTextArea,
 } from "../../../components/modules/form";
 
-import MapContainer from "@/app/components/modules/post_create/MapContainer";
-import Tags from "@/app/components/modules/post_create/Tags";
+import validateField from "@/app/utils/validator";
+
+import CheckboxContainer from "./CheckboxContainer";
+import ImagesContainer from "./ImagesContainer";
+import MapContainer from "./MapContainer";
+import Tags from "./Tags";
 
 import styles from "./PostCreate.module.css";
-import CheckboxContainer from "@/app/components/modules/post_create/CheckboxContainer";
-import ImagesContainer from "@/app/components/modules/post_create/ImagesContainer";
 
 export default function PostCreate({ slug }) {
   const router = useRouter();
   const [displayMapInput, setDisplayMapInput] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const [title, setTitle] = React.useState<string>("");
   const [body, setBody] = React.useState<string>("");
@@ -51,62 +47,15 @@ export default function PostCreate({ slug }) {
   const [bodyError, setBodyError] = React.useState<string>("");
   const [mapError, setMapError] = React.useState<string>("");
 
-  // const formValidation = React.useCallback(() => {
-  //   let isValid;
-  //
-  //   if (titleValidator(title)) {
-  //     setTitleError(titleValidator(title));
-  //     isValid = false;
-  //   } else {
-  //     setTitleError("");
-  //     isValid = true;
-  //   }
-  //
-  //   if (map) {
-  //     if (mapValidator(map)) {
-  //       setMapError(mapValidator(map));
-  //       isValid = false;
-  //     } else {
-  //       setMapError("");
-  //       isValid = true;
-  //     }
-  //   } else {
-  //     setMapError("");
-  //   }
-  //
-  //   if (body) {
-  //     if (bodyValidator(body)) {
-  //       setBodyError(bodyValidator(body));
-  //       isValid = false;
-  //     } else {
-  //       setBodyError("");
-  //       isValid = true;
-  //     }
-  //   } else {
-  //     setBodyError("");
-  //   }
-  //
-  //   return isValid;
-  // }, [title, body, map, setTitleError, bodyError, mapValidator]);
-
   const formValidation = React.useCallback(() => {
-    const validateField = (value, validator, setError) => {
-      let isValid;
-      const error = validator(value);
-
-      if (error) {
-        setError(error);
-        isValid = false;
-      } else {
-        setError("");
-        isValid = true;
-      }
-      return isValid;
-    };
-
-    const title_value = validateField(title, titleValidator, setTitleError);
-    const map_value = validateField(map, mapValidator, setMapError);
-    const body_value = validateField(body, bodyValidator, setBodyError);
+    const title_value = validateField(
+      title,
+      null,
+      titleValidator,
+      setTitleError,
+    );
+    const map_value = validateField(map, null, mapValidator, setMapError);
+    const body_value = validateField(body, null, bodyValidator, setBodyError);
 
     return title_value && map_value && body_value;
   }, [title, map]);
@@ -127,10 +76,16 @@ export default function PostCreate({ slug }) {
     images?.forEach((image2) => {
       formData.append("images", image2);
     });
-    const result = await createPost({ formData, slug });
-
-    if (!result.error) {
-      router.push(`/blog/${slug}/post/${result.data.post_id}/`);
+    setIsLoading(true);
+    try {
+      const result = await createPost({ formData, slug });
+      if (!result.error) {
+        router.push(`/blog/${slug}/post/${result.data.post_id}/`);
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке комментария:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -164,8 +119,8 @@ export default function PostCreate({ slug }) {
           height={150}
           onChange={setBody}
           label={"Тело поста"}
-          autoSize={true}
-          showCount={false}
+          autoSize
+          showCount
         />
         <div
           className={styles.mapTitle}
@@ -198,12 +153,16 @@ export default function PostCreate({ slug }) {
         />
         <button
           className={classNames(styles.submitButton, {
-            [styles.active]: availableToSubmit,
+            [styles.active]: availableToSubmit && !isLoading,
           })}
           onClick={handleSubmit}
           disabled={!availableToSubmit}
         >
-          Создать публикацию
+          {isLoading ? (
+            <div className={"loaderMini"}></div>
+          ) : (
+            <div>Создать публикацию</div>
+          )}
         </button>
       </form>
     </div>

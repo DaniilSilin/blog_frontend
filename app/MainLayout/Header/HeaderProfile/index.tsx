@@ -8,14 +8,8 @@ import { useDispatch } from "react-redux";
 import { logout as reduxLogout } from "@/app/store/reducers/slices/djangoSlice";
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdOutlineCreate } from "react-icons/md";
-import {
-  IoIosCheckmark,
-  IoIosArrowUp,
-  IoIosArrowDown,
-  IoIosLogOut,
-  IoIosArrowForward,
-} from "react-icons/io";
-import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
+import { IoIosArrowDown, IoIosLogOut, IoIosArrowForward } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
 import { BsPaletteFill } from "react-icons/bs";
 import { ImBooks } from "react-icons/im";
 
@@ -103,14 +97,12 @@ export default function HeaderProfile() {
           {openUserMenu && (
             <>
               {displaySwitchThemeMenu ? (
-                <div className={styles.profileMenu}>
-                  <SwitchThemeMenu
-                    currentTheme={currentTheme}
-                    setCurrentTheme={setCurrentTheme}
-                    setCurrenThemeLabel={setCurrenThemeLabel}
-                    setDisplaySwitchThemeMenu={setDisplaySwitchThemeMenu}
-                  />
-                </div>
+                <SwitchThemeMenu
+                  currentTheme={currentTheme}
+                  setCurrentTheme={setCurrentTheme}
+                  setCurrenThemeLabel={setCurrenThemeLabel}
+                  setDisplaySwitchThemeMenu={setDisplaySwitchThemeMenu}
+                />
               ) : (
                 <div className={styles.profileMenu}>
                   <div

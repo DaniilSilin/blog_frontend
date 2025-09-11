@@ -1,37 +1,26 @@
 .root {
-  width: 600px;
-}
-
-.avatarContainer {
   display: flex;
-  justify-content: center;
-}
-
-.avatar {
-  border-radius: 50%;
-}
-
-.avatar:hover {
-  border: 1px dashed black;
-  cursor: pointer;
 }
 
 .buttonSubmit {
+  display: flex;
+  width: 70px;
   padding: 10px;
-  background-color: #363636;
+  background-color: var(--button-background-5);
   color: #6e6e6e;
   border-radius: 15px;
+  justify-content: center;
   cursor: default;
 }
 
 .buttonSubmit.active {
   color: white;
-  background-color: #363636;
+  background-color: var(--button-background-5);
   cursor: pointer;
 }
 
 .buttonSubmit.active:hover {
   color: white;
-  background-color: #535353;
+  background-color: var(--button-hover-background-5);
   cursor: pointer;
 }

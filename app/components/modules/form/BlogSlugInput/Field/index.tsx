@@ -30,7 +30,7 @@ export default function Field({
       return "blogSlug";
     }
   }, [value, error]);
-  console.log(descriptionState);
+
   return (
     <div style={{ margin: "10px 0" }}>
       <div
