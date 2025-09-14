@@ -3,113 +3,103 @@ import DjangoService from "@/app/store/services/DjangoService";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import type { MenuProps } from "antd/lib";
 import { Layout, Menu } from "antd/lib";
 const { Sider } = Layout;
 
-import { CiBookmark } from "react-icons/ci";
-import { RiArticleLine } from "react-icons/ri";
-import { IoHomeOutline, IoFolderOpenOutline } from "react-icons/io5";
-import { FaBook } from "react-icons/fa";
-import { AiOutlineLike } from "react-icons/ai";
+import miniSiderMenu from "./constants";
 
-const siderMenu = [
-  {
-    key: "1",
-    icon: <IoHomeOutline size={24} />,
-    href: "/",
-    label: "Главная",
-  },
-  {
-    key: "2",
-    icon: <RiArticleLine size={24} />,
-    href: "/post/list",
-    label: "Публикации",
-  },
-  {
-    key: "3",
-    icon: <FaBook size={24} />,
-    href: "/blog/list",
-    label: "Каналы",
-  },
-  {
-    key: "4",
-    icon: <CiBookmark size={24} />,
-    href: "/bookmarks",
-    label: "Сохранённое",
-  },
-  {
-    key: "5",
-    icon: <IoFolderOpenOutline size={24} />,
-    href: "/subscriptions",
-    label: "Подписки",
-  },
-  {
-    key: "6",
-    icon: <AiOutlineLike size={24} />,
-    label: "Понравившиеся",
-    href: `/liked`,
-  },
-];
+import styles from "./sider.module.css";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
-const items2: MenuProps["items"] = siderMenu.map((icon, index) => {
-  return {
-    key: siderMenu[index].key,
-    icon: siderMenu[index].icon,
-    label: (
-      <Link href={{ pathname: `${siderMenu[index].href}` }}>
-        {siderMenu[index].label}
-      </Link>
-    ),
-  };
-});
+export interface Props {
+  isWideScreen: boolean;
+  isSiderExpanded: boolean;
+}
 
-export default function App() {
+export default function App({ isWideScreen, isSiderExpanded }: Props) {
   const router = useRouter();
-  const { data: subscriptionListMini } =
-    DjangoService.useSubscriptionListMiniQuery({});
-  const [siderSubs, setSiderSubs] = React.useState<any>([]);
-
-  React.useEffect(() => {
-    setSiderSubs([
-      {
-        id: 1,
-        icon: <IoHomeOutline size={24} />,
-        title: "Главная",
-        children: subscriptionListMini,
-      },
-    ]);
-  }, [subscriptionListMini]);
-
-  const siderItems = [
-    {
-      key: 1,
-      icon: <IoHomeOutline size={24} />,
-      title: "Главная",
-      // children: subscriptionListMini
-    },
-  ];
+  const wideScreenAndFullMode = isWideScreen && isSiderExpanded ? 200 : 90;
 
   const defaultSelectedKey = React.useMemo(() => {
-    const defaultValue = siderMenu.find((item) =>
-      item.href === router.asPath ? `${item.key}` : null,
+    const defaultValue = miniSiderMenu.find(
+      (item) => item.href === router.asPath,
     );
-    return defaultValue?.key;
+    return defaultValue ? defaultValue.key : "";
   }, [router.asPath]);
 
   return (
-    <Sider>
-      <div className="demo-logo-vertical" />
-      <Menu
-        theme="dark"
-        defaultSelectedKeys={[defaultSelectedKey]}
-        mode="inline"
-        items={items2}
-      />
-      <div style={{ border: "1px solid black" }}></div>
-      {/*<Menu theme="dark" defaultSelectedKeys={['']} mode="inline" items={siderItems} />*/}
-    </Sider>
+    <>
+      <Sider className={styles.root} width={wideScreenAndFullMode}>
+        <div className="demo-logo-vertical" />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={[defaultSelectedKey]}
+          mode="inline"
+        >
+          {isWideScreen ? (
+            <>
+              {isSiderExpanded ? (
+                <>
+                  {miniSiderMenu?.map((item: any) => (
+                    <Menu.Item
+                      key={item.key}
+                      className={styles.expandedSidebarItem}
+                    >
+                      <Link href={`${item.href}`}>
+                        <div className={styles.expandedSidebarSubItem}>
+                          <div className={styles.expandedSidebarItemIcon}>
+                            {item.icon}
+                          </div>
+                          <div className={styles.expandedSidebarItemTitle}>
+                            {item.label}
+                          </div>
+                        </div>
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {miniSiderMenu?.map((item: any) => (
+                    <Menu.Item
+                      key={item.key}
+                      className={styles.collapsedSidebarItem}
+                    >
+                      <Link href={`${item.href}`}>
+                        <div className={styles.collapsedSidebarItemIcon}>
+                          {item.icon}
+                        </div>
+                        <span className={styles.collapsedSidebarItemTitle}>
+                          {item.label}
+                        </span>
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {miniSiderMenu?.map((item: any) => (
+                <Menu.Item
+                  key={item.key}
+                  className={styles.collapsedSidebarItem}
+                >
+                  <Link href={`${item.href}`}>
+                    <div className={styles.collapsedSidebarItemIcon}>
+                      {item.icon}
+                    </div>
+                    <span className={styles.collapsedSidebarItemTitle}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </Menu.Item>
+              ))}
+            </>
+          )}
+        </Menu>
+      </Sider>
+    </>
   );
 }

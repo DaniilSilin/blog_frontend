@@ -25,7 +25,6 @@ export default function ContentReact({
   wasCopiedOnce,
 }: Props) {
   const router = useRouter();
-  console.log(router);
   // const {
   //   token: { colorBgContainer, borderRadiusLG },
   // } = theme.useToken();

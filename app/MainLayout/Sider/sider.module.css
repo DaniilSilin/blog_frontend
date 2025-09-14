@@ -1,0 +1,60 @@
+@media (max-width: 790px) {
+  .root {
+    display: none;
+  }
+}
+
+@media (min-width: 790px) {
+  .root {
+    width: 100px !important;
+  }
+}
+
+.collapsedSidebarItem {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 90px !important;
+  padding: 20px 0 18px 0 !important;
+}
+
+.collapsedSidebarItem:hover {
+  background-color: var(--interface-background-hover-color) !important;
+}
+
+.collapsedSidebarItemIcon {
+  display: flex;
+  justify-content: center;
+}
+
+.collapsedSidebarItemTitle {
+  font-size: 10px;
+}
+
+.expandedSidebarItem {
+  display: flex;
+  height: 40px !important;
+  padding-left: 0 !important;
+}
+
+.expandedSidebarItem:hover {
+  background-color: var(--interface-background-hover-color) !important;
+}
+
+.expandedSidebarSubItem {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: left;
+  margin-left: 20px;
+}
+
+.expandedSidebarItemIcon {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.expandedSidebarItemTitle {
+  font-size: 14px;
+}

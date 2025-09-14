@@ -1,0 +1,28 @@
+.root {
+  width: 100% !important;
+  display: flex;
+  line-height: 30px;
+}
+
+.headerMenu {
+  width: 100% !important;
+}
+
+.container {
+  width: 100% !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+}
+
+.toggleButton:hover {
+  background-color: var(--interface-background-hover-color);
+}
+
+.headerActions {
+  display: flex;
+}

@@ -1,0 +1,22 @@
+.root {
+  width: 100% !important;
+  height: 100%;
+  position: absolute !important;
+  z-index: 100000;
+}
+
+.header {
+  height: 64px;
+  padding: 0 0 0 50px;
+}
+
+.headerSiderButton {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  color: var(--interface-button-color);
+}
+
+.headerSiderButton:hover {
+  background-color: var(--interface-background-hover-color);
+}

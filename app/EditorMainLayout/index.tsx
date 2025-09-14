@@ -1,5 +1,4 @@
 import React from "react";
-import type { MenuProps } from "antd/lib";
 import { Layout, Menu, theme } from "antd/lib";
 import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
 import { FaRegComment } from "react-icons/fa6";
@@ -49,7 +48,7 @@ export default function EditorMainLayout({ children, slug }: Props) {
     },
   ];
 
-  const items2: MenuProps["items"] = settingsMenu.map((icon, index) => {
+  const items2 = settingsMenu.map((icon, index) => {
     return {
       key: settingsMenu[index].key,
       icon: settingsMenu[index].icon,

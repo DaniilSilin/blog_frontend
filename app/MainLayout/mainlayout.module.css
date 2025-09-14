@@ -1,4 +1,13 @@
 .root {
-    color: var(--text-color);
-    background-color: var(--background-color);
+    /*color: var(--text-color);*/
+    /*background-color: var(--background-color);*/
+}
+
+.mainLayout {
+  display: flex;
+}
+
+.mainLayout.active {
+  background-color: rgba(0,0,0,.5) !important;
+  opacity: 0.5 !important;
 }
