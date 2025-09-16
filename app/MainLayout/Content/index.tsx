@@ -42,7 +42,7 @@ export default function ContentReact({
           padding: 24,
         }}
       >
-        <div style={{ width: "1100px", margin: "20px auto" }}>{children}</div>
+        <div style={{ width: "100%", margin: "20px auto" }}>{children}</div>
         {wasCopiedOnce && (
           <button
             className={classNames(styles.notification, {

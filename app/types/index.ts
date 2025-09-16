@@ -8,3 +8,4 @@ export * from "./Post";
 export * from "./Comment";
 export * from "./UserProfile";
 export * from "./Notification";
+export * from "./CleanParams";

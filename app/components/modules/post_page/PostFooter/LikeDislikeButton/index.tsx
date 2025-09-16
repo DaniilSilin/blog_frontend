@@ -2,7 +2,6 @@ import React from "react";
 import { useAppSelector } from "@/app/store";
 import DjangoService from "@/app/store/services/DjangoService";
 
-import styles from "@/app/components/modules/post_page/PostFooter/post_footer.module.css";
 import {
   AiFillDislike,
   AiFillLike,
@@ -10,7 +9,8 @@ import {
   AiOutlineLike,
 } from "react-icons/ai";
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
-import LikedUserListMini from "@/app/components/modules/post_page/PostFooter/LikedUserListMini";
+
+import styles from "./like_dislike_button.module.css";
 
 export interface Props {
   post: any;
@@ -34,6 +34,10 @@ export default function LikeDislikeButton({ post }: Props) {
   const setOrRemovePostDislike = (slug: string, post_id: number) => {
     setOrRemoveDislike({ slug, post_id });
   };
+
+  // const setOrRemovePostDislike = React.useCallback(() => {
+  //   setOrRemoveDislike({ slug: post?.blog.slug, post_id: post?.post_id });
+  // }, [post]);
 
   const handleShowLikePopup = React.useCallback(() => {
     setDisplayLikePopup((displayLikePopup) => !displayLikePopup);
@@ -64,17 +68,12 @@ export default function LikeDislikeButton({ post }: Props) {
   });
 
   return (
-    <div className={styles.likedAndDislikeContainer}>
+    <div className={styles.root}>
       {user.isGuest ? (
         <div className={styles.likeContainer} ref={likeRef}>
           <button className={styles.likeButton} onClick={handleShowLikePopup}>
             <AiOutlineLike className={styles.likeIconNotLiked} size={20} />
             <div className={styles.likeCounter}>{post?.likes}</div>
-            {/*<div>*/}
-            {/*  {post?.likes > 0 && visibleLikedUserList && (*/}
-            {/*    <LikedUserListMini post={post} />*/}
-            {/*  )}*/}
-            {/*</div>*/}
           </button>
           {displayLikePopup && (
             <div
@@ -93,35 +92,26 @@ export default function LikeDislikeButton({ post }: Props) {
           )}
         </div>
       ) : (
-        <div className={styles.likeContainer}>
-          <button
-            onClick={() => setOrRemovePostLike(post.blog.slug, post.post_id)}
-            className={styles.likeButton}
-          >
-            {post?.isLiked.toString() === "true" ? (
-              <AiFillLike className={styles.likeIconLiked} size={20} />
-            ) : (
-              <AiOutlineLike className={styles.likeIconNotLiked} size={20} />
-            )}
-            <div className={styles.likeCounter}>{post?.likes}</div>
-          </button>
-          <div>
-            {post?.likes > 0 && visibleLikedUserList && (
-              <LikedUserListMini post={post} />
-            )}
-          </div>
-        </div>
+        <button
+          onClick={() => setOrRemovePostLike(post.blog.slug, post.post_id)}
+          className={styles.likeButton}
+        >
+          {post?.isLiked.toString() === "true" ? (
+            <AiFillLike className={styles.likeIcon} size={20} />
+          ) : (
+            <AiOutlineLike className={styles.likeIcon} size={20} />
+          )}
+          <div className={styles.likeCounter}>{post?.likes}</div>
+        </button>
       )}
+      <div style={{ border: "1px solid white" }}></div>
       {user.isGuest ? (
         <div className={styles.dislikeContainer} ref={dislikeRef}>
           <button
             className={styles.dislikeButton}
             onClick={handleShowDislikePopup}
           >
-            <AiOutlineDislike
-              className={styles.dislikeIconNotLiked}
-              size={20}
-            />
+            <AiOutlineDislike className={styles.dislikeIcon} size={20} />
             <div className={styles.dislikeCounter}>{post?.dislikes}</div>
           </button>
           {displayDislikePopup && (
@@ -143,22 +133,17 @@ export default function LikeDislikeButton({ post }: Props) {
           )}
         </div>
       ) : (
-        <div className={styles.dislikeContainer}>
-          <button
-            onClick={() => setOrRemovePostDislike(post.blog.slug, post.post_id)}
-            className={styles.dislikeButton}
-          >
-            {post?.isDisliked.toString() === "true" ? (
-              <AiFillDislike className={styles.dislikeIconLiked} size={20} />
-            ) : (
-              <AiOutlineDislike
-                className={styles.dislikeIconNotLiked}
-                size={20}
-              />
-            )}
-            <div className={styles.dislikeCounter}>{post?.dislikes}</div>
-          </button>
-        </div>
+        <button
+          onClick={setOrRemovePostDislike}
+          className={styles.dislikeButton}
+        >
+          {post?.isDisliked.toString() === "true" ? (
+            <AiFillDislike className={styles.dislikeIcon} size={20} />
+          ) : (
+            <AiOutlineDislike className={styles.dislikeIcon} size={20} />
+          )}
+          <div className={styles.dislikeCounter}>{post?.dislikes}</div>
+        </button>
       )}
     </div>
   );

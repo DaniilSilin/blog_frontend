@@ -14,6 +14,30 @@ export interface Props {
   post: PostType;
 }
 
+const shareMenuList = [
+  {
+    id: 1,
+    title: "Скопировать",
+    icon: <IoLink size={25} className={styles.shareIcon} />,
+    href: "23",
+    isLink: false,
+  },
+  {
+    id: 2,
+    title: "Telegram",
+    icon: <ImTelegram size={25} />,
+    href: `https://t.me/share/url?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}?share_to=telegram&text=${123}`,
+    isLink: true,
+  },
+  {
+    id: 3,
+    title: "VK",
+    icon: <ImVk size={25} />,
+    href: `https://t.me/share/url?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}?share_to=telegram&text=${4}`,
+    isLink: false,
+  },
+];
+
 export default function ShareMenu({ post, setDisplayShareMenu }: Props) {
   const menuRef = React.useRef(null);
 
@@ -42,34 +66,27 @@ export default function ShareMenu({ post, setDisplayShareMenu }: Props) {
     <div ref={menuRef} className={styles.root}>
       <div className={styles.shareTitle}>Поделиться</div>
       <div className={styles.shareListContainer}>
-        <div className={styles.shareMenuListItem} onClick={copyText}>
-          <div>
-            <IoLink size={25} className={styles.shareIcon} />
+        {shareMenuList.map((item) => (
+          <div
+            key={item.id}
+            className={styles.shareMenuListItem}
+            onClick={copyText}
+          >
+            <div className={styles.shareIcon}>{item.icon}</div>
+            {item.isLink ? (
+              <div>
+                <Link
+                  className={styles.shareMenuListItemTitle}
+                  href={item.href}
+                >
+                  {item.title}
+                </Link>
+              </div>
+            ) : (
+              <div>{item.title}</div>
+            )}
           </div>
-          Скопировать
-        </div>
-        <div className={styles.shareMenuListItem} onClick={hideMenu}>
-          <ImVk size={25} />
-          <div>
-            <Link
-              className={styles.shareMenuListItemTitle}
-              href={`https://vk.com/share.php?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}&title=${post.title}?share_to=vk`}
-            >
-              ВКонтакте
-            </Link>
-          </div>
-        </div>
-        <div className={styles.shareMenuListItem} onClick={hideMenu}>
-          <ImTelegram size={25} />
-          <div>
-            <Link
-              className={styles.shareMenuListItemTitle}
-              href={`https://t.me/share/url?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}?share_to=telegram&text=${post.title}`}
-            >
-              Telegram
-            </Link>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

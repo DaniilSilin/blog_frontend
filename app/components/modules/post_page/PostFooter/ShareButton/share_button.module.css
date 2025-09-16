@@ -1,0 +1,28 @@
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  width: fit-content;
+  background-color: var(--button-background);
+  border-radius: 10px;
+  color: var(--text-color-primary);
+}
+
+@media (max-width: 500px) {
+  .root {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.root:hover {
+  cursor: pointer;
+  background-color: var(--button-hover-background);
+}
+
+.shareIcon {
+  margin-right: 16px;
+}

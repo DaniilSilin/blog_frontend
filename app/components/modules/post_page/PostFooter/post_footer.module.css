@@ -1,10 +1,19 @@
-.root {
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0 10px;
 }
 
-.postTags {
-  font-size: 15px;
-  margin-bottom: 7px;
+@media (max-width: 500px) {
+  .actionContainer {
+    flex-direction: column;
+    gap: 10px 0;
+  }
 }
+
+
+
+
 
 .postFooterActionMenu {
   display: flex;
@@ -91,26 +100,6 @@
   border: 1px solid #888;
   border-radius: 10px;
   width: 30%; /* Could be more or less, depending on screen size */
-}
-
-.bookmarkContainer {
-  padding: 7px 10px;
-  width: fit-content;
-  margin-left: 8px;
-  background-color: #272727;
-  border-radius: 10px;
-  color: white;
-}
-
-.bookmarkContainer:hover {
-  cursor: pointer;
-  background-color: #3f3f3f;
-}
-
-.bookmarkButton {
-  display: flex;
-  align-items: center;
-  width: 100%;
 }
 
 .contentPublishedInformationBlock {
@@ -200,14 +189,18 @@
 .commentFooter {
 }
 
-.actionContainer {
-  display: flex;
-  height: 36px;
-}
-
 .likedAndDislikeContainer {
   display: flex;
 }
+
+@media (max-width: 500px) {
+  .likedAndDislikeContainer {
+    display: flex;
+    width: 100%;
+  }
+}
+
+
 
 .likeContainer {
   display: flex;
@@ -276,56 +269,6 @@
 
 .dislikeCounter {
   color: white;
-}
-
-.bookmarkContainer {
-  padding: 7px 10px;
-  width: fit-content;
-  margin-left: 8px;
-  background-color: #272727;
-  border-radius: 10px;
-  color: white;
-}
-
-.bookmarkContainer:hover {
-  cursor: pointer;
-  background-color: #3f3f3f;
-}
-
-.bookmarkButton {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.bookmarkIconAdded {
-  margin-right: 16px;
-  color: white;
-}
-
-.bookmarkIconNotAdded {
-  margin-right: 16px;
-  color: white;
-}
-
-.shareButton {
-  display: flex;
-  align-items: center;
-  padding: 7px 10px;
-  width: fit-content;
-  margin-left: 8px;
-  background-color: #272727;
-  border-radius: 10px;
-  color: white;
-}
-
-.shareButton:hover {
-  cursor: pointer;
-  background-color: #3f3f3f;
-}
-
-.shareIcon {
-  margin-right: 16px;
 }
 
 .subscribeButton {

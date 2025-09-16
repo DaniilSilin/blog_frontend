@@ -1,0 +1,34 @@
+.root {
+  width: fit-content;
+  background-color: var(--button-background);
+  border-radius: 10px;
+  color: var(--text-color-primary);
+}
+
+.root:hover {
+  cursor: pointer;
+  background-color: var(--button-hover-background);
+}
+
+@media (max-width: 500px) {
+  .root {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.bookmarkButton {
+  display: flex;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  align-items: center;
+  justify-content: center;
+  width: inherit;
+}
+
+.bookmarkIcon {
+  margin-right: 16px;
+  color: var(--icon-color-primary);
+}
+

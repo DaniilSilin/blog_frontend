@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from "react";
 import { Input as BaseInput } from "antd/lib";
 
+import styles from "./filter_input.module.css";
+
 export interface Props {
   width: number;
   height: number;
@@ -29,7 +31,7 @@ export default function FilterInput({
   );
 
   return (
-    <div>
+    <div className={styles.root}>
       <BaseInput
         onChange={handleChange}
         placeholder={placeholder}

@@ -38,6 +38,10 @@ body {
   --icon-color-primary: #0e0e0e;
   --text-color-primary: #0e0e0e;
   --text-color-primary-1: #606060;
+
+  --text-color-primary-3: #f1f1f1;
+
+
   --menu-background: #ffffff;
   --menu-chosen-background: #e5e5e5;
   --menu-hover-background: #cecece;
@@ -70,6 +74,7 @@ body {
   --button-hover-background-3: #65b8ff;
   --button-hover-background-4: #263850;
   --text-color-primary-2: #3ea6ff;
+  --text-color-primary-3: #0e0e0e;
 
   --button-hover-background-1: #d9d9d9;
   --button-hover-background-2: #3f3f3f;

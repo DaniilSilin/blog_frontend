@@ -8,7 +8,7 @@ import { IoBookmarkOutline, IoBookmarkSharp } from "react-icons/io5";
 import { TiArrowForwardOutline } from "react-icons/ti";
 
 import NoUserPopup from "@/app/components/modules/NoUserPopup";
-import ShareMenu from "@/app/components/modules/post_page/PostFooter/ShareMenu";
+import ShareMenu from "../../../post_page/PostFooter/ShareButton/ShareMenu";
 import LikeDislikeButton from "./LikeDislikeButton";
 
 import styles from "@/app/components/modules/post/post_page/post_page.module.css";

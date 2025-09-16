@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  gap: 0 10px;
+}
+
+@media (max-width: 620px) {
+  .root {
+    gap: 10px;
+  }
+}
