@@ -6,11 +6,10 @@
 }
 
 .root:hover {
-  cursor: pointer;
   background-color: var(--button-hover-background);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 520px) {
   .root {
     display: flex;
     width: 100%;

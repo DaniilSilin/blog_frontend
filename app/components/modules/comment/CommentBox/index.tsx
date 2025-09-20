@@ -52,14 +52,7 @@ export default function CommentBox({
     if (displayReplyInput) {
       setDisplayReplyInput(false);
     } else return;
-  }, [
-    editMode,
-    setEditMode,
-    displayReplyInput,
-    setDisplayReplyInput,
-    setFocusOnInput,
-    setCommentBody,
-  ]);
+  }, [editMode, displayReplyInput]);
 
   React.useEffect(() => {
     if (editMode) {

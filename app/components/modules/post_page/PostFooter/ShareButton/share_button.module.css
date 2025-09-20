@@ -10,7 +10,7 @@
   color: var(--text-color-primary);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 520px) {
   .root {
     display: flex;
     width: 100%;

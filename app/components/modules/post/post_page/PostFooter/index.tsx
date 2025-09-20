@@ -51,8 +51,6 @@ export default function PostFooter({ post, refetch }: Props) {
     }
   };
 
-  console.log(displayShareMenu);
-
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
       // @ts-ignore

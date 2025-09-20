@@ -19,7 +19,6 @@ export default function ImagesContainer({ images, setImages }: Props) {
     },
     [setImages],
   );
-  console.log(images);
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');

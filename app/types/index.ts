@@ -9,3 +9,4 @@ export * from "./Comment";
 export * from "./UserProfile";
 export * from "./Notification";
 export * from "./CleanParams";
+export * from "./ShareMenuItem";

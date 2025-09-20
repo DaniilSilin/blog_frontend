@@ -39,8 +39,6 @@ export default function HeaderSettings() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
-  console.log(displayMenu);
-
   return (
     <div className={styles.root} ref={settingsMenu}>
       <button className={styles.menuButton} onClick={handleShowDisplayMenu}>

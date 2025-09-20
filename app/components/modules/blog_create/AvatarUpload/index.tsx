@@ -47,7 +47,6 @@ export default function AvatarUpload({
     (e: ChangeEvent<HTMLInputElement>) => {
       setImageErrorMessage("");
       const file = e.target.files?.[0];
-      console.log(file);
       if (!file) return;
 
       const fileSize = file?.size;
@@ -58,7 +57,6 @@ export default function AvatarUpload({
       reader.addEventListener("load", () => {
         const imageElement = new Image();
         const imageUrl = reader.result?.toString() || "";
-        console.log(imageUrl);
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {

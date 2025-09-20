@@ -19,7 +19,6 @@ export default function PostImage({ image }: Props) {
       if (isImageModalOn) {
       } else {
         let modalNode = null;
-        console.log(elem);
         if (
           elem.lastElementChild &&
           elem.lastElementChild.className.startsWith("modal_3")

@@ -1,24 +1,22 @@
 .root {
   display: flex;
-  min-width: 200px;
+  /*min-width: 200px;*/
 }
 
 .inputForm {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.inputSubForm {
-  position: absolute;
-  width: inherit;
+  width: min(100%, 400px);
 }
 
 .clearButton {
-  position: relative;
+  color: var(--text-color-primary);
+  position: absolute;
   border-radius: 50%;
-  right: 30px;
-  padding: 5px;
+  right: 5px;
+  padding: 4px;
 }
 
 .clearButton:hover {
@@ -30,5 +28,10 @@
 }
 
 .searchButton {
-  margin-left: 5px;
+  color: var(--text-color-primary);
+  display: flex;
+  align-items: center;
+  background-color: #8c4747;
+  padding: 3px;
+  border-radius: 0 3px 3px 0;
 }

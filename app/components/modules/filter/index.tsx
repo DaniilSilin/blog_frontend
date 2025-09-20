@@ -2,7 +2,7 @@ import React from "react";
 
 import { ConfigProvider } from "antd/lib";
 import locale from "antd/locale/ru_RU";
-import { CleanParams } from "@/app/types";
+import { CleanParamsType } from "@/app/types";
 
 import DatePicker2 from "@/app/components/modules/filter/DatePicker";
 import SortingMenu from "./SortingMenu";
@@ -12,7 +12,7 @@ import styles from "./filter.module.css";
 
 export interface Props {
   setPage: (value: number) => void;
-  cleanParams: CleanParams;
+  cleanParams: CleanParamsType;
 }
 
 export default function Filter({ cleanParams, setPage }: Props) {

@@ -23,8 +23,6 @@ export default function Profile({ username }) {
   const [dynamicContentModalDisplayed, setDynamicContentModalDisplayed] =
     React.useState(false);
 
-  console.log(dynamicContentModalDisplayed);
-
   const freezeBody = React.useCallback(
     () => document.querySelector("body")?.classList.add("freeze"),
     [],
@@ -44,7 +42,6 @@ export default function Profile({ username }) {
         }
       } else {
         let modalNode = null;
-        console.log(elem);
         if (elem.nextSibling.className.startsWith("modal_3")) {
           modalNode = elem.nextSibling;
           modalNode.style.display = "block";

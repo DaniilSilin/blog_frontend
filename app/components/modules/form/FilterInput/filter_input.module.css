@@ -1,3 +1,26 @@
 .root {
   display: block;
 }
+
+.filterInput {
+  display: block;
+  border-radius: 10px 0 0 10px;
+  color: var(--text-color-primary);
+  background-color: var(--textarea-backround);
+}
+
+.filterInput:hover {
+  background-color: var(--textarea-backround);
+}
+
+.filterInput:focus {
+  background-color: var(--textarea-backround);
+}
+
+.filterInput {
+  color: var(--text-color-primary)
+}
+
+.filterInput::placeholder {
+  color: var(--text-color-primary-1)
+}

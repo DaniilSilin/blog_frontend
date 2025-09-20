@@ -68,7 +68,7 @@ export default function MainLayout({ children }: Props) {
   }, [isWideScreen]);
 
   return (
-    <Layout>
+    <Layout style={{ width: "100%", overflowX: "hidden" }}>
       {!isWideScreen && (
         <MainSider
           setIsMainSiderHidden={setIsMainSiderHidden}

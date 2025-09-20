@@ -31,15 +31,19 @@ export default function FilterInput({
   );
 
   return (
-    <div className={styles.root}>
-      <BaseInput
-        onChange={handleChange}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        maxLength={maxLength}
-        value={value}
-        style={{ display: "block", width: `${width}px`, height: `${height}px` }}
-      />
-    </div>
+    <BaseInput
+      onChange={handleChange}
+      placeholder={placeholder}
+      defaultValue={defaultValue}
+      maxLength={maxLength}
+      value={value}
+      className={styles.filterInput}
+      width={width}
+      height={height}
+      style={{
+        // width: `${width}px`,
+        height: `${height}px`,
+      }}
+    />
   );
 }

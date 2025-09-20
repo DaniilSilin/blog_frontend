@@ -4,7 +4,14 @@ html {
 }
 
 body {
-  margin: 0;
+  margin: 0 !important;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout,
+:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout-content {
+   width: 100%;
 }
 
 
@@ -282,6 +289,7 @@ button {
 * {
   /*color: white;*/
   /*background: #0f0f0f;*/
+   box-sizing: border-box;
 }
 
 .labelForm {

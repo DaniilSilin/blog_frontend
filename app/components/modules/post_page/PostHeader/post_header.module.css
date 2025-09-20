@@ -1,72 +1,34 @@
-.root {
-}
-
 .postHeader {
   display: flex;
-  color: black;
   font-size: 24px;
   margin-bottom: 7px;
-  justify-content: space-between;
-}
-
-.postHeaderRightPart {
-  display: flex;
-}
-
-.postHeaderLeftPart {
-  font-size: 16px;
-}
-
-.postHeaderLeftPart:hover {
-  /*padding: 5px;*/
-  /*border-radius: 50%;*/
-  /*cursor: pointer;*/
-  /*background-color: #353535;*/
-}
-
-.postBlogAvatar {
-  margin-right: 10px;
 }
 
 .avatar {
+  display: flex;
   margin-right: 10px;
   border-radius: 50%;
 }
 
 .postBlogTitle {
-  text-decoration: none;
-  color: black;
+  color: var(--text-color-primary);
+  word-break: break-all;
+}
+
+.postBlogTitle:hover {
+  color: inherit;
 }
 
 .postTitle {
   font-size: 20px;
-  color: black;
+  margin-bottom: 10px;
+  word-break: break-all;
 }
 
-.postTitle:hover {
-  font-size: 20px;
-  color: #0086b3;
+.postTitleLink {
+  color: var(--text-color-primary);
 }
 
-.postHeaderInfo {
-  display: flex;
-}
-
-.postHeaderDelimiter {
-  padding: 0 8px;
-  font-weight: 600;
-}
-
-.postHeaderDate {
-  font-weight: 600;
-  color: #757373;
-}
-
-.postHeaderAuthor {
-  font-weight: 700;
-}
-
-.postHeaderViews {
-  font-weight: 600;
-  color: #757373;
+.postTitleLink:hover {
+  color: inherit;
 }

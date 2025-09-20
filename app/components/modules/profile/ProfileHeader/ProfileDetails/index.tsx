@@ -12,7 +12,7 @@ import styles from "./profileDetails.module.css";
 
 export default function ProfileDetails() {
   const user = useAppSelector((state) => state.django.profile);
-  console.log(user);
+
   return (
     <div>
       <div>

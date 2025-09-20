@@ -21,22 +21,49 @@
   color: var(--text-color-primary-1)
 }
 
-.baseInput {
+.textarea {
   display: block;
   background-color: var(--textarea-backround);
-  color: var(--text-color-primary);
+}
+
+.textarea:hover {
+  background-color: var(--textarea-backround);
+}
+
+.textarea:focus {
+  background-color: var(--textarea-backround);
+}
+
+.textarea {
+  color: var(--text-color-primary)
+}
+
+.textarea::placeholder {
+  color: var(--text-color-primary-1)
+}
+
+.bsInput {
+  display: block;
+  background-color: var(--textarea-backround) !important;
+  color: var(--text-color-primary) !important;
+}
+
+.baseInput {
+  display: block;
+  background-color: var(--textarea-backround) !important;
+  color: var(--text-color-primary) !important;
 }
 
 .baseInput:hover {
-  background-color: var(--textarea-backround);
+  background-color: var(--textarea-backround) !important;
 }
 
 .baseInput:focus {
-  background-color: var(--textarea-backround);
+  background-color: var(--textarea-backround) !important;
 }
 
 .baseInput::placeholder {
-  color: var(--text-color-primary-1)
+  color: var(--text-color-primary-1) !important;
 }
 
 .eyeIcon {

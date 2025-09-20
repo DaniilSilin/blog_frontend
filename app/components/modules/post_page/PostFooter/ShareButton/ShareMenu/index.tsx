@@ -1,11 +1,10 @@
 import React from "react";
-import Link from "next/link";
 import ClipboardTextNotification from "@/app/contexts/ClipboardTextNotification";
-
-import { PostType } from "@/app/types";
+import { PostType, ShareMenuItemType } from "@/app/types";
 
 import { ImTelegram, ImVk } from "react-icons/im";
 import { IoLink } from "react-icons/io5";
+import ShareMenuItem from "./ShareMenuItem";
 
 import styles from "./share_menu.module.css";
 
@@ -31,7 +30,14 @@ const shareMenuList = [
   },
   {
     id: 3,
-    title: "VK",
+    title: "ВКонтакте",
+    icon: <ImVk size={25} />,
+    href: `https://t.me/share/url?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}?share_to=telegram&text=${4}`,
+    isLink: false,
+  },
+  {
+    id: 4,
+    title: "ВКонтакте",
     icon: <ImVk size={25} />,
     href: `https://t.me/share/url?url=${encodeURIComponent("http://localhost:3001/blog/ax1le/post/1/")}?share_to=telegram&text=${4}`,
     isLink: false,
@@ -40,16 +46,6 @@ const shareMenuList = [
 
 export default function ShareMenu({ post, setDisplayShareMenu }: Props) {
   const menuRef = React.useRef(null);
-
-  const copyToClipboard = React.useContext(ClipboardTextNotification);
-  const copyText = () => {
-    copyToClipboard(post);
-    setDisplayShareMenu(false);
-  };
-
-  const hideMenu = React.useCallback(() => {
-    setDisplayShareMenu(false);
-  }, [setDisplayShareMenu]);
 
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
@@ -66,26 +62,13 @@ export default function ShareMenu({ post, setDisplayShareMenu }: Props) {
     <div ref={menuRef} className={styles.root}>
       <div className={styles.shareTitle}>Поделиться</div>
       <div className={styles.shareListContainer}>
-        {shareMenuList.map((item) => (
-          <div
-            key={item.id}
-            className={styles.shareMenuListItem}
-            onClick={copyText}
-          >
-            <div className={styles.shareIcon}>{item.icon}</div>
-            {item.isLink ? (
-              <div>
-                <Link
-                  className={styles.shareMenuListItemTitle}
-                  href={item.href}
-                >
-                  {item.title}
-                </Link>
-              </div>
-            ) : (
-              <div>{item.title}</div>
-            )}
-          </div>
+        {shareMenuList.map((menuItem: ShareMenuItemType) => (
+          <ShareMenuItem
+            key={menuItem.id}
+            menuItem={menuItem}
+            post={post}
+            setDisplayShareMenu={setDisplayShareMenu}
+          />
         ))}
       </div>
     </div>

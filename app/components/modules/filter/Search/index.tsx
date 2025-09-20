@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
 import { useRouter } from "next/router";
-import { CleanParams } from "@/app/types";
+import { CleanParamsType } from "@/app/types";
 
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
@@ -10,7 +10,7 @@ import FilterInput from "@/app/components/modules/form/FilterInput";
 import styles from "./search.module.css";
 
 export interface Props {
-  cleanParams: CleanParams;
+  cleanParams: CleanParamsType;
   setPage: (value: number) => void;
 }
 
@@ -23,7 +23,6 @@ export default function Search({ setPage, cleanParams }: Props) {
 
   const setSearchQueryParam = React.useCallback(
     (search: string) => {
-      console.log("Memoized function called");
       setPage(1);
       router.push(
         {
@@ -42,12 +41,10 @@ export default function Search({ setPage, cleanParams }: Props) {
     setSearchQueryParam(inputSearch);
   };
 
-  const clearInput = () => {
+  const clearInput = React.useCallback(() => {
     setInputSearch("");
     setSearchQueryParam("");
-  };
-
-  console.log("Rendering MyComponent");
+  }, []);
 
   return (
     <div className={styles.root}>
@@ -60,13 +57,11 @@ export default function Search({ setPage, cleanParams }: Props) {
           defaultValue={cleanParams.search}
           placeholder={"Введите запрос"}
         />
-        <div className={styles.inputSubForm}>
-          {inputSearch && (
-            <button className={styles.clearButton} onClick={clearInput}>
-              <RxCross2 size={20} className={styles.clearButtonIcon} />
-            </button>
-          )}
-        </div>
+        {inputSearch && (
+          <button className={styles.clearButton} onClick={clearInput}>
+            <RxCross2 size={20} className={styles.clearButtonIcon} />
+          </button>
+        )}
       </form>
       <button className={styles.searchButton} onClick={filterInputHandleSubmit}>
         <HiMiniMagnifyingGlass />

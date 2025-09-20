@@ -45,11 +45,11 @@ export default function Input({
     if (setInputOnFocus) {
       setInputOnFocus(true);
     } else return;
-  }, [setOnFocus, setInputOnFocus]);
+  }, [setInputOnFocus]);
 
   const handleBlur = React.useCallback(() => {
     setOnFocus(false);
-  }, [setOnFocus]);
+  }, []);
 
   return (
     <div>

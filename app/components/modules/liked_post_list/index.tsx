@@ -26,7 +26,7 @@ export default function LikedPostList() {
   const { data: likedPosts, isFetching } = DjangoService.useLikedPostListQuery(
     cleanParams(router.query, page),
   );
-  console.log(likedPosts);
+
   React.useEffect(() => {
     const onScroll = () => {
       const scrolledToBottom =

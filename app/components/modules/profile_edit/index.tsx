@@ -127,8 +127,6 @@ export default function ProfileEdit({ username }) {
     React.useState(false);
   const [isReadyToSubmit, setIsReadyToSubmit] = React.useState(false);
 
-  console.log(data);
-
   React.useEffect(() => {
     if (data) {
       setInitialFirstName(data.first_name);
@@ -465,8 +463,6 @@ export default function ProfileEdit({ username }) {
 
   const dateHandleChange: DatePickerProps["onChange"] = React.useCallback(
     (date, dateString) => {
-      console.log(date);
-      console.log(dateString);
       setBirthDate(dateString);
     },
     [setBirthDate, birthDate],
@@ -475,7 +471,6 @@ export default function ProfileEdit({ username }) {
   const defaultBirthDateValue = initialBirthDate
     ? [moment(initialBirthDate), moment(initialBirthDate)]
     : undefined;
-  console.log(defaultBirthDateValue);
 
   const updateProfileData = async () => {
     const formData = new FormData();

@@ -23,7 +23,6 @@ export default function PostImageItem({ image, setImages, images }: Props) {
       const file = e.target.files?.[0];
       if (!file) return;
       const currentImage = images.find((image) => image.name === item.name);
-      console.log(currentImage);
     },
     [images],
   );
@@ -35,7 +34,6 @@ export default function PostImageItem({ image, setImages, images }: Props) {
       const currentImageFindIndex = images.findIndex(
         (image) => image.name === item.name,
       );
-      console.log(currentImageFindIndex);
     },
     [images],
   );

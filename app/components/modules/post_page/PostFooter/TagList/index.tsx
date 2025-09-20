@@ -9,7 +9,7 @@ export interface Props {
 
 export default function TagList({ tags }: Props) {
   return (
-    <div className={styles.postTags}>
+    <div className={styles.root}>
       {tags &&
         tags.split(" ").map((tag, index) => (
           <Link key={index} href={`/hashtag/${tag.slice(1)}`}>

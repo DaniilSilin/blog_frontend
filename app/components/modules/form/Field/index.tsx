@@ -27,31 +27,19 @@ export default function Field({
     return !!((!error && !value) || (!error && value));
   }, [error, value]);
 
-  const iconValue = React.useMemo(() => {
-    if (!error && !value) {
-      return "1";
-    } else if (error && value) {
-      return "2";
-    } else {
-      return "3";
-    }
-  }, [error, value]);
-
   return (
-    <div style={{ margin: "10px 0" }}>
-      <div
-        className={classNames(styles.label, {
-          [styles.active]: onFocus,
-          [styles.non_active]: !onFocus,
-        })}
-      >
-        {label}
-      </div>
-      <div style={{ display: "flex" }}>
-        {children}
-        {/*{iconValue === '3' && <div><FaCheck color={'green'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}*/}
-        {/*{iconValue === '2' && <div><CiWarning color={'red'} size={25} style={{ position: 'absolute', margin: '8px 8px' }} /></div>}*/}
-      </div>
+    <div className={styles.root}>
+      {label && (
+        <div
+          className={classNames(styles.label, {
+            [styles.active]: onFocus,
+            [styles.non_active]: !onFocus,
+          })}
+        >
+          {label}
+        </div>
+      )}
+      <div style={{ display: "flex" }}>{children}</div>
       <>
         {isInputEmptyOrHasNoError ? (
           <div

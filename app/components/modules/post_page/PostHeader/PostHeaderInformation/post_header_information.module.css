@@ -1,0 +1,30 @@
+.root {
+  display: flex;
+}
+
+.root > div:not(:first-child)::before {
+  content: '·';
+  padding: 0 8px;
+  font-weight: 600;
+}
+
+.postHeaderDate {
+  font-weight: 600;
+  color: var(--text-color-primary-1);
+  white-space: nowrap;
+}
+
+.postHeaderAuthor {
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.postHeaderViews {
+  font-weight: 600;
+  color: var(--text-color-primary-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

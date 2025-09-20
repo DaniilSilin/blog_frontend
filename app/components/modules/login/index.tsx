@@ -27,7 +27,6 @@ export default function Login() {
       setErrorMessage("Неправильный логин или пароль");
     } else {
       setErrorMessage("");
-      console.log(response);
       CookieHelper.setCookie("token", response.data.token, 365);
       getUserData();
       router.push(redirectTo);
@@ -37,8 +36,8 @@ export default function Login() {
   const [isCapsLockOn, setIsCapsLockOn] = React.useState(false);
 
   React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      setIsCapsLockOn(event.getModifierState("CapsLock"));
+    const handleKeyDown = (e: KeyboardEvent) => {
+      setIsCapsLockOn(e.getModifierState("CapsLock"));
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -55,7 +54,7 @@ export default function Login() {
           label={"Имя пользователя"}
           placeholder={"Имя пользователя"}
         />
-        <div style={{ display: "flex" }}>
+        <div className={styles.loginContainer}>
           <Input
             width={300}
             height={50}

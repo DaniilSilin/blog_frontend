@@ -1,12 +1,12 @@
 import React from "react";
 import DjangoService from "../../../store/services/DjangoService";
 import { useRouter } from "next/router";
-import { PostType, CleanParams } from "@/app/types";
+import { PostType, CleanParamsType } from "@/app/types";
 
 import Filter from "../filter";
 import PostItem from "../post_page";
 
-const cleanParams = (query: any, page: number): CleanParams => {
+const cleanParams = (query: any, page: number): CleanParamsType => {
   const search = query.search ? query.search : undefined;
   const before = query.before ? query.before : undefined;
   const after = query.after ? query.after : undefined;
@@ -51,6 +51,7 @@ export default function PostList() {
       {postPaginatedList?.results.map((post: PostType[], index: number) => (
         <PostItem key={index} post={post} />
       ))}
+      {isFetching && <div className={"loader"}></div>}
     </div>
   );
 }

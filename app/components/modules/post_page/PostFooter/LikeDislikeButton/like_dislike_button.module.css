@@ -22,18 +22,26 @@
   min-width: 75px;
   align-items: center;
   justify-content: center;
+  border-radius: 10px 0 0 10px;
+  position: relative;
 }
 
 .likeButton:hover {
-  cursor: pointer;
   background-color: var(--button-hover-background);
+}
+
+.likeButton::after {
+  content: "";
+  background: var(--button-hover-background-1);
+  position: absolute;
+  right: 0;
+  top: 6px;
+  height: 24px;
+  width: 1px;
 }
 
 .likeIcon {
   margin-right: 6px;
-}
-
-.likeCounter {
 }
 
 .dislikeButton {
@@ -43,16 +51,13 @@
   min-width: 75px;
   align-items: center;
   justify-content: center;
+  border-radius: 0 10px 10px 0;
 }
 
 .dislikeButton:hover {
-  cursor: pointer;
   background-color: var(--button-hover-background);
 }
 
 .dislikeIcon {
   margin-right: 6px;
-}
-
-.dislikeCounter {
 }

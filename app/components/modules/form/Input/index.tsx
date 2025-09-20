@@ -52,78 +52,95 @@ const Input = React.forwardRef(function Input(
     if (setInputOnFocus) {
       setInputOnFocus(true);
     } else return;
-  }, [setOnFocus, setInputOnFocus]);
+  }, [setInputOnFocus]);
 
   const handleBlur = React.useCallback(() => {
     setOnFocus(false);
-  }, [setOnFocus]);
+  }, []);
 
   return (
     <div>
-      <Field
-        label={label}
-        onFocus={onFocus}
-        error={error}
-        value={value}
-        description={description}
-      >
-        {isPassword ? (
-          <>
-            <BaseInput.Password
-              onChange={handleChangeInput}
-              placeholder={placeholder}
-              defaultValue={defaultValue}
-              maxLength={maxLength}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              ref={ref}
-              className={styles.basePasswordInput}
-              style={{
-                width: `${width}px`,
-                height: `${height}px`,
-              }}
-              iconRender={(visible) =>
-                visible ? (
-                  <EyeTwoTone
-                    className={styles.eyeIcon}
-                    style={{
-                      position: "absolute",
-                      right: "20px",
-                      marginBottom: "20px",
-                    }}
-                  />
-                ) : (
-                  <EyeInvisibleOutlined
-                    className={styles.eyeIcon}
-                    style={{
-                      position: "absolute",
-                      right: "20px",
-                      marginBottom: "20px",
-                    }}
-                  />
-                )
-              }
-            />
-          </>
-        ) : (
-          <BaseInput
-            onChange={handleChangeInput}
-            placeholder={placeholder}
-            defaultValue={defaultValue}
-            maxLength={maxLength}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            ref={ref}
-            className={styles.baseInput}
-            style={{
-              width: `${width}px`,
-              height: `${height}px`,
-            }}
-          />
-        )}
-      </Field>
+      <BaseInput
+        onChange={handleChangeInput}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        maxLength={maxLength}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        ref={ref}
+        className={styles.textarea}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+        }}
+      />
     </div>
   );
 });
 
 export default Input;
+
+// <div>
+//     <Field
+//         label={label}
+//         onFocus={onFocus}
+//         error={error}
+//         value={value}
+//         description={description}
+//     >
+//         {isPassword ? (
+//             <>
+//                 <BaseInput.Password
+//                     onChange={handleChangeInput}
+//                     placeholder={placeholder}
+//                     defaultValue={defaultValue}
+//                     maxLength={maxLength}
+//                     onFocus={handleFocus}
+//                     onBlur={handleBlur}
+//                     ref={ref}
+//                     className={styles.basePasswordInput}
+//                     style={{
+//                         width: `${width}px`,
+//                         height: `${height}px`,
+//                     }}
+//                     iconRender={(visible) =>
+//                         visible ? (
+//                             <EyeTwoTone
+//                                 className={styles.eyeIcon}
+//                                 style={{
+//                                     position: "absolute",
+//                                     right: "20px",
+//                                     marginBottom: "20px",
+//                                 }}
+//                             />
+//                         ) : (
+//                             <EyeInvisibleOutlined
+//                                 className={styles.eyeIcon}
+//                                 style={{
+//                                     position: "absolute",
+//                                     right: "20px",
+//                                     marginBottom: "20px",
+//                                 }}
+//                             />
+//                         )
+//                     }
+//                 />
+//             </>
+//         ) : (
+//             <BaseInput
+//                 onChange={handleChangeInput}
+//                 placeholder={placeholder}
+//                 defaultValue={defaultValue}
+//                 maxLength={maxLength}
+//                 onFocus={handleFocus}
+//                 onBlur={handleBlur}
+//                 ref={ref}
+//                 className={styles.baseInput}
+//                 style={{
+//                     width: `${width}px`,
+//                     height: `${height}px`,
+//                 }}
+//             />
+//         )}
+//     </Field>
+// </div>
