@@ -19,7 +19,7 @@ import styles from "./register.module.css";
 const usernameDescription =
   "Минимальная длина: 3 символа. Ваше имя пользователя может содержать латинские буквы, цифры и знак нижнего подчёркивания.";
 const passwordDescription =
-  "Минимальная длина: 8 символов. Ваш пароль должен содержать строчные и заглавные буквы, а также цифры.";
+  "Минимальная длина: 8 символов. Ваш пароль должен содержать латинские в верхнем и нижнем регистре и цифры";
 
 export default function Register() {
   const router = useRouter();
@@ -29,6 +29,7 @@ export default function Register() {
   const [username, setUsername] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+  const [token, setToken] = React.useState<string>("");
 
   const [emailError, setEmailError] = React.useState<string>("");
   const [usernameError, setUsernameError] = React.useState<string>("");
@@ -37,13 +38,9 @@ export default function Register() {
   const [lastNameError, setLastNameError] = React.useState<string>("");
   const [confirmPasswordError, setConfirmPasswordError] =
     React.useState<string>("");
-  const [captchaError, setCaptchaError] = React.useState<string>("");
 
-  const firstNameRef = React.useRef(null);
-
-  const [token, setToken] = React.useState<string | undefined>("");
-  const [registerUser] = DjangoService.useRegisterMutation();
   const [readyToSubmit, setReadyToSubmit] = React.useState(false);
+  const [registerUser] = DjangoService.useRegisterMutation();
   const { data: isUsernameAvailable } =
     DjangoService.useIsUsernameAvailableQuery({ username });
 
@@ -105,22 +102,17 @@ export default function Register() {
       setConfirmPasswordError,
     );
 
-    // if (!token) {
-    //   setCaptchaError("Не пройдена капча");
-    //   isValid = false;
-    // } else {
-    //   setCaptchaError("");
-    // }
-
     return (
       firstNameField &&
       lastNameField &&
       emailField &&
       usernameField &&
       passwordField &&
-      passwordConfirmField
+      passwordConfirmField &&
+      !!token
     );
   }, [
+    token,
     firstName,
     lastName,
     email,
@@ -128,23 +120,18 @@ export default function Register() {
     password,
     confirmPassword,
     firstNameError,
+    isUsernameAvailable,
     setFirstNameError,
     setLastNameError,
     setEmailError,
     setUsernameError,
     setPasswordError,
     setConfirmPasswordError,
-    isUsernameAvailable,
   ]);
-
-  const isNowErrors = React.useCallback(() => {
-    if ()
-  })
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const isValid = formValidation();
-    // focusErrorInputOnHandleSubmit();
     if (isValid) {
       const register = await registerUser({
         first_name: firstName,
@@ -161,9 +148,7 @@ export default function Register() {
 
   React.useEffect(() => {
     const submit = formValidation();
-    if (submit) {
-      setReadyToSubmit(submit);
-    }
+    setReadyToSubmit(submit);
   }, [
     firstName,
     lastName,
@@ -171,15 +156,15 @@ export default function Register() {
     username,
     password,
     confirmPassword,
+    token,
     isUsernameAvailable,
-    formValidation,
   ]);
 
   return (
     <div className={styles.root}>
       <form onSubmit={handleSubmit}>
         <div className={styles.registerTitle}>Регистрация</div>
-        <div className={styles.formContainer}>
+        <div>
           <Input
             width={400}
             height={40}
@@ -188,7 +173,6 @@ export default function Register() {
             error={firstNameError}
             value={firstName}
             description={"Введите ваше имя."}
-            ref={firstNameRef}
           />
           <Input
             width={400}
@@ -240,11 +224,7 @@ export default function Register() {
             value={confirmPassword}
             isPassword
           />
-          <YandexCaptcha
-            language={"ru"}
-            setToken={setToken}
-            error={captchaError}
-          />
+          <YandexCaptcha language={"ru"} setToken={setToken} />
           <input
             type="submit"
             disabled={!readyToSubmit}

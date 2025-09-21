@@ -3,7 +3,7 @@ import {
   fetchBaseQuery,
   defaultSerializeQueryArgs,
 } from "@reduxjs/toolkit/query/react";
-import { Blog, PostType, Register, Login, Author } from "@/app/types";
+import { BlogType, PostType, Register, Login, Author } from "@/app/types";
 import { HYDRATE } from "next-redux-wrapper";
 import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";

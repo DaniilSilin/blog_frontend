@@ -36,26 +36,23 @@ export default function Field({
         </div>
       )}
       <div className={styles.content}>{children}</div>
-      <>
-        {isInputEmptyOrHasNoError ? (
-          <div
-            className={classNames(styles.description, {
-              [styles.active]: onFocus,
-            })}
-          >
-            {description}
-          </div>
-        ) : (
-          <div
-            className={classNames(styles.error, {
-              [styles.active]: onFocus,
-              [styles.non_active]: !onFocus,
-            })}
-          >
-            {error}
-          </div>
-        )}
-      </>
+      {isInputEmptyOrHasNoError ? (
+        <div
+          className={classNames(styles.description, {
+            [styles.active]: onFocus,
+          })}
+        >
+          {description}
+        </div>
+      ) : (
+        <div
+          className={classNames(styles.error, {
+            [styles.active]: onFocus,
+          })}
+        >
+          {error}
+        </div>
+      )}
     </div>
   );
 }

@@ -7,20 +7,17 @@
   font-size: 32px;
 }
 
-.formContainer {
-}
-
 .registerButton {
+  height: 40px;
+  width: 400px;
   border: none;
   background-image: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  width: 400px;
   margin-top: 20px;
   background-color: blue;
   border-radius: 10px;
-  height: 40px;
 }
 
 .registerButton.active {

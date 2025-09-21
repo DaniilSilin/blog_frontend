@@ -28,9 +28,9 @@
 
 .error {
   margin-top: 5px;
-  color: #ef5151;
+  color: var(--text-error);
 }
 
 .error.active {
-  color: #f40000;
+  color: var(--text-error-active);
 }
