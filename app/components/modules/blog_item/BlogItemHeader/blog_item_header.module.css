@@ -1,0 +1,74 @@
+.root {
+  display: flex;
+  justify-content: space-between;
+}
+
+.subHeader {
+  display: flex;
+}
+
+.blogAvatar {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.titleContainer {
+  display: flex;
+}
+
+.blogTitle {
+  font-size: 24px;
+  color: var(--text-color-primary);
+  overflow: hidden;
+  max-lines: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.blogTitle:hover {
+  color: var(--text-color-primary);
+}
+
+.blogOwnerNotification {
+  font-size: 13px;
+  color: var(--text-color-primary);
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.blogSubscribersCountTitle {
+  color: var(--text-color-primary);
+  overflow: hidden;
+  max-lines: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.subscribeButton {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: var(--button-background-1);
+  color: var(--body-color-reversed);
+  height: 40px;
+  font-weight: 600;
+}
+
+.subscribeButton:hover {
+  background-color: var(--button-hover-background-1);
+}
+
+.unsubscribeButton {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: var(--button-background-1);
+  color: var(--body-color-reversed);
+  height: 40px;
+  font-weight: 600;
+}
+
+.unsubscribeButton:hover {
+  background-color: var(--button-hover-background-1);
+}

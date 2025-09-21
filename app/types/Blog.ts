@@ -1,4 +1,4 @@
-import { PostType, User } from "./index";
+import { User } from "./index";
 
 export interface BlogType {
   id: number;
@@ -27,4 +27,5 @@ export interface BlogType {
   subscriberList?: number;
   views: number;
   phone_number: string;
+  isBlogAuthor: boolean;
 }

@@ -137,10 +137,9 @@ export default function Register() {
     isUsernameAvailable,
   ]);
 
-  // const focusErrorInputOnHandleSubmit = React.useCallback(() => {
-  //   if ((setFirstNameError && firstName) || !firstName) {
-  //   }
-  // }, [setFirstNameError, firstName]);
+  const isNowErrors = React.useCallback(() => {
+    if ()
+  })
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -162,10 +161,8 @@ export default function Register() {
 
   React.useEffect(() => {
     const submit = formValidation();
-    if (submit === true) {
-      setReadyToSubmit(true);
-    } else {
-      setReadyToSubmit(false);
+    if (submit) {
+      setReadyToSubmit(submit);
     }
   }, [
     firstName,
@@ -175,7 +172,6 @@ export default function Register() {
     password,
     confirmPassword,
     isUsernameAvailable,
-    setReadyToSubmit,
     formValidation,
   ]);
 

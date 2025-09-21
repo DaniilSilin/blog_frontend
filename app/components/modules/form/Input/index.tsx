@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { Input as BaseInput } from "antd/lib";
+const { Password } = BaseInput;
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons/lib";
 import Field from "../Field";
 
@@ -37,7 +38,7 @@ const Input = React.forwardRef(function Input(
   }: Props,
   ref,
 ) {
-  const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [onFocus, setOnFocus] = React.useState(false);
   const handleChangeInput = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -45,7 +46,6 @@ const Input = React.forwardRef(function Input(
     },
     [onChange],
   );
-  const [onFocus, setOnFocus] = React.useState(false);
 
   const handleFocus = React.useCallback(() => {
     setOnFocus(true);
@@ -60,87 +60,48 @@ const Input = React.forwardRef(function Input(
 
   return (
     <div>
-      <BaseInput
-        onChange={handleChangeInput}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        maxLength={maxLength}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        ref={ref}
-        className={styles.textarea}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-        }}
-      />
+      <Field
+        label={label}
+        onFocus={onFocus}
+        error={error}
+        value={value}
+        description={description}
+      >
+        {isPassword ? (
+          <Password
+            onChange={handleChangeInput}
+            placeholder={placeholder}
+            defaultValue={defaultValue}
+            maxLength={maxLength}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            ref={ref}
+            className={styles.baseInput}
+            style={{
+              display: "flex",
+              width: `${width}px`,
+              height: `${height}px`,
+            }}
+          />
+        ) : (
+          <BaseInput
+            onChange={handleChangeInput}
+            placeholder={placeholder}
+            defaultValue={defaultValue}
+            maxLength={maxLength}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            ref={ref}
+            className={styles.baseInput}
+            style={{
+              width: `${width}px`,
+              height: `${height}px`,
+            }}
+          />
+        )}
+      </Field>
     </div>
   );
 });
 
 export default Input;
-
-// <div>
-//     <Field
-//         label={label}
-//         onFocus={onFocus}
-//         error={error}
-//         value={value}
-//         description={description}
-//     >
-//         {isPassword ? (
-//             <>
-//                 <BaseInput.Password
-//                     onChange={handleChangeInput}
-//                     placeholder={placeholder}
-//                     defaultValue={defaultValue}
-//                     maxLength={maxLength}
-//                     onFocus={handleFocus}
-//                     onBlur={handleBlur}
-//                     ref={ref}
-//                     className={styles.basePasswordInput}
-//                     style={{
-//                         width: `${width}px`,
-//                         height: `${height}px`,
-//                     }}
-//                     iconRender={(visible) =>
-//                         visible ? (
-//                             <EyeTwoTone
-//                                 className={styles.eyeIcon}
-//                                 style={{
-//                                     position: "absolute",
-//                                     right: "20px",
-//                                     marginBottom: "20px",
-//                                 }}
-//                             />
-//                         ) : (
-//                             <EyeInvisibleOutlined
-//                                 className={styles.eyeIcon}
-//                                 style={{
-//                                     position: "absolute",
-//                                     right: "20px",
-//                                     marginBottom: "20px",
-//                                 }}
-//                             />
-//                         )
-//                     }
-//                 />
-//             </>
-//         ) : (
-//             <BaseInput
-//                 onChange={handleChangeInput}
-//                 placeholder={placeholder}
-//                 defaultValue={defaultValue}
-//                 maxLength={maxLength}
-//                 onFocus={handleFocus}
-//                 onBlur={handleBlur}
-//                 ref={ref}
-//                 className={styles.baseInput}
-//                 style={{
-//                     width: `${width}px`,
-//                     height: `${height}px`,
-//                 }}
-//             />
-//         )}
-//     </Field>
-// </div>

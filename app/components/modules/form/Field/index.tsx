@@ -1,7 +1,6 @@
 import React from "react";
-import { CiWarning } from "react-icons/ci";
-import { FaCheck } from "react-icons/fa6";
 import classNames from "classnames";
+
 import styles from "./field.module.css";
 
 export interface Props {
@@ -11,7 +10,6 @@ export interface Props {
   value: string;
   description: string;
   onFocus: boolean;
-  blog_slug: string;
 }
 
 export default function Field({
@@ -21,7 +19,6 @@ export default function Field({
   value,
   description,
   onFocus,
-  blog_slug,
 }: Props) {
   const isInputEmptyOrHasNoError = React.useMemo(() => {
     return !!((!error && !value) || (!error && value));
@@ -33,22 +30,20 @@ export default function Field({
         <div
           className={classNames(styles.label, {
             [styles.active]: onFocus,
-            [styles.non_active]: !onFocus,
           })}
         >
           {label}
         </div>
       )}
-      <div style={{ display: "flex" }}>{children}</div>
+      <div className={styles.content}>{children}</div>
       <>
         {isInputEmptyOrHasNoError ? (
           <div
             className={classNames(styles.description, {
               [styles.active]: onFocus,
-              [styles.non_active]: !onFocus,
             })}
           >
-            {blog_slug ? blog_slug : description}
+            {description}
           </div>
         ) : (
           <div

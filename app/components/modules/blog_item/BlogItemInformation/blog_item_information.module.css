@@ -1,0 +1,70 @@
+.root {
+  margin-top: 12px;
+}
+
+.descriptionContainer {
+  display: flex;
+}
+
+.descriptionTitle {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.descriptionContent {
+  font-size: 18px;
+  margin-left: 5px;
+  word-break: break-all;
+  overflow: hidden;
+  max-lines: 2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.lastUpdatedContainer {
+  display: flex;
+}
+
+.dateTitle {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.dateData {
+  margin-left: 5px;
+  font-size: 18px;
+}
+
+.blogStatsContainer {
+  display: flex;
+}
+
+.countOfPostsStatContainer {
+  display: flex;
+  padding: 4px 8px 4px 0;
+  gap: 5px;
+}
+
+.statName {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.statValue {
+  font-size: 14px;
+  color: #7A9199;
+  margin-top: 3.5px;
+}
+
+.commentsStatContainer {
+  display: flex;
+  padding: 4px 8px;
+  gap: 5px;
+}
+
+.viewsStatContainer {
+  display: flex;
+  padding: 4px 8px;
+  gap: 7px;
+}

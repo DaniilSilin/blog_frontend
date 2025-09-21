@@ -19,6 +19,7 @@ body {
 :root {
   --body-background: #ffffff;
   --body-color: #0e0e0e;
+  --body-color-reversed: #f1f1f1;
 
   --inteface-background-color: #001529;
   --interface-background-hover-color: #1677ff;
@@ -48,6 +49,8 @@ body {
 
   --text-color-primary-3: #f1f1f1;
 
+  --text-color-primary-4: #404040;
+
 
   --menu-background: #ffffff;
   --menu-chosen-background: #e5e5e5;
@@ -64,10 +67,13 @@ body {
 [dark-theme="dark"] {
   --body-background: #0e0e0e;
   --body-color: #f1f1f1;
+  --body-color-reversed: #0e0e0e;
 
   --button-background: #393838;
   --button-hover-background: #3d3d3d;
   --button-background-1: #f1f1f1;
+
+  --text-color-primary-4: #8f8f8f;
 
   --button-disabled-background: #272727;
   --button-text-disabled-background: #717171;

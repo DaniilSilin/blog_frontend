@@ -3,31 +3,27 @@
 }
 
 .label {
-  color: #666;
-  margin-bottom: 5px;
   font-size: 18px;
   font-weight: 500;
+  color: var(--text-color-primary-1);
+  margin-bottom: 5px;
 }
 
 .label.active {
-  color: #404040;
+  color: var(--text-color-primary-4);
 }
 
-.label.non_active {
-  color: #666;
+.content {
+  display: flex;
 }
 
 .description {
   margin-top: 5px;
-  color: #a1a1a1;
+  color: var(--text-color-primary-1);
 }
 
 .description.active {
-  color: #666;
-}
-
-.description.non_active {
-  color: #a1a1a1;
+  color: var(--text-color-primary-4);
 }
 
 .error {

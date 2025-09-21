@@ -11,11 +11,11 @@
 }
 
 .loginButton {
-  width: auto;
+  width: 300px;
   height: 40px;
   font-weight: 600;
-  background-color: blue;
-  color: white;
+  background-color: var(--button-background-2);
+  color: var(--text-color-primary);
   border-radius: 10px;
 }
 
