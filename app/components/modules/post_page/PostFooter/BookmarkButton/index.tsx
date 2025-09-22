@@ -21,12 +21,13 @@ export default function BookmarkButton({ post }: Props) {
   const [addOrRemoveBookmark] = DjangoService.useAddOrRemoveBookmarkMutation();
 
   const handleShowBookmarkPopup = React.useCallback(() => {
+    // @ts-ignore
     setDisplayBookmarkPopup((displayBookmarkPopup) => !displayBookmarkPopup);
   }, []);
 
   const addOrRemoveBookmarksFunction = React.useCallback(() => {
     addOrRemoveBookmark({ slug: post.blog.slug, post_id: post.post_id });
-  }, []);
+  }, [post]);
 
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
