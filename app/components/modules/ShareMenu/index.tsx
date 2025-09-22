@@ -7,6 +7,8 @@ import { ImTelegram, ImVk } from "react-icons/im";
 import { IoLink } from "react-icons/io5";
 import ClipboardTextNotification from "@/app/contexts/ClipboardTextNotification";
 
+import styles from "./share_menu.module.css";
+
 export interface Props {
   setDisplayShareMenu: (value: boolean) => void;
   post: PostType;

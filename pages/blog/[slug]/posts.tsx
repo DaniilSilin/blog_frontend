@@ -3,7 +3,7 @@ import BlogPostsView from "@/app/views/BlogPosts";
 import MainLayout from "@/app/MainLayout";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export default function BlogPostsPage(props) {
+export default function BlogPostsPage(props: any) {
   return (
     <MainLayout>
       <BlogPostsView slug={props.slug} />

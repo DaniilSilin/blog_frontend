@@ -48,7 +48,7 @@ export default function CommentReply({
             href={`/blog/${slug}/post/${post.post_id}/`}
           >
             <div className={styles.relatedPostText}>
-              Комментарии к публикации "{post.title}"
+              Комментарии к публикации &quot;{post.title}&quot;
             </div>
             <Image
               src={

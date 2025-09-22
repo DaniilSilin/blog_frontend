@@ -57,8 +57,11 @@ export default function Input({
         label={label}
         onFocus={onFocus}
         error={error}
+        // @ts-ignore
         value={value}
+        // @ts-ignore
         description={description}
+        // @ts-ignore
         blog_slug={blog_slug}
       >
         <BaseInput

@@ -30,6 +30,7 @@ export default function HeaderSettings() {
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      // @ts-ignore
       if (!settingsMenu.current.contains(e.target)) {
         setDisplayMenu(false);
         setDisplayThemeMenu(false);

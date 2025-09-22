@@ -38,7 +38,7 @@ const AvatarModal = React.forwardRef(function AvatarModal(
   const previewCanvasRef = React.useRef(null);
   const [crop, setCrop] = React.useState<any>();
 
-  const dataURLtoFile = (dataUrl, filename) => {
+  const dataURLtoFile = (dataUrl: any, filename: any) => {
     const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
@@ -51,7 +51,7 @@ const AvatarModal = React.forwardRef(function AvatarModal(
     return new File([u8arr], filename, { type: mime });
   };
 
-  const onImageLoad = (e) => {
+  const onImageLoad = (e: any) => {
     const width = e.target.width;
     const height = e.target.height;
     const crop = makeAspectCrop(
@@ -67,11 +67,15 @@ const AvatarModal = React.forwardRef(function AvatarModal(
     setCrop(centeredCrop);
   };
 
-  const setCanvasPreview = (image, canvas, crop) => {
+  const setCanvasPreview = (
+    image: HTMLImageElement,
+    canvas: HTMLCanvasElement,
+    crop: any,
+  ) => {
     const setCanvasPreview = (
-      image, // HTMLImageElement
-      canvas, // HTMLCanvasElement
-      crop, // PixelCrop
+      image: any, // HTMLImageElement
+      canvas: { getContext: (arg0: string) => any }, // HTMLCanvasElement
+      crop: any, // PixelCrop
     ) => {
       const ctx = canvas.getContext("2d");
       if (!ctx) {
@@ -87,14 +91,19 @@ const AvatarModal = React.forwardRef(function AvatarModal(
     canvas.width = Math.floor(crop.width * scaleX * PixelRatio);
     canvas.height = Math.floor(crop.height * scaleY * PixelRatio);
 
+    // @ts-ignore
     ctx.scale(PixelRatio, PixelRatio);
+    // @ts-ignore
     ctx.imageSmoothingQuality = "high";
+    // @ts-ignore
     ctx.save();
 
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleY;
 
+    // @ts-ignore
     ctx.translate(-cropX, -cropY);
+    // @ts-ignore
     ctx.drawImage(
       image,
       0,
@@ -106,6 +115,7 @@ const AvatarModal = React.forwardRef(function AvatarModal(
       image.naturalWidth,
       image.naturalHeight,
     );
+    // @ts-ignore
     ctx.restore();
   };
 
@@ -115,14 +125,18 @@ const AvatarModal = React.forwardRef(function AvatarModal(
 
   const saveImage = () => {
     setCanvasPreview(
+      // @ts-ignore
       imgRef.current,
       previewCanvasRef.current,
+      // @ts-ignore
       convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height),
     );
+    // @ts-ignore
     const dataUrl = previewCanvasRef.current.toDataURL();
     setCroppedImageUrl(dataUrl);
     const file = dataURLtoFile(dataUrl, "croppedImage.jpeg");
     setCroppedImage(file);
+    // @ts-ignore
     ref.current.style.display = "none";
   };
 

@@ -24,7 +24,11 @@ import Tags from "./Tags";
 
 import styles from "./PostCreate.module.css";
 
-export default function PostCreate({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function PostCreate({ slug }: Props) {
   const router = useRouter();
   const [displayMapInput, setDisplayMapInput] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -68,8 +72,11 @@ export default function PostCreate({ slug }) {
     formData.append("body", body);
     formData.append("map_type", mapType);
     formData.append("map", map);
+    // @ts-ignore
     formData.append("is_published", isPublished);
+    // @ts-ignore
     formData.append("comments_allowed", commentsAllowed);
+    // @ts-ignore
     formData.append("author_is_hidden", authorIsHidden);
     formData.append("blog", slug);
     formData.append("tags", tags.join(" "));
@@ -79,7 +86,9 @@ export default function PostCreate({ slug }) {
     setIsLoading(true);
     try {
       const result = await createPost({ formData, slug });
+      // @ts-ignore
       if (!result.error) {
+        // @ts-ignore
         router.push(`/blog/${slug}/post/${result.data.post_id}/`);
       }
     } catch (error) {

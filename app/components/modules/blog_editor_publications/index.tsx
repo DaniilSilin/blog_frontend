@@ -9,7 +9,11 @@ import postListMenu from "./POST_LIST_MENU";
 
 import styles from "./BlogEditorPublications.module.css";
 
-export default function BlogEditorPublications({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function BlogEditorPublications({ slug }: Props) {
   const router = useRouter();
   const [state, setState] = React.useState("published");
   const [sortOrder, setSortOrder] = React.useState<string | null>(null);

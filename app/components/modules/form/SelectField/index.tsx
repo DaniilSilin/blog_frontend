@@ -7,7 +7,6 @@ export interface Props {
   data: any;
   setAddressee: (value: string) => void;
   setUsername: (value: string) => void;
-  onClear: any;
 }
 
 import styles from "./SelectField.module.css";
@@ -19,7 +18,6 @@ export default function SelectField({
   data,
   setAddressee,
   setUsername,
-  onClear,
 }: Props) {
   const searchUserByUsername = React.useCallback(
     (value: string) => {

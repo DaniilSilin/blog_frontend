@@ -4,7 +4,7 @@ import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 import MainLayout from "@/app/MainLayout";
 import ProfileView from "@/app/views/Profile";
 
-export default function ProfilePage(props) {
+export default function ProfilePage(props: any) {
   return (
     <MainLayout>
       <ProfileView username={props.username} />

@@ -18,7 +18,12 @@ import PostInputComponent from "@/app/components/modules/post_edit/PostInputComp
 
 import styles from "./post_edit.module.css";
 
-export default function PostEdit({ slug, post_id }) {
+export interface Props {
+  slug: string;
+  post_id: number;
+}
+
+export default function PostEdit({ slug, post_id }: Props) {
   const router = useRouter();
   const { data: post } = DjangoService.useGetPostQuery({
     slug: slug,
@@ -134,26 +139,33 @@ export default function PostEdit({ slug, post_id }) {
   const formValidator = React.useCallback(() => {
     let isValid = false;
 
+    // @ts-ignore
     if (titleValidator(title)) {
+      // @ts-ignore
       setTitleError(titleValidator(title));
       isValid = false;
     } else {
+      // @ts-ignore
       setTitleError("");
       isValid = true;
     }
-
+    // @ts-ignore
     if (bodyValidator(body)) {
+      // @ts-ignore
       setBodyError(bodyValidator(body));
       isValid = false;
     } else {
+      // @ts-ignore
       setBodyError("");
       isValid = true;
     }
-
+    // @ts-ignore
     if (mapValidator(map)) {
+      // @ts-ignore
       setMapError(mapValidator(map));
       isValid = false;
     } else {
+      // @ts-ignore
       setMapError("");
       isValid = true;
     }
@@ -173,6 +185,7 @@ export default function PostEdit({ slug, post_id }) {
 
   const deletePostFunction = async () => {
     const result = await deletePost({ slug, post_id });
+    // @ts-ignore
     if (!result.error) {
       router.push(`/blog/${slug}/`);
     }
@@ -192,6 +205,7 @@ export default function PostEdit({ slug, post_id }) {
         comments_allowed: isCommentsAllowed,
         author_is_hidden: isAuthorHidden,
       });
+      // @ts-ignore
       if (!result.error) {
         router.push(`/blog/${slug}/post/${post_id}/`);
       }

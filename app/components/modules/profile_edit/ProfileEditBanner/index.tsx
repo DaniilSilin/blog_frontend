@@ -96,6 +96,7 @@ const ProfileEditBanner = React.forwardRef(function ProfileEditBanner(
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');
+    // @ts-ignore
     if (input) input.click();
   };
 
@@ -159,6 +160,7 @@ const ProfileEditBanner = React.forwardRef(function ProfileEditBanner(
             <div
               onClick={handleDisplayModal}
               style={{ overflow: "hidden" }}
+              // @ts-ignore
               ref={ref}
               className="modal_3"
             >

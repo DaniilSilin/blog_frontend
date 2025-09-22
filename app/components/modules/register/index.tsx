@@ -45,6 +45,7 @@ export default function Register() {
     DjangoService.useIsUsernameAvailableQuery({ username });
 
   const formValidation = React.useCallback(() => {
+    // @ts-ignore
     const validateField = (value, value2, validator, setError) => {
       let isValid;
       let error;
@@ -140,6 +141,7 @@ export default function Register() {
         username,
         password,
       });
+      // @ts-ignore
       if (!register.error) {
         router.push("/login");
       }
@@ -224,7 +226,7 @@ export default function Register() {
             value={confirmPassword}
             isPassword
           />
-          <YandexCaptcha language={"ru"} setToken={setToken} />
+          {/*<YandexCaptcha language={"ru"} setToken={setToken} />*/}
           <input
             type="submit"
             disabled={!readyToSubmit}

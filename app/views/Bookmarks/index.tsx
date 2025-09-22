@@ -1,6 +1,6 @@
 import React from "react";
-import Bookmarks from "@/app/components/modules/bookmarks";
+import BookmarkedPostList from "@/app/components/modules/bookmarked_post_list";
 
 export default function BookmarksView() {
-  return <Bookmarks />;
+  return <BookmarkedPostList />;
 }

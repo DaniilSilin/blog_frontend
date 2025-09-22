@@ -1,5 +1,5 @@
 import React from "react";
-import { CleanParams } from "@/app/types";
+import { CleanParamsType } from "@/app/types";
 import SortingButton from "./SortingButton";
 
 import styles from "./sorting_menu.module.css";
@@ -34,7 +34,7 @@ const sortingOptions: SortParam[] = [
 ];
 
 export interface Props {
-  cleanParams: CleanParams;
+  cleanParams: CleanParamsType;
   setPage: (value: number) => void;
 }
 

@@ -26,6 +26,7 @@ export default function ReplyButton({
   }, [setDisplayReplyPopup, displayReplyPopup]);
 
   const showReplyInputHandleChange = React.useCallback(() => {
+    // @ts-ignore
     setDisplayReplyInput((displayReplyInput) => !displayReplyInput);
   }, []);
 

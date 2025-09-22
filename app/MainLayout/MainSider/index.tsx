@@ -114,8 +114,9 @@ export default function MainSider({
   });
 
   const handleChangeMenu = React.useCallback(() => {
+    // @ts-ignore
     setIsMainSiderHidden((prev) => !prev);
-  }, [setIsMainSiderHidden]);
+  }, []);
 
   const defaultSelectedKey = React.useMemo(() => {
     const defaultValue = siderMenu.find((item) => item.href === router.asPath);

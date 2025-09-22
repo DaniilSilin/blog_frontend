@@ -44,6 +44,7 @@ export default function CommentCreate({ post_id, slug }: Props) {
               submitButtonText={"Оставить комментарий"}
               slug={slug}
               post_id={post_id}
+              // @ts-ignore
               isReplyToParentComment={false}
               setLoading={setLoading}
             />

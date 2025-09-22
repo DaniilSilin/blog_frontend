@@ -3,23 +3,23 @@ import { UpdateInput } from "@/app/components/modules/form";
 
 export interface Props {
   initialVkLink: any;
-  vkLinkError: string;
+  vkLinkError: any;
   vkLink: any;
   setVkLink: (value: string) => void;
   initialTelegramLink: any;
-  telegramLinkError: string;
+  telegramLinkError: any;
   telegramLink: any;
   setTelegramLink: (value: string) => void;
   initialYoutubeLink: any;
-  youtubeLinkError: string;
+  youtubeLinkError: any;
   youtubeLink: any;
   setYoutubeLink: (value: string) => void;
   initialDzenLink: any;
-  dzenLinkError: string;
+  dzenLinkError: any;
   dzenLink: any;
   setDzenLink: (value: string) => void;
   initialOwnSiteLink: any;
-  ownSiteLinkError: string;
+  ownSiteLinkError: any;
   ownSiteLink: any;
   setOwnSiteLink: (value: string) => void;
 }

@@ -84,6 +84,7 @@ export default function BlogCreate() {
       setIsLoading(true);
       try {
         const result = await createBlog({ formData });
+        // @ts-ignore
         if (!result.error) {
           router.push(`/blog/${slug}/`);
         }

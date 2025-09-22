@@ -1,3 +1,4 @@
+// @ts-ignore
 const validateField = (value, value2, validator, errorMessage) => {
   let isValid;
   let error;

@@ -37,6 +37,7 @@ const OwnerBlogList = React.forwardRef(function OwnerBlogList(
   React.useEffect(() => {
     if (showBlogActionsMenu) {
       const handleMouse = (e: MouseEvent) => {
+        // @ts-ignore
         if (!ref.current.contains(e.target)) {
           setShowBlogActionsMenu(false);
         }
@@ -76,6 +77,7 @@ const OwnerBlogList = React.forwardRef(function OwnerBlogList(
           <>
             {showBlogActionsMenu && (
               <div
+                // @ts-ignore
                 ref={ref}
                 className={styles.blogMenu}
                 onClick={() => setShowBlogActionsMenu(false)}
@@ -103,6 +105,7 @@ const OwnerBlogList = React.forwardRef(function OwnerBlogList(
           <>
             {showBlogActionsMenu && (
               <div
+                // @ts-ignore
                 ref={ref}
                 className={styles.blogMenu}
                 onClick={() => setShowBlogActionsMenu(false)}

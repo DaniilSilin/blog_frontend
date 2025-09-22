@@ -6,7 +6,11 @@ import PostItem from "@/app/components/modules/post_page";
 
 import styles from "./posts_search.module.css";
 
-export default function PostsSearch({ hashtag }) {
+interface Props {
+  hashtag: string;
+}
+
+export default function PostsSearch({ hashtag }: Props) {
   const [page, setPage] = React.useState(1);
   const { data: postList, isFetching } = DjangoService.usePostsSearchQuery({
     hashtag,
@@ -37,7 +41,7 @@ export default function PostsSearch({ hashtag }) {
         <div className={styles.divider}>•</div>
         <div>{postList?.count_of_blogs} блогов</div>
       </div>
-      {postList?.results.map((post: PostType[], index: number) => (
+      {postList?.results.map((post: PostType, index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

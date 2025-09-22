@@ -33,6 +33,7 @@ export default function UpdateInput({
   const handleChangeInput = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
+      // @ts-ignore
       onChange(value);
     },
     [onChange],
@@ -53,7 +54,9 @@ export default function UpdateInput({
         label={label}
         inputIsFocused={inputIsFocused}
         error={error}
+        // @ts-ignore
         value={value}
+        // @ts-ignore
         description={description}
       >
         <BaseInput

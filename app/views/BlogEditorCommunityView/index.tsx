@@ -1,6 +1,10 @@
 import React from "react";
 import BlogEditorCommunity from "@/app/components/modules/blog_editor_community";
 
-export default function BlogEditorCommunityView({ slug }) {
+interface Props {
+  slug: string;
+}
+
+export default function BlogEditorCommunityView({ slug }: Props) {
   return <BlogEditorCommunity slug={slug} />;
 }

@@ -30,6 +30,7 @@ export default function InviteOrRemoveAuthor({ slug }: Props) {
       blog: slug,
       admin: user?.id,
     });
+    // @ts-ignore
     if (!result.error) {
       setDescription("");
       setUsername("");
@@ -62,7 +63,6 @@ export default function InviteOrRemoveAuthor({ slug }: Props) {
             data={userList}
             setAddressee={setAddressee}
             setUsername={setUsername}
-            onClear={onClear}
           />
           <TextArea
             width={400}

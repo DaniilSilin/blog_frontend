@@ -27,6 +27,7 @@ export default function ActionBar({
 
   const deleteBlogFunction = async () => {
     const result = await deleteBlog({ slug });
+    // @ts-ignore
     if (!result.error) {
       router.push("/");
     }

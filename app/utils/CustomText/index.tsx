@@ -8,7 +8,11 @@ const CustomText = (text: string) => {
     return parts.map((part, index) => {
       if (userMentionRegex.test(part)) {
         const username = part.slice(1);
-        return <Link href={`/profile/${username}/`}>{part}&nbsp;</Link>;
+        return (
+          <Link key={index} href={`/profile/${username}/`}>
+            {part}&nbsp;
+          </Link>
+        );
       }
       return <span key={index}>{part} </span>;
     });

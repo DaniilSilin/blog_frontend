@@ -20,6 +20,7 @@ export default function Tags({ tags, setTags }: Props) {
   const inputRef = React.useRef<InputRef>(null);
 
   const handleClose = (removedTag: string) => {
+    // @ts-ignore
     const newTags = tags.filter((tag) => tag !== removedTag);
     setTags(newTags);
   };
@@ -70,9 +71,11 @@ export default function Tags({ tags, setTags }: Props) {
     <div style={{ margin: "12px 0", width: "400px" }}>
       <TweenOne
         style={{ marginBottom: "10px" }}
+        // @ts-ignore
         appear={false}
         enter={{ scale: 0.8, opacity: 0, type: "from", duration: 100 }}
         leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+        // @ts-ignore
         onEnd={(e) => {
           if (e.type === "appear" || e.type === "enter") {
             (e.target as any).style = "display: inline-block";

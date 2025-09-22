@@ -27,7 +27,7 @@ export default function PostListTableBody({
         setSelectedPosts([...selectedPosts, post]);
       } else {
         setSelectedPosts(
-          selectedPosts.filter((item) => item.post_id !== post.post_id),
+          selectedPosts.filter((item: any) => item.post_id !== post.post_id),
         );
       }
     },
@@ -42,7 +42,7 @@ export default function PostListTableBody({
             <PostInputCheckbox
               onChange={handleChangeCheckbox}
               checked={selectedPosts.find(
-                (item) => item.post_id === post.post_id,
+                (item: any) => item.post_id === post.post_id,
               )}
               post={post}
             />

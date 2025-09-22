@@ -80,11 +80,16 @@ export default function SortingBlogPosts({
     );
   };
 
+  const dispSearchInput = React.useCallback(() => {
+    setDisplaySearchInput("");
+  }, []);
+
   return (
     <div className={styles.root}>
       <div className={styles.sortingButtonsContainer}>
         {SORTING_LIST.map((item) => (
           <button
+            key={item.id}
             className={classNames(styles.sortingItem, {
               [styles.active]: currentSortingParam === item.query_param,
             })}
@@ -94,7 +99,7 @@ export default function SortingBlogPosts({
           </button>
         ))}
       </div>
-      <button onClick={() => setDisplaySearchInput(true)}>
+      <button onClick={dispSearchInput}>
         <HiMiniMagnifyingGlass size={35} />
       </button>
       {displaySearchInput && (

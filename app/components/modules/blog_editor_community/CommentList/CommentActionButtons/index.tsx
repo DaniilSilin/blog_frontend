@@ -3,11 +3,9 @@ import { useAppSelector } from "@/app/store";
 import DjangoService from "@/app/store/services/DjangoService";
 
 import Image from "next/image";
-import classNames from "classnames";
 
 import { FcLike } from "react-icons/fc";
 import { FaRegHeart } from "react-icons/fa";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import {
   AiOutlineLike,
@@ -54,6 +52,7 @@ export default function CommentActionButtons({
 
   const commentReplyInputHandle = React.useCallback(() => {
     setDisplayCommentInputReply(
+      // @ts-ignore
       (displayCommentInputReply) => !displayCommentInputReply,
     );
   }, []);

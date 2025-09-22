@@ -63,7 +63,9 @@ export default function PostHeader({ post, slug, post_id }: Props) {
 
   const toggleBlogSubscription = async () => {
     const result = await blogSubscription({ slug });
+    // @ts-ignore
     if (!result.error && result.data.status !== "unsuccessful") {
+      // @ts-ignore
       refetchPost();
     }
   };
@@ -98,7 +100,7 @@ export default function PostHeader({ post, slug, post_id }: Props) {
           {!user?.isGuest ? (
             <>
               {post?.blog.authors.find(
-                (author) => author.username === user.username,
+                (author: any) => author.username === user.username,
               ) ||
                 (user.username === post.blog.owner.username && (
                   <Link

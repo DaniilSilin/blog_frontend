@@ -29,11 +29,11 @@ export default function CropSourceImage({
   const [previous, setPrevious] = React.useState();
   const previewCanvasRef = React.useRef(null);
 
-  const setCanvasPreview = (image, canvas, crop) => {
+  const setCanvasPreview = (image: any, canvas: any, crop: any) => {
     const setCanvasPreview = (
-      image, // HTMLImageElement
-      canvas, // HTMLCanvasElement
-      crop, // PixelCrop
+      image: any, // HTMLImageElement
+      canvas: { getContext: (arg0: string) => any }, // HTMLCanvasElement
+      crop: any, // PixelCrop
     ) => {
       const ctx = canvas.getContext("2d");
       if (!ctx) {
@@ -71,7 +71,7 @@ export default function CropSourceImage({
     ctx.restore();
   };
 
-  const onImageLoad = (e) => {
+  const onImageLoad = (e: any) => {
     const width = e.target.width;
     const height = e.target.height;
     const cropWidthInPercent = (MIN_DIMENSION / width) * 100;
@@ -93,11 +93,18 @@ export default function CropSourceImage({
     setCanvasPreview(
       imgRef.current,
       previewCanvasRef.current,
+      // @ts-ignore
       convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height),
     );
+    // @ts-ignore
     const dataUrl = previewCanvasRef.current.toDataURL();
     setAvatar(dataUrl);
   };
+
+  const returnButton = React.useCallback(() => {
+    // @ts-ignore
+    setPrevious("true");
+  }, []);
 
   if (avatar) {
     return (
@@ -144,7 +151,7 @@ export default function CropSourceImage({
         />
       )}
       <div onClick={cropImage}>Сохранить и продолжить</div>
-      <div onClick={() => setPrevious(true)}>Вернуться назад</div>
+      <div onClick={returnButton}>Вернуться назад</div>
     </div>
   );
 }

@@ -66,6 +66,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ slug }) => ({
                 type: "Blog" as const,
                 slug: slug,
@@ -104,6 +105,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ post_id, slug }) => ({
                 type: "Post" as const,
                 id: post_id,
@@ -134,18 +136,18 @@ const DjangoService = createApi({
         body: formData,
       }),
     }),
-    getBlog: builder.query<Blog, { slug: string }>({
+    getBlog: builder.query({
       query: ({ slug }) => ({
         url: `blog/${slug}/`,
       }),
     }),
-    deleteBlog: builder.mutation<Blog, { slug: string }>({
+    deleteBlog: builder.mutation({
       query: ({ slug }) => ({
         url: `blog/${slug}/`,
         method: "DELETE",
       }),
     }),
-    updateBlog: builder.mutation<Blog>({
+    updateBlog: builder.mutation({
       query: ({ formData, slug }) => ({
         url: `blog/${slug}/`,
         method: "PUT",
@@ -167,14 +169,17 @@ const DjangoService = createApi({
           endpointName,
           originalArgs,
         } of DjangoService.util.selectInvalidatedBy(getState(), [
+          // @ts-ignore
           { type: "Blog", slug: slug },
         ])) {
           if (!["getBlogPaginatedList"].includes(endpointName)) continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
+                // @ts-ignore
                 const blog = draft.results.find((blog) => blog.slug === slug);
                 if (blog) {
                   blog.isSubscribed = !blog.isSubscribed;
@@ -202,7 +207,7 @@ const DjangoService = createApi({
         method: "POST",
       }),
     }),
-    getPost: builder.query<Post, { slug: string; post_id: number }>({
+    getPost: builder.query({
       query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/`,
       }),
@@ -247,6 +252,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ post_id }) => ({
                 type: "Post" as const,
                 id: post_id,
@@ -282,10 +288,13 @@ const DjangoService = createApi({
         ])) {
           if (!["getInviteList"].includes(endpointName)) continue;
           dispatch(
+            // @ts-ignore
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
+                // @ts-ignore
                 const invite = draft.results.find((invite) => invite.pk === pk);
                 if (invite) {
                   invite.status = true;
@@ -316,10 +325,13 @@ const DjangoService = createApi({
         ])) {
           if (!["getInviteList"].includes(endpointName)) continue;
           dispatch(
+            // @ts-ignore
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
+                // @ts-ignore
                 const invite = draft.results.find((invite) => invite.pk === pk);
                 if (invite) {
                   invite.status = false;
@@ -360,6 +372,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ pk }) => ({
                 type: "Invite" as const,
                 id: pk,
@@ -397,6 +410,7 @@ const DjangoService = createApi({
                 continue;
               dispatch(
                 DjangoService.util.updateQueryData(
+                  // @ts-ignore
                   endpointName,
                   originalArgs,
                   (draft) => {
@@ -434,6 +448,7 @@ const DjangoService = createApi({
               continue;
             dispatch(
               DjangoService.util.updateQueryData(
+                // @ts-ignore
                 endpointName,
                 originalArgs,
                 (draft) => {
@@ -502,6 +517,7 @@ const DjangoService = createApi({
           endpointName,
           originalArgs,
         } of DjangoService.util.selectInvalidatedBy(getState(), [
+          // @ts-ignore
           { type: "Post", id: post_id, slug: slug },
         ])) {
           if (
@@ -517,10 +533,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const post = draft.results.find(
+                  // @ts-ignore
                   (post) => post.post_id === post_id && post.blog.slug === slug,
                 );
                 if (post) {
@@ -560,6 +578,7 @@ const DjangoService = createApi({
           endpointName,
           originalArgs,
         } of DjangoService.util.selectInvalidatedBy(getState(), [
+          // @ts-ignore
           { type: "Post", id: post_id, slug: slug },
         ])) {
           if (
@@ -575,10 +594,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const post = draft.results.find(
+                  // @ts-ignore
                   (post) => post.post_id === post_id && post.blog.slug === slug,
                 );
                 if (post) {
@@ -640,6 +661,7 @@ const DjangoService = createApi({
           endpointName,
           originalArgs,
         } of DjangoService.util.selectInvalidatedBy(getState(), [
+          // @ts-ignore
           { type: "Post", id: post_id, slug: slug },
         ])) {
           if (
@@ -653,10 +675,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const post = draft.results.find(
+                  // @ts-ignore
                   (post) => post.post_id === post_id && post.blog.slug === slug,
                 );
                 if (post) {
@@ -692,14 +716,17 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 if (comment) {
                   draft.results = draft.results.filter(
+                    // @ts-ignore
                     (comment) => comment.comment_id !== comment_id,
                   );
                 }
@@ -732,10 +759,12 @@ const DjangoService = createApi({
           if (!["postCommentList"].includes(endpointName)) continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 console.log(comment);
@@ -775,10 +804,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 if (comment) {
@@ -918,6 +949,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ comment_id }) => ({
                 type: "Comment" as const,
                 id: comment_id,
@@ -953,6 +985,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ post_id, slug }) => ({
                 type: "Post" as const,
                 id: post_id,
@@ -988,6 +1021,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ post_id, slug }) => ({
                 type: "Post" as const,
                 id: post_id,
@@ -1027,6 +1061,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ post_id, slug }) => ({
                 type: "Post" as const,
                 id: post_id,
@@ -1081,6 +1116,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ comment_id }) => ({
                 type: "Comment" as const,
                 id: comment_id,
@@ -1114,10 +1150,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 console.log(comment);
@@ -1170,10 +1208,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 if (comment) {
@@ -1225,10 +1265,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 if (comment) {
@@ -1260,10 +1302,12 @@ const DjangoService = createApi({
             continue;
           dispatch(
             DjangoService.util.updateQueryData(
+              // @ts-ignore
               endpointName,
               originalArgs,
               (draft) => {
                 const comment = draft.results.find(
+                  // @ts-ignore
                   (comment) => comment.comment_id === comment_id,
                 );
                 if (comment) {
@@ -1342,6 +1386,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ comment_id }) => ({
                 type: "Comment" as const,
                 id: comment_id,
@@ -1390,6 +1435,7 @@ const DjangoService = createApi({
       providesTags: (result) =>
         result
           ? [
+              // @ts-ignore
               ...result.results.map(({ comment_id }) => ({
                 type: "Comment" as const,
                 id: comment_id,

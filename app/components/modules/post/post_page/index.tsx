@@ -11,7 +11,12 @@ import PostFooter from "./PostFooter";
 import styles from "./post_page.module.css";
 import PostImages from "@/app/components/modules/post/post_page/PostImages";
 
-export default function PostPage({ slug, post_id }) {
+interface Props {
+  slug: string;
+  post_id: number;
+}
+
+export default function PostPage({ slug, post_id }: Props) {
   const [sortBy, setSortBy] = React.useState<string>("newest");
   const [tags, setTags] = React.useState([]);
 
@@ -58,6 +63,7 @@ export default function PostPage({ slug, post_id }) {
       <PostImages post={post} />
       <div className={styles.tagsContainer}>
         {tags?.map((tag, index) => (
+          // @ts-ignore
           <Link key={index} href={`/hashtag/${tag.slice(1)}/`}>
             {tag}{" "}
           </Link>

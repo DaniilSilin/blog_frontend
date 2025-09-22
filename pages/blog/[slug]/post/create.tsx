@@ -4,7 +4,7 @@ import PostCreateView from "@/app/views/PostCreate";
 import type { GetServerSidePropsContext } from "next";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export default function PostCreatePage(props) {
+export default function PostCreatePage(props: any) {
   return (
     <MainLayout>
       <PostCreateView slug={props.slug} />

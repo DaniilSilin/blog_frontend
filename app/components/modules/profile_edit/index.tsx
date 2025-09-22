@@ -38,7 +38,11 @@ const MIN_DIMENSION_AVATAR = 100;
 const MIN_HEIGHT_BANNER = 576;
 const MIN_WIDTH_BANNER = 1024;
 
-export default function ProfileEdit({ username }) {
+export interface Props {
+  username: string;
+}
+
+export default function ProfileEdit({ username }: Props) {
   const { data } = DjangoService.useUserProfileQuery({ username });
   const [chosenFile, setChosenFile] = React.useState<string>("");
 
@@ -193,6 +197,7 @@ export default function ProfileEdit({ username }) {
   const [imageErrorMessage, setImageErrorMessage] = React.useState("");
 
   const formValidator = React.useCallback(() => {
+    // @ts-ignore
     const validateField = (value, validator, setError) => {
       let isValid;
       const error = validator(value);
@@ -286,7 +291,9 @@ export default function ProfileEdit({ username }) {
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {
+          // @ts-ignore
           const width = e.currentTarget.width;
+          // @ts-ignore
           const height = e.currentTarget.height;
           if (width < MIN_WIDTH_BANNER || MIN_HEIGHT_BANNER > height) {
             setChosenFile("banner");
@@ -328,7 +335,9 @@ export default function ProfileEdit({ username }) {
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {
+          // @ts-ignore
           const width = e.currentTarget.width;
+          // @ts-ignore
           const height = e.currentTarget.height;
           if (width < MIN_DIMENSION_AVATAR || MIN_DIMENSION_AVATAR > height) {
             setChosenFile("avatar");
@@ -462,6 +471,7 @@ export default function ProfileEdit({ username }) {
   );
 
   const dateHandleChange: DatePickerProps["onChange"] = React.useCallback(
+    // @ts-ignore
     (date, dateString) => {
       setBirthDate(dateString);
     },
@@ -475,17 +485,26 @@ export default function ProfileEdit({ username }) {
   const updateProfileData = async () => {
     const formData = new FormData();
     if (avatarState !== `${BASE_URL}${initialAvatarSmall}`) {
+      // @ts-ignore
       formData.append("avatar", avatarOriginal);
+      // @ts-ignore
       formData.append("avatar_small", avatarSmall);
     }
     if (bannerState !== `${BASE_URL}${initialBannerSmall}`) {
+      // @ts-ignore
       formData.append("banner", bannerOriginal);
+      // @ts-ignore
       formData.append("banner_small", bannerSmall);
     }
+    // @ts-ignore
     formData.append("first_name", firstName);
+    // @ts-ignore
     formData.append("last_name", lastName);
+    // @ts-ignore
     formData.append("description", description);
+    // @ts-ignore
     formData.append("email", email);
+    // @ts-ignore
     formData.append("gender", gender);
     // formData.append("date_of_birth", birthDate);
     changeUserProfile({ formData, username });
@@ -593,8 +612,11 @@ export default function ProfileEdit({ username }) {
         />
         <Space direction="vertical">
           <DatePicker
+            // @ts-ignore
             onChange={dateHandleChange}
+            // @ts-ignore
             defaultValue={defaultBirthDateValue}
+            // @ts-ignore
             value={moment(birthDate)}
             format={dateFormat}
           />

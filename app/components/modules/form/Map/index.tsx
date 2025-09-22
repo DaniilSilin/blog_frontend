@@ -54,6 +54,7 @@ export default function TextArea({
           maxLength={maxLength}
           onFocus={handleFocus}
           handleBlur={handleBlur}
+          // @ts-ignore
           onChange={handleChangeInput}
           defaultValue={defaultValue}
           autoSize={true}

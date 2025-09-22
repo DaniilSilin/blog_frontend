@@ -72,6 +72,7 @@ export default function CommentBody({
                 setDisplayReplyInput={setDisplayReplyInput}
                 placeholder={"Введите ответ"}
                 submitButtonText={"Ответить"}
+                // @ts-ignore
                 setLoading={setLoading}
                 isParent={isParent}
               />

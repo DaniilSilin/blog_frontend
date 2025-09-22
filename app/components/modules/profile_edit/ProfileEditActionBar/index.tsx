@@ -26,7 +26,9 @@ export default function ProfileEditActionBar({
   const [deleteBlog] = DjangoService.useDeleteBlogMutation();
 
   const deleteBlogFunction = async () => {
+    // @ts-ignore
     const result = await deleteBlog({ username });
+    // @ts-ignore
     if (!result.error) {
       router.push("/");
     }

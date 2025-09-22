@@ -4,12 +4,12 @@ import DjangoService from "@/app/store/services/DjangoService";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { Blog } from "@/app/types";
+import { BlogType } from "@/app/types";
 
 import styles from "@/app/components/modules/blog_page/blog_page.module.css";
 
 export interface Props {
-  blog: Blog;
+  blog: BlogType;
   slug: string;
 }
 

@@ -21,6 +21,7 @@ const ProfileUploadErrorModal = React.forwardRef(
     }, [imageErrorMessage]);
 
     return (
+      // @ts-ignore
       <div ref={ref} onClick={handleDisplayModal} className="modal_3">
         <div className={styles.modalContentError}>
           <div className={styles.messageTitle}>Ошибка</div>

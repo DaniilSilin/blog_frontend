@@ -6,7 +6,10 @@ import { PostType, CleanParamsType } from "@/app/types";
 import Filter from "../filter";
 import PostItem from "../post_page";
 
-const cleanParams = (query: any, page: number): CleanParamsType => {
+const cleanParams = (
+  query: Record<string, any>,
+  page: number,
+): CleanParamsType => {
   const search = query.search ? query.search : undefined;
   const before = query.before ? query.before : undefined;
   const after = query.after ? query.after : undefined;
@@ -48,7 +51,7 @@ export default function PostList() {
     <div>
       <h1>Публикации</h1>
       <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
-      {postPaginatedList?.results.map((post: PostType[], index: number) => (
+      {postPaginatedList?.results.map((post: PostType, index: number) => (
         <PostItem key={index} post={post} />
       ))}
       {isFetching && <div className={"loader"}></div>}

@@ -7,8 +7,8 @@ export interface Props {
   label?: string | undefined;
   children: React.ReactNode;
   error: string | undefined;
-  value: string;
-  inputIsFocused: boolean;
+  value?: string;
+  inputIsFocused?: boolean;
 }
 
 export default function Field({ label, children, inputIsFocused }: Props) {

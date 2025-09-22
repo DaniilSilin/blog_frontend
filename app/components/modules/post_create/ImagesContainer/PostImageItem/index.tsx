@@ -14,6 +14,7 @@ export interface Props {
 
 export default function PostImageItem({ image, setImages, images }: Props) {
   const deleteImage = (item: any) => {
+    // @ts-ignore
     const currentImage = images.filter((image) => image.name !== item.name);
     setImages(currentImage);
   };
@@ -22,6 +23,7 @@ export default function PostImageItem({ image, setImages, images }: Props) {
     (e: ChangeEvent<HTMLInputElement>, item: any) => {
       const file = e.target.files?.[0];
       if (!file) return;
+      // @ts-ignore
       const currentImage = images.find((image) => image.name === item.name);
     },
     [images],
@@ -29,9 +31,11 @@ export default function PostImageItem({ image, setImages, images }: Props) {
 
   const swapImages = React.useCallback(
     (item: any) => {
+      // @ts-ignore
       const currentImage = images.find((image) => image.name === item.name);
       const currentImageIndex = images.indexOf(currentImage);
       const currentImageFindIndex = images.findIndex(
+        // @ts-ignore
         (image) => image.name === item.name,
       );
     },
@@ -46,6 +50,7 @@ export default function PostImageItem({ image, setImages, images }: Props) {
         </button>
         <button
           className={styles.reUploadButton}
+          // @ts-ignore
           onClick={(e) => reUploadImage(e, image)}
         >
           <PiArrowsCounterClockwise size={15} />

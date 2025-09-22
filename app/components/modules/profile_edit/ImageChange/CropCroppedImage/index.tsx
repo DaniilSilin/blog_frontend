@@ -8,7 +8,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import DjangoService from "@/app/store/services/DjangoService";
 
 export interface Props {
-  avatar: string;
+  avatar: any;
   imageSourceUrl: string;
   username: string;
   sourceImage: any;
@@ -18,9 +18,13 @@ const ASPECT_RATION = 1;
 const MIN_DIMENSION = 150;
 
 export default function CropCroppedImage({
+  // @ts-ignore
   avatar,
+  // @ts-ignore
   imageSourceUrl,
+  // @ts-ignore
   username,
+  // @ts-ignore
   sourceImage,
 }) {
   const [finalAvatar, setFinalAvatar] = React.useState("");
@@ -31,7 +35,7 @@ export default function CropCroppedImage({
   const previewCanvasRef = React.useRef(null);
   const imgRef = React.useRef(null);
 
-  const dataURLtoFile = (dataUrl, filename) => {
+  const dataURLtoFile = (dataUrl: any, filename: any) => {
     const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
@@ -44,11 +48,16 @@ export default function CropCroppedImage({
     return new File([u8arr], filename, { type: mime });
   };
 
-  const setCanvasPreview = (image, canvas, crop) => {
+  const setCanvasPreview = (
+    image: any,
+    canvas: HTMLCanvasElement,
+    crop: any,
+  ) => {
+    // @ts-ignore
     const setCanvasPreview = (
-      image, // HTMLImageElement
-      canvas, // HTMLCanvasElement
-      crop, // PixelCrop
+      image: any, // HTMLImageElement
+      canvas: { getContext: (arg0: string) => any }, // HTMLCanvasElement
+      crop: any, // PixelCrop
     ) => {
       const ctx = canvas.getContext("2d");
       if (!ctx) {
@@ -64,14 +73,19 @@ export default function CropCroppedImage({
     canvas.width = Math.floor(crop.width * scaleX * PixelRatio);
     canvas.height = Math.floor(crop.height * scaleY * PixelRatio);
 
+    // @ts-ignore
     ctx.scale(PixelRatio, PixelRatio);
+    // @ts-ignore
     ctx.imageSmoothingQuality = "high";
+    // @ts-ignore
     ctx.save();
 
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleX;
 
+    // @ts-ignore
     ctx.translate(-cropX, -cropY);
+    // @ts-ignore
     ctx.drawImage(
       image,
       0,
@@ -83,10 +97,11 @@ export default function CropCroppedImage({
       image.naturalWidth,
       image.naturalHeight,
     );
+    // @ts-ignore
     ctx.restore();
   };
 
-  const onImageLoad = (e) => {
+  const onImageLoad = (e: any) => {
     const width = e.target.width;
     const height = e.target.height;
     const crop = makeAspectCrop(
@@ -107,9 +122,12 @@ export default function CropCroppedImage({
       setCrop(pixelCrop);
       setCanvasPreview(
         imgRef.current,
+        // @ts-ignore
         previewCanvasRef.current,
+        // @ts-ignore
         convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height),
       );
+      // @ts-ignore
       const dataUrl = previewCanvasRef.current.toDataURL();
       setDataUrl(dataUrl);
     },

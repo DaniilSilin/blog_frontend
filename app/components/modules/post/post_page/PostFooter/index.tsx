@@ -46,6 +46,7 @@ export default function PostFooter({ post, refetch }: Props) {
       slug: post.blog.slug,
       post_id: post.post_id,
     });
+    // @ts-ignore
     if (!result.error && result.data.status !== "unsuccessful") {
       refetch();
     }
@@ -90,13 +91,13 @@ export default function PostFooter({ post, refetch }: Props) {
                   cursor: "default",
                 }}
               >
-                <NoUserPopup
-                  title={"Хотите посмотреть публикацию позже?"}
-                  description={
-                    "Войдите, чтобы добавить публикацию в сохранённые"
-                  }
-                  redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}
-                />
+                {/*<NoUserPopup*/}
+                {/*  title={"Хотите посмотреть публикацию позже?"}*/}
+                {/*  description={*/}
+                {/*    "Войдите, чтобы добавить публикацию в сохранённые"*/}
+                {/*  }*/}
+                {/*  redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}*/}
+                {/*/>*/}
               </div>
             )}
           </div>
@@ -128,11 +129,7 @@ export default function PostFooter({ post, refetch }: Props) {
           Поделиться
         </button>
         {displayShareMenu && (
-          <ShareMenu
-            post={post}
-            setDisplayShareMenu={setDisplayShareMenu}
-            shareButtonRef={shareButtonRef}
-          />
+          <ShareMenu post={post} setDisplayShareMenu={setDisplayShareMenu} />
         )}
       </div>
     </div>

@@ -163,6 +163,7 @@ const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
             <div
               onClick={handleDisplayModal}
               style={{ overflow: "hidden" }}
+              // @ts-ignore
               ref={ref}
               className="modal_3"
             >

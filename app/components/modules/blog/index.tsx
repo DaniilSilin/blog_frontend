@@ -8,7 +8,10 @@ import Filter from "../filter";
 
 import styles from "./blog.module.css";
 
-const cleanParams = (query, page: number): CleanParamsType => {
+const cleanParams = (
+  query: Record<string, any>,
+  page: number,
+): CleanParamsType => {
   const search = query.search ? query.search : undefined;
   const before = query.before ? query.before : undefined;
   const after = query.after ? query.after : undefined;
@@ -53,13 +56,9 @@ export default function BlogList() {
   return (
     <div className={styles.root}>
       <h1>Блоги</h1>
-      <Filter
-        page={page}
-        setPage={setPage}
-        cleanParams={cleanParams(router.query, page)}
-      />
-      {blogList?.results.map((blog: BlogType[], index: number) => (
-        <BlogItem key={index} blog={blog} refetchBlogList={refetchBlogList} />
+      <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
+      {blogList?.results.map((blog: BlogType, index: number) => (
+        <BlogItem key={index} blog={blog} />
       ))}
     </div>
   );

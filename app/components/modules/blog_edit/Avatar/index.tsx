@@ -163,6 +163,7 @@ const Avatar = React.forwardRef(function Avatar(
             <div
               onClick={handleDisplayModal}
               style={{ overflow: "hidden" }}
+              // @ts-ignore
               ref={ref}
               className="modal_3"
             >

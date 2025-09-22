@@ -6,7 +6,7 @@ export interface Props {
   label?: string | undefined;
   children: React.ReactNode;
   error: string | undefined;
-  value: string;
+  value?: string;
 }
 
 export default function Field({ label, children, error }: Props) {

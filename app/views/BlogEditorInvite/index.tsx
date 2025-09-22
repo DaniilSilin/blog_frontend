@@ -1,6 +1,10 @@
 import React from "react";
 import BlogEditorInvite from "@/app/components/modules/blog_editor_invite";
 
-export default function BlogEditorInviteView({ slug }) {
+interface Props {
+  slug: string;
+}
+
+export default function BlogEditorInviteView({ slug }: Props) {
   return <BlogEditorInvite slug={slug} />;
 }

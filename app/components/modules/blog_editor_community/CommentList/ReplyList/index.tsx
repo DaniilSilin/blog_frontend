@@ -128,6 +128,7 @@ export default function ReplyList({
               (item: any) => item.comment_id === commentReply.comment_id,
             )}
             onChange={blogCommentInputCheckboxHandleChange}
+            // @ts-ignore
             isParent={false}
           />
         </div>

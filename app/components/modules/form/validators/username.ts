@@ -4,6 +4,7 @@ const usernameValidator = (username: string, isUsernameAvailable: any) => {
   if (!username) {
     return "";
   } else {
+    // @ts-ignore
     if (usernameRegex.length < 3) {
       return "Слишком короткое имя пользователя.";
     } else if (!usernameRegex.test(username)) {

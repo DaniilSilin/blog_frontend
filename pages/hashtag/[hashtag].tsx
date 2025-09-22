@@ -3,7 +3,7 @@ import MainLayout from "@/app/MainLayout";
 import PostsSearchView from "@/app/views/PostsSearch";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export default function PostsSearchPage(props) {
+export default function PostsSearchPage(props: any) {
   return (
     <MainLayout>
       <PostsSearchView hashtag={props.hashtag} />

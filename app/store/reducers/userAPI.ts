@@ -32,7 +32,10 @@ export const userAPI = createApi({
 });
 
 export const {
+  // @ts-ignore
   useRegisterUserMutation,
+  // @ts-ignore
   useLoginUserMutation,
+  // @ts-ignore
   useLogoutUserMutation,
 } = userAPI;

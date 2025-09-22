@@ -59,6 +59,7 @@ export default function LikeDislikeButton({ post, refetch }: Props) {
       slug: post.blog.slug,
       post_id: post.post_id,
     });
+    // @ts-ignore
     if (!result.error && result.data.status !== "unsuccessful") {
       refetch();
     }
@@ -69,6 +70,7 @@ export default function LikeDislikeButton({ post, refetch }: Props) {
       slug: post.blog.slug,
       post_id: post.post_id,
     });
+    // @ts-ignore
     if (!result.error && result.data.status !== "unsuccessful") {
       refetch();
     }
@@ -90,11 +92,11 @@ export default function LikeDislikeButton({ post, refetch }: Props) {
                 cursor: "default",
               }}
             >
-              <NoUserPopup
-                title={"Нравится эта публикация?"}
-                description={"Войдите, чтобы поставить лайк на эту публикацию."}
-                redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}
-              />
+              {/*<NoUserPopup*/}
+              {/*  title={"Нравится эта публикация?"}*/}
+              {/*  description={"Войдите, чтобы поставить лайк на эту публикацию."}*/}
+              {/*  redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}*/}
+              {/*/>*/}
             </div>
           )}
         </div>
@@ -130,13 +132,13 @@ export default function LikeDislikeButton({ post, refetch }: Props) {
                 cursor: "default",
               }}
             >
-              <NoUserPopup
-                title={"Не нравится эта публикация?"}
-                description={
-                  "Войдите, чтобы поставить дизлайк на эту публикацию."
-                }
-                redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}
-              />
+              {/*<NoUserPopup*/}
+              {/*  title={"Не нравится эта публикация?"}*/}
+              {/*  description={*/}
+              {/*    "Войдите, чтобы поставить дизлайк на эту публикацию."*/}
+              {/*  }*/}
+              {/*  redirectTo={`/blog/${post.blog.slug}/post/${post.post_id}`}*/}
+              {/*/>*/}
             </div>
           )}
         </div>

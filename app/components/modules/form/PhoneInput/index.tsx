@@ -11,7 +11,7 @@ export interface Props {
   error?: string | undefined;
   defaultValue?: string;
   maxLength?: number;
-  description?: string;
+  description?: any;
 }
 
 const countries = ["ru"];

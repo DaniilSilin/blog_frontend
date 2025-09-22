@@ -3,7 +3,7 @@ import MainLayout from "@/app/MainLayout";
 import PostView from "@/app/views/Post";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export default function PostPage(props) {
+export default function PostPage(props: any) {
   return (
     <MainLayout>
       <PostView slug={props.slug} post_id={props.post_id} />

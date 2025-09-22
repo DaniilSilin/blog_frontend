@@ -3,14 +3,10 @@ import BlogView from "@/app/views/Blog";
 import MainLayout from "@/app/MainLayout";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export interface Props {
-  children: React.ReactNode;
-}
-
-export default function BlogPage(props, children) {
+export default function BlogPage(props: any) {
   return (
     <MainLayout>
-      <BlogView children={children} slug={props.slug} />
+      <BlogView slug={props.slug} />
     </MainLayout>
   );
 }

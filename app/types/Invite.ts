@@ -1,9 +1,9 @@
-import { Blog, User } from "@/app/types";
+import { BlogType, User } from "@/app/types";
 
 export interface InviteType {
   pk: number;
   status: boolean;
-  blog: Blog;
+  blog: BlogType;
   admin: any;
   addressee: any;
   created_at: string;

@@ -15,6 +15,7 @@ export default function UploadImagePage({ username }: Props) {
   const [errorMessage, setErrorMessage] = React.useState<string>("");
 
   const onSelectFile = React.useCallback(
+    // @ts-ignore
     (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -22,11 +23,14 @@ export default function UploadImagePage({ username }: Props) {
 
       reader.addEventListener("load", () => {
         const imageElement = new Image();
+        // @ts-ignore
         const imageUrl = reader.result.toString() || "";
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {
+          // @ts-ignore
           const height = e.currentTarget.height;
+          // @ts-ignore
           const width = e.currentTarget.width;
           if (height < MIN_DIMENSION || width < MIN_DIMENSION) {
             setErrorMessage(

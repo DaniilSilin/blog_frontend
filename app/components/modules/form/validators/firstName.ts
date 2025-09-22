@@ -4,6 +4,7 @@ const firstNameValidator = (firstName: string) => {
   if (!firstName) {
     return "";
   } else {
+    // @ts-ignore
     if (firstName.length < 2) {
       return "Имя слишком короткое";
     } else if (!firstNameRegex.test(firstName)) {

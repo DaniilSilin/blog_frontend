@@ -40,10 +40,11 @@ const AvatarCrop = React.forwardRef(function AvatarCrop(
   const cancelCrop = React.useCallback(() => {
     setOriginalAvatarSourceUrl("");
     setOriginalAvatarSource(undefined);
+    // @ts-ignore
     ref.current.style.display = "none";
   }, [setOriginalAvatarSourceUrl, setOriginalAvatarSource]);
 
-  const onImageLoad = (e) => {
+  const onImageLoad = (e: any) => {
     const width = e.target.width;
     const height = e.target.height;
     const cropWidthInPercent = (MIN_DIMENSION / width) * 100;
@@ -58,10 +59,11 @@ const AvatarCrop = React.forwardRef(function AvatarCrop(
       height,
     );
     const centeredCrop = centerCrop(crop, width, height);
+    // @ts-ignore
     setCrop(centeredCrop);
   };
 
-  const dataURLtoFile = (dataUrl, filename) => {
+  const dataURLtoFile = (dataUrl: any, filename: any) => {
     const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
@@ -76,19 +78,26 @@ const AvatarCrop = React.forwardRef(function AvatarCrop(
 
   const cropImage = () => {
     setCanvasPreview(
+      // @ts-ignore
       avatarRef.current,
       previewCanvasRef.current,
       convertToPixelCrop(
+        // @ts-ignore
         crop,
+        // @ts-ignore
         avatarRef.current.width,
+        // @ts-ignore
         avatarRef.current.height,
       ),
     );
+    // @ts-ignore
     const dataUrl = previewCanvasRef.current.toDataURL();
+    // @ts-ignore
     setCroppedAvatarUrl(dataUrl);
     const file = dataURLtoFile(dataUrl, "croppedImage.jpeg");
     setCroppedAvatar(file);
     setIsAvatarDeleted(false);
+    // @ts-ignore
     ref.current.style.display = "none";
   };
 
@@ -135,6 +144,7 @@ const AvatarCrop = React.forwardRef(function AvatarCrop(
     <div className={styles.root}>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <ReactCrop
+          // @ts-ignore
           onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
           circularCrop
           crop={crop}

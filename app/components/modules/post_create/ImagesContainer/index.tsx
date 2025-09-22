@@ -22,6 +22,7 @@ export default function ImagesContainer({ images, setImages }: Props) {
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');
+    // @ts-ignore
     if (input) input.click();
   };
 

@@ -1,12 +1,12 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
+import { useRouter } from "next/router";
 
 import { PostType } from "@/app/types";
 import PostItem from "@/app/components/modules/post_page";
 import Filter from "@/app/components/modules/filter";
-import { useRouter } from "next/router";
 
-const cleanParams = (query, page: number) => {
+const cleanParams = (query: Record<string, any>, page: number) => {
   const search = query.search ? query.search : undefined;
   const before = query.before ? query.before : undefined;
   const after = query.after ? query.after : undefined;
@@ -47,12 +47,8 @@ export default function Subscriptions() {
   return (
     <div>
       <h1>Подписки</h1>
-      <Filter
-        page={page}
-        setPage={setPage}
-        cleanParams={cleanParams(router.query, page)}
-      />
-      {subscriptionList?.results.map((post: PostType[], index: number) => (
+      <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
+      {subscriptionList?.results.map((post: PostType, index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

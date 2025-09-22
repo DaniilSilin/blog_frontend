@@ -1,7 +1,11 @@
 import React from "react";
 import PostsSearch from "@/app/components/modules/posts_search";
 
-export default function PostsSearchView({ hashtag }) {
+interface Props {
+  hashtag: string;
+}
+
+export default function PostsSearchView({ hashtag }: Props) {
   return (
     <div>
       <PostsSearch hashtag={hashtag} />

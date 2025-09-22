@@ -1,11 +1,11 @@
 import React from "react";
 
-import { Post } from "../../../../types";
+import { PostType } from "@/app/types";
 import styles from "../blog_page.module.css";
 import PostItem from "@/app/components/modules/post_page";
 
 export interface Props {
-  post: Post;
+  post: PostType;
 }
 
 export default function PostList({ post }: Props) {

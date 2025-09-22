@@ -84,6 +84,7 @@ export default function EditorMainLayout({ children, slug }: Props) {
           <Sider style={{ background: colorBgContainer }} width={200}>
             <Menu
               mode="inline"
+              // @ts-ignore
               defaultSelectedKeys={[defaultSelectedMenu]}
               defaultOpenKeys={["sub1"]}
               style={{ height: "100%" }}

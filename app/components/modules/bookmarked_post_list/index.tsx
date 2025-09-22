@@ -7,7 +7,7 @@ import { PostType } from "@/app/types";
 import PostItem from "@/app/components/modules/post_page";
 import Filter from "@/app/components/modules/filter";
 
-const cleanParams = (query, page: number) => {
+const cleanParams = (query: Record<string, any>, page: number) => {
   const search = query.search ? query.search : undefined;
   const before = query.before ? query.before : undefined;
   const after = query.after ? query.after : undefined;
@@ -47,17 +47,11 @@ export default function BookmarkedPostList() {
     return () => document.removeEventListener("scroll", onScroll);
   }, [page, isFetching]);
 
-  if (isLoading) return <div>Загрузка</div>;
-
   return (
     <div>
       <h1>Сохранённые записи</h1>
-      <Filter
-        page={page}
-        setPage={setPage}
-        cleanParams={cleanParams(router.query, page)}
-      />
-      {bookmarkedPostList?.results.map((post: PostType[], index: number) => (
+      <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
+      {bookmarkedPostList?.results.map((post: PostType, index: number) => (
         <PostItem key={index} post={post} />
       ))}
     </div>

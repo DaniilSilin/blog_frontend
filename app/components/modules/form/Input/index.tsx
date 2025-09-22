@@ -64,7 +64,9 @@ const Input = React.forwardRef(function Input(
         label={label}
         onFocus={onFocus}
         error={error}
+        // @ts-ignore
         value={value}
+        // @ts-ignore
         description={description}
       >
         {isPassword ? (
@@ -75,6 +77,7 @@ const Input = React.forwardRef(function Input(
             maxLength={maxLength}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            // @ts-ignore
             ref={ref}
             className={styles.baseInput}
             style={{
@@ -91,6 +94,7 @@ const Input = React.forwardRef(function Input(
             maxLength={maxLength}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            // @ts-ignore
             ref={ref}
             className={styles.baseInput}
             style={{

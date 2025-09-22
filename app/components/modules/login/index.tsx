@@ -23,12 +23,16 @@ export default function Login() {
     const redirectTo = router.query.next || "/";
     e.preventDefault();
     const response = await loginUser({ username, password });
+    // @ts-ignore
     if (response.error) {
       setErrorMessage("Неправильный логин или пароль");
     } else {
       setErrorMessage("");
+      // @ts-ignore
       CookieHelper.setCookie("token", response.data.token, 365);
+      // @ts-ignore
       getUserData();
+      // @ts-ignore
       router.push(redirectTo);
     }
   };

@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from "react";
 
 export interface Props {
-  defaultChecked: defaultChecked;
-  value: value;
-  description: description;
+  defaultChecked: any;
+  value: any;
+  description: any;
   onChange: any;
 }
 

@@ -1,6 +1,10 @@
 import React from "react";
 import BlogEdit from "@/app/components/modules/blog_edit";
 
-export default function BlogEditView({ slug }) {
+interface Props {
+  slug: string;
+}
+
+export default function BlogEditView({ slug }: Props) {
   return <BlogEdit slug={slug} />;
 }

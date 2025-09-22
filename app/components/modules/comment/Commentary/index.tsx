@@ -93,6 +93,7 @@ export default function Commentary({
                 displayReplyInput={displayReplyInput}
                 editMode={editMode}
                 setDisplayReplyInput={setDisplayReplyInput}
+                // @ts-ignore
                 setLoading={setLoading}
                 isParent={isParent}
               />

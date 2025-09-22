@@ -38,6 +38,7 @@ export default function HeaderNotifications() {
 
   const readNotificationFunction = React.useCallback(
     (notificationData: NotificationType) => {
+      // @ts-ignore
       setNotification(notificationData);
       readNotification({ pk: notificationData?.pk });
       setDisplayCommentList(true);
@@ -47,6 +48,7 @@ export default function HeaderNotifications() {
 
   React.useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
+      // @ts-ignore
       if (!notificationMenuRef.current.contains(e.target)) {
         setDisplayNotificationListWindow(false);
       }
@@ -58,7 +60,9 @@ export default function HeaderNotifications() {
   if (displayCommentList && notification) {
     return (
       <CommentReply
+        // @ts-ignore
         slug={notification?.post.blog.slug}
+        // @ts-ignore
         post={notification?.post}
         setDisplayCommentList={setDisplayCommentList}
         setDisplayNotificationListWindow={setDisplayNotificationListWindow}

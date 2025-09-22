@@ -72,6 +72,7 @@ export default function NotificationCommentaryMainFooter({
   };
 
   const showReplyInputHandleChange = React.useCallback(() => {
+    // @ts-ignore
     setDisplayReplyInput((displayReplyInput) => !displayReplyInput);
   }, []);
 

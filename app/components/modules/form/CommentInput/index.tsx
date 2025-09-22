@@ -33,6 +33,7 @@ const CommentInput = React.forwardRef(function CommentInput(
   const handleChangeInput = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
+      // @ts-ignore
       onChange(value);
     },
     [onChange],
@@ -64,7 +65,9 @@ const CommentInput = React.forwardRef(function CommentInput(
       ) : (
         <div>
           <TextArea
+            // @ts-ignore
             onChange={handleChangeInput}
+            // @ts-ignore
             ref={ref}
             value={value}
             placeholder={placeholder}

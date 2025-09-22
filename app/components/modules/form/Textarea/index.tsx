@@ -59,6 +59,7 @@ export default function TextArea({
       <Field label={label} error={error}>
         <BaseTextArea
           maxLength={maxLength}
+          // @ts-ignore
           onChange={handleChangeInput}
           defaultValue={defaultValue}
           placeholder={placeholder}

@@ -4,13 +4,13 @@ import moment from "moment/moment";
 
 const { RangePicker } = DatePicker;
 import { DatePicker, Space } from "antd/lib";
-import { CleanParams } from "@/app/types";
+import { CleanParamsType } from "@/app/types";
 
 import styles from "./date_picker.module.css";
 
 export interface Props {
   setPage: (value: number) => void;
-  cleanParams: CleanParams;
+  cleanParams: CleanParamsType;
 }
 
 const dateFormat = "YYYY-MM-DD";
@@ -38,20 +38,19 @@ export default function DatePicker2({ setPage, cleanParams }: Props) {
       ? [moment(cleanParams.after), moment(cleanParams.before)]
       : undefined;
 
-  const handleChangeDate = React.useCallback(
-    (date_1, date_2) => {
-      setSortByDateParam(date_2[1], date_2[0]);
-    },
-    [setSortByDateParam],
-  );
+  const handleChangeDate = React.useCallback((date_1: any, date_2: any) => {
+    setSortByDateParam(date_2[1], date_2[0]);
+  }, []);
 
   return (
     <div className={styles.root}>
       <div style={{ width: "300px" }}>
         <Space direction="vertical" size={12}>
           <RangePicker
+            // @ts-ignore
             defaultValue={defaultDateValues}
             format={dateFormat}
+            // @ts-ignore
             picker="day"
             onChange={handleChangeDate}
           />

@@ -5,7 +5,11 @@ import BlogInvitations from "./BlogInvitations";
 
 import styles from "./blog_editor_invite.module.css";
 
-export default function BlogEditorInvite({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function BlogEditorInvite({ slug }: Props) {
   return (
     <div>
       <div className={styles.title}>Приглашения</div>

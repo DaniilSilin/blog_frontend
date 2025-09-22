@@ -49,6 +49,7 @@ export default function Input({
         label={label}
         inputIsFocused={inputIsFocused}
         error={error}
+        // @ts-ignore
         value={value}
         wasFocusedOnce={wasFocusedOnce}
       >

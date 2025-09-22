@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import { RootReducer } from "../reduxTypes";
 import DjangoService from "../services/DjangoService";
 import djangoSlice from "./slices/djangoSlice";
-
+// @ts-ignore
 export const rootReducer = (state, action) => {
   switch (action.type) {
     case HYDRATE:

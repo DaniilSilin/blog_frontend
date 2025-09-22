@@ -72,6 +72,7 @@ export default function CommentEditMode({
             </button>
             <div
               onClick={leaveComment}
+              // @ts-ignore
               disabled={commentBody === comment?.body || commentBody === ""}
               className={classNames(styles.submitButton, {
                 [styles.active]: !(

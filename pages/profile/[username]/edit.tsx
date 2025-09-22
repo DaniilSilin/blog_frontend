@@ -4,7 +4,7 @@ import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 import MainLayout from "@/app/MainLayout";
 import ProfileEditView from "@/app/views/ProfileEdit";
 
-export default function ProfilePage(props) {
+export default function ProfilePage(props: any) {
   return (
     <MainLayout>
       <ProfileEditView username={props.username} />

@@ -96,6 +96,7 @@ const Banner = React.forwardRef(function Banner(
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');
+    // @ts-ignore
     if (input) input.click();
   };
 
@@ -158,6 +159,7 @@ const Banner = React.forwardRef(function Banner(
             <div
               onClick={handleDisplayModal}
               style={{ overflow: "hidden" }}
+              // @ts-ignore
               ref={ref}
               className="modal_3"
             >

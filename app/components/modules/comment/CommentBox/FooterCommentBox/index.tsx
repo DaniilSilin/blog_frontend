@@ -55,6 +55,7 @@ const FooterCommentBox = React.forwardRef(function FooterCommentBox(
       // @ts-ignore
       if (
         emojiPickerRef.current &&
+        // @ts-ignore
         !emojiPickerRef.current.contains(e.target)
       ) {
         setDisplayEmojiPicker(false);
@@ -75,6 +76,7 @@ const FooterCommentBox = React.forwardRef(function FooterCommentBox(
             className={styles.emojiPicker}
             open={displayEmojiPicker}
             onEmojiClick={onEmojiHandleClick}
+            // @ts-ignore
             theme={
               CookieHelper.getCookie("theme")
                 ? CookieHelper.getCookie("theme")

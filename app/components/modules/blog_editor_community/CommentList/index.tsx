@@ -68,6 +68,7 @@ export default function BlogComment({
   const blogCommentInputCheckboxHandleChange = React.useCallback(
     (checked: boolean, comment: any) => {
       if (checked) {
+        // @ts-ignore
         setSelectedBlogComments([...selectedBlogComments, comment]);
       } else {
         setSelectedBlogComments(

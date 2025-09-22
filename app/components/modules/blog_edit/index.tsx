@@ -37,7 +37,11 @@ const MIN_AVATAR_SIZE_IN_MB = 33554432;
 
 import styles from "./blog_edit.module.css";
 
-export default function BlogEdit({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function BlogEdit({ slug }: Props) {
   const { data, refetch: refetchBlog } = DjangoService.useGetBlogQuery({
     slug,
   });
@@ -225,6 +229,7 @@ export default function BlogEdit({ slug }) {
   ]);
 
   const formValidator = React.useCallback(() => {
+    // @ts-ignore
     const validateField = (value, validator, setError) => {
       let isValid;
       const error = validator(value);
@@ -467,24 +472,39 @@ export default function BlogEdit({ slug }) {
   const updateBlogData = async () => {
     const formData = new FormData();
     if (avatarState !== `${BASE_URL}${initialAvatarSmall}`) {
+      // @ts-ignore
       formData.append("avatar", avatarOriginal);
+      // @ts-ignore
       formData.append("avatar_small", avatarSmall);
     }
     if (bannerState !== `${BASE_URL}${initialBannerSmall}`) {
+      // @ts-ignore
       formData.append("banner", bannerOriginal);
+      // @ts-ignore
       formData.append("banner_small", bannerSmall);
     }
+    // @ts-ignore
     formData.append("title", title);
+    // @ts-ignore
     formData.append("description", description);
+    // @ts-ignore
     formData.append("email", email);
+    // @ts-ignore
     formData.append("phone_number", phone);
+    // @ts-ignore
     formData.append("map", map);
+    // @ts-ignore
     formData.append("vk_link", vkLink);
+    // @ts-ignore
     formData.append("telegram_link", telegramLink);
+    // @ts-ignore
     formData.append("youtube_link", youtubeLink);
+    // @ts-ignore
     formData.append("dzen_link", dzenLink);
+    // @ts-ignore
     formData.append("site_link", ownSiteLink);
     const result = await updateBlog({ slug, formData });
+    // @ts-ignore
     if (!result.error && result.data.status !== "unsuccessful") {
       refetchBlog();
       createDataSentSuccessfullyNotification();
@@ -701,6 +721,7 @@ export default function BlogEdit({ slug }) {
         <PhoneInput
           label={"Номер телефона"}
           defaultValue={initialPhone}
+          // @ts-ignore
           value={phone}
           description={
             "Можете добавить номер телефона. Только Российские номера!"

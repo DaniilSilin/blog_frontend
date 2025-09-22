@@ -4,8 +4,8 @@ import classNames from "classnames";
 export interface Props {
   label?: string | undefined;
   children: React.ReactNode;
-  error: string | undefined;
-  value: string;
+  error?: string | undefined;
+  value?: string;
   description: string;
 }
 

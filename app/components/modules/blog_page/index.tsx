@@ -57,7 +57,7 @@ export default function BlogItem({ slug, children }: Props) {
   }, [blogData?.subscriberList]);
 
   const handleDynamicContentClick = React.useCallback(
-    (e) => {
+    (e: any) => {
       let elem = e.target;
       if (dynamicContentModalDisplayed) {
         if (

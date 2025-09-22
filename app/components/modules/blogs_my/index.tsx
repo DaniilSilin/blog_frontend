@@ -2,7 +2,7 @@ import React from "react";
 import { useAppSelector } from "@/app/store";
 import DjangoService from "@/app/store/services/DjangoService";
 
-import { Blog } from "@/app/types";
+import { BlogType } from "@/app/types";
 
 import OwnerBlogList from "@/app/components/modules/blogs_my/OwnerBlogList";
 
@@ -26,9 +26,11 @@ export default function BlogsMy() {
           </div>
         ) : (
           <div className={styles.blogContainer}>
-            {blogsWhereUserIsOwner?.results.map((blog: Blog, index: number) => (
-              <OwnerBlogList key={index} blog={blog} ref={blogRef} owner />
-            ))}
+            {blogsWhereUserIsOwner?.results.map(
+              (blog: BlogType, index: number) => (
+                <OwnerBlogList key={index} blog={blog} ref={blogRef} owner />
+              ),
+            )}
           </div>
         )}
       </div>
@@ -41,7 +43,7 @@ export default function BlogsMy() {
         ) : (
           <div className={styles.blogContainer}>
             {blogsWhereUserIsAuthor?.results.map(
-              (blog: Blog, index: number) => (
+              (blog: BlogType, index: number) => (
                 <OwnerBlogList key={index} blog={blog} ref={blogRef} />
               ),
             )}

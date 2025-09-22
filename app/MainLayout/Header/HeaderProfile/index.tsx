@@ -98,6 +98,7 @@ export default function HeaderProfile() {
             <>
               {displaySwitchThemeMenu ? (
                 <SwitchThemeMenu
+                  // @ts-ignore
                   currentTheme={currentTheme}
                   setCurrentTheme={setCurrentTheme}
                   setCurrenThemeLabel={setCurrenThemeLabel}

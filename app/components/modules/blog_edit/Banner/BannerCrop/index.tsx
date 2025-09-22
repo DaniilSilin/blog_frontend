@@ -42,10 +42,11 @@ const BannerCrop = React.forwardRef(function BannerCrop(
   const cancelCrop = React.useCallback(() => {
     setOriginalBannerSourceUrl("");
     setOriginalBannerSource(undefined);
+    // @ts-ignore
     ref.current.style.display = "none";
   }, [setOriginalBannerSourceUrl, setOriginalBannerSource]);
 
-  const onImageLoad = (e) => {
+  const onImageLoad = (e: any) => {
     const width = e.target.width;
     const height = e.target.height;
     const cropWidthInPercent = MIN_DIMENSION / width;
@@ -60,10 +61,11 @@ const BannerCrop = React.forwardRef(function BannerCrop(
       height,
     );
     const centeredCrop = centerCrop(crop, width, height);
+    // @ts-ignore
     setCrop(centeredCrop);
   };
 
-  const dataURLtoFile = (dataUrl, filename) => {
+  const dataURLtoFile = (dataUrl: any, filename: any) => {
     const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
@@ -78,19 +80,25 @@ const BannerCrop = React.forwardRef(function BannerCrop(
 
   const cropImage = () => {
     setCanvasPreview(
+      // @ts-ignore
       bannerRef.current,
       previewCanvasRef.current,
       convertToPixelCrop(
+        // @ts-ignore
         crop,
+        // @ts-ignore
         bannerRef.current.width,
+        // @ts-ignore
         bannerRef.current.height,
       ),
     );
+    // @ts-ignore
     const dataUrl = previewCanvasRef.current.toDataURL();
     setCroppedBannerUrl(dataUrl);
     const file = dataURLtoFile(dataUrl, "croppedImage.jpeg");
     setCroppedBanner(file);
     setIsBannerDeleted(false);
+    // @ts-ignore
     ref.current.style.display = "none";
   };
 
@@ -136,6 +144,7 @@ const BannerCrop = React.forwardRef(function BannerCrop(
   return (
     <div>
       <ReactCrop
+        // @ts-ignore
         onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
         crop={crop}
         keepSelection

@@ -20,7 +20,11 @@ const cleanParams = (queryParams: any, page: number, slug: string) => {
   return { sorting: sorting, search: search, slug: slug, page: page };
 };
 
-export default function BlogPosts({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function BlogPosts({ slug }: Props) {
   const router = useRouter();
   const user = useAppSelector((state) => state.django.profile);
   const [page, setPage] = React.useState(1);
@@ -58,7 +62,7 @@ export default function BlogPosts({ slug }) {
             />
             {(user.username === blog?.owner.username ||
               blog.authors.find(
-                (author) => author.username === user.username,
+                (author: any) => author.username === user.username,
               )) && (
               <div>
                 <Link
@@ -80,7 +84,7 @@ export default function BlogPosts({ slug }) {
           <>
             {(user.username === blog?.owner.username ||
               blog.authors.find(
-                (author) => author.username === user.username,
+                (author: any) => author.username === user.username,
               )) && (
               <div style={{ marginTop: "15px" }}>
                 <Link

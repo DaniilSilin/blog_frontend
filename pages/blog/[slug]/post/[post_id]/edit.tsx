@@ -4,7 +4,7 @@ import type { GetServerSidePropsContext } from "next";
 import PostEditView from "@/app/views/PostEdit";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
-export default function PostPage(props) {
+export default function PostPage(props: any) {
   return (
     <MainLayout>
       <PostEditView slug={props.slug} post_id={props.post_id} />

@@ -5,7 +5,11 @@ import BlogCommentList from "./BlogCommentList";
 
 import styles from "./blog_editor_community.module.css";
 
-export default function BlogEditorCommunity({ slug }) {
+export interface Props {
+  slug: string;
+}
+
+export default function BlogEditorCommunity({ slug }: Props) {
   const [selectedBlogComments, setSelectedBlogComments] = React.useState([]);
 
   return (

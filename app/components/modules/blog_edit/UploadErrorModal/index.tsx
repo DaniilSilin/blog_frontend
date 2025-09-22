@@ -35,10 +35,12 @@ const UploadErrorModal = React.forwardRef(function UploadErrorModal(
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');
+    // @ts-ignore
     if (input) input.click();
   };
 
   return (
+    // @ts-ignore
     <div ref={ref} onClick={handleDisplayModal} className="modal_3">
       <div className={styles.modalContentError}>
         <div className={styles.messageTitle}>Ошибка</div>

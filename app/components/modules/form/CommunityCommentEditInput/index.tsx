@@ -32,6 +32,7 @@ const CommunityCommentEditInput = React.forwardRef(
     const handleChangeInput = React.useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        // @ts-ignore
         onChange(value);
       },
       [onChange],
@@ -48,6 +49,7 @@ const CommunityCommentEditInput = React.forwardRef(
             <span>Комментарий</span>
           </div>
           <TextArea
+            // @ts-ignore
             onChange={handleChangeInput}
             // onFocus={handleFocus}
             ref={inputRef}

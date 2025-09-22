@@ -93,6 +93,7 @@ export default function NotificationCommentaryMain({
                 className={styles.createReplyUserAvatar}
                 alt={""}
               />
+
               <CommentBox
                 comment={comment}
                 post_id={post_id}

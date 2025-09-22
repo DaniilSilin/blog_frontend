@@ -16,7 +16,11 @@ import styles from "./profile.module.css";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
-export default function Profile({ username }) {
+export interface Props {
+  username: string;
+}
+
+export default function Profile({ username }: Props) {
   const { data: user } = DjangoService.useUserProfileQuery({ username });
   const _user = useAppSelector((state) => state.django.profile);
 
@@ -33,7 +37,7 @@ export default function Profile({ username }) {
   );
 
   const handleDynamicContentClick = React.useCallback(
-    (e) => {
+    (e: any) => {
       let elem = e.target;
       if (dynamicContentModalDisplayed) {
         if (elem.className.startsWith("modal_3")) {

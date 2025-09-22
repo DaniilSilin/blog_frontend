@@ -1,4 +1,4 @@
-import { Blog, Tag, User, Author, Comment } from "./index";
+import { BlogType, Tag, User, Author, CommentType } from "./index";
 
 export interface PostType {
   id: number;
@@ -13,7 +13,7 @@ export interface PostType {
   dislikes: number;
   isDisliked: boolean;
   views: number;
-  blog: Blog;
+  blog: BlogType;
   tags: Tag[];
   liked_users: User[];
   isBookmarked: boolean;
