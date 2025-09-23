@@ -8,7 +8,7 @@ import { HYDRATE } from "next-redux-wrapper";
 import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";
 
-const API_URL = "http://127.0.0.1:8080/api/v1/";
+const API_URL = "http://79.174.92.166/api/v1/";
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
