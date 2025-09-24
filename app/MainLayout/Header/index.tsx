@@ -27,11 +27,9 @@ export default function HeaderReact({
 
   const toggleSiderMode = React.useCallback(() => {
     if (isWideScreen) {
-      // @ts-ignore
-      setIsSiderExpanded((prev) => !prev);
+      setIsSiderExpanded((isWideScreen) => !isWideScreen);
     } else {
-      // @ts-ignore
-      setIsMainSiderHidden((prev) => !prev);
+      setIsMainSiderHidden((isWideScreen) => !isWideScreen);
     }
   }, [isWideScreen, setIsMainSiderHidden, setIsSiderExpanded]);
 

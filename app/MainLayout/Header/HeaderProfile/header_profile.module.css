@@ -3,14 +3,14 @@
 }
 
 .root:hover {
-  background-color: #1677ff;
+  background-color: var(--interface-background-hover-color);
 }
 
 .root.active {
-  background-color: #1677ff;
+  background-color: var(--interface-background-hover-color);
 }
 
-.avatarContainer {
+.userMenuButton {
   display: flex;
   align-items: center;
   height: inherit;
@@ -18,77 +18,19 @@
   cursor: pointer;
 }
 
-.avatar {
+.userMenuAvatar {
   border-radius: 50%;
 }
 
-.themeMenu {
-  color: #a6adb4 !important;
-  width: 250px;
-  position: absolute;
-  padding: 10px 0;
-  background-color: #001529;
-  right: 50px;
-  border: 2px solid #363738;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  z-index: 9999;
-}
-
-.profileMenu {
+.userMenuContainer {
   color: #a6adb4 !important;
   width: 250px;
   position: absolute;
   padding: 10px;
-  background-color: #001529;
+  background-color: var(--inteface-background-color);
   right: 50px;
   border: 2px solid #363738;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   z-index: 9999;
-}
-
-.profileMenu > .profileMenuElement {
-  color: #a6adb4 !important;
-  display: flex;
-  height: 50px;
-  /*padding: 10px 16px;*/
-  align-items: center;
-}
-
-.profileMenu > .profileMenuElement:hover {
-  background-color: #1677ff !important;
-  border-radius: 10px;
-  color: #ffffff !important;
-  cursor: pointer;
-}
-
-.profileMenuElement > a {
-  align-items: center;
-  color: #a6adb4 !important;
-  display: inline-block;
-  height: 100%;
-  width: 100%;
-  padding: 10px 16px;
-}
-
-a > .profileMenuContainer {
-  display: flex;
-  align-items: center;
-}
-
-.profileMenuElementIcon {
-  margin-right: 12px;
-}
-
-.profileMenuElement > a:hover {
-  color: #ffffff !important;
-}
-
-.loginContainer {
-  color: #a6adb4;
-}
-
-.loginContainer:hover {
-  color: #ffffff;
 }

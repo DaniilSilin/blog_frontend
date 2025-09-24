@@ -10,3 +10,4 @@ export * from "./UserProfile";
 export * from "./Notification";
 export * from "./CleanParams";
 export * from "./ShareMenuItem";
+export * from "./UserMenu";

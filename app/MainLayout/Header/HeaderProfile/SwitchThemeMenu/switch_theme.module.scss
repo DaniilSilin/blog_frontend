@@ -54,20 +54,3 @@
   color: #606060;
   line-height: 25px;
 }
-
-.themeItem {
-  display: flex;
-  width: 100%;
-
-  &:hover {
-    background-color: var(--interface-background-hover-color);
-  }
-
-  .themeItemChosen {
-
-  }
-
-  .themeItemLabel {
-    margin-left: 30px;
-  }
-}

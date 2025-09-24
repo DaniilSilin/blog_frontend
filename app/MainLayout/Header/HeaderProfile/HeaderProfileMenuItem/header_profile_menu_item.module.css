@@ -1,0 +1,36 @@
+.root > a {
+  align-items: center;
+  color: #a6adb4 !important;
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  padding: 10px 16px;
+}
+
+.root:hover {
+  color: #ffffff !important;
+  background-color: var(--interface-background-hover-color) !important;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.root > a:hover {
+  color: #ffffff !important;
+}
+
+.root > .nonLinkUserItemContainer {
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+}
+
+a > .userMenuItemContainer {
+  display: flex;
+  align-items: center;
+}
+
+.userMenuItemIcon {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}

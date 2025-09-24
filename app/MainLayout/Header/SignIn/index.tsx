@@ -11,7 +11,7 @@ export default function SignIn() {
       <Link className={styles.linkContainer} href={"/login"}>
         <div className={styles.linkSubContainer}>
           <FaRegUserCircle size={20} />
-          <div>Войти</div>
+          Войти
         </div>
       </Link>
     </div>

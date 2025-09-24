@@ -27,17 +27,17 @@ export default function MainLayout({ children }: Props) {
   const [dataSentSuccessfully, setDataSentSuccessfully] = React.useState(false);
 
   const [isMainSiderHidden, setIsMainSiderHidden] = React.useState(true);
-  const [isWideScreen, setIsWideScreen] = React.useState(false);
+  const [isWideScreen, setIsWideScreen] = React.useState<boolean>(false);
   const [isSiderExpanded, setIsSiderExpanded] = React.useState(false);
 
-  const createDataSentSuccessfullyNotification = (value: any) => {
+  const createDataSentSuccessfullyNotification = React.useCallback(() => {
     setDataSentSuccessfully(true);
     setTimeout(() => {
       setDataSentSuccessfully(false);
     }, 5000);
-  };
+  }, []);
 
-  const copyToClipboard = (value: any) => {
+  const copyToClipboard = React.useCallback((value: any) => {
     setWasCopiedOnce(true);
     navigator.clipboard.writeText(
       `${BASE_URL}/blog/${value.blog.slug}/post/${value.post_id}/`,
@@ -46,7 +46,7 @@ export default function MainLayout({ children }: Props) {
     setTimeout(() => {
       setIsCopied(false);
     }, 2000);
-  };
+  }, []);
 
   React.useEffect(() => {
     const handleResize = () => {
