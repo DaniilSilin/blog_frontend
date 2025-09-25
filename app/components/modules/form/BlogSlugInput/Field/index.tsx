@@ -9,7 +9,7 @@ export interface Props {
   value: string;
   description: string;
   onFocus: boolean;
-  blog_slug: string;
+  blog_slug: any;
 }
 
 export default function Field({
@@ -65,14 +65,14 @@ export default function Field({
         )}
         {descriptionState === "blogSlug" && (
           <>
-            {blog_slug === "Адрес свободен" ? (
+            {blog_slug?.available === true ? (
               <div
                 className={classNames(styles.available, {
                   [styles.active]: onFocus,
                   [styles.non_active]: !onFocus,
                 })}
               >
-                {blog_slug}
+                Адрес свободен
               </div>
             ) : (
               <div
@@ -81,7 +81,7 @@ export default function Field({
                   [styles.non_active]: !onFocus,
                 })}
               >
-                {blog_slug}
+                Адрес занят
               </div>
             )}
           </>

@@ -9,39 +9,68 @@ const MIN_AVATAR_SIZE_IN_MB = 4194304;
 const MIN_DIMENSION_AVATAR = 100;
 
 export interface Props {
-  imageSource: string;
-  setImageSource: any;
-  imageSourceUrl: any;
-  setImageSourceUrl: any;
-  croppedImage: any;
-  setCroppedImage: any;
-  croppedImageUrl: any;
-  setCroppedImageUrl: any;
+  sourceImageFile: File | null;
+  setSourceImageFile: React.Dispatch<React.SetStateAction<File | null>>;
+  sourceImageUrl: string;
+  setSourceImageUrl: (value: string) => void;
+  setCroppedImageFile: React.Dispatch<React.SetStateAction<File | null>>;
+  croppedImageUrl: string | null;
+  setCroppedImageUrl: (value: string) => void;
   setImageErrorMessage: (value: string) => void;
 }
 
 export default function AvatarUpload({
-  imageSource,
-  setImageSource,
-  imageSourceUrl,
-  setImageSourceUrl,
-  croppedImage,
-  setCroppedImage,
+  sourceImageFile,
+  setSourceImageFile,
+  sourceImageUrl,
+  setSourceImageUrl,
+  setCroppedImageFile,
   croppedImageUrl,
   setCroppedImageUrl,
   setImageErrorMessage,
 }: Props) {
-  const divRef = React.useRef(null);
+  const divRef = React.useRef<HTMLDivElement | null>(null);
+
+  //
+  React.useEffect(() => {
+    if (divRef.current) {
+      divRef.current.style.display = sourceImageFile ? "block" : "none";
+    }
+  }, [sourceImageFile]);
 
   React.useEffect(() => {
-    if (imageSource) {
-      // @ts-ignore
-      divRef.current.style.display = "block";
-    } else {
-      // @ts-ignore
+    if (!sourceImageFile) {
+      setSourceImageUrl("");
+    }
+  }, [sourceImageFile]);
+
+  React.useEffect(() => {
+    if (divRef.current) {
       divRef.current.style.display = "none";
     }
-  }, [imageSource]);
+  }, [croppedImageUrl]);
+  //
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && divRef.current) {
+        divRef.current.style.display = "none";
+        setSourceImageFile(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  //
+  const handleHideModalContentClick = React.useCallback((e: any) => {
+    let elem = e.target;
+    if (elem.className === "modal") {
+      elem.style.display = "none";
+      setSourceImageFile(null);
+    }
+  }, []);
+  //
 
   const onSelectAvatar = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,25 +89,34 @@ export default function AvatarUpload({
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {
-          // @ts-ignore
-          const width = e.currentTarget.width;
-          // @ts-ignore
-          const height = e.currentTarget.height;
+          const target = e.currentTarget as HTMLImageElement;
+          if (!target) return;
+
+          const width = target.width;
+          const height = target.height;
           if (width < MIN_DIMENSION_AVATAR || MIN_DIMENSION_AVATAR > height) {
             setImageErrorMessage(
               "Минимальный размер изображения – 99 x 99 пикс.",
             );
-            setImageSource(undefined);
-            imageSourceUrl("");
+            setSourceImageFile(null);
+            setSourceImageUrl("");
           } else {
-            setImageSource(file);
-            setImageSourceUrl(imageUrl);
+            setSourceImageFile(file);
+            setSourceImageUrl(imageUrl);
           }
         });
       });
       reader.readAsDataURL(file);
     },
-    [setCroppedImage, setImageSource, setImageErrorMessage],
+    [setSourceImageFile, setSourceImageUrl],
+  );
+
+  const handleUploadImageClick = React.useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      onSelectAvatar(e);
+    },
+    [],
   );
 
   return (
@@ -97,27 +135,21 @@ export default function AvatarUpload({
             alt={""}
           />
           <input
-            style={{ display: "none" }}
+            className={styles.uploadButton}
             type={"file"}
-            accept={"image/*"}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              e.preventDefault();
-              onSelectAvatar(e);
-            }}
+            accept={"image/png, image/jpeg, image/gif"}
+            onChange={handleUploadImageClick}
           />
         </label>
       </div>
-      <div ref={divRef} className="modal_3">
-        <div className="modalContent_3" style={{ margin: "10% auto" }}>
+      <div ref={divRef} onClick={handleHideModalContentClick} className="modal">
+        <div className="modalContent" style={{ margin: "10% auto" }}>
           <AvatarModal
-            setImageSource={setImageSource}
-            imageSourceUrl={imageSourceUrl}
-            setImageSourceUrl={setImageSourceUrl}
+            sourceImageFile={sourceImageFile}
+            setSourceImageFile={setSourceImageFile}
+            sourceImageUrl={sourceImageUrl}
+            setCroppedImageFile={setCroppedImageFile}
             setCroppedImageUrl={setCroppedImageUrl}
-            imageSource={imageSource}
-            croppedImage={croppedImage}
-            setCroppedImage={setCroppedImage}
-            ref={divRef}
           />
         </div>
       </div>

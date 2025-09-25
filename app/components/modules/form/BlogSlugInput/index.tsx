@@ -15,7 +15,7 @@ export interface Props {
   value?: string;
   description?: string;
   setInputOnFocus?: any;
-  blog_slug?: string;
+  blog_slug?: any;
 }
 
 export default function Input({
@@ -49,7 +49,7 @@ export default function Input({
 
   const handleBlur = React.useCallback(() => {
     setOnFocus(false);
-  }, [setOnFocus]);
+  }, []);
 
   return (
     <div>

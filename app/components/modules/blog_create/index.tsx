@@ -17,7 +17,7 @@ import styles from "./blog_create.module.css";
 
 export default function BlogCreate() {
   const router = useRouter();
-  const [submitAvailable, setSubmitIsAvailable] = React.useState(false);
+  const [isSubmitAvailable, setIsSubmitAvailable] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const [title, setTitle] = React.useState<string>("");
@@ -28,10 +28,14 @@ export default function BlogCreate() {
 
   const { data: blog_slug } = DjangoService.useGetBlogSlugQuery({ slug });
 
-  const [imageSource, setImageSource] = React.useState<any>(null);
-  const [imageSourceUrl, setImageSourceUrl] = React.useState("");
-  const [croppedImage, setCroppedImage] = React.useState<any>(null);
-  const [croppedImageUrl, setCroppedImageUrl] = React.useState();
+  const [sourceImageFile, setSourceImageFile] = React.useState<File | null>(
+    null,
+  );
+  const [sourceImageUrl, setSourceImageUrl] = React.useState<string>("");
+  const [croppedImageFile, setCroppedImageFile] = React.useState<File | null>(
+    null,
+  );
+  const [croppedImageUrl, setCroppedImageUrl] = React.useState<string>("");
 
   const [imageErrorMessage, setImageErrorMessage] = React.useState("");
 
@@ -39,48 +43,38 @@ export default function BlogCreate() {
   const [slugError, setSlugError] = React.useState<string>("");
 
   const formValidation = React.useCallback(() => {
-    const titleValue = validateField(
+    const titleField = validateField(
       title,
-      null,
+      undefined,
       titleValidator,
       setTitleError,
     );
-    const slugValue = validateField(
+    const slugField = validateField(
       slug,
       blog_slug,
       slugValidator,
       setSlugError,
     );
-
-    return titleValue && slugValue;
-  }, [title, slug, blog_slug, setSlugError, setTitleError]);
+    return titleField && slugField;
+  }, [title, slug, blog_slug]);
 
   React.useEffect(() => {
     const isValid = formValidation();
-    if (isValid && title && slug && blog_slug === "Адрес свободен") {
-      setSubmitIsAvailable(true);
-    } else {
-      setSubmitIsAvailable(false);
-    }
-  }, [title, slug, blog_slug, formValidation]);
+    setIsSubmitAvailable(isValid);
+  }, [title, slug, blog_slug]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    let isValid = formValidation();
-
-    if (isValid) {
+    formValidation();
+    if (isSubmitAvailable) {
       const formData = new FormData();
-      if (croppedImage) {
-        formData.append("avatar_small", croppedImage);
-        formData.append("avatar", imageSource);
-        formData.append("title", title);
-        formData.append("description", description);
-        formData.append("slug", slug);
-      } else {
-        formData.append("title", title);
-        formData.append("description", description);
-        formData.append("slug", slug);
+      if (croppedImageFile && sourceImageFile) {
+        formData.append("avatar_small", croppedImageFile);
+        formData.append("avatar", sourceImageFile);
       }
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("slug", slug);
       setIsLoading(true);
       try {
         const result = await createBlog({ formData });
@@ -96,22 +90,15 @@ export default function BlogCreate() {
     }
   };
 
-  // React.useEffect(() => {
-  //   if (slug && !slugError) {
-  //     triggerQuery({ slug });
-  //   }
-  // }, [slug, slugError, triggerQuery]);
-
   return (
     <div className={styles.root}>
       <form onSubmit={handleSubmit}>
         <AvatarUpload
-          imageSource={imageSource}
-          setImageSource={setImageSource}
-          imageSourceUrl={imageSourceUrl}
-          setImageSourceUrl={setImageSourceUrl}
-          croppedImage={croppedImage}
-          setCroppedImage={setCroppedImage}
+          sourceImageFile={sourceImageFile}
+          setSourceImageFile={setSourceImageFile}
+          sourceImageUrl={sourceImageUrl}
+          setSourceImageUrl={setSourceImageUrl}
+          setCroppedImageFile={setCroppedImageFile}
           croppedImageUrl={croppedImageUrl}
           setCroppedImageUrl={setCroppedImageUrl}
           setImageErrorMessage={setImageErrorMessage}
@@ -146,9 +133,9 @@ export default function BlogCreate() {
         />
         <button
           onClick={handleSubmit}
-          disabled={!submitAvailable}
+          disabled={!isSubmitAvailable}
           className={classNames(styles.buttonSubmit, {
-            [styles.active]: submitAvailable && !isLoading,
+            [styles.active]: isSubmitAvailable && !isLoading,
           })}
         >
           {isLoading ? (

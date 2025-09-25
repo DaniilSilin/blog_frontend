@@ -13,6 +13,7 @@ import {
   passwordValidator,
   confirmPasswordValidator,
 } from "../../modules/form/validators";
+import validateField from "@/app/utils/validator";
 
 import styles from "./register.module.css";
 
@@ -45,27 +46,6 @@ export default function Register() {
     DjangoService.useIsUsernameAvailableQuery({ username });
 
   const formValidation = React.useCallback(() => {
-    // @ts-ignore
-    const validateField = (value, value2, validator, setError) => {
-      let isValid;
-      let error;
-
-      if (value && value2) {
-        error = validator(value, value2);
-      } else {
-        error = validator(value);
-      }
-
-      if (error || !value) {
-        setError(error);
-        isValid = false;
-      } else {
-        setError("");
-        isValid = true;
-      }
-      return isValid;
-    };
-
     const firstNameField = validateField(
       firstName,
       undefined,
@@ -226,7 +206,7 @@ export default function Register() {
             value={confirmPassword}
             isPassword
           />
-          {/*<YandexCaptcha language={"ru"} setToken={setToken} />*/}
+          <YandexCaptcha setToken={setToken} />
           <input
             type="submit"
             disabled={!readyToSubmit}

@@ -16,3 +16,7 @@
   border: 1px dashed var(--body-color);
   cursor: pointer;
 }
+
+.uploadButton {
+  display: none;
+}

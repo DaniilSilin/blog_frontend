@@ -1,5 +1,9 @@
-// @ts-ignore
-const validateField = (value, value2, validator, errorMessage) => {
+const validateField = (
+  value: string,
+  value2: Record<string, boolean> | undefined,
+  validator: (value: string, value2?: Record<string, any>) => string,
+  setError: (value: string) => void,
+) => {
   let isValid;
   let error;
 
@@ -9,11 +13,11 @@ const validateField = (value, value2, validator, errorMessage) => {
     error = validator(value);
   }
 
-  if (error && !value) {
-    errorMessage(error);
+  if (error || !value) {
+    setError(error);
     isValid = false;
   } else {
-    errorMessage(error);
+    setError("");
     isValid = true;
   }
   return isValid;
