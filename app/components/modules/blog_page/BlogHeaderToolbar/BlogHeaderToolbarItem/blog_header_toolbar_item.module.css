@@ -1,0 +1,15 @@
+.toolbarButton {
+  font-size: 22px;
+  width: fit-content;
+  margin-right: 24px;
+  text-decoration: none;
+  color: var(--text-color-primary-4) !important;
+}
+
+.toolbarButton:hover {
+  border-bottom: 2px solid var(--text-color-primary);
+}
+
+.toolbarButton.active {
+  border-bottom: 2px solid var(--text-color-primary);
+}

@@ -228,38 +228,6 @@
   color: gray;
 }
 
-.bottomMenu {
-  height: 40px;
-  display: flex;
-  /*border-bottom: 2px solid black;*/
-  margin-bottom: 10px;
-}
-
-.bottomMenu > div {
-  font-size: 20px;
-  margin-right: 15px;
-}
-
-.bottomMenu > div:hover {
-  border-bottom: 1px solid black;
-}
-
-.blogMenu {
-  font-size: 22px;
-  width: fit-content;
-  margin-right: 24px;
-  text-decoration: none;
-  color: black !important;
-}
-
-.blogMenu:hover {
-  border-bottom: 2px solid black;
-}
-
-.blogMenu.active {
-  border-bottom: 2px solid black;
-}
-
 .divider {
   margin-top: -10px;
   border: 1px solid #3f3f3f;

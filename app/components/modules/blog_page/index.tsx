@@ -1,14 +1,11 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 import { useAppSelector } from "@/app/store";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import Link from "next/link";
-import classNames from "classnames";
 
-import AdditionalBlogInformation from "./AdditionalBlogInformation";
 import BlogActionMenu from "./BlogActionMenu";
-import createBlogMenu from "./constants";
+import BlogHeaderToolbar from "./BlogHeaderToolbar";
+import AdditionalBlogInformation from "./AdditionalBlogInformation";
 
 import styles from "./blog_page.module.css";
 
@@ -20,7 +17,6 @@ export interface Props {
 }
 
 export default function BlogItem({ slug, children }: Props) {
-  const router = useRouter();
   const { data: blogData } = DjangoService.useGetBlogQuery({ slug });
   const user = useAppSelector((state) => state.django.profile);
 
@@ -86,8 +82,6 @@ export default function BlogItem({ slug, children }: Props) {
     },
     [freezeBody, unfreezeBody, dynamicContentModalDisplayed],
   );
-
-  const BLOG_MENU = createBlogMenu(slug);
 
   return (
     <div className={styles.root}>
@@ -165,19 +159,7 @@ export default function BlogItem({ slug, children }: Props) {
           </div>
         </div>
       </div>
-      <div className={styles.bottomMenu}>
-        {BLOG_MENU.map((item, index: number) => (
-          <Link
-            key={index}
-            className={classNames(styles.blogMenu, {
-              [styles.active]: router.pathname === item.pathname,
-            })}
-            href={item.href}
-          >
-            <div>{item.title}</div>
-          </Link>
-        ))}
-      </div>
+      <BlogHeaderToolbar slug={slug} />
       <div className={styles.divider}></div>
       {children}
     </div>

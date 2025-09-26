@@ -3,7 +3,7 @@ import MainLayout from "../app/MainLayout";
 import { getConfig, serverSideResolverWrapper } from "@/app/store/wrapper";
 
 export default function In() {
-  return <MainLayout>123</MainLayout>;
+  return <MainLayout> </MainLayout>;
 }
 
 const resolveConfig = getConfig([]);
