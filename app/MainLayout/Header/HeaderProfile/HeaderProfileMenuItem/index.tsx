@@ -13,10 +13,12 @@ import styles from "./header_profile_menu_item.module.css";
 export interface Props {
   menuItem: UserMenuType;
   setOpenUserMenu: (value: boolean) => void;
-  setDisplaySwitchThemeMenu: any;
+  setDisplaySwitchThemeMenu: (value: boolean) => void;
+  currentTheme: string;
 }
 
 export default function HeaderProfileMenuItem({
+  currentTheme,
   menuItem,
   setDisplaySwitchThemeMenu,
   setOpenUserMenu,
@@ -24,13 +26,9 @@ export default function HeaderProfileMenuItem({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  //
-  const initialTheme = CookieHelper.getCookie("theme") || "light";
-  const [currentTheme, setCurrentTheme] = React.useState(initialTheme);
-  const [currentThemeLabel, setCurrentThemeLabel] = React.useState(
-    initialTheme === "light" ? "светлая" : "тёмная",
-  );
-  //
+  const currentThemeLabel = React.useMemo(() => {
+    return currentTheme === "light" ? "светлая" : "тёмная";
+  }, [currentTheme]);
 
   const logout = () => {
     CookieHelper.removeCookie("token");
@@ -40,7 +38,7 @@ export default function HeaderProfileMenuItem({
   };
 
   const handleMenuItemClick = React.useCallback(() => {
-    if (menuItem.title === "Палитра") {
+    if (menuItem.title === "Тема") {
       setDisplaySwitchThemeMenu(true);
     } else if (menuItem.title === "Выйти") {
       logout();

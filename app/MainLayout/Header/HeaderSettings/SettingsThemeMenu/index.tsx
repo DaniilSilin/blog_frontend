@@ -1,63 +1,57 @@
 import React from "react";
-import CookieHelper from "@/app/store/cookieHelper";
+
+import ThemeListItem from "./ThemeListItem";
+import { FaArrowLeft } from "react-icons/fa";
 
 import styles from "./settings_theme_menu.module.css";
 
 export interface Props {
-  setDisplayMenu: (value: boolean) => void;
+  currentTheme: string;
   setCurrentTheme: (value: string) => void;
   setDisplayThemeMenu: (value: boolean) => void;
+  setDisplaySettingsMenu: (value: boolean) => void;
 }
 
 const themeList = [
   {
     id: 1,
     theme: "light",
-    value: "Как на устройстве",
-  },
-  {
-    id: 1,
-    theme: "light",
-    value: "Светлая",
+    label: "Светлая",
   },
   {
     id: 2,
     theme: "dark",
-    value: "Тёмная",
+    label: "Тёмная",
   },
 ];
 
 export default function SettingsThemeMenu({
-  setDisplayMenu,
+  currentTheme,
   setCurrentTheme,
   setDisplayThemeMenu,
+  setDisplaySettingsMenu,
 }: Props) {
-  const themeSwitchHandleChange = React.useCallback(
-    (theme: any) => {
-      CookieHelper.setCookie("theme", theme, 365);
-      setCurrentTheme(theme);
-      if (theme === "dark") {
-        document.body.setAttribute("dark-theme", "dark");
-      } else {
-        document.body.removeAttribute("dark-theme");
-      }
-    },
-    [setCurrentTheme],
-  );
-
   const returnToMenu = React.useCallback(() => {
     setDisplayThemeMenu(false);
-    setDisplayMenu(true);
-  }, [setDisplayThemeMenu, setDisplayMenu]);
+    setDisplaySettingsMenu(true);
+  }, []);
 
   return (
     <div className={styles.root}>
-      <div onClick={returnToMenu}>Назад</div>
-      {themeList.map((item, index) => (
-        <div key={index} onClick={() => themeSwitchHandleChange(item.theme)}>
-          {item.value}
-        </div>
-      ))}
+      <button className={styles.returnBackToMenuButton} onClick={returnToMenu}>
+        <FaArrowLeft size={15} style={{ marginLeft: "8px" }} />
+        <div className={styles.returnBackToMenuSubButton}>Назад</div>
+      </button>
+      <div className={styles.themeMenuListContainer}>
+        {themeList.map((themeListItem: Record<string, any>) => (
+          <ThemeListItem
+            key={themeListItem.id}
+            currentTheme={currentTheme}
+            themeListItem={themeListItem}
+            setCurrentTheme={setCurrentTheme}
+          />
+        ))}
+      </div>
     </div>
   );
 }

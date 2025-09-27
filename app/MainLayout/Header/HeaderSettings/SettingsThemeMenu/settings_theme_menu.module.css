@@ -4,4 +4,21 @@
   border: 1px solid var(--interface-border-color);
   top: 65px;
   right: 150px;
+  width: 200px;
+  padding: 10px 0;
+  cursor: default;
+}
+
+.returnBackToMenuButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.returnBackToMenuButton:hover {
+  background-color: var(--interface-background-hover-color);
+}
+
+.returnBackToMenuSubButton {
+  margin-left: 10px;
 }

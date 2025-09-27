@@ -10,6 +10,7 @@ import SwitchThemeMenu from "./SwitchThemeMenu";
 import HeaderProfileMenuItem from "./HeaderProfileMenuItem";
 
 import styles from "./header_profile.module.css";
+import CookieHelper from "@/app/store/cookieHelper";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -17,6 +18,10 @@ export default function HeaderProfile() {
   const userMenuRef = React.useRef<HTMLDivElement | null>(null);
   const user = useAppSelector((state) => state.django.profile);
   const userMenuItems = USER_MENU(user);
+
+  const initialTheme =
+    CookieHelper.getCookie("theme") === "dark" ? "dark" : "light";
+  const [currentTheme, setCurrentTheme] = React.useState(initialTheme);
 
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const [isSwitchThemeMenuVisible, setIsSwitchThemeMenuVisible] =
@@ -65,12 +70,16 @@ export default function HeaderProfile() {
           <>
             {isSwitchThemeMenuVisible ? (
               <SwitchThemeMenu
+                currentTheme={currentTheme}
+                setCurrentTheme={setCurrentTheme}
                 setIsSwitchThemeMenuVisible={setIsSwitchThemeMenuVisible}
               />
             ) : (
               <div className={styles.userMenuContainer}>
                 {userMenuItems.map((menuItem: UserMenuType) => (
                   <HeaderProfileMenuItem
+                    key={menuItem.id}
+                    currentTheme={currentTheme}
                     menuItem={menuItem}
                     setOpenUserMenu={setIsUserMenuOpen}
                     setDisplaySwitchThemeMenu={setIsSwitchThemeMenuVisible}

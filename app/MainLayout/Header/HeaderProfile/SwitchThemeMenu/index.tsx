@@ -6,6 +6,8 @@ import ThemeItem from "./ThemeItem";
 import styles from "./switch_theme.module.scss";
 
 export interface Props {
+  currentTheme: string;
+  setCurrentTheme: (value: string) => void;
   setIsSwitchThemeMenuVisible: (value: boolean) => void;
 }
 
@@ -29,9 +31,10 @@ const themeList: Theme[] = [
 ];
 
 export default function SwitchThemeMenu({
+  currentTheme,
+  setCurrentTheme,
   setIsSwitchThemeMenuVisible,
 }: Props) {
-  const [currentMenuThemeTitle, setCurrentMenuThemeTitle] = React.useState("");
   const handleBackToMenuClick = React.useCallback(() => {
     setIsSwitchThemeMenuVisible(false);
   }, []);
@@ -56,8 +59,8 @@ export default function SwitchThemeMenu({
             <ThemeItem
               key={themeItem.id}
               themeItem={themeItem}
-              setCurrentMenuThemeTitle={setCurrentMenuThemeTitle}
-              currentMenuThemeTitle={currentMenuThemeTitle}
+              currentTheme={currentTheme}
+              setCurrentTheme={setCurrentTheme}
             />
           ))}
         </div>

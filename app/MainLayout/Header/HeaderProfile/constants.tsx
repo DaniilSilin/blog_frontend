@@ -28,7 +28,7 @@ const USER_MENU = (user: any) => [
   {
     id: 4,
     link: "",
-    title: "Палитра",
+    title: "Тема",
     icon: <BsPaletteFill size={24} />,
   },
   {
