@@ -504,6 +504,11 @@ const DjangoService = createApi({
         body: formData,
       }),
     }),
+    deleteProfile: builder.mutation({
+      query: ({ username }) => ({
+        url: `profile/${username}/`,
+      }),
+    }),
     setOrRemoveLike: builder.mutation({
       query: ({ slug, post_id }) => ({
         url: `blog/${slug}/post/${post_id}/like/`,

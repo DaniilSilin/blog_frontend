@@ -3,8 +3,8 @@
   display: flex;
   height: 64px;
   top: 0;
-  border-bottom: 1px solid #e5e5e5;
-  background-color: white;
+  border-bottom: 1px solid var(--menu-chosen-background);
+  background-color: var(--body-background);
   justify-content: space-between;
   z-index: 100;
 }
@@ -21,7 +21,7 @@
   font-weight: 600;
 }
 
-.buttonsContainer {
+.actionButtonsContainer {
   display: flex;
   gap: 10px;
   height: 33px;
@@ -40,77 +40,39 @@
 }
 
 .cancelButton {
+  font-weight: 600;
   padding: 7px 16px;
   border-radius: 10px;
-  color: #6f6f6f;
-  background-color: #3e3e3e;
+  color: var(--button-text-disabled-background);
+  background-color: var(--button-background);
   cursor: default;
 }
 
 .cancelButton.active {
   cursor: pointer;
-  color: #eaeaea;
-  background-color: #3e3e3e;
+  color: var(--text-color-primary-1);
+  background-color: var(--button-background);
 }
 
 .cancelButton.active:hover {
-  background-color: #535353;
+  background-color: var(--button-hover-background);
 }
 
 .submitButton {
+  font-weight: 600;
   padding: 7px 16px;
   border-radius: 10px;
-  color: #6f6f6f;
-  background-color: #3e3e3e;
+  color: var(--button-text-disabled-background);
+  background-color: var(--button-background);
   cursor: default;
 }
 
 .submitButton.active {
   cursor: pointer;
-  color: #eaeaea;
-  background-color: #3e3e3e;
+  color: var(--text-color-primary-1);
+  background-color: var(--button-background);
 }
 
 .submitButton.active:hover {
-  background-color: #535353;
-}
-
-.submitDeleteButton {
-  padding: 5px 15px;
-  border-radius: 10px;
-  color: #e1e3e6;
-  font-weight: 600;
-  background-color: #434343;
-}
-
-.submitDeleteButton:hover {
-  background-color: #616161;
-  cursor: pointer;
-}
-
-.cancelDeleteButton {
-  padding: 5px 15px;
-  border-radius: 10px;
-  background-color: #e1e3e6;
-  color: #222222;
-  font-weight: 600;
-}
-
-.cancelDeleteButton:hover {
-  background-color: #d5d8dc;
-  cursor: pointer;
-}
-
-.deleteMessage {
-  padding: 10px 20px;
-  font-size: 20px;
-}
-
-.deleteMessageButtons {
-  display: flex;
-  gap: 10px;
-  font-size: 18px;
-  justify-content: end;
-  margin-right: 20px;
-  margin-bottom: 10px;
+  background-color: var(--button-background-6);
 }

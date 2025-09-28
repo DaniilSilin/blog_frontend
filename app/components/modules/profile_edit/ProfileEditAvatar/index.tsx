@@ -1,45 +1,51 @@
 import React, { ChangeEvent } from "react";
 import NextImage from "next/image";
+import classNames from "classnames";
 
-// import AvatarCrop from "./AvatarCrop";
-
+const acceptImageTypes = "image/png,image/jpeg,image/gif";
 const MIN_DIMENSION_AVATAR = 100;
 const MIN_AVATAR_SIZE_IN_MB = 33554432;
 const AVATAR_SMALL_PATH = "/img/default/avatar_default.jpg";
 
+import ProfileAvatar from "./ProfileAvatar";
+
 import styles from "./profile_edit_avatar.module.css";
 
 export interface Props {
-  avatarState: any;
-  isAvatarDeleted: boolean;
-  setIsAvatarDeleted: any;
+  setOriginalAvatarFile: React.Dispatch<React.SetStateAction<File | null>>;
+  setCroppedAvatarFile: React.Dispatch<React.SetStateAction<File | null>>;
+  setCroppedAvatarUrl: (value: string) => void;
+  originalAvatarUrl: string | null;
+  setOriginalAvatarUrl: (value: string) => void;
+  avatarDeletedOrNotUploadedInitially: boolean;
+  originalAvatarFile: File | null;
+  croppedAvatarFile: File | null;
+  setOriginalAvatarPath: any;
+  setSmallAvatarPath: any;
+  currentAvatarImage: any;
+
   setChosenFile: any;
   setImageErrorMessage: any;
-  setCroppedAvatar: any;
-  setCroppedAvatarUrl: any;
-  handleDisplayModal: any;
-  originalAvatarSource: any;
-  setOriginalAvatarSource: any;
-  originalAvatarSourceUrl: any;
-  setOriginalAvatarSourceUrl: any;
 }
 
-const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
-  {
-    avatarState,
-    isAvatarDeleted,
-    setIsAvatarDeleted,
-    setChosenFile,
-    setImageErrorMessage,
-    setCroppedAvatar,
-    setCroppedAvatarUrl,
-    handleDisplayModal,
-    setOriginalAvatarSource,
-    originalAvatarSourceUrl,
-    setOriginalAvatarSourceUrl,
-  }: Props,
-  ref,
-) {
+export default function ProfileEditAvatar({
+  setCroppedAvatarFile,
+  avatarDeletedOrNotUploadedInitially,
+  setOriginalAvatarFile,
+  setCroppedAvatarUrl,
+  originalAvatarUrl,
+  setOriginalAvatarUrl,
+  originalAvatarFile,
+  croppedAvatarFile,
+  setOriginalAvatarPath,
+  setSmallAvatarPath,
+  currentAvatarImage,
+
+  setChosenFile,
+  setImageErrorMessage,
+}: Props) {
+  const profileAvatarRef = React.useRef<HTMLDivElement | null>(null);
+
   const onSelectAvatar = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setImageErrorMessage("");
@@ -57,88 +63,96 @@ const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
         imageElement.src = imageUrl;
 
         imageElement.addEventListener("load", (e) => {
-          // @ts-ignore
-          const width = e.currentTarget.width;
-          // @ts-ignore
-          const height = e.currentTarget.height;
+          const target = e.currentTarget as HTMLImageElement;
+          if (!target) return;
+
+          const width = target.width;
+          const height = target.height;
           if (width < MIN_DIMENSION_AVATAR || MIN_DIMENSION_AVATAR > height) {
             setChosenFile("avatar");
             setImageErrorMessage(
               "Минимальный размер изображения – 99 x 99 пикс.",
             );
-            setOriginalAvatarSource(undefined);
-            setOriginalAvatarSourceUrl("");
+            setOriginalAvatarFile(null);
+            setOriginalAvatarUrl("");
           } else {
-            setOriginalAvatarSource(file);
-            setOriginalAvatarSourceUrl(imageUrl);
+            setOriginalAvatarFile(file);
+            setOriginalAvatarUrl(imageUrl);
           }
         });
       });
       reader.readAsDataURL(file);
     },
-    [
-      setOriginalAvatarSource,
-      setOriginalAvatarSourceUrl,
-      setChosenFile,
-      setImageErrorMessage,
-    ],
+    [setOriginalAvatarFile, setOriginalAvatarUrl],
   );
 
   const deleteAvatar = React.useCallback(() => {
-    setIsAvatarDeleted(true);
+    setOriginalAvatarPath("");
+    setSmallAvatarPath("");
+
+    setOriginalAvatarFile(null);
+    setCroppedAvatarFile(null);
     setCroppedAvatarUrl("");
-    setCroppedAvatar(undefined);
-  }, [setCroppedAvatarUrl, setCroppedAvatar, setIsAvatarDeleted]);
+    setCroppedAvatarFile(null);
+  }, []);
 
   const handleUploadButtonClick = () => {
-    // @ts-ignore
-    document.getElementById("avatar-upload").click();
+    document.getElementById("avatar-upload")?.click();
   };
 
   const handleUploadButtonClick2 = () => {
-    // @ts-ignore
-    document.getElementById("avatar-upload2").click();
+    document.getElementById("avatar-upload-2")?.click();
   };
 
+  const handleHideModalContentClick = React.useCallback((e: any) => {
+    let elem = e.target;
+    if (elem.classList.contains("modal")) {
+      elem.style.display = "none";
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (profileAvatarRef.current) {
+      profileAvatarRef.current.style.display =
+        originalAvatarFile && originalAvatarUrl ? "block" : "none";
+    }
+  }, [originalAvatarFile, originalAvatarUrl]);
+
+  React.useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && profileAvatarRef.current) {
+        profileAvatarRef.current.style.display = "none";
+      }
+    };
+    document.addEventListener("keydown", handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, []);
+
   return (
-    <div className={styles.avatarContainer}>
+    <div className={styles.root}>
       <div className={styles.avatarContainerTitle}>Фото профиля</div>
-      <div className={styles.bannerContainerDescription}>
+      <div className={styles.avatarContainerDescription}>
         Фото профиля показывается, например, рядом с вашими видео или
         комментариями на сайте.
       </div>
-      <div style={{ display: "flex", marginTop: "8px" }}>
+      <div className={styles.avatarUploadContainer}>
         <div className={styles.avatarBackground}>
           <NextImage
-            src={avatarState}
+            src={currentAvatarImage}
             className={styles.avatarImage}
             width={140}
             height={140}
             alt={""}
           />
         </div>
-        <div className={styles.avatarUploadContainer}>
+        <div className={styles.avatarGuideAndUploadContainer}>
           <div className={styles.avatarGuide}>
             Рекомендуем использовать изображение размером не менее 98 х 98
             пикселей в формате PNG, JPEG или GIF. Анимированные картинки
             загружать нельзя. Размер файла – не более 4 МБ.
           </div>
           <div className={styles.avatarActionsContainer}>
-            {avatarState === AVATAR_SMALL_PATH ||
-            isAvatarDeleted.toString() === "true" ? (
-              <div
-                className={styles.avatarUploadButton}
-                onClick={handleUploadButtonClick}
-              >
-                Загрузить
-                <input
-                  type={"file"}
-                  accept="image/png,image/jpeg,image/gif"
-                  onChange={onSelectAvatar}
-                  id="avatar-upload"
-                />
-              </div>
-            ) : (
+            {avatarDeletedOrNotUploadedInitially ? (
               <>
                 <button
                   className={styles.avatarUploadButton}
@@ -147,9 +161,9 @@ const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
                   Изменить
                   <input
                     type={"file"}
-                    accept="image/png,image/jpeg,image/gif"
+                    accept={acceptImageTypes}
                     onChange={onSelectAvatar}
-                    id="avatar-upload2"
+                    id="avatar-upload-2"
                   />
                 </button>
                 <button
@@ -159,24 +173,35 @@ const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
                   Удалить
                 </button>
               </>
+            ) : (
+              <div
+                className={styles.avatarUploadButton}
+                onClick={handleUploadButtonClick}
+              >
+                Загрузить
+                <input
+                  type={"file"}
+                  accept={acceptImageTypes}
+                  onChange={onSelectAvatar}
+                  id="avatar-upload"
+                />
+              </div>
             )}
             <div
-              onClick={handleDisplayModal}
-              style={{ overflow: "hidden" }}
-              // @ts-ignore
-              ref={ref}
-              className="modal_3"
+              ref={profileAvatarRef}
+              className={classNames("modal", styles.modalStyle)}
+              onClick={handleHideModalContentClick}
             >
-              <div className="modalContent_3" style={{ margin: "10% auto" }}>
-                {/*<AvatarCrop*/}
-                {/*  originalAvatarSourceUrl={originalAvatarSourceUrl}*/}
-                {/*  setOriginalAvatarSource={setOriginalAvatarSource}*/}
-                {/*  setOriginalAvatarSourceUrl={setOriginalAvatarSourceUrl}*/}
-                {/*  setCroppedAvatar={setCroppedAvatar}*/}
-                {/*  setCroppedAvatarUrl={setCroppedAvatarUrl}*/}
-                {/*  setIsAvatarDeleted={setIsAvatarDeleted}*/}
-                {/*  ref={ref}*/}
-                {/*/>*/}
+              <div className={classNames("modalContent", styles.modalStyle)}>
+                <ProfileAvatar
+                  // @ts-ignore
+                  originalAvatarUrl={originalAvatarUrl}
+                  setOriginalAvatarUrl={setOriginalAvatarUrl}
+                  setOriginalAvatarFile={setOriginalAvatarFile}
+                  setCroppedAvatarFile={setCroppedAvatarFile}
+                  setCroppedAvatarUrl={setCroppedAvatarUrl}
+                  ref={profileAvatarRef}
+                />
               </div>
             </div>
           </div>
@@ -184,6 +209,4 @@ const ProfileEditAvatar = React.forwardRef(function ProfileEditAvatar(
       </div>
     </div>
   );
-});
-
-export default ProfileEditAvatar;
+}

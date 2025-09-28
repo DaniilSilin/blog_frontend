@@ -54,11 +54,14 @@ export default function PostCreate({ slug }: Props) {
   const formValidation = React.useCallback(() => {
     const title_value = validateField(
       title,
+      // @ts-ignore
       null,
       titleValidator,
       setTitleError,
     );
+    // @ts-ignore
     const map_value = validateField(map, null, mapValidator, setMapError);
+    // @ts-ignore
     const body_value = validateField(body, null, bodyValidator, setBodyError);
 
     return title_value && map_value && body_value;

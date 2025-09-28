@@ -1,5 +1,6 @@
 const dataURLtoFile = (dataUrl: string, filename: string) => {
   const arr = dataUrl.split(",");
+  // @ts-ignore
   const mime = arr[0].match(/:(.*?);/)[1];
   const bstr = atob(arr[1]);
   let n = bstr.length;

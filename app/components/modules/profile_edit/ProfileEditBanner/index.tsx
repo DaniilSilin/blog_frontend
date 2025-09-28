@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
 import NextImage from "next/image";
 
-import SelectImage from "@/app/contexts/SelectImage";
 // import BannerCrop from "./BannerCrop";
 
 const MIN_BANNER_SIZE_IN_MB = 50331648;
@@ -26,22 +25,19 @@ export interface Props {
   setOriginalBannerSourceUrl: any;
 }
 
-const ProfileEditBanner = React.forwardRef(function ProfileEditBanner(
-  {
-    bannerState,
-    isBannerDeleted,
-    setIsBannerDeleted,
-    setImageErrorMessage,
-    setChosenFile,
-    setCroppedBanner,
-    setCroppedBannerUrl,
-    handleDisplayModal,
-    setOriginalBannerSource,
-    originalBannerSourceUrl,
-    setOriginalBannerSourceUrl,
-  }: Props,
-  ref,
-) {
+export default function ProfileEditBanner({
+  bannerState,
+  isBannerDeleted,
+  setIsBannerDeleted,
+  setImageErrorMessage,
+  setChosenFile,
+  setCroppedBanner,
+  setCroppedBannerUrl,
+  handleDisplayModal,
+  setOriginalBannerSource,
+  originalBannerSourceUrl,
+  setOriginalBannerSourceUrl,
+}: Props) {
   const onSelectBannerImage = React.useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setImageErrorMessage("");
@@ -86,13 +82,11 @@ const ProfileEditBanner = React.forwardRef(function ProfileEditBanner(
     ],
   );
 
-  const onSelectBanner = React.useContext(SelectImage);
-
   const deleteBanner = React.useCallback(() => {
     setIsBannerDeleted(true);
     setCroppedBannerUrl("");
     setCroppedBanner(undefined);
-  }, [setCroppedBannerUrl, setCroppedBanner, setIsBannerDeleted]);
+  }, []);
 
   const handleUploadButtonClick = () => {
     const input = document.querySelector('input[type="file"]');
@@ -189,6 +183,4 @@ const ProfileEditBanner = React.forwardRef(function ProfileEditBanner(
       </div>
     </div>
   );
-});
-
-export default ProfileEditBanner;
+}

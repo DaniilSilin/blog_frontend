@@ -78,6 +78,7 @@ export default function Register() {
     );
     const passwordConfirmField = validateField(
       confirmPassword,
+      // @ts-ignore
       password,
       confirmPasswordValidator,
       setConfirmPasswordError,

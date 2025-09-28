@@ -2,32 +2,42 @@
   padding: 12px 12px 12px 0;
 }
 
-.bannerAndAvatarContainer {
-  padding: 12px 12px 12px 0;
+.avatarContainerTitle {
+  font-size: 15px;
+  font-weight: 700;
 }
 
-.bannerUploadContainer {
-  width: 330px;
-  margin-left: 30px;
+.avatarContainerDescription {
+  color: var(--text-color-primary-1);
 }
 
 .avatarUploadContainer {
+  display: flex;
+  margin-top: 8px;
+}
+
+.avatarBackground {
+  width: 290px;
+  height: 160px;
+  background-color: var(--body-background-1);
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.avatarImage {
+  border-radius: 50%;
+}
+
+.avatarGuideAndUploadContainer {
   width: 330px;
   margin-left: 30px;
 }
 
 .avatarGuide {
   font-size: 13px;
-}
-
-.previewBannerUploadContainer {
-  background-color: #0f0f0f;
-  border-radius: 10px;
-}
-
-.bannerActionsContainer {
-  display: flex;
-  margin-top: 8px;
+  color: var(--text-color-primary-1);
 }
 
 .avatarActionsContainer {
@@ -35,40 +45,18 @@
   margin-top: 8px;
 }
 
-.avatarContainer {
-  padding: 12px 12px 12px 0;
-}
-
-.avatarContainerTitle {
-  font-size: 15px;
-  font-weight: 700;
-}
-
 .avatarUploadButton {
-  padding: 0 16px;
   font-size: 14px;
+  font-weight: 600;
+  padding: 0 16px;
   line-height: 36px;
   border-radius: 18px;
-  color: white;
-  background-color: #3e3e3e;
-}
-
-.avatarDeleteButton {
-  margin-left: 8px;
-  padding: 0 16px;
-  font-size: 14px;
-  line-height: 36px;
-  border-radius: 18px;
-  color: white;
-  background-color: #3e3e3e;
-}
-
-.avatarDeleteButton:hover {
-  background-color: #535353;
+  color: var(--text-color-primary);
+  background-color: var(--button-background-reversed-7);
 }
 
 .avatarUploadButton:hover {
-  background-color: #535353;
+  background-color: var(--button-hover-background-6);
   cursor: pointer;
 }
 
@@ -80,17 +68,25 @@
   display: none;
 }
 
-.avatarImage {
-  border-radius: 50%;
-  border: 2px solid white;
+.avatarDeleteButton {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 8px;
+  padding: 0 16px;
+  line-height: 36px;
+  border-radius: 18px;
+  color: var(--text-color-primary);
+  background-color: var(--button-background-reversed-7);
 }
 
-.avatarBackground {
-  width: 290px;
-  height: 160px;
-  background-color: #1f1f1f;
-  align-items: center;
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
+.avatarDeleteButton:hover {
+  background-color: var(--button-hover-background-6);
+}
+
+.modalStyle {
+  overflow: hidden;
+}
+
+.modalContentStyle {
+  margin: 10% auto;
 }

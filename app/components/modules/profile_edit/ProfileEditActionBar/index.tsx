@@ -2,15 +2,20 @@ import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import { logout as reduxLogout } from "@/app/store/reducers/slices/djangoSlice";
+import { useDispatch } from "react-redux";
+
+import ProfileDeleteMessageModal from "./ProfileDeleteMessageModal";
 
 import styles from "./profile_edit_action_bar.module.css";
+import CookieHelper from "@/app/store/cookieHelper";
 
 export interface Props {
   username: string;
   hasProfileDataChanged: boolean;
   isReadyToSubmit: boolean;
   updateProfileData: () => void;
-  setToDefaultHandleChange: any;
+  setToDefault: () => void;
 }
 
 export default function ProfileEditActionBar({
@@ -18,91 +23,83 @@ export default function ProfileEditActionBar({
   hasProfileDataChanged,
   isReadyToSubmit,
   updateProfileData,
-  setToDefaultHandleChange,
+  setToDefault,
 }: Props) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [displaySubmitDeleteBlogModal, setDisplaySubmitDeleteBlogModal] =
     React.useState(false);
-  const [deleteBlog] = DjangoService.useDeleteBlogMutation();
+  const [deleteProfile] = DjangoService.useDeleteProfileMutation();
 
-  const deleteBlogFunction = async () => {
-    // @ts-ignore
-    const result = await deleteBlog({ username });
-    // @ts-ignore
-    if (!result.error) {
-      router.push("/");
-    }
-  };
+  const freezeBody = React.useCallback(
+    () => document.querySelector(".modal")?.classList.add("freeze"),
+    [],
+  );
+  const unfreezeBody = React.useCallback(
+    () => document.querySelector(".modal")?.classList.remove("freeze"),
+    [],
+  );
 
+  //
   const handleDisplayModal = React.useCallback(
     (e: any) => {
       let elem = e.target;
       if (displaySubmitDeleteBlogModal) {
         if (
-          elem.className.startsWith("modal_3") ||
+          elem.className.startsWith("modal") ||
           elem.className.endsWith("close_5")
         ) {
           if (elem.className.endsWith("close_5")) {
             elem = elem.parentNode.parentNode.parentNode;
           }
           elem.style.display = "none";
+          unfreezeBody();
           setDisplaySubmitDeleteBlogModal(false);
         }
       } else {
         let modalNode = null;
-        if (elem.firstElementChild.className.startsWith("modal_3")) {
+        if (elem.firstElementChild.className.startsWith("modal")) {
           modalNode = elem.firstElementChild;
           modalNode.style.display = "block";
+          freezeBody();
           setDisplaySubmitDeleteBlogModal(true);
         }
       }
     },
-    [displaySubmitDeleteBlogModal],
+    [displaySubmitDeleteBlogModal, freezeBody, unfreezeBody],
   );
+  //
+
+  const handleDeleteAccountButtonClick = async () => {
+    const result = await deleteProfile({ username });
+    // @ts-ignore
+    if (!result.error) {
+      setDisplaySubmitDeleteBlogModal(false);
+      CookieHelper.removeCookie("token");
+      dispatch(reduxLogout());
+      router.push("/");
+    }
+  };
 
   return (
     <div className={styles.root}>
       <div className={styles.selectionTypeContainer}>
-        <div className={styles.mainType}>Основные</div>
+        <div>Основные</div>
       </div>
-      <div className={styles.buttonsContainer}>
+      <div className={styles.actionButtonsContainer}>
         <button className={styles.deleteButton} onClick={handleDisplayModal}>
-          Удалить блог
-          <div className={"modal_3"}>
-            <div
-              className={"modalContent_3"}
-              style={{
-                height: "150px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className={styles.deleteMessage}>
-                Вы действительно хотите удалить блог?
-              </div>
-              <div className={styles.deleteMessageButtons}>
-                <div
-                  onClick={deleteBlogFunction}
-                  className={styles.submitDeleteButton}
-                >
-                  Да
-                </div>
-                <div
-                  className={classNames(styles.cancelDeleteButton, "close_5")}
-                >
-                  Отмена
-                </div>
-              </div>
-            </div>
-          </div>
+          Удалить аккаунт
+          <ProfileDeleteMessageModal
+            setDisplaySubmitDeleteBlogModal={setDisplaySubmitDeleteBlogModal}
+            handleDeleteAccountButtonClick={handleDeleteAccountButtonClick}
+          />
         </button>
         <button
           className={classNames(styles.cancelButton, {
             [styles.active]: hasProfileDataChanged,
           })}
           disabled={!hasProfileDataChanged}
-          onClick={setToDefaultHandleChange}
+          onClick={setToDefault}
         >
           Отмена
         </button>
