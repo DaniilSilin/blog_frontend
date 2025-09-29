@@ -9,7 +9,7 @@ export default function YandexCaptcha({ setToken }: Props) {
   return (
     <div>
       <SmartCaptcha
-        sitekey={"ysc1_2ZI0asoXIE1TtagkykBzdtbUyfUFUtJR9WuSJ1gK4e4cd413"}
+        sitekey={process.env.NEXT_PUBLIC_YANDEX_CAPTCHA || ""}
         language={"ru"}
         onSuccess={setToken}
       />

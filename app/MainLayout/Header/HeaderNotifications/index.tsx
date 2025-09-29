@@ -83,7 +83,7 @@ export default function HeaderNotifications() {
             <div style={{ marginLeft: "16px" }}>Уведомления</div>
           </div>
           <div style={{ overflowY: "auto", maxHeight: "430px" }}>
-            {notificationList.results.map(
+            {notificationList?.results.map(
               (notification: NotificationType, index: number) => (
                 <div
                   key={index}

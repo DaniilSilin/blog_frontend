@@ -56,42 +56,6 @@ const siderMenu = [
     label: "Понравившиеся",
     href: `/liked`,
   },
-  {
-    key: "7",
-    icon: <IoHomeOutline size={24} />,
-    href: "/",
-    label: "Главная",
-  },
-  {
-    key: "8",
-    icon: <RiArticleLine size={24} />,
-    href: "/post/list",
-    label: "Публикации",
-  },
-  {
-    key: "9",
-    icon: <FaBook size={24} />,
-    href: "/blog/list",
-    label: "Каналы",
-  },
-  {
-    key: "10",
-    icon: <CiBookmark size={24} />,
-    href: "/bookmarks",
-    label: "Сохранённое",
-  },
-  {
-    key: "11",
-    icon: <IoFolderOpenOutline size={24} />,
-    href: "/subscriptions",
-    label: "Подписки",
-  },
-  {
-    key: "12",
-    icon: <AiOutlineLike size={24} />,
-    label: "Понравившиеся",
-    href: `/liked`,
-  },
 ];
 
 export default function MainSider({

@@ -8,13 +8,18 @@ import { HYDRATE } from "next-redux-wrapper";
 import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";
 
-const API_URL = "http://127.0.0.1:3001/api/v1/";
+function getApiUrl() {
+  if (typeof window === "undefined") {
+    return process.env.API_URL;
+  }
+  return process.env.NEXT_PUBLIC_API_URL;
+}
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
   tagTypes: ["Comment", "Post", "Blog", "Invite", "Notification"],
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
+    baseUrl: getApiUrl(),
     prepareHeaders: (headers, api) => {
       const token =
         typeof window === "undefined"
