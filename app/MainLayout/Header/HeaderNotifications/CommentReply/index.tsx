@@ -17,6 +17,13 @@ export interface Props {
   setDisplayNotificationListWindow: any;
 }
 
+function getApiUrl() {
+  if (typeof window === "undefined") {
+    return process.env.API_URL;
+  }
+  return process.env.NEXT_PUBLIC_API_URL;
+}
+
 const BASE_URL = getApiUrl();
 
 export default function CommentReply({

@@ -1,6 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { Register, Login } from "@/app/types";
 
+function getApiUrl() {
+  if (typeof window === "undefined") {
+    return process.env.API_URL;
+  }
+  return process.env.NEXT_PUBLIC_API_URL;
+}
+
 export const userAPI = createApi({
   reducerPath: "userAPI",
   baseQuery: fetchBaseQuery({ baseUrl: getApiUrl() }),
