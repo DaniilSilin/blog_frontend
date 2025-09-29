@@ -17,7 +17,7 @@ export interface Props {
   setDisplayNotificationListWindow: any;
 }
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = getApiUrl();
 
 export default function CommentReply({
   slug,

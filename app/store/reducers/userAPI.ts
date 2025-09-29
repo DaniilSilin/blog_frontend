@@ -1,11 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { Register, Login } from "@/app/types";
 
-const BASE_URL = "http://127.0.0.1:8000/";
-
 export const userAPI = createApi({
   reducerPath: "userAPI",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: getApiUrl() }),
   endpoints: (builder) => ({
     registerUser: builder.mutation<Register, undefined>({
       query: (register) => ({
