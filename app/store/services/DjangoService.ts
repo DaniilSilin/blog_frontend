@@ -121,10 +121,10 @@ const DjangoService = createApi({
           : [{ type: "Post", id: "LIST" }],
     }),
     register: builder.mutation({
-      query: ({ first_name, last_name, email, username, password }) => ({
+      query: ({ first_name, last_name, email, username, password, token }) => ({
         url: "register/",
         method: "POST",
-        body: { first_name, last_name, email, username, password },
+        body: { first_name, last_name, email, username, password, token },
       }),
     }),
     getLogin: builder.mutation<Login, { username: string; password: string }>({

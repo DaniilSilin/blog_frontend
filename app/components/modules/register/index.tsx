@@ -121,7 +121,9 @@ export default function Register() {
         email,
         username,
         password,
+        token,
       });
+      console.log(register);
       // @ts-ignore
       if (!register.error) {
         router.push("/login");

@@ -13,7 +13,14 @@ export interface Props {
   invite: InviteType;
 }
 
-const BASE_URL = "http://127.0.0.1:8000/";
+function getApiUrl() {
+  if (typeof window === "undefined") {
+    return process.env.API_URL;
+  }
+  return process.env.NEXT_PUBLIC_API_URL;
+}
+
+const BASE_URL = getApiUrl();
 
 export default function Invite({ invite }: Props) {
   const [acceptInvite] = DjangoService.useAcceptInviteMutation();

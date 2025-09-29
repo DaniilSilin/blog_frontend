@@ -8,7 +8,14 @@ import CommunityCommentEditInput from "@/app/components/modules/form/CommunityCo
 import styles from "./comment_edit_mode.module.css";
 import DjangoService from "@/app/store/services/DjangoService";
 
-const BASE_URL = "http://127.0.0.1:8000/";
+function getApiUrl() {
+  if (typeof window === "undefined") {
+    return process.env.API_URL;
+  }
+  return process.env.NEXT_PUBLIC_API_URL;
+}
+
+const BASE_URL = getApiUrl();
 
 export interface Props {
   slug: string;
