@@ -11,18 +11,39 @@ export interface Props {
 }
 
 export default function ShareButton({ post }: Props) {
+  const shareMenuContainer = React.useRef<HTMLDivElement | null>(null);
   const [displayShareMenu, setDisplayShareMenu] = React.useState(false);
 
   const handleShowShareMenu = React.useCallback(() => {
-    setDisplayShareMenu(true);
+    setDisplayShareMenu((displayShareMenu) => !displayShareMenu);
   }, []);
 
+  React.useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      if (!shareMenuContainer.current) return;
+      const isClickInsideMenu = shareMenuContainer.current.contains(
+        e.target as Node,
+      );
+      if (displayShareMenu && !isClickInsideMenu) {
+        setDisplayShareMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [displayShareMenu]);
+
   return (
-    <div className={styles.root} onClick={handleShowShareMenu}>
-      <TiArrowForwardOutline className={styles.shareIcon} size={20} />
-      <div>Поделиться</div>
+    <div ref={shareMenuContainer} className={styles.root}>
+      <button className={styles.shareButton} onClick={handleShowShareMenu}>
+        <TiArrowForwardOutline className={styles.shareIcon} size={20} />
+        <div>Поделиться</div>
+      </button>
       {displayShareMenu && (
-        <ShareMenu setDisplayShareMenu={setDisplayShareMenu} post={post} />
+        <ShareMenu
+          setDisplayShareMenu={setDisplayShareMenu}
+          displayShareMenu={displayShareMenu}
+          post={post}
+        />
       )}
     </div>
   );

@@ -123,6 +123,12 @@ body {
   --spinner-color: #393939;
 }
 
+@media (hover: hover) {
+  button:hover {
+    background-color: transparent;
+  }
+}
+
 .modal {
   display: none;
   position: fixed; /* Stay in place */

@@ -1,11 +1,12 @@
 .root {
   position: absolute;
   background-color: var(--popup-background);
-  padding: 15px;
+  padding: 10px;
   border-radius: 15px;
   z-index: 120;
   color: var(--text-color-primary);
   width: inherit;
+  top: 110%;
 }
 
 @media (max-width: 500px) {
@@ -13,11 +14,14 @@
     position: fixed;
     bottom: 0;
     border-radius: 15px 15px 0 0;
+    top: auto;
   }
 }
 
 .shareListContainer {
-  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 @media (max-width: 500px) {
@@ -36,8 +40,4 @@
   font-weight: 600;
   color: var(--text-color-primary);
   margin-bottom: 10px;
-}
-
-.shareTitle:hover {
-  cursor: pointer;
 }

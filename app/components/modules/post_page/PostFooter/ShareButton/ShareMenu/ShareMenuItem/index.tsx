@@ -20,17 +20,17 @@ export default function ShareMenuItem({
   const copyToClipboard = React.useContext(ClipboardTextNotification);
 
   const handleShareMenuItemButtonClick = React.useCallback(() => {
-    if (!menuItem.isLink) {
+    if (!menuItem.href) {
       copyToClipboard(post);
     }
     setDisplayShareMenu(false);
-  }, []);
+  }, [post]);
 
   return (
     <>
       <button className={styles.root} onClick={handleShareMenuItemButtonClick}>
         <div className={styles.shareIcon}>{menuItem.icon}</div>
-        {menuItem.isLink ? (
+        {!!menuItem.href ? (
           <div>
             <Link
               className={styles.shareMenuListItemTitle}

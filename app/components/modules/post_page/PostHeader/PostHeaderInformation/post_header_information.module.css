@@ -1,5 +1,6 @@
 .root {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .root > div:not(:first-child)::before {
@@ -11,7 +12,6 @@
 .postHeaderDate {
   font-weight: 600;
   color: var(--text-color-primary-1);
-  white-space: nowrap;
 }
 
 .postHeaderAuthor {
@@ -24,7 +24,4 @@
 .postHeaderViews {
   font-weight: 600;
   color: var(--text-color-primary-1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

@@ -11,11 +11,9 @@ export interface Props {
 }
 
 export default function PostHeaderInformation({ post }: Props) {
-  const [dateCollapseMode, setIsDateCollapseMode] = React.useState(1);
   const today = Date.now();
 
   const countOfViewsTitle = React.useMemo(() => {
-    // @ts-ignore
     const countOfViews = post?.views.toString();
 
     if (countOfViews.slice(-1) === "1" && countOfViews.slice(-2) !== "11") {
@@ -34,36 +32,6 @@ export default function PostHeaderInformation({ post }: Props) {
     }
   }, [post]);
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 425) {
-        setIsDateCollapseMode(1);
-      } else if (window.innerWidth <= 425 && window.innerWidth > 385) {
-        setIsDateCollapseMode(2);
-      } else if (window.innerWidth <= 385) {
-        setIsDateCollapseMode(3);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const currentDate = React.useMemo(() => {
-    switch (dateCollapseMode) {
-      case 1:
-        return moment(post.created_at).diff(today, "days") < 26
-          ? moment(post.created_at).format("DD MMMM YYYY HH:mm")
-          : moment(post.created_at).fromNow();
-      case 2:
-        return moment(post.created_at).format("DD.MM.YYYY HH:mm");
-      case 3:
-        return moment(post.created_at).format("DD.MM.YY");
-      default:
-        return moment(post.created_at).fromNow();
-    }
-  }, [dateCollapseMode]);
-
   return (
     <div className={styles.root}>
       {!post?.author_is_hidden && (
@@ -73,7 +41,11 @@ export default function PostHeaderInformation({ post }: Props) {
           </Link>
         </div>
       )}
-      <div className={styles.postHeaderDate}>{currentDate}</div>
+      <div className={styles.postHeaderDate}>
+        {moment(post.created_at).diff(today, "days") < 26
+          ? moment(post.created_at).format("DD MMMM YYYY HH:mm")
+          : moment(post.created_at).fromNow()}
+      </div>
       <div className={styles.postHeaderViews}>{countOfViewsTitle}</div>
     </div>
   );

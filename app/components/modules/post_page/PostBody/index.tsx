@@ -12,8 +12,6 @@ export default function PostBody({ post }: Props) {
   const [isBodyExpanded, setIsBodyExpanded] = React.useState(false);
   const [isEnoughTextSpace, setIsEnoughTextSpace] = React.useState(true);
 
-  const bodyRef = React.useRef(null);
-
   const handleExpandTextOnClick = React.useCallback(() => {
     setIsBodyExpanded((isExpanded) => !isExpanded);
   }, []);

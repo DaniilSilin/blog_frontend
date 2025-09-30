@@ -2,8 +2,8 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  padding: 7px 10px;
   width: fit-content;
   background-color: var(--button-background);
   border-radius: 10px;
@@ -18,8 +18,16 @@
   }
 }
 
-.root:hover {
-  cursor: pointer;
+.shareButton {
+  display: flex;
+  width: 100%;
+  padding: 7px 10px;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: var(--button-hover-background);
+}
+
+.shareButton:hover {
   background-color: var(--button-hover-background);
 }
 

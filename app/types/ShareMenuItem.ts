@@ -5,5 +5,4 @@ export interface ShareMenuItemType {
   title: string;
   icon: ReactNode;
   href: string;
-  isLink: boolean;
 }

@@ -51,10 +51,12 @@ export default function PostList() {
     <div>
       <h1>Публикации</h1>
       <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
-      {postPaginatedList?.results.map((post: PostType, index: number) => (
-        <PostItem key={index} post={post} />
+      {postPaginatedList?.results.map((post: PostType) => (
+        <PostItem key={post.id} post={post} />
       ))}
-      {isFetching && <div className={"loader"}></div>}
+      {isFetching && (
+        <div style={{ margin: "0 auto" }} className={"loader"}></div>
+      )}
     </div>
   );
 }
