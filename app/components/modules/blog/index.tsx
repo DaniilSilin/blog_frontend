@@ -29,13 +29,8 @@ const cleanParams = (
 export default function BlogList() {
   const router = useRouter();
   const [page, setPage] = React.useState<number>(1);
-  const {
-    data: blogList,
-    isFetching,
-    refetch: refetchBlogList,
-  } = DjangoService.useGetBlogPaginatedListQuery(
-    cleanParams(router.query, page),
-  );
+  const { data: blogList, isFetching } =
+    DjangoService.useGetBlogPaginatedListQuery(cleanParams(router.query, page));
 
   React.useEffect(() => {
     const onScroll = () => {
@@ -57,8 +52,8 @@ export default function BlogList() {
     <div className={styles.root}>
       <h1>Блоги</h1>
       <Filter setPage={setPage} cleanParams={cleanParams(router.query, page)} />
-      {blogList?.results.map((blog: BlogType, index: number) => (
-        <BlogItem key={index} blog={blog} />
+      {blogList?.results.map((blog: BlogType) => (
+        <BlogItem key={blog.id} blog={blog} />
       ))}
     </div>
   );

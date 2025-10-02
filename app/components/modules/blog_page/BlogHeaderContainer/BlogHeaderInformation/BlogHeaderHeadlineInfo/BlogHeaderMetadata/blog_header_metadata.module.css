@@ -1,0 +1,39 @@
+.root {
+  white-space: normal;
+}
+
+.blogTitleContainer {
+  font-size: 36px;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: normal;
+  color: var(--text-color-primary)
+}
+
+.blogTitle {
+  font-weight: 700;
+}
+
+.blogMetadataContainer {
+  display: flex;
+}
+
+.blogContentCountersContainer {
+  display: flex;
+  color: var(--text-color-primary-1);
+}
+
+.blogPostsCounterContainer {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.blogSubscribersCounterContainer {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.delimiter {
+  margin: 0 4px;
+}
+

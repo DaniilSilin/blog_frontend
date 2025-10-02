@@ -1,22 +1,10 @@
-.root {
-  /*display: flex;*/
-}
-
 .blogTitle {
   font-size: 36px;
-  margin-right: 10px;
 }
 
-.blogInfo {
-  margin-right: 10px;
-  margin-left: 10px;
-}
 
-.blogContainer {
-  font-size: 16px;
-  width: 1000px;
-  padding: 15px;
-}
+
+
 
 .blogUpdateContainer {
   padding: 50px 15px 15px 15px;
@@ -54,10 +42,6 @@
 .unsubscribeButton:hover {
   cursor: pointer;
   background-color: #303030;
-}
-
-.delimiter {
-  margin: 0 4px;
 }
 
 .postsContainer {
@@ -107,16 +91,6 @@
 
 .postBody {
   margin: 15px 0;
-}
-
-.blogDescription {
-  margin: 5px 0;
-  color: black;
-}
-
-.blogDescription:hover {
-  cursor: pointer;
-  color: gray;
 }
 
 .modal {

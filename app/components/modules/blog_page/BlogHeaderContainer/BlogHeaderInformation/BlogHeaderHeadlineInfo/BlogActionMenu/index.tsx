@@ -25,16 +25,6 @@ export default function BlogActionMenu({ blog, slug }: Props) {
     blogSubscription({ slug });
   };
 
-  // React.useEffect(() => {
-  //   const handler = (e: MouseEvent) => {
-  //     if (!subscribeButtonRef.current.contains(e.target)) {
-  //       setOpenSubscribePopup(false);
-  //     }
-  //     document.addEventListener("mousedown", handler);
-  //     return () => document.removeEventListener("mousedown", handler);
-  //   };
-  // });
-
   if (user.username === blog?.owner.username) {
     return (
       <Link href={`/blog/${blog.slug}/editor/settings/`}>

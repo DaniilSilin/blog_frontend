@@ -1,0 +1,10 @@
+
+.blogDescription {
+  margin: 5px 0;
+  color: black;
+}
+
+.blogDescription:hover {
+  cursor: pointer;
+  color: gray;
+}

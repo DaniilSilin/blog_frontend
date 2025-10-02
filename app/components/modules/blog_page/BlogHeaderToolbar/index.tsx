@@ -17,7 +17,7 @@ export default function BlogHeaderToolbar({ slug }: Props) {
       {blogToolbarList.map((toolbarItemButton: Record<string, any>) => (
         <BlogHeaderToolbarItem
           key={toolbarItemButton.id}
-          item={toolbarItemButton}
+          toolbarItemButton={toolbarItemButton}
         />
       ))}
     </div>

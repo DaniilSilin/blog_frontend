@@ -6,20 +6,20 @@ import classNames from "classnames";
 import styles from "./blog_header_toolbar_item.module.css";
 
 export interface Props {
-  item: any;
+  toolbarItemButton: Record<string, any>;
 }
 
-export default function BlogHeaderToolbarItem({ item }: Props) {
+export default function BlogHeaderToolbarItem({ toolbarItemButton }: Props) {
   const router = useRouter();
 
   return (
     <Link
       className={classNames(styles.toolbarButton, {
-        [styles.active]: router.pathname === item.pathname,
+        [styles.active]: router.pathname === toolbarItemButton.pathname,
       })}
-      href={item.href}
+      href={toolbarItemButton.href}
     >
-      <div>{item.title}</div>
+      <div>{toolbarItemButton.title}</div>
     </Link>
   );
 }
