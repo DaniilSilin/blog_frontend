@@ -22,14 +22,7 @@ export interface Props {
   post_id: number;
 }
 
-function getApiUrl() {
-  if (typeof window === "undefined") {
-    return process.env.API_URL;
-  }
-  return process.env.NEXT_PUBLIC_API_URL;
-}
-
-const BASE_URL = getApiUrl();
+const BASE_URL = "http://127.0.0.1:8000/";
 
 export default function NotificationCommentaryMain({
   slug,

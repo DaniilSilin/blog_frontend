@@ -1,12 +1,11 @@
 import React from "react";
-import Commentary from "@/app/components/modules/comment/Commentary";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import CommentList from "@/app/components/modules/CommentList";
-import NotificationCommentList from "@/app/MainLayout/Header/HeaderNotifications/NotificationCommentList";
-import NotificationCommentary from "@/app/MainLayout/Header/HeaderNotifications/NotificationCommentary";
-import { CommentType, PostType } from "@/app/types";
 
-// import styles from "@/app/components/modules/comment/comment.module.css";
+import { CommentType, PostType } from "@/app/types";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
+import NotificationCommentList from "../index";
+import NotificationCommentary from "@/app/MainLayout/Header/HeaderNotifications/NotificationCommentary";
+
 import styles from "./notification_comment.module.css";
 
 export interface Props {
@@ -16,7 +15,6 @@ export interface Props {
   post_id: number;
   comment: CommentType;
   post: PostType;
-  isReplyToParentComment: boolean;
 }
 
 export default function NotificationComment({
@@ -26,7 +24,6 @@ export default function NotificationComment({
   slug,
   comment,
   post,
-  isReplyToParentComment,
 }: Props) {
   const [shouldShowReplies, setShouldShowReplies] = React.useState(false);
   const toggleReplies = React.useCallback(() => {
@@ -34,22 +31,21 @@ export default function NotificationComment({
   }, []);
 
   const countOfRepliesTitle = React.useMemo(() => {
-    // @ts-ignore
-    const countOfReplies = comment?.count_of_replies.toString();
+    const repliesCount = comment?.replies_count.toString();
 
-    if (countOfReplies.slice(-1) === "1" && countOfReplies.slice(-2) !== "11") {
-      return `${countOfReplies} ответ`;
+    if (repliesCount.slice(-1) === "1" && repliesCount.slice(-2) !== "11") {
+      return `${repliesCount} ответ`;
     } else if (
-      (countOfReplies.slice(-1) === "2" ||
-        countOfReplies.slice(-1) === "3" ||
-        countOfReplies.slice(-1) === "4") &&
-      countOfReplies.slice(-2) !== "12" &&
-      countOfReplies.slice(-2) !== "13" &&
-      countOfReplies.slice(-2) !== "14"
+      (repliesCount.slice(-1) === "2" ||
+        repliesCount.slice(-1) === "3" ||
+        repliesCount.slice(-1) === "4") &&
+      repliesCount.slice(-2) !== "12" &&
+      repliesCount.slice(-2) !== "13" &&
+      repliesCount.slice(-2) !== "14"
     ) {
-      return `${countOfReplies} ответа`;
+      return `${repliesCount} ответа`;
     } else {
-      return `${countOfReplies} ответов`;
+      return `${repliesCount} ответов`;
     }
   }, [comment]);
 
@@ -62,10 +58,8 @@ export default function NotificationComment({
         post_id={post_id}
         slug={slug}
         post={post}
-        isParent
-        isReplyToParentComment={isReplyToParentComment}
       />
-      {!!comment?.count_of_replies && (
+      {!!comment?.replies_count && (
         <div className={styles.commentRepliesContainer}>
           {!comment.forceRender && (
             <button

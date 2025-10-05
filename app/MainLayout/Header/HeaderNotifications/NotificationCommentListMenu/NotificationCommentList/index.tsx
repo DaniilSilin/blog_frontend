@@ -4,7 +4,7 @@ import DjangoService from "@/app/store/services/DjangoService";
 import { PostType, CommentType } from "@/app/types";
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
 
-import NotificationComment from "@/app/MainLayout/Header/HeaderNotifications/NotificationComment";
+import NotificationComment from "./NotificationComment";
 
 import styles from "./notification_comment_list.module.css";
 
@@ -14,8 +14,8 @@ export interface Props {
   slug: string;
   post_id: number;
   post: PostType;
-  isParent?: boolean;
   parent_id?: number;
+  isParent?: boolean;
 }
 
 const NotificationCommentList: FC<Props> = ({
@@ -61,20 +61,17 @@ const NotificationCommentList: FC<Props> = ({
 
   return (
     <div>
-      {notificationCommentList?.results.map(
-        (comment: CommentType, index: number) => (
-          <NotificationComment
-            key={index}
-            width={width}
-            height={height}
-            slug={slug}
-            post_id={post?.post_id}
-            comment={comment}
-            post={post}
-            isReplyToParentComment={true}
-          />
-        ),
-      )}
+      {notificationCommentList?.results.map((comment: CommentType) => (
+        <NotificationComment
+          key={comment.id}
+          width={width}
+          height={height}
+          slug={slug}
+          post_id={post?.post_id}
+          comment={comment}
+          post={post}
+        />
+      ))}
       {!!notificationCommentList?.next && !isParent && (
         <button onClick={loadMoreReplies} className={styles.showMoreReplies}>
           <MdOutlineSubdirectoryArrowRight

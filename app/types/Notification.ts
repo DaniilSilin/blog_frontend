@@ -1,7 +1,7 @@
 import { User, PostType } from "./index";
 
 export interface NotificationType {
-  pk: number;
+  id: number;
   addressee: User;
   post: PostType;
   text: string;

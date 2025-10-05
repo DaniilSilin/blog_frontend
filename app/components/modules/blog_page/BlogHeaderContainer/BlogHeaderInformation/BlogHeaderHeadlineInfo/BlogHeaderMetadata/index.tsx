@@ -7,7 +7,7 @@ export interface Props {
   blog: BlogType;
 }
 
-export default function BlogHeaderMetadata({ blog }) {
+export default function BlogHeaderMetadata({ blog }: Props) {
   const blogSubscribersTitle = React.useMemo(() => {
     // @ts-ignore
     const blogSubscribers = blog?.subscriberList.toString();

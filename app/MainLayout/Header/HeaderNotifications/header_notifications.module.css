@@ -5,12 +5,13 @@
 }
 
 .root:hover {
-  background-color: #1677ff;
+  background-color: var(--interface-background-hover-color);
 }
 
 .bellIcon {
   height: 100%;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .notificationMenu {
@@ -19,74 +20,9 @@
   width: 480px;
   height: 500px;
   position: absolute;
-  /*padding: 10px;*/
-  background-color: #001529;
+  background-color: var(--inteface-background-color);
   right: 120px;
   border: 2px solid #363738;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-}
-
-.notificationHeaderContainer {
-  height: 49px;
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  font-weight: 600;
-  border-bottom: 1px solid #535353;
-}
-
-.notificationContainer {
-  display: flex;
-  padding: 16px 16px 16px 0;
-}
-
-.notificationContainer:hover {
-  cursor: pointer;
-  background-color: #3e3e3e;
-}
-
-.notificationRenderer {
-  width: 4px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: blue;
-  margin: 24px 5px;
-}
-
-.notificationRendererIsRead {
-  width: 4px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: transparent;
-  margin: 24px 5px;
-}
-
-.avatarContainer {
-  display: flex;
-  margin-right: 16px;
-}
-
-.avatar {
-  border-radius: 50%;
-}
-
-.textContainer {
-  width: 250px;
-  line-height: 24px;
-  color: #f0f0f0;
-  word-break: break-word;
-  margin-bottom: 8px;
-}
-
-.postContainer {
-  margin: 0 16px;
-}
-
-.additionalMenu {
-
-}
-
-.additionalMenu:hover {
-
 }

@@ -17,8 +17,8 @@
 }
 
 .commentContainer {
-  width: 352px;
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 

@@ -65,21 +65,21 @@ export default function CommentActionButtons({
   }, []);
 
   const countOfReliesLabel = React.useMemo(() => {
-    const countOfReplies = comment.count_of_replies.toString();
+    const repliesCount = comment.replies_count.toString();
 
-    if (countOfReplies.slice(-1) === "1" && countOfReplies.slice(-2) !== "11") {
-      return `${countOfReplies} ответ`;
+    if (repliesCount.slice(-1) === "1" && repliesCount.slice(-2) !== "11") {
+      return `${repliesCount} ответ`;
     } else if (
-      (countOfReplies.slice(-1) === "2" ||
-        countOfReplies.slice(-1) === "3" ||
-        countOfReplies.slice(-1) === "4") &&
-      countOfReplies.slice(-2) !== "12" &&
-      countOfReplies.slice(-2) !== "13" &&
-      countOfReplies.slice(-2) !== "14"
+      (repliesCount.slice(-1) === "2" ||
+        repliesCount.slice(-1) === "3" ||
+        repliesCount.slice(-1) === "4") &&
+      repliesCount.slice(-2) !== "12" &&
+      repliesCount.slice(-2) !== "13" &&
+      repliesCount.slice(-2) !== "14"
     ) {
-      return `${countOfReplies} ответа`;
+      return `${repliesCount} ответа`;
     } else {
-      return `${countOfReplies} ответов`;
+      return `${repliesCount} ответов`;
     }
   }, [comment]);
 
@@ -114,7 +114,7 @@ export default function CommentActionButtons({
       </button>
       {isParentComment && (
         <>
-          {!!comment.count_of_replies ? (
+          {!!comment.replies_count ? (
             <button
               onClick={shouldDisplayRepliesButton}
               className={styles.showMoreRepliesButton}

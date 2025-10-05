@@ -9,13 +9,13 @@
 .showRepliesButton {
   display: inline-flex;
   align-items: center;
-  color: #3ea6ff;
+  color: var(--button-background-2);
   padding: 3px 14px;
   border-radius: 20px;
 }
 
 .showRepliesButton:hover {
-  background-color: #263850;
+  background-color: var(--button-hover-background-4);
 }
 
 .arrow {

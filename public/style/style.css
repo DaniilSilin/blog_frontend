@@ -9,10 +9,10 @@ body {
   box-sizing: border-box;
 }
 
-:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout,
-:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout-content {
-   width: 100%;
-}
+/*:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout,*/
+/*:where(.css-dev-only-do-not-override-14i19y2).ant-layout.ant-layout-has-sider >.ant-layout-content {*/
+/*   width: 100%;*/
+/*}*/
 
 :root {
   --body-background: #ffffff;

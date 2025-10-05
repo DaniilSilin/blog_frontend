@@ -26,14 +26,7 @@ export interface Props {
   setDisplayReplyInput: (value: boolean) => void;
 }
 
-function getApiUrl() {
-  if (typeof window === "undefined") {
-    return process.env.API_URL;
-  }
-  return process.env.NEXT_PUBLIC_API_URL;
-}
-
-const BASE_URL = getApiUrl();
+const BASE_URL = "http://127.0.0.1:8000";
 
 export default function NotificationCommentaryMainFooter({
   slug,
@@ -58,25 +51,25 @@ export default function NotificationCommentaryMainFooter({
   );
   const [isBodyCollapsed, setIsBodyCollapsed] = React.useState(false);
 
-  const likeCommentButton = () => {
+  const likeCommentButton = React.useCallback(() => {
     setOrRemoveCommentLike({
       slug,
       post_id,
       comment_id: comment?.comment_id,
     });
-  };
+  }, []);
 
-  const dislikeCommentButton = () => {
+  const dislikeCommentButton = React.useCallback(() => {
     setOrRemoveCommentDislike({
       slug,
       post_id,
       comment_id: comment?.comment_id,
     });
-  };
+  }, []);
 
-  const setLikeByAuthorButton = () => {
+  const setLikeByAuthorButton = React.useCallback(() => {
     setOrRemoveLikeByAuthor({ slug, post_id, comment_id: comment?.comment_id });
-  };
+  }, []);
 
   const showReplyInputHandleChange = React.useCallback(() => {
     // @ts-ignore

@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  padding: 16px 16px 16px 0;
+}
+
+.root:hover {
+  cursor: pointer;
+  background-color: #3e3e3e;
+}
+
+.notificationRenderer {
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: blue;
+  margin: 24px 5px;
+}
+
+.notificationRendererIsRead {
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: transparent;
+  margin: 24px 5px;
+}
+
+.avatarContainer {
+  display: flex;
+  margin-right: 16px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.notificationTextAndDateRenderer {
+  display: flex;
+  flex-direction: column;
+}
+
+.textContainer {
+  width: 250px;
+  line-height: 24px;
+  color: #f0f0f0;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+
+.notificationDate {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.postContainer {
+  margin: 0 16px;
+}

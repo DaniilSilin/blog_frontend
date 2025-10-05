@@ -13,7 +13,7 @@ export interface CommentType {
   is_edited: boolean;
   liked_by_author: boolean;
   reply_to?: number;
-  count_of_replies?: number;
+  replies_count: number;
   forceRender?: boolean;
   is_pinned: boolean;
   pinned_by_user: User;

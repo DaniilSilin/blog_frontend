@@ -1,5 +1,4 @@
 import React from "react";
-import DjangoService from "@/app/store/services/DjangoService";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -9,8 +8,6 @@ const { Sider } = Layout;
 import miniSiderMenu from "./constants";
 
 import styles from "./sider.module.css";
-
-const BASE_URL = "http://127.0.0.1:8000";
 
 export interface Props {
   isWideScreen: boolean;

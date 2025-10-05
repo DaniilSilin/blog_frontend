@@ -422,8 +422,8 @@ const DjangoService = createApi({
                     const comment = draft.results.find(
                       (comment: any) => comment.comment_id === reply_to,
                     );
-                    comment.count_of_replies += 1;
-                    if (comment.count_of_replies === 1) {
+                    comment.replies_count += 1;
+                    if (comment.replies_count === 1) {
                       comment.forceRender = true;
                     }
                   },
@@ -1363,9 +1363,27 @@ const DjangoService = createApi({
       }),
     }),
     notificationList: builder.query({
-      query: ({ username }) => ({
+      query: ({ username, page }) => ({
         url: `profile/${username}/notification/list/`,
+        params: {
+          page: page || undefined,
+        },
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems, otherArgs) => {
+        currentCache.previous = newItems.previous;
+        currentCache.next = newItems.next;
+        if (otherArgs.arg.page > 1) {
+          currentCache.results.push(...newItems.results);
+        } else {
+          currentCache.results = newItems.results;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return true;
+      },
     }),
     postCommentListReply: builder.query({
       query: ({ slug, post_id, parent_id, page, comment_reply }) => ({
@@ -1406,14 +1424,14 @@ const DjangoService = createApi({
           : [{ type: "Comment", id: "LIST" }],
     }),
     readNotification: builder.mutation({
-      query: ({ pk }) => ({
-        url: `/notification/${pk}/is_read/`,
+      query: ({ id }) => ({
+        url: `/notification/${id}/is_read/`,
         method: "POST",
       }),
     }),
     hideNotification: builder.mutation({
-      query: ({ pk }) => ({
-        url: `/notification/${pk}/hide/`,
+      query: ({ id }) => ({
+        url: `/notification/${id}/hide/`,
         method: "POST",
       }),
     }),

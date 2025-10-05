@@ -129,7 +129,11 @@ export default function PostFooter({ post, refetch }: Props) {
           Поделиться
         </button>
         {displayShareMenu && (
-          <ShareMenu post={post} setDisplayShareMenu={setDisplayShareMenu} />
+          <ShareMenu
+            post={post}
+            displayShareMenu={displayShareMenu}
+            setDisplayShareMenu={setDisplayShareMenu}
+          />
         )}
       </div>
     </div>
