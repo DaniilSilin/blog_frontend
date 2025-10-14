@@ -1,0 +1,14 @@
+.root {
+
+}
+
+.titleTh {
+  text-align: start;
+  font-weight: 500;
+}
+
+.likedPercent {
+  min-width: 180px;
+  text-align: end;
+  font-weight: 500;
+}

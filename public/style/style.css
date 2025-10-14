@@ -41,6 +41,7 @@ body {
   --button-background-5: #363636;
 
   --button-disabled-background: #f2f2f2;
+  --button-hover-background-7: #909090;
   --button-text-disabled-background: #909090;
 
   --button-background-2: #065fd4;
@@ -100,6 +101,7 @@ body {
   --button-hover-background-5: #535353;
 
   --button-disabled-background-5: #363636;
+  --button-hover-background-7: #717171;
 
   --button-background-2: #3ea6ff;
   --button-hover-background-3: #65b8ff;

@@ -1,11 +1,11 @@
 import React from "react";
 import DjangoService from "@/app/store/services/DjangoService";
-import { useRouter } from "next/router";
-import classNames from "classnames";
+import { PostType } from "@/app/types";
 
-import PostListTableContent from "./PostListTableContent";
-import BatchActionBar from "./BatchActionBar";
 import postListMenu from "./POST_LIST_MENU";
+import BatchActionBar from "./BatchActionBar";
+import PostListTableContent from "./PostListTableContent";
+import BlogPostListMenuBarItem from "./BlogPostListMenuBarItem";
 
 import styles from "./BlogEditorPublications.module.css";
 
@@ -14,60 +14,40 @@ export interface Props {
 }
 
 export default function BlogEditorPublications({ slug }: Props) {
-  const router = useRouter();
-  const [state, setState] = React.useState("published");
+  const [currentPostListType, setCurrentPostListType] =
+    React.useState<string>("published");
   const [sortOrder, setSortOrder] = React.useState<string | null>(null);
   const [columnType, setColumnType] = React.useState<string | null>(null);
-  const { data: postList } = DjangoService.useBlogEditorPostsQuery({
-    slug,
-    state,
-    sortOrder,
-    columnType,
-  });
+  const [selectedPosts, setSelectedPosts] = React.useState<PostType[]>([]);
 
-  const [selectedPosts, setSelectedPosts] = React.useState([]);
+  const { data: postList, refetch: refetchBlogPosts } =
+    DjangoService.useBlogEditorPostsQuery({
+      slug,
+      currentPostListType,
+      sortOrder,
+      columnType,
+    });
   const POST_LIST_MENU = postListMenu(slug);
-
-  const postListHandleChange = React.useCallback(
-    (item: any) => {
-      if (item.title === "Опубликованные") {
-        setState("published");
-      } else {
-        setState("draft");
-      }
-    },
-    [setState],
-  );
 
   return (
     <div className={styles.root}>
       <div className={styles.title}>Публикации</div>
       <div className={styles.tabsMenu}>
-        {POST_LIST_MENU.map((item, index) => (
-          <div
-            key={index}
-            className={classNames(styles.postTabsMenu, {
-              [styles.active]:
-                `${router.pathname}?state=${state}` === item.pathname,
-            })}
-          >
-            <div onClick={() => postListHandleChange(item)}>{item.title}</div>
-            {item.id === 1 ? (
-              <div style={{ marginLeft: "10px" }}>
-                {postList?.count_of_published_posts}
-              </div>
-            ) : null}
-            {item.id === 2 ? (
-              <div style={{ marginLeft: "10px" }}>
-                {postList?.const_of_drafted_posts}
-              </div>
-            ) : null}
-          </div>
+        {POST_LIST_MENU.map((menuBarItem: Record<string, any>) => (
+          <BlogPostListMenuBarItem
+            key={menuBarItem.id}
+            setSelectedPosts={setSelectedPosts}
+            currentPostListType={currentPostListType}
+            setCurrentPostListType={setCurrentPostListType}
+            postList={postList}
+            menuBarItem={menuBarItem}
+          />
         ))}
       </div>
       {selectedPosts.length !== 0 && (
         <BatchActionBar
           slug={slug}
+          refetchBlogPosts={refetchBlogPosts}
           selectedPosts={selectedPosts}
           setSelectedPosts={setSelectedPosts}
         />

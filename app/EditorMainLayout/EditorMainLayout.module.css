@@ -1,6 +1,15 @@
 .root {
+  padding: 24px 0;
+  background-color: var(--body-background);
+  color: var(--text-color-primary)
 }
 
-.ant-menu-item-selected {
-  background-color: #b039cc !important;
+.sider {
+  background-color: var(--body-background);
+  color: var(--text-color-primary)
+}
+
+.content {
+  padding: 0 24px;
+  color: var(--text-color-primary);
 }

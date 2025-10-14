@@ -1,11 +1,14 @@
 import React from "react";
-import { Layout, Menu, theme } from "antd/lib";
-import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
-import { FaRegComment } from "react-icons/fa6";
-import { MdOutlineLocalPostOffice, MdPostAdd } from "react-icons/md";
 import Link from "next/link";
-const { Content, Sider } = Layout;
 import { useRouter } from "next/router";
+
+import { Layout, Menu, theme } from "antd/lib";
+const { Content, Sider } = Layout;
+
+import { IoSettingsOutline, IoPeopleOutline } from "react-icons/io5";
+import { MdOutlineLocalPostOffice, MdPostAdd } from "react-icons/md";
+
+import styles from "./EditorMainLayout.module.css";
 
 export interface Props {
   children: React.ReactNode;
@@ -64,36 +67,23 @@ export default function EditorMainLayout({ children, slug }: Props) {
     const defaultValue = settingsMenu.find((item) =>
       item.href === router.asPath ? `${item.key}` : null,
     );
-    return defaultValue?.key;
+    return defaultValue ? defaultValue?.key : "";
   }, [router.asPath, settingsMenu]);
-
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
   return (
     <Layout>
       <Content>
-        <Layout
-          style={{
-            padding: "24px 0",
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Sider style={{ background: colorBgContainer }} width={200}>
+        <Layout className={styles.root}>
+          <Sider className={styles.sider} width={200}>
             <Menu
               mode="inline"
-              // @ts-ignore
               defaultSelectedKeys={[defaultSelectedMenu]}
               defaultOpenKeys={["sub1"]}
               style={{ height: "100%" }}
               items={items2}
             />
           </Sider>
-          <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            {children}
-          </Content>
+          <Content className={styles.content}>{children}</Content>
         </Layout>
       </Content>
     </Layout>

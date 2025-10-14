@@ -1,0 +1,30 @@
+.root {
+  display: flex;
+}
+
+.root {
+  font-size: 22px;
+  width: fit-content;
+  text-decoration: none;
+  color: var(--button-hover-background-7);
+  padding-bottom: 10px;
+}
+
+.root:hover {
+  cursor: pointer;
+  border-bottom: 2px solid var(--button-hover-background-7);
+}
+
+.root.active {
+  color: var(--text-color-primary);
+  border-bottom: 2px solid var(--text-color-primary);
+}
+
+.root:not(:last-child) {
+  margin-right: 24px;
+}
+
+.rootItems {
+  display: flex;
+  gap: 10px;
+}

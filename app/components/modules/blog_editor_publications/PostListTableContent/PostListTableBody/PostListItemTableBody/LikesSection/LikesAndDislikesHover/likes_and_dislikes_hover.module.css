@@ -1,3 +1,9 @@
+.root {
+  position: absolute;
+  height: 48px;
+  top: -40px;
+}
+
 .likedAndDislikeContainer {
   display: flex;
 }
@@ -7,7 +13,7 @@
   height: 48px;
   width: 75px;
   padding: 0 16px;
-  background-color: #272727;
+  background-color: var(--button-background-reversed-7);
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -19,22 +25,22 @@
 }
 
 .likeIconLiked {
-  color: white;
+  color: var(--text-color-primary);
   margin-right: 6px;
 }
 
 .likeIconNotLiked {
-  color: white;
+  color: var(--text-color-primary);
   margin-right: 6px;
 }
 
 .likeCounter {
-  color: white;
+  color: var(--text-color-primary);
 }
 
 .dislikeContainer {
   display: flex;
-  background-color: #272727;
+  background-color: var(--button-background-reversed-7);
   width: 75px;
   padding: 0 16px;
   border-bottom-right-radius: 10px;
@@ -49,15 +55,15 @@
 }
 
 .dislikeIconLiked {
-  color: white;
+  color: var(--text-color-primary);
   margin-right: 6px;
 }
 
 .dislikeIconNotLiked {
-  color: white;
+  color: var(--text-color-primary);
   margin-right: 6px;
 }
 
 .dislikeCounter {
-  color: white;
+  color: var(--text-color-primary);
 }

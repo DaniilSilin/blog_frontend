@@ -1,0 +1,23 @@
+.root {
+  text-align: end;
+}
+
+.viewsTh {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.viewsTh:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viewsTh.active {
+  font-weight: 700;
+}
+
+.arrow {
+  margin-left: 5px;
+}

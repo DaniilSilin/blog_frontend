@@ -12,13 +12,13 @@ export interface Props {
 export default function LikesSection({ post }: Props) {
   const [displayLikesDislikes, setDisplayLikesDislikes] = React.useState(false);
 
-  const onMouseLeaveHide = () => {
+  const onMouseLeaveHide = React.useCallback(() => {
     setDisplayLikesDislikes(false);
-  };
+  }, []);
 
-  const onMouseDisplayOver = () => {
+  const onMouseDisplayOver = React.useCallback(() => {
     setDisplayLikesDislikes(true);
-  };
+  }, []);
 
   const calculatedInPercent = React.useMemo(() => {
     return (Math.abs(post.likes / (post.likes + post.dislikes)) * 100).toFixed(
@@ -27,7 +27,6 @@ export default function LikesSection({ post }: Props) {
   }, [post]);
 
   const likesLabel = React.useMemo(() => {
-    // @ts-ignore
     const countOfLikes = post?.likes.toString();
     if (countOfLikes === "0") {
       return 'Нет отметок "Нравится"';

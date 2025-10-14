@@ -16,7 +16,7 @@ export interface Props {
 
 export default function LikesAndDislikesHover({ post }: Props) {
   return (
-    <div style={{ position: "absolute", height: "48px", top: "-40px" }}>
+    <div className={styles.root}>
       <div className={styles.likedAndDislikeContainer}>
         <div className={styles.likeContainer}>
           <div className={styles.likeButton}>

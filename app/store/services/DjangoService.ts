@@ -1,9 +1,5 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  defaultSerializeQueryArgs,
-} from "@reduxjs/toolkit/query/react";
-import { BlogType, PostType, Register, Login, Author } from "@/app/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Login, PostType } from "@/app/types";
 import { HYDRATE } from "next-redux-wrapper";
 import { GetServerSidePropsContext } from "next";
 import CookieHelper from "@/app/store/cookieHelper";
@@ -17,7 +13,7 @@ function getApiUrl() {
 
 const DjangoService = createApi({
   reducerPath: "djangoService",
-  tagTypes: ["Comment", "Post", "Blog", "Invite", "Notification"],
+  tagTypes: ["Comment", "Post", "Blog", "Invite", "Notification", "Post_list"],
   baseQuery: fetchBaseQuery({
     baseUrl: getApiUrl(),
     prepareHeaders: (headers, api) => {
@@ -880,13 +876,77 @@ const DjangoService = createApi({
       }),
     }),
     blogEditorPosts: builder.query({
-      query: ({ slug, state, columnType, sortOrder }) => ({
-        url: `blog/${slug}/editor/posts?state=${state}`,
+      query: ({ slug, currentPostListType, columnType, sortOrder }) => ({
+        url: `blog/${slug}/editor/posts?state=${currentPostListType}`,
         params: {
           columnType: columnType || undefined,
           sortOrder: sortOrder || undefined,
         },
       }),
+      providesTags: (result) =>
+        result
+          ? [
+              // @ts-ignore
+              ...result.results.map(({ post_id, slug }) => ({
+                type: "Post" as const,
+                id: post_id,
+                slug: slug,
+              })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }],
+    }),
+    blogDeletePosts: builder.mutation({
+      query: ({ slug, selectedPosts }) => ({
+        url: `blog/${slug}/posts/delete/`,
+        method: "DELETE",
+        body: { selectedPosts },
+      }),
+      async onQueryStarted(
+        { slug, selectedPosts },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        for (const { post_id } of selectedPosts) {
+          console.log(post_id);
+          for (const {
+            endpointName,
+            originalArgs,
+          } of DjangoService.util.selectInvalidatedBy(getState(), [
+            // @ts-ignore
+            { type: "Post", id: post_id, slug: slug },
+          ])) {
+            if (
+              ![
+                "getPostPaginatedList",
+                "subscriptionList",
+                "getBlogPosts",
+                "likedPostList",
+                "blogEditorPosts",
+              ].includes(endpointName)
+            )
+              continue;
+
+            dispatch(
+              DjangoService.util.updateQueryData(
+                // @ts-ignore
+                endpointName,
+                originalArgs,
+                (draft) => {
+                  draft.results = draft.results.filter(
+                    (post: PostType) =>
+                      post.post_id !== post_id || post.blog.slug !== slug,
+                  );
+                },
+              ),
+            );
+          }
+          try {
+            await queryFulfilled;
+          } catch {
+            // patchResult.undo();
+          }
+        }
+      },
     }),
     blogsWhereUserIsOwner: builder.query({
       query: ({ username }) => ({
@@ -1471,13 +1531,6 @@ const DjangoService = createApi({
               { type: "Comment", id: "LIST" },
             ]
           : [{ type: "Comment", id: "LIST" }],
-    }),
-    blogDeletePosts: builder.mutation({
-      query: ({ slug, selectedPosts }) => ({
-        url: `blog/${slug}/posts/delete/`,
-        method: "DELETE",
-        body: { selectedPosts },
-      }),
     }),
   }),
 });

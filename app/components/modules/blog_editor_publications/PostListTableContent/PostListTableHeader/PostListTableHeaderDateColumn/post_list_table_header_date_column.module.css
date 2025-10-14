@@ -1,0 +1,23 @@
+.root {
+  text-align: start;
+}
+
+.dateTh {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.dateTh.active {
+  font-weight: 700;
+}
+
+.dateTh:hover {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.arrow {
+  margin-left: 5px;
+}

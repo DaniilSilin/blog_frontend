@@ -1,9 +1,12 @@
 import React, { ChangeEvent } from "react";
+import { PostType } from "@/app/types";
+
+import styles from "./post_input_checkbox.module.css";
 
 export interface Props {
-  onChange: any;
+  onChange: (checked: boolean, post: PostType) => void;
   checked: boolean;
-  post: any;
+  post: PostType;
 }
 
 export default function PostInputCheckbox({ onChange, checked, post }: Props) {
@@ -15,7 +18,7 @@ export default function PostInputCheckbox({ onChange, checked, post }: Props) {
   );
 
   return (
-    <label style={{ cursor: "pointer" }}>
+    <label className={styles.root}>
       <input
         type={"checkbox"}
         onChange={handleChange}

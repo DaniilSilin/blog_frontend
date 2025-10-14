@@ -62,7 +62,7 @@ export default function MainSider({
   setIsMainSiderHidden,
   isMainSiderHidden,
 }: Props) {
-  const mainSiderRef = React.useRef(null);
+  const mainSiderRef = React.useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   React.useEffect(() => {

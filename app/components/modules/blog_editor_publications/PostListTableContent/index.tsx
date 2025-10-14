@@ -1,17 +1,20 @@
 import React from "react";
 
+import { PostType } from "@/app/types";
 import PostListTableHeader from "./PostListTableHeader";
 import PostListTableBody from "./PostListTableBody";
 
+import styles from "./post_list_table_content.module.css";
+
 export interface Props {
-  setColumnType: any;
-  columnType: any;
-  sortOrder: any;
-  setSortOrder: any;
+  setColumnType: (value: string | null) => void;
+  columnType: string | null;
+  sortOrder: string | null;
+  setSortOrder: (value: string | null) => void;
   slug: string;
-  setSelectedPosts: any;
-  selectedPosts: any;
-  postList: any;
+  setSelectedPosts: (value: PostType[]) => void;
+  selectedPosts: PostType[];
+  postList: Record<string, any>;
 }
 
 export default function PostListTableContent({
@@ -25,7 +28,7 @@ export default function PostListTableContent({
   postList,
 }: Props) {
   return (
-    <table cellPadding={10}>
+    <table cellPadding={10} className={styles.root}>
       <PostListTableHeader
         postList={postList}
         selectedPosts={selectedPosts}
