@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Платформа для ведения блогов путешественников с функцией геолокации
 
-## Getting Started
+Дипломный проект выпускника Ульяновского Государственного Университета (УлГУ) по специальности **09.03.02 «Информационные системы и технологии»**.
 
-First, run the development server:
+Веб-приложение представляет собой современную блог-платформу, адаптированную для путешественников, с разграничением прав доступа, интерактивными функциями взаимодействия и кастомизацией интерфейса.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Технологический стек
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Фреймворк:** Next.js (Pages Router)
+* **Управление состоянием и запросы:** Redux Toolkit (RTK) & RTK Query
+* **Язык программирования:** TypeScript
+* **UI-библиотека:** Ant Design
+* **Стилизация:** СSS, SCSS
+* **Форматирование кода:** Prettier
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---
 
-## Learn More
+## 🚀 Функциональные возможности
 
-To learn more about Next.js, take a look at the following resources:
+### Пользователи и роли
+* **Авторизация:** Регистрация, вход и выход из системы (JWT/Session).
+* **Система ролей:** Полное разделение прав (Администратор / Создатель блога / Автор блога / Неавторизованный пользователь).
+* **Управление авторами:** Возможность добавления других пользователей в авторы своего блога для совместного ведения и публикации постов.
+* **Профиль:** CRUD-управление данными пользователя, загрузка аватара и кастомного баннера.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Контент и блоги
+* **Управление сущностями:** Полный цикл CRUD для блогов, публикаций и комментариев.
+* **Кастомизация блогов:** Установка уникальных изображений и баннеров для страниц блогов.
+* **Социальные функции:** Система лайков/дизлайков для постов и комментариев, добавление материалов в «Избранное», шеринг публикаций в социальные сети.
+* **Система комментариев:** Реализована древовидная структура ответов, полностью повторяющая логику комментариев YouTube (до обновления).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Фильтрация и UX
+* **Поиск и сортировка:** Гибкая фильтрация данных по поисковой строке, диапазону дат. Сортировка контента по дате создания и названию.
+* **Кастомизация интерфейса:** Переключение между темной и светлой темами оформления.
 
-## Deploy on Vercel
+Ссылка на просмотр: https://drive.google.com/file/d/1pgYgyLC5dztYfLXZq_Ok1o1Vf_WI-KZN/view?usp=sharing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
